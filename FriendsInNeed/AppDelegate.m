@@ -17,6 +17,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+       
+    [self registerForLocalNotifications];
+    
+    _locationManager = [FINLocationManager sharedManager];
+    
+    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+    localNotification.alertTitle = @"Ooops!";
+    localNotification.alertBody  = @"App launched!";
+    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    
     return YES;
 }
 
@@ -40,6 +50,24 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark - Custom methods
+- (void)registerForLocalNotifications
+{
+    UIMutableUserNotificationCategory *reminderCategory = [UIMutableUserNotificationCategory new];
+    reminderCategory.identifier = @"ReminderCategory";
+    [reminderCategory setActions:nil forContext:UIUserNotificationActionContextDefault];
+    
+    NSSet *categories = [NSSet setWithObjects:reminderCategory, nil];
+    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+    
 }
 
 @end

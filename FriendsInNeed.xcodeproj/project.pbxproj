@@ -14,6 +14,9 @@
 		F38B72FC1C00E04F00FBE20C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FA1C00E04F00FBE20C /* Main.storyboard */; };
 		F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FD1C00E04F00FBE20C /* Assets.xcassets */; };
 		F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */; };
+		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
+		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
+		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,10 @@
 		F38B72FD1C00E04F00FBE20C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F38B73001C00E04F00FBE20C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F38B73021C00E04F00FBE20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F38B73081C00E39D00FBE20C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
+		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +43,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
+				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,6 +54,8 @@
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
+				F38B730A1C00F31200FBE20C /* CoreLocation.framework */,
+				F38B73081C00E39D00FBE20C /* MapKit.framework */,
 				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				F38B72EC1C00E04F00FBE20C /* Products */,
 			);
@@ -72,6 +83,8 @@
 				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
+				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
+				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -115,6 +128,11 @@
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -157,6 +175,7 @@
 				F38B72F91C00E04F00FBE20C /* SecondViewController.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F38B72F61C00E04F00FBE20C /* FirstViewController.m in Sources */,
+				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

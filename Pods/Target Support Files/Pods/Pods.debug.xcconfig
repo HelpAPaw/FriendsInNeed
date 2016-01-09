@@ -1,0 +1,7 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/Backendless-ios-SDK"
+LIBRARY_SEARCH_PATHS = "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/backendless" "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/CommLibiOS" "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/MediaLibiOS3x" "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/libav-11.4/lib" "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/speex-1.2rc2/lib" "$(SRCROOT)/Pods/Backendless-ios-SDK/SDK/lib/x264/lib"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/Backendless-ios-SDK"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"CommLibiOS" -l"MediaLibiOS" -l"avcodec" -l"avdevice" -l"avfilter" -l"avformat" -l"avutil" -l"backendless" -l"speex" -l"sqlite3" -l"swscale" -l"x264" -l"z" -framework "AVFoundation" -framework "AdSupport" -framework "AudioToolbox" -framework "CFNetwork" -framework "CoreData" -framework "CoreGraphics" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreVideo" -framework "Foundation" -framework "MapKit" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
+PODS_ROOT = ${SRCROOT}/Pods
+SWIFT_OBJC_BRIDGING_HEADER = ${PODS_ROOT}/Headers/Public/Backendless-ios-SDK/Backendless-With-Media-Bridging-Header.h

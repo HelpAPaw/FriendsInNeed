@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "Backendless.h"
+
+#define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
+#define BCKNDLSS_SECRET_KEY     @"9F8B017B-2890-A887-FFD5-63D6A5302100"
+#define BCKNDLSS_VERSION_NUM    @"v1"
 
 @interface AppDelegate ()
 
@@ -17,7 +22,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-       
+    
+    [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
+    
     [self registerForLocalNotifications];
     
     _locationManager = [FINLocationManager sharedManager];

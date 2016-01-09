@@ -1,0 +1,1 @@
+pod "Backendless-ios-SDK", "~>2.0.0"

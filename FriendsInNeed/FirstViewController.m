@@ -59,13 +59,6 @@
     
     
     
-    BackendlessUser *user = [BackendlessUser new];
-    user.email = @"milen@kanbanize.com";
-    user.password = @"my_super_password";
-    user.name = @"Milen";
-    user.userId = @"fjlas";
-    user.objectId = @"jflas";
-    [backendless.userService registering:user];
 }
 
 - (void)didReceiveMemoryWarning {

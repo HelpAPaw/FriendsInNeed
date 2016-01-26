@@ -18,5 +18,6 @@
 - (void)startMonitoringSignificantLocationChanges;
 - (void)updateUserLocation;
 - (void)updateMapToLastKnownLocation;
+- (CLLocation *)getLastKnownUserLocation;
 
 @end

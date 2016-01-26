@@ -146,5 +146,10 @@
     return lastLocation;
 }
 
+- (CLLocation *)getLastKnownUserLocation
+{
+    return _lastSavedLocation;
+}
+
 
 @end

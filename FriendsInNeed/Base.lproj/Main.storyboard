@@ -89,7 +89,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oxv-wE-HBu">
-                                <rect key="frame" x="146" y="547" width="82" height="30"/>
+                                <rect key="frame" x="146" y="200" width="82" height="30"/>
                                 <state key="normal" title="Submit"/>
                                 <connections>
                                     <action selector="onSubmitSignal:" destination="8rJ-Kc-sve" eventType="touchUpInside" id="sa6-G9-Oat"/>

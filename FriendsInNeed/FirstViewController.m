@@ -56,9 +56,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +71,7 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [_locationManager updateMapToLastKnownLocation];
+    [_locationManager updateMapWithNearbySignals];
     [_locationManager updateUserLocation];
 }
 

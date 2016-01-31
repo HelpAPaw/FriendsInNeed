@@ -20,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBackgroundTap:)];
+    [self.view addGestureRecognizer:tapGR];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -27,31 +30,41 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)onBackgroundTap:(UITapGestureRecognizer *)gr
+{
+    [_titleTextField resignFirstResponder];
+}
+
 - (IBAction)onSubmitSignal:(id)sender
 {
     CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
     
-    Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved: ) selErrorHandler:@selector(errorHandler:)];
+    Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved:) selErrorHandler:@selector(errorHandler:)];
     GEO_POINT coordinate;
     coordinate.latitude = userLocation.coordinate.latitude;
     coordinate.longitude = userLocation.coordinate.longitude;
     NSDictionary *geoPointMeta = @{@"name":_titleTextField.text};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
+    
+    [_titleTextField setText:@""];
+    [_titleTextField resignFirstResponder];
 }
 
 - (void)geoPointSaved:(GeoPoint *)response
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
-                                                                   message:@"You have successfully submitted your first signal! Congratulations!"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
+                                                                   message:@"Your signal was submitted."
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Cool!"
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                                               [self dismissViewControllerAnimated:YES completion:nil];
+                                                              self.tabBarController.selectedIndex = 0;
                                                           }];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+    [[FINLocationManager sharedManager] addNewSignal:response];
 }
 
 - (void)errorHandler:(Fault *)fault

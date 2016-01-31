@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "Backendless.h"
 
 @interface FINLocationManager : NSObject
 
@@ -18,6 +19,8 @@
 - (void)startMonitoringSignificantLocationChanges;
 - (void)updateUserLocation;
 - (void)updateMapToLastKnownLocation;
+- (void)updateMapWithNearbySignals;
 - (CLLocation *)getLastKnownUserLocation;
+- (void)addNewSignal:(GeoPoint *)geoPoint;
 
 @end

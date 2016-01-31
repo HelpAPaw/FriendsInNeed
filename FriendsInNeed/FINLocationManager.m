@@ -10,12 +10,15 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define kLastKnownLocation @"LastKnownLocation"
+#define kDefaultMapRegion   4000
 
 @interface FINLocationManager() <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation        *lastSavedLocation;
+@property (strong, nonatomic) CLLocation        *lastSignalCheckLocation;
 @property (assign, nonatomic) BOOL              userLocationUpdateRequested;
+@property (strong, nonatomic) NSMutableArray    *nearbySignals;
 
 @end
 
@@ -41,6 +44,8 @@
     _locationManager.delegate = self;
     _locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     [_locationManager requestAlwaysAuthorization];
+    
+    _nearbySignals = [NSMutableArray new];
     
     return self;
 }
@@ -69,6 +74,12 @@
         NSLog(@"Distance travelled: %f", distance);
     }
     
+    if (   (_lastSignalCheckLocation == nil)
+        || ([_lastSignalCheckLocation distanceFromLocation:newLocation] > 300)
+       )
+    {
+        [self getSignalForLocation:newLocation];
+    }
     
     _lastSavedLocation = newLocation;
     [self saveLastKnownLocation:newLocation];
@@ -77,15 +88,7 @@
     {
         [self updateMapToLocation:newLocation];
     }
-    else
-    {
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.alertTitle = @"Ooops! You just changed your location!";
-        localNotification.alertBody  = [NSString stringWithFormat:@"You travelled: %f", distance];
-        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-    }
     
-
     if (_userLocationUpdateRequested)
     {
         _userLocationUpdateRequested = NO;
@@ -95,7 +98,7 @@
 
 - (void)updateMapToLocation:(CLLocation *)location
 {
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, 4000, 4000);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, kDefaultMapRegion, kDefaultMapRegion);
     [_mapView setRegion:region animated:YES];
 }
 
@@ -111,13 +114,6 @@
 
 - (void)saveLastKnownLocation:(CLLocation *)location
 {
-//    NSNumber *lat = [NSNumber numberWithDouble:location.coordinate.latitude];
-//    NSNumber *lon = [NSNumber numberWithDouble:location.coordinate.longitude];
-//    NSDictionary *userLocation=@{@"latitude":lat,@"longitude":lon};
-//    
-//    [[NSUserDefaults standardUserDefaults] setObject:userLocation forKey:kLastKnownLocation];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-    
     NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
     [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastKnownLocation];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -125,13 +121,6 @@
 
 - (CLLocation *)loadLastKnownLocation
 {
-//    NSDictionary *userLoc = [[NSUserDefaults standardUserDefaults] objectForKey:kLastKnownLocation];
-//    
-//    NSNumber *lat = [userLoc objectForKey:@"latitude"];
-//    NSNumber *lon = [userLoc objectForKey:@"longitude"];
-//    
-//    CLLocation *lastLocation = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
-    
     CLLocation *lastLocation = nil;
     @try
     {
@@ -149,6 +138,99 @@
 - (CLLocation *)getLastKnownUserLocation
 {
     return _lastSavedLocation;
+}
+
+- (void)getSignalForLocation:(CLLocation *)location
+{
+    GEO_POINT center;
+    center.latitude = location.coordinate.latitude;
+    center.longitude = location.coordinate.longitude;
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
+    query.includeMeta = @YES;
+    Responder *responder = [Responder responder:self selResponseHandler:@selector(signalsReceived:) selErrorHandler:@selector(errorHandler:)];
+    [backendless.geoService getPoints:query responder:responder];
+    
+    _lastSignalCheckLocation = location;
+}
+
+- (void)signalsReceived:(BackendlessCollection *)response
+{
+    NSLog(@"Received %lu signals", (unsigned long)response.data.count);
+    
+    NSMutableArray *newSignals = [NSMutableArray new];
+    for (GeoPoint *receivedGeoPoint in response.data)
+    {
+        BOOL alreadyPresent = NO;
+        for (GeoPoint *oldGeoPoint in _nearbySignals)
+        {
+            if ([oldGeoPoint.objectId isEqualToString:receivedGeoPoint.objectId])
+            {
+                alreadyPresent = YES;
+            }
+        }
+        if (alreadyPresent == NO)
+        {
+            [newSignals addObject:receivedGeoPoint];
+            NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:@"name"]);
+        }
+    }
+    
+    _nearbySignals = [NSMutableArray arrayWithArray:response.data];
+    
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    {
+        [self updateMapWithNearbySignals];
+    }
+    else if (newSignals.count > 0)
+    {
+        NSString *alertBody;
+        if (newSignals.count > 1)
+        {
+            alertBody = @"There are animals near you that need urgent help!";
+            
+        }
+        else
+        {
+            alertBody = @"There is a hurt animal near you!";
+        }
+        
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.alertBody  = alertBody;
+        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    }
+}
+
+
+- (void)errorHandler:(Fault *)fault
+{
+    NSLog(@"%@", fault.description);
+    
+    _lastSignalCheckLocation = nil;
+}
+
+- (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
+{
+    MKPointAnnotation *annotation = [MKPointAnnotation new];
+    annotation.title = [geoPoint.metadata objectForKey:@"name"];
+    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(geoPoint.latitude.doubleValue, geoPoint.longitude.doubleValue);
+    annotation.coordinate = coordinate;
+    [_mapView addAnnotation:annotation];
+}
+
+- (void)updateMapWithNearbySignals
+{
+    [_mapView removeAnnotations:[_mapView annotations]];
+    
+    for (GeoPoint *geoPoint in _nearbySignals)
+    {
+        [self addAnnotationToMapFromGeoPoint:geoPoint];
+    }
+}
+
+- (void)addNewSignal:(GeoPoint *)geoPoint
+{
+    [_nearbySignals addObject:geoPoint];
+    [self addAnnotationToMapFromGeoPoint:geoPoint];
 }
 
 

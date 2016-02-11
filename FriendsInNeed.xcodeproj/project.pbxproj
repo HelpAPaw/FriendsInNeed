@@ -106,9 +106,9 @@
 				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
 				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
-				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
+				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";

@@ -39,11 +39,13 @@
 {
     CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
     
+    BackendlessUser *currentUser = [backendless.userService login:@"milen@kanbanize.com" password:@"fuckingshit"];
+    
     Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved:) selErrorHandler:@selector(errorHandler:)];
     GEO_POINT coordinate;
     coordinate.latitude = userLocation.coordinate.latitude;
     coordinate.longitude = userLocation.coordinate.longitude;
-    NSDictionary *geoPointMeta = @{@"name":_titleTextField.text};
+    NSDictionary *geoPointMeta = @{@"name":_titleTextField.text, @"author":currentUser};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
     

@@ -15,6 +15,8 @@
 
 @interface AppDelegate ()
 
+@property (strong, nonatomic) UILocalNotification *localNotificationReceived;
+
 @end
 
 @implementation AppDelegate
@@ -27,12 +29,15 @@
     
     [self registerForLocalNotifications];
     
+    UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
+    [_locationManager setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
+    
     _locationManager = [FINLocationManager sharedManager];
     
-    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-    localNotification.alertTitle = @"Ooops!";
-    localNotification.alertBody  = @"App launched!";
-    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+//    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//    localNotification.alertTitle = @"Ooops!";
+//    localNotification.alertBody  = @"App launched!";
+//    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
     
     return YES;
 }
@@ -57,6 +62,13 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+//    _localNotificationReceived = notification;
+    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
+    [_locationManager setFocusSignalID:focusSignalID];
 }
 
 #pragma mark - Custom methods

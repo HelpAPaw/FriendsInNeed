@@ -176,6 +176,7 @@
     }
     
     _nearbySignals = [NSMutableArray arrayWithArray:response.data];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
     
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
@@ -196,6 +197,8 @@
         
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
         localNotification.alertBody  = alertBody;
+        GeoPoint *nearestSignal = _nearbySignals.firstObject;
+        localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
         [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
     }
 }
@@ -208,13 +211,23 @@
     _lastSignalCheckLocation = nil;
 }
 
-- (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
+- (MKPointAnnotation *)annotationFromGeoPoint:(GeoPoint *)geoPoint
 {
     MKPointAnnotation *annotation = [MKPointAnnotation new];
     annotation.title = [geoPoint.metadata objectForKey:@"name"];
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(geoPoint.latitude.doubleValue, geoPoint.longitude.doubleValue);
     annotation.coordinate = coordinate;
+    return annotation;
+}
+
+- (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
+{
+    MKPointAnnotation *annotation = [self annotationFromGeoPoint:geoPoint];
     [_mapView addAnnotation:annotation];
+    if ([geoPoint.objectId isEqualToString:_focusSignalID])
+    {
+        [_mapView selectAnnotation:annotation animated:YES];
+    }
 }
 
 - (void)updateMapWithNearbySignals
@@ -231,6 +244,20 @@
 {
     [_nearbySignals addObject:geoPoint];
     [self addAnnotationToMapFromGeoPoint:geoPoint];
+}
+
+- (void)setFocusSignalID:(NSString *)focusSignalID
+{
+    _focusSignalID = focusSignalID;
+    
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Restaurants"]];
+    query.whereClause = [NSString stringWithFormat:@"objectid='%@'", focusSignalID];
+    [query includeMeta:YES];
+    [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
+        NSLog(@"%@", collection.data);
+    } error:^(Fault *error) {
+        NSLog(@"%@", error.detail);
+    }];
 }
 
 

@@ -10,9 +10,12 @@
 #import <MapKit/MapKit.h>
 #import "Backendless.h"
 
+#define kNotificationSignalID   @"NotificationSignalID"
+
 @interface FINLocationManager : NSObject
 
 @property (weak, nonatomic) MKMapView *mapView;
+@property (strong, nonatomic) NSString  *focusSignalID;
 
 + (id)sharedManager;
 

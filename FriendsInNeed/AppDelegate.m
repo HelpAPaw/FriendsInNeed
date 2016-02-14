@@ -26,6 +26,7 @@
     // Override point for customization after application launch.
     
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
+    [backendless.userService setStayLoggedIn:YES];
     
     [self registerForLocalNotifications];
     

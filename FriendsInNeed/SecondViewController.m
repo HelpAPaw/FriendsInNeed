@@ -9,6 +9,7 @@
 #import "SecondViewController.h"
 #import "FINLocationManager.h"
 #import "Backendless.h"
+#import "FINLoginVC.h"
 
 @interface SecondViewController ()
 @property (weak, nonatomic) IBOutlet UITextField *titleTextField;
@@ -39,7 +40,13 @@
 {
     CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
     
-    BackendlessUser *currentUser = [backendless.userService login:@"milen@kanbanize.com" password:@"fuckingshit"];
+//    BackendlessUser *currentUser = [backendless.userService login:@"milen@kanbanize.com" password:@"fuckingshit"];
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    if (!currentUser)
+    {
+        [self showLoginScreen];
+        return;
+    }
     
     Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved:) selErrorHandler:@selector(errorHandler:)];
     GEO_POINT coordinate;
@@ -82,6 +89,14 @@
                                                           }];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+}
+
+- (void)showLoginScreen
+{
+    FINLoginVC *loginVC = [[FINLoginVC alloc] init];
+    [self presentViewController:loginVC animated:YES completion:^{
+        
+    }];
 }
 
 @end

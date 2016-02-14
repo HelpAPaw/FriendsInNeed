@@ -66,40 +66,16 @@
 {
     UISegmentedControl *segControl = (UISegmentedControl *)sender;
     
-//    [UIView animateWithDuration:1.3f animations:^{
-//        if (segControl.selectedSegmentIndex == 1)
-//        {
-////            [_registrationView removeFromSuperview];
-////            [_containerScrollView addSubview:_loginView];
-//            [self setupLoginView];
-//        }
-//        else
-//        {
-////            [_loginView removeFromSuperview];
-////            [_containerScrollView addSubview:_registrationView];
-//            [self setupRegistrationView];
-//        }
-//    }];
-    
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
         if (segControl.selectedSegmentIndex == 1)
         {
-//            [_registrationView removeFromSuperview];
-//            [_containerScrollView addSubview:_loginView];
             [self setupLoginView];
         }
         else
         {
-//            [_loginView removeFromSuperview];
-//            [_containerScrollView addSubview:_registrationView];
             [self setupRegistrationView];
         }
-    } completion:^(BOOL finished){
-//        if (finished) {
-//            NSLog(@"Hm: %@", _registerLoginButton.titleLabel.text);
-//        }
-    }];
-
+    } completion:^(BOOL finished){}];
 }
 
 - (void)setupRegistrationView
@@ -124,9 +100,7 @@
 
 - (IBAction)onCancelButton:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (IBAction)onRegisterButton:(id)sender

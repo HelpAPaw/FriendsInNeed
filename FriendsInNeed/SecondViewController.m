@@ -79,10 +79,10 @@
 - (void)errorHandler:(Fault *)fault
 {
     NSLog(@"%@", fault.description);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Fuck!"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
                                                                    message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.description]
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"Ooook..."
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                                               [self dismissViewControllerAnimated:YES completion:nil];
@@ -94,9 +94,10 @@
 - (void)showLoginScreen
 {
     FINLoginVC *loginVC = [[FINLoginVC alloc] init];
-    [self presentViewController:loginVC animated:YES completion:^{
-        
-    }];
+    loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:loginVC animated:YES completion:^{}];
+    
+    [self.tabBarController setSelectedIndex:0];
 }
 
 @end

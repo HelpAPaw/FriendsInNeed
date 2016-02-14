@@ -10,9 +10,17 @@
 #import "Backendless.h"
 
 @interface FINLoginVC ()
+@property (weak, nonatomic) IBOutlet UIScrollView *containerScrollView;
+@property (strong, nonatomic) IBOutlet UIView *registrationView;
+@property (strong, nonatomic) IBOutlet UIView *loginView;
+@property (weak, nonatomic) IBOutlet UILabel *hintLabel;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
+
+@property (assign, nonatomic) BOOL viewDidAppearOnce;
 
 @end
 
@@ -22,7 +30,31 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
+    [_containerScrollView addSubview:_registrationView];
+    
     //TODO: add support for landscape orientation
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    //TODO: do this only first time
+    if (_viewDidAppearOnce == NO)
+    {
+        CGRect registrationFrame = _registrationView.frame;
+        registrationFrame.size.height = _containerScrollView.frame.size.height;
+        registrationFrame.size.width  = _containerScrollView.frame.size.width;
+        _registrationView.frame = registrationFrame;
+        [_registrationView setNeedsUpdateConstraints];
+        
+        _loginView.frame = registrationFrame;
+        
+        _viewDidAppearOnce = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -30,15 +62,66 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
+- (IBAction)onRegisterLoginSwitch:(id)sender
+{
+    UISegmentedControl *segControl = (UISegmentedControl *)sender;
+    
+//    [UIView animateWithDuration:1.3f animations:^{
+//        if (segControl.selectedSegmentIndex == 1)
+//        {
+////            [_registrationView removeFromSuperview];
+////            [_containerScrollView addSubview:_loginView];
+//            [self setupLoginView];
+//        }
+//        else
+//        {
+////            [_loginView removeFromSuperview];
+////            [_containerScrollView addSubview:_registrationView];
+//            [self setupRegistrationView];
+//        }
+//    }];
+    
+    [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
+        if (segControl.selectedSegmentIndex == 1)
+        {
+//            [_registrationView removeFromSuperview];
+//            [_containerScrollView addSubview:_loginView];
+            [self setupLoginView];
+        }
+        else
+        {
+//            [_loginView removeFromSuperview];
+//            [_containerScrollView addSubview:_registrationView];
+            [self setupRegistrationView];
+        }
+    } completion:^(BOOL finished){
+//        if (finished) {
+//            NSLog(@"Hm: %@", _registerLoginButton.titleLabel.text);
+//        }
+    }];
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
-*/
+
+- (void)setupRegistrationView
+{
+    _hintLabel.text = @"You need to register before you can submit signals";
+    _nameLabel.hidden = NO;
+    _nameTextField.hidden = NO;
+    
+    [UIView performWithoutAnimation:^{
+        _registerLoginButton.titleLabel.text = @"Register";
+        [_registerLoginButton layoutIfNeeded];
+    }];
+}
+
+- (void)setupLoginView
+{
+    _hintLabel.text = @"Please enter your credentials";
+    _nameLabel.hidden = YES;
+    _nameTextField.hidden = YES;
+    _registerLoginButton.titleLabel.text = @"Login";
+}
+
 - (IBAction)onCancelButton:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:^{

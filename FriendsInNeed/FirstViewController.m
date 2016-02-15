@@ -80,4 +80,9 @@
 //    [_locationManager startMonitoringSignificantLocationChanges];
 //}
 
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
+}
+
 @end

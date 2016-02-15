@@ -158,8 +158,14 @@
     NSLog(@"Received %lu signals", (unsigned long)response.data.count);
     
     NSMutableArray *newSignals = [NSMutableArray new];
+    NSMutableArray *tempNearbySignals = [NSMutableArray new];
     for (GeoPoint *receivedGeoPoint in response.data)
     {
+        if (!receivedGeoPoint)
+        {
+            continue;
+        }
+        
         BOOL alreadyPresent = NO;
         for (GeoPoint *oldGeoPoint in _nearbySignals)
         {
@@ -173,9 +179,11 @@
             [newSignals addObject:receivedGeoPoint];
             NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:@"name"]);
         }
+        
+        [tempNearbySignals addObject:receivedGeoPoint];
     }
     
-    _nearbySignals = [NSMutableArray arrayWithArray:response.data];
+    _nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
     
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)

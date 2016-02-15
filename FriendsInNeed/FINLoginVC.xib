@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINLoginVC">
             <connections>
+                <outlet property="activityIndicator" destination="Bge-ec-XTM" id="SDo-6r-6cA"/>
                 <outlet property="containerScrollView" destination="HPy-Be-HpR" id="Zbb-IT-2bd"/>
                 <outlet property="emailTextField" destination="Sas-B9-08t" id="DYx-Lx-riA"/>
                 <outlet property="hintLabel" destination="5kY-zC-Bse" id="Sat-FQ-lhO"/>
@@ -14,6 +15,7 @@
                 <outlet property="nameTextField" destination="wdr-Ti-WQ7" id="0zY-J5-iMR"/>
                 <outlet property="passwordTextField" destination="aLU-m9-fxe" id="5In-Cl-OXc"/>
                 <outlet property="registerLoginButton" destination="wbC-vS-778" id="IOw-VC-npA"/>
+                <outlet property="segmentControl" destination="Pzg-IJ-Iml" id="vZR-Hp-3fh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -157,6 +159,9 @@
                                 <action selector="onRegisterButton:" destination="-1" eventType="touchUpInside" id="gA2-gn-KkO"/>
                             </connections>
                         </button>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Bge-ec-XTM">
+                            <rect key="frame" x="290" y="343" width="20" height="20"/>
+                        </activityIndicatorView>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wdr-Ti-WQ7" userLabel="Name Text Field">
                             <rect key="frame" x="155" y="277" width="290" height="30"/>
                             <constraints>
@@ -170,6 +175,7 @@
                         </textField>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="8" id="3G3-BY-gJT"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="top" secondItem="saT-hO-LZA" secondAttribute="bottom" constant="8" id="6AQ-Bo-z4U"/>
                         <constraint firstItem="saT-hO-LZA" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="CWD-pI-C9n"/>
                         <constraint firstItem="aLU-m9-fxe" firstAttribute="top" secondItem="ma8-2h-gbd" secondAttribute="bottom" constant="8" id="Cbi-qR-eU5"/>
@@ -178,6 +184,7 @@
                         <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="30" id="Ofh-9Q-pt6"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="V55-1V-vb4"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="top" secondItem="5kY-zC-Bse" secondAttribute="bottom" constant="15" id="X6G-vf-NoC"/>
+                        <constraint firstItem="Bge-ec-XTM" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="bFe-CH-e1X"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="bKY-1h-k5G"/>
                         <constraint firstAttribute="bottom" secondItem="wbC-vS-778" secondAttribute="bottom" constant="80" id="fLt-7Q-uWm"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="leading" secondItem="HPy-Be-HpR" secondAttribute="leading" constant="30" id="fVe-AM-2j2"/>

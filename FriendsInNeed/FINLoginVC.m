@@ -20,8 +20,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
 
-@property (assign, nonatomic) BOOL viewDidAppearOnce;
-
 @end
 
 @implementation FINLoginVC
@@ -31,8 +29,6 @@
     // Do any additional setup after loading the view from its nib.
     
     [_containerScrollView addSubview:_registrationView];
-    
-    //TODO: add support for landscape orientation
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -40,26 +36,14 @@
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidLayoutSubviews
-{
-    //TODO: do this only first time
-    if (_viewDidAppearOnce == NO)
-    {
-        CGRect registrationFrame = _registrationView.frame;
-        registrationFrame.size.height = _containerScrollView.frame.size.height;
-        registrationFrame.size.width  = _containerScrollView.frame.size.width;
-        _registrationView.frame = registrationFrame;
-        [_registrationView setNeedsUpdateConstraints];
-        
-        _loginView.frame = registrationFrame;
-        
-        _viewDidAppearOnce = YES;
-    }
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (BOOL)prefersStatusBarHidden
+{
+    return NO;
 }
 
 - (IBAction)onRegisterLoginSwitch:(id)sender

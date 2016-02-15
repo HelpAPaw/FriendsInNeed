@@ -25,8 +25,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
+    
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
-    [backendless.userService setStayLoggedIn:YES];
+    //TODO: change this after debuging is done
+    [backendless.userService setStayLoggedIn:NO];
     
     [self registerForLocalNotifications];
     

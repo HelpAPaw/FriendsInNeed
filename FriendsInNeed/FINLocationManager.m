@@ -222,7 +222,12 @@
 - (MKPointAnnotation *)annotationFromGeoPoint:(GeoPoint *)geoPoint
 {
     MKPointAnnotation *annotation = [MKPointAnnotation new];
-    annotation.title = [geoPoint.metadata objectForKey:@"name"];
+    NSString *title = [geoPoint.metadata objectForKey:@"name"];
+    NSLog(@"title's class is %@", [title class]);
+    if ([title isKindOfClass:[NSString class]])
+    {
+        annotation.title = title;
+    }
     CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(geoPoint.latitude.doubleValue, geoPoint.longitude.doubleValue);
     annotation.coordinate = coordinate;
     return annotation;

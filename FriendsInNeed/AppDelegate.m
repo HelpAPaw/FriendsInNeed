@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Backendless.h"
+#import "FINMapVC.h"
 
 #define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
 #define BCKNDLSS_SECRET_KEY     @"9F8B017B-2890-A887-FFD5-63D6A5302100"
@@ -28,20 +29,24 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = TRUE;
     
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
-    //TODO: change this after debuging is done
+    //TODO: change this to YES after debuging is done
     [backendless.userService setStayLoggedIn:NO];
+    
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    // Override point for customization after application launch.
+    FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
+    self.window.rootViewController = mapVC;
+    [self.window makeKeyAndVisible];
+    
     
     [self registerForLocalNotifications];
     
-    UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-    [_locationManager setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
     
     _locationManager = [FINLocationManager sharedManager];
     
-//    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-//    localNotification.alertTitle = @"Ooops!";
-//    localNotification.alertBody  = @"App launched!";
-//    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+    UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
+    [_locationManager setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
     
     return YES;
 }

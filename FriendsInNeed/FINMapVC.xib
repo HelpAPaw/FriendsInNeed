@@ -15,15 +15,18 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" userLabel="Main View">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzw-BA-6AS">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="cgi-WK-N7P"/>
+                    </connections>
                 </mapView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ttH-Qm-6yO">
-                    <rect key="frame" x="548" y="548" width="22" height="22"/>
+                    <rect key="frame" x="558" y="558" width="22" height="22"/>
                     <state key="normal">
                         <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -36,10 +39,10 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Vzw-BA-6AS" secondAttribute="trailing" id="1L4-vy-sW4"/>
                 <constraint firstItem="Vzw-BA-6AS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7HH-Qn-u3B"/>
-                <constraint firstAttribute="bottom" secondItem="ttH-Qm-6yO" secondAttribute="bottom" constant="30" id="JIG-0F-Jlh"/>
+                <constraint firstAttribute="bottom" secondItem="ttH-Qm-6yO" secondAttribute="bottom" constant="20" id="JIG-0F-Jlh"/>
                 <constraint firstAttribute="bottom" secondItem="Vzw-BA-6AS" secondAttribute="bottom" id="Rlx-L2-fvx"/>
                 <constraint firstItem="Vzw-BA-6AS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pUk-6q-AIT"/>
-                <constraint firstAttribute="trailing" secondItem="ttH-Qm-6yO" secondAttribute="trailing" constant="30" id="ykJ-5t-Mcu"/>
+                <constraint firstAttribute="trailing" secondItem="ttH-Qm-6yO" secondAttribute="trailing" constant="20" id="ykJ-5t-Mcu"/>
             </constraints>
         </view>
         <view alpha="0.90000000000000002" contentMode="scaleToFill" id="1V9-Vl-MM8">
@@ -61,7 +64,7 @@
                     <rect key="frame" x="2" y="2" width="435" height="30"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textField>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

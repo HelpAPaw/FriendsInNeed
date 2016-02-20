@@ -13,9 +13,10 @@
 
 #define kAddSignalViewYposition 30.0f
 #define kAddSignalViewYbounce   10.0f
+#define kButtonBlueColor [UIColor colorWithRed:13.0f/255.0f green:95.0f/255.0f blue:255.0f/255.0f alpha:1.0f]
 
 
-@interface FINMapVC ()
+@interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *addSignalButton;
@@ -44,7 +45,7 @@
                                                object:nil];
     
     _addSignalButton.layer.shadowOpacity = 1.0f;
-    _addSignalButton.layer.shadowColor = [UIColor blackColor].CGColor;
+    _addSignalButton.layer.shadowColor = kButtonBlueColor.CGColor;
     _addSignalButton.layer.shadowOffset = CGSizeMake(0, 0);
     
     _addSignalView.layer.cornerRadius = 5.0f;
@@ -53,6 +54,10 @@
     _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
     
     _submitMode = NO;
+    
+    UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
+    [panGR setDelegate:self];
+    [_mapView addGestureRecognizer:panGR];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -82,7 +87,25 @@
 
 - (void)toggleSubmitMode
 {
+    CGFloat rotationAngle;
+    UIColor *buttonColor;
+    if (!_submitMode)
+    {
+        rotationAngle = -3.25f;
+        buttonColor = [UIColor redColor];
+    }
+    else
+    {
+        rotationAngle = 0.0f;
+        buttonColor = kButtonBlueColor;
+    }
+    
+    
     [UIView animateWithDuration:0.3f animations:^{
+        
+        _addSignalButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
+        _addSignalButton.tintColor = buttonColor;
+        _addSignalButton.layer.shadowColor = buttonColor.CGColor;
         
         CGRect frame = _addSignalView.frame;
         if (_submitMode)
@@ -183,6 +206,27 @@
                                                           }];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+}
+
+#pragma mark - Pan Gesture Recognizer Delegate
+// This is needed so that the Pan GR works along with the map's gesture recognizers
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+- (void)didDragMap:(UIGestureRecognizer*)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    {
+        [_signalTitleField resignFirstResponder];
+    }
+}
+
+#pragma mark - Map Delegate
+- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+{
+    
 }
 
 @end

@@ -26,6 +26,8 @@
 @property (strong, nonatomic) FINLocationManager *locationManager;
 
 @property (assign, nonatomic) BOOL submitMode;
+@property (strong, nonatomic) MKPointAnnotation *submitSignalAnnotation;
+@property (weak, nonatomic) MKPinAnnotationView *submitSignalAnnotationView;
 
 @end
 
@@ -93,6 +95,12 @@
     {
         rotationAngle = -3.25f;
         buttonColor = [UIColor redColor];
+        
+        // Add a pin to the map to select location of the signal
+        CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
+        _submitSignalAnnotation = [MKPointAnnotation new];
+        _submitSignalAnnotation.coordinate = userLocation.coordinate;
+        [_mapView addAnnotation:_submitSignalAnnotation];
     }
     else
     {
@@ -111,6 +119,9 @@
         if (_submitMode)
         {
             frame.origin.y += kAddSignalViewYbounce;
+            
+            // Fade pin before removal
+            _submitSignalAnnotationView.alpha = 0.0f;
         }
         else
         {
@@ -126,6 +137,10 @@
                 if (_submitMode)
                 {
                     frame.origin.y = - frame.size.height;
+                    
+                    // Remove pin and annotation
+                    [_mapView removeAnnotation:_submitSignalAnnotation];
+                    _submitSignalAnnotation = nil;
                 }
                 else
                 {
@@ -146,8 +161,6 @@
 
 - (IBAction)onSendButton:(id)sender
 {
-    CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
-    
     BackendlessUser *currentUser = backendless.userService.currentUser;
     if (!currentUser)
     {
@@ -157,14 +170,16 @@
     
     Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved:) selErrorHandler:@selector(errorHandler:)];
     GEO_POINT coordinate;
-    coordinate.latitude = userLocation.coordinate.latitude;
-    coordinate.longitude = userLocation.coordinate.longitude;
+    coordinate.latitude = _submitSignalAnnotation.coordinate.latitude;
+    coordinate.longitude = _submitSignalAnnotation.coordinate.longitude;
     NSDictionary *geoPointMeta = @{@"name":_signalTitleField.text, @"author":currentUser};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
     
     [_signalTitleField setText:@""];
     [_signalTitleField resignFirstResponder];
+    
+    NSLog(@"Submitted a signal for location: lon %f, lat %f", _submitSignalAnnotation.coordinate.longitude, _submitSignalAnnotation.coordinate.latitude);
 }
 
 - (void)showLoginScreen
@@ -227,6 +242,24 @@
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {
     
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation
+{
+    MKPinAnnotationView *newAnnotationView;
+    
+    if (annotation == _submitSignalAnnotation)
+    {
+        newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"submitSignalAnnotation"];
+        newAnnotationView.pinTintColor = kButtonBlueColor;
+        newAnnotationView.animatesDrop = YES;
+        newAnnotationView.draggable = YES;
+        newAnnotationView.canShowCallout = NO;
+        [newAnnotationView setSelected:YES animated:YES];
+        _submitSignalAnnotationView = newAnnotationView;
+    }
+    
+    return newAnnotationView;
 }
 
 @end

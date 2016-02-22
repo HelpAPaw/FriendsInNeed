@@ -45,6 +45,7 @@
     
     _locationManager = [FINLocationManager sharedManager];
     
+    // TODO: fix this to happen in MapVC
     UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
     [_locationManager setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
     

@@ -8,9 +8,11 @@
 
 #import "FINLocationManager.h"
 #import <CoreLocation/CoreLocation.h>
+#import "FINAnnotation.h"
 
 #define kLastKnownLocation @"LastKnownLocation"
-#define kDefaultMapRegion   4000
+#define kDefaultMapRegion           4000
+#define kMinimumDistanceTravelled   300
 
 @interface FINLocationManager() <CLLocationManagerDelegate>
 
@@ -74,12 +76,9 @@
         NSLog(@"Distance travelled: %f", distance);
     }
     
-    if (   (_lastSignalCheckLocation == nil)
-        || ([_lastSignalCheckLocation distanceFromLocation:newLocation] > 300)
-       )
-    {
-        [self getSignalForLocation:newLocation];
-    }
+    
+    [self getSignalsForLocation:newLocation];
+    
     
     _lastSavedLocation = newLocation;
     [self saveLastKnownLocation:newLocation];
@@ -140,8 +139,16 @@
     return _lastSavedLocation;
 }
 
-- (void)getSignalForLocation:(CLLocation *)location
+- (void)getSignalsForLocation:(CLLocation *)location
 {
+    // Do not check if delta distance is below threshold
+    if (   (_lastSignalCheckLocation != nil)
+        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)
+        )
+    {
+        return;
+    }
+    
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
@@ -219,34 +226,37 @@
     _lastSignalCheckLocation = nil;
 }
 
-- (MKPointAnnotation *)annotationFromGeoPoint:(GeoPoint *)geoPoint
-{
-    MKPointAnnotation *annotation = [MKPointAnnotation new];
-    NSString *title = [geoPoint.metadata objectForKey:@"name"];
-    NSLog(@"title's class is %@", [title class]);
-    if ([title isKindOfClass:[NSString class]])
-    {
-        annotation.title = title;
-    }
-    CLLocationCoordinate2D coordinate = CLLocationCoordinate2DMake(geoPoint.latitude.doubleValue, geoPoint.longitude.doubleValue);
-    annotation.coordinate = coordinate;
-    return annotation;
-}
-
 - (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
 {
-    MKPointAnnotation *annotation = [self annotationFromGeoPoint:geoPoint];
-    [_mapView addAnnotation:annotation];
-    if ([geoPoint.objectId isEqualToString:_focusSignalID])
+    BOOL alreadyPresent = NO;
+    for (FINAnnotation *ann in _mapView.annotations)
     {
-        [_mapView selectAnnotation:annotation animated:YES];
+        if ([ann isKindOfClass:[FINAnnotation class]] == NO)
+        {
+            continue;
+        }
+        else if ([ann.geoPoint.objectId isEqualToString:geoPoint.objectId] == YES)
+        {
+            alreadyPresent = YES;
+            
+            if ([ann.geoPoint.objectId isEqualToString:_focusSignalID])
+            {
+                [_mapView selectAnnotation:ann animated:YES];
+            }
+            
+            break;
+        }
+    }
+    
+    if (alreadyPresent == NO)
+    {
+        FINAnnotation *annotation = [[FINAnnotation alloc] initWithGeoPoint:geoPoint];
+        [_mapView addAnnotation:annotation];
     }
 }
 
 - (void)updateMapWithNearbySignals
-{
-    [_mapView removeAnnotations:[_mapView annotations]];
-    
+{    
     for (GeoPoint *geoPoint in _nearbySignals)
     {
         [self addAnnotationToMapFromGeoPoint:geoPoint];

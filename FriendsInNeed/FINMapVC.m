@@ -235,13 +235,15 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
         [_signalTitleField resignFirstResponder];
+        
+        CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
+        [_locationManager getSignalsForLocation:newCenter];
     }
 }
 
 #pragma mark - Map Delegate
 - (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
 {
-    
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation

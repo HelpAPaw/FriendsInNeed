@@ -25,5 +25,6 @@
 - (void)updateMapWithNearbySignals;
 - (CLLocation *)getLastKnownUserLocation;
 - (void)addNewSignal:(GeoPoint *)geoPoint;
+- (void)getSignalsForLocation:(CLLocation *)location;
 
 @end

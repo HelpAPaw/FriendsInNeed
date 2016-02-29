@@ -14,5 +14,6 @@
 @property (strong, nonatomic) GeoPoint *geoPoint;
 
 - (FINAnnotation *)initWithGeoPoint:(GeoPoint *)geoPoint;
+- (void)updateAnnotationSubtitle;
 
 @end

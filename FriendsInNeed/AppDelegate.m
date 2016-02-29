@@ -30,7 +30,7 @@
     
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
     //TODO: change this to YES after debuging is done
-    [backendless.userService setStayLoggedIn:NO];
+    [backendless.userService setStayLoggedIn:YES];
     
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

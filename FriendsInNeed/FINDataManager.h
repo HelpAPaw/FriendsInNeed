@@ -14,4 +14,8 @@
 
 @interface FINDataManager : NSObject
 
++ (id)sharedManager;
+
+@property (strong, nonatomic) NSDateFormatter *signalDateFormatter;
+
 @end

@@ -11,10 +11,13 @@
 #import "FINLocationManager.h"
 #import "FINDataManager.h"
 #import "FINLoginVC.h"
+#import "FINAnnotation.h"
 
 #define kAddSignalViewYposition 30.0f
 #define kAddSignalViewYbounce   10.0f
 #define kButtonBlueColor [UIColor colorWithRed:13.0f/255.0f green:95.0f/255.0f blue:255.0f/255.0f alpha:1.0f]
+#define kSubmitSignalAnnotationView     @"SubmitSignalAnnotationView"
+#define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
 @interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate>
@@ -104,6 +107,8 @@
         _submitSignalAnnotation = [MKPointAnnotation new];
         _submitSignalAnnotation.coordinate = userLocation.coordinate;
         [_mapView addAnnotation:_submitSignalAnnotation];
+        
+        _signalTitleField.text = @"";
     }
     else
     {
@@ -175,7 +180,9 @@
     GEO_POINT coordinate;
     coordinate.latitude = _submitSignalAnnotation.coordinate.latitude;
     coordinate.longitude = _submitSignalAnnotation.coordinate.longitude;
-    NSDictionary *geoPointMeta = @{kSignalTitleKey:_signalTitleField.text, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:[NSDate date]};
+    FINDataManager *dataManager = [FINDataManager sharedManager];
+    NSString *submitDate = [dataManager.signalDateFormatter stringFromDate:[NSDate date]];
+    NSDictionary *geoPointMeta = @{kSignalTitleKey:_signalTitleField.text, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
     
@@ -251,20 +258,73 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation
 {
+    // If the annotation is the user location, just return nil so the default annotation view is used
+    if ([annotation isKindOfClass:[MKUserLocation class]])
+    {
+        return nil;
+    }
+    
+    FINAnnotation *customAnnotation = (FINAnnotation *)annotation;
     MKPinAnnotationView *newAnnotationView;
     
     if (annotation == _submitSignalAnnotation)
     {
-        newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"submitSignalAnnotation"];
-        newAnnotationView.pinTintColor = kButtonBlueColor;
-        newAnnotationView.animatesDrop = YES;
-        newAnnotationView.draggable = YES;
-        newAnnotationView.canShowCallout = NO;
+        newAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kSubmitSignalAnnotationView];
+        if (newAnnotationView == nil)
+        {
+            newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kSubmitSignalAnnotationView];
+            newAnnotationView.pinTintColor = kButtonBlueColor;
+            newAnnotationView.animatesDrop = YES;
+            newAnnotationView.draggable = YES;
+            newAnnotationView.canShowCallout = NO;
+        }
+        else
+        {
+            newAnnotationView.annotation = annotation;
+            newAnnotationView.alpha = 1.0f;
+        }
+        
         [newAnnotationView setSelected:YES animated:YES];
+        
         _submitSignalAnnotationView = newAnnotationView;
+    }
+    else
+    {
+        newAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
+        if (newAnnotationView == nil)
+        {
+            newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kStandardSignalAnnotationView];
+            newAnnotationView.canShowCallout = YES;
+            
+            // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
+            UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+            [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+            newAnnotationView.rightCalloutAccessoryView = rightButton;
+            
+            // Add a custom image to the left side of the callout.
+            UIImageView *signalImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_paw.png"]];
+            CGRect imageFrame = signalImage.frame;
+            imageFrame.size.height = newAnnotationView.frame.size.height;
+            imageFrame.size.width  = newAnnotationView.frame.size.height;
+            signalImage.frame = imageFrame;
+            newAnnotationView.leftCalloutAccessoryView = signalImage;
+        }
+        else
+        {
+            newAnnotationView.annotation = annotation;
+        }
     }
     
     return newAnnotationView;
+}
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
+{
+    if ([view.reuseIdentifier isEqualToString:kStandardSignalAnnotationView])
+    {
+        FINAnnotation *annotation = (FINAnnotation *)view.annotation;
+        [annotation updateAnnotationSubtitle];
+    }
 }
 
 @end

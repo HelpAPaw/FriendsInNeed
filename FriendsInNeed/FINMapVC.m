@@ -85,6 +85,8 @@
     [_locationManager updateMapToLastKnownLocation];
     [_locationManager updateMapWithNearbySignals];
     [_locationManager updateUserLocation];
+    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
 - (void)toggleSubmitMode
@@ -172,7 +174,7 @@
     GEO_POINT coordinate;
     coordinate.latitude = _submitSignalAnnotation.coordinate.latitude;
     coordinate.longitude = _submitSignalAnnotation.coordinate.longitude;
-    NSDictionary *geoPointMeta = @{@"name":_signalTitleField.text, @"author":currentUser};
+    NSDictionary *geoPointMeta = @{@"title":_signalTitleField.text, @"author":currentUser};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
     

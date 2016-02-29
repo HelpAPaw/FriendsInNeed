@@ -184,14 +184,13 @@
         if (alreadyPresent == NO)
         {
             [newSignals addObject:receivedGeoPoint];
-            NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:@"name"]);
+            NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:@"title"]);
         }
         
         [tempNearbySignals addObject:receivedGeoPoint];
     }
     
     _nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
     
     if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
     {
@@ -199,20 +198,11 @@
     }
     else if (newSignals.count > 0)
     {
-        NSString *alertBody;
-        if (newSignals.count > 1)
-        {
-            alertBody = @"There are animals near you that need urgent help!";
-            
-        }
-        else
-        {
-            alertBody = @"There is a hurt animal near you!";
-        }
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
         
-        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.alertBody  = alertBody;
         GeoPoint *nearestSignal = _nearbySignals.firstObject;
+        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+        localNotification.alertBody  = [nearestSignal.metadata objectForKey:@"title"];
         localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
         [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
     }
@@ -235,16 +225,18 @@
         {
             continue;
         }
-        else if ([ann.geoPoint.objectId isEqualToString:geoPoint.objectId] == YES)
+        else
         {
-            alreadyPresent = YES;
-            
             if ([ann.geoPoint.objectId isEqualToString:_focusSignalID])
             {
-                [_mapView selectAnnotation:ann animated:YES];
+                [self focusAnnotation:ann];
             }
             
-            break;
+            if ([ann.geoPoint.objectId isEqualToString:geoPoint.objectId] == YES)
+            {
+                alreadyPresent = YES;
+                break;
+            }
         }
     }
     
@@ -252,6 +244,11 @@
     {
         FINAnnotation *annotation = [[FINAnnotation alloc] initWithGeoPoint:geoPoint];
         [_mapView addAnnotation:annotation];
+        
+        if ([annotation.geoPoint.objectId isEqualToString:_focusSignalID])
+        {
+            [self focusAnnotation:annotation];
+        }
     }
 }
 
@@ -273,14 +270,27 @@
 {
     _focusSignalID = focusSignalID;
     
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Restaurants"]];
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", focusSignalID];
     [query includeMeta:YES];
     [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
         NSLog(@"%@", collection.data);
+        
+        if (collection.data.count > 0)
+        {
+            GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
+            [self addAnnotationToMapFromGeoPoint:geoPoint];
+        }
     } error:^(Fault *error) {
         NSLog(@"%@", error.detail);
     }];
+}
+
+- (void)focusAnnotation:(FINAnnotation *)annotation
+{
+    [_mapView selectAnnotation:annotation animated:YES];
+    [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    _focusSignalID = nil;
 }
 
 

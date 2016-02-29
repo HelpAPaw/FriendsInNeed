@@ -7,12 +7,13 @@
 //
 
 #import "FINAnnotation.h"
+#import "FINDataManager.h"
 
 @implementation FINAnnotation
 
 - (FINAnnotation *)initWithGeoPoint:(GeoPoint *)geoPoint
 {
-    NSString *title = [geoPoint.metadata objectForKey:@"name"];
+    NSString *title = [geoPoint.metadata objectForKey:kSignalTitleKey];
     NSLog(@"title's class is %@", [title class]);
     if ([title isKindOfClass:[NSString class]])
     {

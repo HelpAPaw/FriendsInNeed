@@ -9,6 +9,7 @@
 #import "FINMapVC.h"
 #import <CoreLocation/CoreLocation.h>
 #import "FINLocationManager.h"
+#import "FINDataManager.h"
 #import "FINLoginVC.h"
 
 #define kAddSignalViewYposition 30.0f
@@ -174,7 +175,7 @@
     GEO_POINT coordinate;
     coordinate.latitude = _submitSignalAnnotation.coordinate.latitude;
     coordinate.longitude = _submitSignalAnnotation.coordinate.longitude;
-    NSDictionary *geoPointMeta = @{@"title":_signalTitleField.text, @"author":currentUser};
+    NSDictionary *geoPointMeta = @{kSignalTitleKey:_signalTitleField.text, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:[NSDate date]};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     [backendless.geoService savePoint:point responder:responder];
     

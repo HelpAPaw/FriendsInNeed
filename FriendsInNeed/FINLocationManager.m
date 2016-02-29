@@ -7,6 +7,7 @@
 //
 
 #import "FINLocationManager.h"
+#import "FINDataManager.h"
 #import <CoreLocation/CoreLocation.h>
 #import "FINAnnotation.h"
 
@@ -184,7 +185,7 @@
         if (alreadyPresent == NO)
         {
             [newSignals addObject:receivedGeoPoint];
-            NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:@"title"]);
+            NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:kSignalTitleKey]);
         }
         
         [tempNearbySignals addObject:receivedGeoPoint];
@@ -202,7 +203,7 @@
         
         GeoPoint *nearestSignal = _nearbySignals.firstObject;
         UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-        localNotification.alertBody  = [nearestSignal.metadata objectForKey:@"title"];
+        localNotification.alertBody  = [nearestSignal.metadata objectForKey:kSignalTitleKey];
         localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
         [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
     }

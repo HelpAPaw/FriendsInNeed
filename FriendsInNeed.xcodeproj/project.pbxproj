@@ -19,6 +19,7 @@
 		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
 		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
+		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484741C6C111D0067A169 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C484721C6C111D0067A169 /* FINLoginVC.xib */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
@@ -47,6 +48,8 @@
 		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
+		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
+		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3C484701C6C111D0067A169 /* FINLoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLoginVC.h; sourceTree = "<group>"; };
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484721C6C111D0067A169 /* FINLoginVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINLoginVC.xib; sourceTree = "<group>"; };
@@ -130,6 +133,8 @@
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
 				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
+				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
+				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
+				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F91C00E04F00FBE20C /* SecondViewController.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F38B72F61C00E04F00FBE20C /* FirstViewController.m in Sources */,

@@ -298,7 +298,6 @@
             
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
-            [rightButton addTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
             newAnnotationView.rightCalloutAccessoryView = rightButton;
             
             // Add a custom image to the left side of the callout.
@@ -325,6 +324,11 @@
         FINAnnotation *annotation = (FINAnnotation *)view.annotation;
         [annotation updateAnnotationSubtitle];
     }
+}
+
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
+{
+
 }
 
 @end

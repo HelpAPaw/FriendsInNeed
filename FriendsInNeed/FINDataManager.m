@@ -158,4 +158,26 @@
     }
 }
 
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    
+    GEO_POINT coordinate;
+    coordinate.latitude = locationCoordinate.latitude;
+    coordinate.longitude = locationCoordinate.longitude;
+    FINDataManager *dataManager = [FINDataManager sharedManager];
+    NSString *submitDate = [dataManager.signalDateFormatter stringFromDate:[NSDate date]];
+    NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate};
+    GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
+    
+    [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
+        
+        [_nearbySignals addObject:returnedGeoPoint];
+        completion(returnedGeoPoint, nil);
+    } error:^(Fault *fault) {
+        
+        completion(nil, fault);
+    }];
+}
+
 @end

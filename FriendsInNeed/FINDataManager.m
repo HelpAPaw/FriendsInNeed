@@ -9,10 +9,11 @@
 #import "FINDataManager.h"
 
 #define kMinimumDistanceTravelled   300
+#define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 
 @interface FINDataManager ()
 
-@property (strong, nonatomic) CLLocation        *lastSignalCheckLocation;
+@property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
 
 @end
 
@@ -42,19 +43,38 @@
     
     _nearbySignals = [NSMutableArray new];
     
+    _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
+    
     return self;
+}
+
+- (void)saveLastSignalCheckLocation:(CLLocation *)location
+{
+    NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
+    [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastSignalCheckLocation];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    _lastSignalCheckLocation = location;
+}
+
+- (CLLocation *)loadLastSignalCheckLocation
+{
+    CLLocation *lastLocation = nil;
+    @try
+    {
+        NSData *locationData = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSignalCheckLocation];
+        lastLocation = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:locationData];
+    }
+    @catch (NSException *exception)
+    {
+        NSLog(@"Couldn't read last location. Exception: %@", exception.description);
+    }
+    
+    return lastLocation;
 }
 
 - (void)getSignalsForLocation:(CLLocation *)location
 {
-    // Do not check if delta distance is below threshold
-    if (   (_lastSignalCheckLocation != nil)
-        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)
-        )
-    {
-        return;
-    }
-    
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
@@ -105,6 +125,8 @@
             localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
         }
+        
+        [self saveLastSignalCheckLocation:location];
     } error:^(Fault *fault) {
         NSLog(@"%@", fault.description);
         
@@ -112,6 +134,28 @@
     }];
     
     _lastSignalCheckLocation = location;
+}
+
+- (void)getSignalsForNewLocation:(CLLocation *)location
+{
+    // Do not check if delta distance is below threshold
+    if (   (_lastSignalCheckLocation != nil)
+        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
+    {
+        return;
+    }
+    else
+    {
+        [self getSignalsForLocation:location];
+    }
+}
+
+- (void)getNewSignalsForLastLocation
+{
+    if (_lastSignalCheckLocation != nil)
+    {
+        [self getSignalsForLocation:_lastSignalCheckLocation];
+    }
 }
 
 @end

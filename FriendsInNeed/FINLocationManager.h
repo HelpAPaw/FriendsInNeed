@@ -8,23 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "Backendless.h"
 
-#define kNotificationSignalID   @"NotificationSignalID"
+@protocol FINLocationManagerMapDelegate <NSObject>
+
+- (void)updateMapToLocation:(CLLocation *)location;
+
+@end
 
 @interface FINLocationManager : NSObject
-
-@property (weak, nonatomic) MKMapView *mapView;
-@property (strong, nonatomic) NSString  *focusSignalID;
 
 + (id)sharedManager;
 
 - (void)startMonitoringSignificantLocationChanges;
 - (void)updateUserLocation;
-- (void)updateMapToLastKnownLocation;
-- (void)updateMapWithNearbySignals;
 - (CLLocation *)getLastKnownUserLocation;
-- (void)addNewSignal:(GeoPoint *)geoPoint;
-- (void)getSignalsForLocation:(CLLocation *)location;
+
+@property (weak, nonatomic) id<FINLocationManagerMapDelegate> mapDelegate;
 
 @end

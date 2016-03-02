@@ -7,15 +7,28 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Backendless.h"
 
 #define kSignalTitleKey         @"title"
 #define kSignalAuthorKey        @"author"
 #define kSignalDateSubmittedKey @"dateSubmitted"
+#define kNotificationSignalID   @"NotificationSignalID"
+#define kDefaultMapRegion       4000
+
+@protocol FINSignalsMapDelegate <NSObject>
+
+- (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
+
+@end
 
 @interface FINDataManager : NSObject
 
 + (id)sharedManager;
 
-@property (strong, nonatomic) NSDateFormatter *signalDateFormatter;
+- (void)getSignalsForLocation:(CLLocation *)location;
+
+@property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
+@property (strong, nonatomic) NSDateFormatter   *signalDateFormatter;
+@property (strong, nonatomic) NSMutableArray    *nearbySignals;
 
 @end

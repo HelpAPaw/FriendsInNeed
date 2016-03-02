@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FINDataManager.h"
+#import "FINLocationManager.h"
 
-@interface FINMapVC : UIViewController
+@interface FINMapVC : UIViewController <FINSignalsMapDelegate, FINLocationManagerMapDelegate>
+
+- (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
+- (void)updateMapToLocation:(CLLocation *)location;
+
+@property (strong, nonatomic) NSString *focusSignalID;
 
 @end

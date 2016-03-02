@@ -17,7 +17,7 @@
 
 @interface AppDelegate ()
 
-@property (strong, nonatomic) UILocalNotification *localNotificationReceived;
+@property (weak, nonatomic) FINMapVC *mapVC;
 
 @end
 
@@ -35,16 +35,14 @@
     FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
     self.window.rootViewController = mapVC;
     [self.window makeKeyAndVisible];
+    _mapVC = mapVC;
     
     
     [self registerForLocalNotifications];
     
     
-    _locationManager = [FINLocationManager sharedManager];
-    
-#warning fix this to happen in MapVC
     UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-    [_locationManager setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
+    [_mapVC setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -75,9 +73,8 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-//    _localNotificationReceived = notification;
     NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
-    [_locationManager setFocusSignalID:focusSignalID];
+    [_mapVC setFocusSignalID:focusSignalID];
 }
 
 #pragma mark - Custom methods

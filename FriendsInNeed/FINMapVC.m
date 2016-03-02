@@ -8,8 +8,6 @@
 
 #import "FINMapVC.h"
 #import <CoreLocation/CoreLocation.h>
-#import "FINLocationManager.h"
-#import "FINDataManager.h"
 #import "FINLoginVC.h"
 #import "FINAnnotation.h"
 
@@ -28,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
+@property (strong, nonatomic) FINDataManager     *dataManager;
 
 @property (assign, nonatomic) BOOL submitMode;
 @property (strong, nonatomic) MKPointAnnotation *submitSignalAnnotation;
@@ -42,7 +41,10 @@
     [super viewDidLoad];
     
     _locationManager = [FINLocationManager sharedManager];
-    [_locationManager setMapView:_mapView];
+    _locationManager.mapDelegate = self;
+    _dataManager = [FINDataManager sharedManager];
+    _dataManager.mapDelegate = self;
+    
     [_locationManager startMonitoringSignificantLocationChanges];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -86,13 +88,26 @@
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    [_locationManager updateMapToLastKnownLocation];
-    [_locationManager updateMapWithNearbySignals];
+    CLLocation *lastKnownUserLocation = [_locationManager getLastKnownUserLocation];
+    if (lastKnownUserLocation != nil)
+    {        
+        [self updateMapToLocation:lastKnownUserLocation];
+    }
+    
     [_locationManager updateUserLocation];
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
+#pragma mark - FINLocationManagerMapDelegate
+- (void)updateMapToLocation:(CLLocation *)location
+{
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, kDefaultMapRegion, kDefaultMapRegion);
+    [_mapView setRegion:region animated:YES];
+}
+
+
+#pragma mark
 - (void)toggleSubmitMode
 {
     CGFloat rotationAngle;
@@ -233,6 +248,84 @@
     [self presentViewController:alert animated:YES completion:^{}];
 }
 
+
+- (void)addNewSignal:(GeoPoint *)geoPoint
+{
+//    [_nearbySignals addObject:geoPoint];
+    [self addAnnotationToMapFromGeoPoint:geoPoint];
+}
+
+- (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
+{
+    BOOL alreadyPresent = NO;
+    for (FINAnnotation *ann in _mapView.annotations)
+    {
+        if ([ann isKindOfClass:[FINAnnotation class]] == NO)
+        {
+            continue;
+        }
+        else
+        {
+            if ([ann.geoPoint.objectId isEqualToString:_focusSignalID])
+            {
+                [self focusAnnotation:ann];
+            }
+            
+            if ([ann.geoPoint.objectId isEqualToString:geoPoint.objectId] == YES)
+            {
+                alreadyPresent = YES;
+                break;
+            }
+        }
+    }
+    
+    if (alreadyPresent == NO)
+    {
+        FINAnnotation *annotation = [[FINAnnotation alloc] initWithGeoPoint:geoPoint];
+        [_mapView addAnnotation:annotation];
+        
+        if ([annotation.geoPoint.objectId isEqualToString:_focusSignalID])
+        {
+            [self focusAnnotation:annotation];
+        }
+    }
+}
+
+- (void)focusAnnotation:(FINAnnotation *)annotation
+{
+    [_mapView selectAnnotation:annotation animated:YES];
+    [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    _focusSignalID = nil;
+}
+
+- (void)setFocusSignalID:(NSString *)focusSignalID
+{
+    _focusSignalID = focusSignalID;
+    
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
+    query.whereClause = [NSString stringWithFormat:@"objectid='%@'", focusSignalID];
+    [query includeMeta:YES];
+    [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
+        NSLog(@"%@", collection.data);
+        
+        if (collection.data.count > 0)
+        {
+            GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
+            [self addAnnotationToMapFromGeoPoint:geoPoint];
+        }
+    } error:^(Fault *error) {
+        NSLog(@"%@", error.detail);
+    }];
+}
+
+- (void)updateMapWithNearbySignals:(NSArray *)nearbySignals
+{
+    for (GeoPoint *geoPoint in nearbySignals)
+    {
+        [self addAnnotationToMapFromGeoPoint:geoPoint];
+    }
+}
+
 #pragma mark - Pan Gesture Recognizer Delegate
 // This is needed so that the Pan GR works along with the map's gesture recognizers
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -247,7 +340,7 @@
         [_signalTitleField resignFirstResponder];
         
         CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
-        [_locationManager getSignalsForLocation:newCenter];
+        [_dataManager getSignalsForLocation:newCenter];
     }
 }
 
@@ -264,7 +357,6 @@
         return nil;
     }
     
-    FINAnnotation *customAnnotation = (FINAnnotation *)annotation;
     MKPinAnnotationView *newAnnotationView;
     
     if (annotation == _submitSignalAnnotation)

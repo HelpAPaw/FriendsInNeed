@@ -25,7 +25,8 @@
 
 + (id)sharedManager;
 
-- (void)getSignalsForLocation:(CLLocation *)location;
+- (void)getSignalsForNewLocation:(CLLocation *)location;
+- (void)getNewSignalsForLastLocation;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSDateFormatter   *signalDateFormatter;

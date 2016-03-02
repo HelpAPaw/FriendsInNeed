@@ -340,7 +340,7 @@
         [_signalTitleField resignFirstResponder];
         
         CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
-        [_dataManager getSignalsForLocation:newCenter];
+        [_dataManager getSignalsForNewLocation:newCenter];
     }
 }
 

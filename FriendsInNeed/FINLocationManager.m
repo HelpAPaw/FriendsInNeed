@@ -72,7 +72,7 @@
     }
     
     
-    [[FINDataManager sharedManager] getSignalsForLocation:newLocation];
+    [[FINDataManager sharedManager] getSignalsForNewLocation:newLocation];
     
 
     [self saveLastKnownLocation:newLocation];

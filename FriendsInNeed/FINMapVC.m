@@ -191,20 +191,41 @@
         return;
     }
     
-    Responder *responder = [Responder responder:self selResponseHandler:@selector(geoPointSaved:) selErrorHandler:@selector(errorHandler:)];
-    GEO_POINT coordinate;
-    coordinate.latitude = _submitSignalAnnotation.coordinate.latitude;
-    coordinate.longitude = _submitSignalAnnotation.coordinate.longitude;
-    FINDataManager *dataManager = [FINDataManager sharedManager];
-    NSString *submitDate = [dataManager.signalDateFormatter stringFromDate:[NSDate date]];
-    NSDictionary *geoPointMeta = @{kSignalTitleKey:_signalTitleField.text, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate};
-    GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
-    [backendless.geoService savePoint:point responder:responder];
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate completion:^(GeoPoint *savedGeoPoint, Fault *fault) {
+        if (savedGeoPoint)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
+                                                                           message:@"Your signal was submitted."
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self toggleSubmitMode];
+                                                                  }];
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+            [self addAnnotationToMapFromGeoPoint:savedGeoPoint];
+            
+            [_signalTitleField setText:@""];
+        }
+        else
+        {
+            NSLog(@"%@", fault.description);
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                                                                           message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.description]
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self dismissViewControllerAnimated:YES completion:nil];
+                                                                  }];
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+        }
+    }];
     
-    [_signalTitleField setText:@""];
+    
     [_signalTitleField resignFirstResponder];
-    
-    NSLog(@"Submitted a signal for location: lon %f, lat %f", _submitSignalAnnotation.coordinate.longitude, _submitSignalAnnotation.coordinate.latitude);
 }
 
 - (void)showLoginScreen
@@ -214,45 +235,6 @@
     [self presentViewController:loginVC animated:YES completion:^{}];
     
     [self.tabBarController setSelectedIndex:0];
-}
-
-
-#pragma mark - Backendless callbacks
-- (void)geoPointSaved:(GeoPoint *)response
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
-                                                                   message:@"Your signal was submitted."
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                                              [self toggleSubmitMode];
-                                                          }];
-    [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:^{}];
-    [[FINLocationManager sharedManager] addNewSignal:response];
-}
-
-- (void)errorHandler:(Fault *)fault
-{
-    NSLog(@"%@", fault.description);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                   message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.description]
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                                              [self dismissViewControllerAnimated:YES completion:nil];
-                                                          }];
-    [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:^{}];
-}
-
-
-- (void)addNewSignal:(GeoPoint *)geoPoint
-{
-//    [_nearbySignals addObject:geoPoint];
-    [self addAnnotationToMapFromGeoPoint:geoPoint];
 }
 
 - (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint

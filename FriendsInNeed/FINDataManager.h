@@ -27,6 +27,7 @@
 
 - (void)getSignalsForNewLocation:(CLLocation *)location;
 - (void)getNewSignalsForLastLocation;
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSDateFormatter   *signalDateFormatter;

@@ -73,7 +73,7 @@
     return lastLocation;
 }
 
-- (void)getSignalsForLocation:(CLLocation *)location
+- (void)getSignalsForLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
@@ -115,15 +115,24 @@
         {
             [_mapDelegate updateMapWithNearbySignals:_nearbySignals];
         }
-        else if (newSignals.count > 0)
+        else
         {
-            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
-            
-            GeoPoint *nearestSignal = _nearbySignals.firstObject;
-            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-            localNotification.alertBody  = [nearestSignal.metadata objectForKey:kSignalTitleKey];
-            localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
-            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+            if (newSignals.count > 0)
+            {
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
+                
+                GeoPoint *nearestSignal = _nearbySignals.firstObject;
+                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                localNotification.alertBody  = [nearestSignal.metadata objectForKey:kSignalTitleKey];
+                localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
+                [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+            else
+            {
+                completionHandler(UIBackgroundFetchResultNoData);
+            }
         }
         
         [self saveLastSignalCheckLocation:location];
@@ -131,6 +140,8 @@
         NSLog(@"%@", fault.description);
         
         _lastSignalCheckLocation = nil;
+        
+        completionHandler(UIBackgroundFetchResultFailed);
     }];
     
     _lastSignalCheckLocation = location;
@@ -146,15 +157,15 @@
     }
     else
     {
-        [self getSignalsForLocation:location];
+        [self getSignalsForLocation:location withCompletionHandler:nil];
     }
 }
 
-- (void)getNewSignalsForLastLocation
+- (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     if (_lastSignalCheckLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation];
+        [self getSignalsForLocation:_lastSignalCheckLocation withCompletionHandler:completionHandler];
     }
 }
 

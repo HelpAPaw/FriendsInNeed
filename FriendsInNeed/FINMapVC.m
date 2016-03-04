@@ -88,15 +88,22 @@
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    CLLocation *lastKnownUserLocation = [_locationManager getLastKnownUserLocation];
-    if (lastKnownUserLocation != nil)
-    {        
-        [self updateMapToLocation:lastKnownUserLocation];
-    }
+    [self updateMapToLastKnownUserLocation];
     
+    [_dataManager getNewSignalsForLastLocationWithCompletionHandler:nil];
     [_locationManager updateUserLocation];
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+}
+
+#pragma mark
+- (void)updateMapToLastKnownUserLocation
+{
+    CLLocation *lastKnownUserLocation = [_locationManager getLastKnownUserLocation];
+    if (lastKnownUserLocation != nil)
+    {
+        [self updateMapToLocation:lastKnownUserLocation];
+    }
 }
 
 #pragma mark - FINLocationManagerMapDelegate
@@ -114,6 +121,8 @@
     UIColor *buttonColor;
     if (!_submitMode)
     {
+        [self updateMapToLastKnownUserLocation];
+        
         rotationAngle = -3.25f;
         buttonColor = [UIColor redColor];
         

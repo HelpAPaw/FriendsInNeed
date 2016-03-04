@@ -26,7 +26,7 @@
 + (id)sharedManager;
 
 - (void)getSignalsForNewLocation:(CLLocation *)location;
-- (void)getNewSignalsForLastLocation;
+- (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;

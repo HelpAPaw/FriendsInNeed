@@ -121,11 +121,13 @@
             {
                 [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
                 
-                GeoPoint *nearestSignal = _nearbySignals.firstObject;
-                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                localNotification.alertBody  = [nearestSignal.metadata objectForKey:kSignalTitleKey];
-                localNotification.userInfo = [NSDictionary dictionaryWithObject:nearestSignal.objectId forKey:kNotificationSignalID];
-                [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                for (GeoPoint *geoPoint in newSignals)
+                {
+                    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                    localNotification.alertBody  = [geoPoint.metadata objectForKey:kSignalTitleKey];
+                    localNotification.userInfo = [NSDictionary dictionaryWithObject:geoPoint.objectId forKey:kNotificationSignalID];
+                    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                }
                 
                 completionHandler(UIBackgroundFetchResultNewData);
             }

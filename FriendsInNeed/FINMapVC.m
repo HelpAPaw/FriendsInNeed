@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FINLoginVC.h"
 #import "FINAnnotation.h"
+#import "FINSignalDetailsVC.h"
 
 #define kAddSignalViewYposition 30.0f
 #define kAddSignalViewYbounce   10.0f
@@ -90,6 +91,7 @@
 {
     [self updateMapToLastKnownUserLocation];
     
+#warning What happens when last location is different from current location? Or current location is unavailable?
     [_dataManager getNewSignalsForLastLocationWithCompletionHandler:nil];
     [_locationManager updateUserLocation];
     
@@ -411,7 +413,10 @@
 
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
-
+    FINAnnotation *annotation = (FINAnnotation *)view.annotation;
+    FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithGeoPoint:annotation.geoPoint];
+    signalDetailsVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:signalDetailsVC animated:YES completion:^{}];
 }
 
 @end

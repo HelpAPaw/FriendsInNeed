@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINSignalDetailsVC">
+            <connections>
+                <outlet property="tableView" destination="sZv-Fz-eoz" id="De1-gk-WO2"/>
+                <outlet property="toolbar" destination="2sk-0j-nHc" id="zGW-Ym-fvV"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IjX-k6-9Qs">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gMU-Xf-NEZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <visualEffectView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLt-xT-r6z">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" id="bPD-sb-onK">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <vibrancyEffect>
+                                    <blurEffect style="light"/>
+                                </vibrancyEffect>
+                            </visualEffectView>
+                        </subviews>
+                    </view>
+                    <blurEffect style="light"/>
+                </visualEffectView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="sZv-Fz-eoz">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="II9-x8-thR"/>
+                        <outlet property="delegate" destination="-1" id="wC1-4M-QxA"/>
+                    </connections>
+                </tableView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2sk-0j-nHc">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="s0s-Sb-g7f"/>
+                    </constraints>
+                    <items>
+                        <barButtonItem title="Close" id="POe-oe-99d">
+                            <color key="tintColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="onCloseButton:" destination="-1" id="pBO-Pl-upQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                </toolbar>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="sZv-Fz-eoz" secondAttribute="bottom" id="2te-N2-O4G"/>
+                <constraint firstItem="sZv-Fz-eoz" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="6U4-5r-UAl"/>
+                <constraint firstAttribute="trailing" secondItem="2sk-0j-nHc" secondAttribute="trailing" id="8U3-rb-EP1"/>
+                <constraint firstAttribute="trailing" secondItem="IjX-k6-9Qs" secondAttribute="trailing" id="ALH-Nc-P9W"/>
+                <constraint firstItem="sZv-Fz-eoz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Npv-BI-eW8"/>
+                <constraint firstItem="2sk-0j-nHc" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Oru-B7-LOH"/>
+                <constraint firstItem="2sk-0j-nHc" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="ZkO-cZ-S4b"/>
+                <constraint firstItem="IjX-k6-9Qs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="n2G-mJ-9io"/>
+                <constraint firstAttribute="trailing" secondItem="sZv-Fz-eoz" secondAttribute="trailing" id="vUa-k5-8bh"/>
+                <constraint firstAttribute="bottom" secondItem="IjX-k6-9Qs" secondAttribute="bottom" id="wTe-Fx-S0f"/>
+                <constraint firstItem="IjX-k6-9Qs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="xFG-jv-Paj"/>
+            </constraints>
+            <point key="canvasLocation" x="-26" y="368"/>
+        </view>
+    </objects>
+</document>

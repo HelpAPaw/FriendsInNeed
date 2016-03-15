@@ -31,7 +31,7 @@
 
 @property (assign, nonatomic) BOOL submitMode;
 @property (strong, nonatomic) MKPointAnnotation *submitSignalAnnotation;
-@property (weak, nonatomic) MKPinAnnotationView *submitSignalAnnotationView;
+@property (weak, nonatomic) MKAnnotationView *submitSignalAnnotationView;
 
 @end
 
@@ -350,36 +350,57 @@
         return nil;
     }
     
-    MKPinAnnotationView *newAnnotationView;
+    MKAnnotationView *newAnnotationView;
     
     if (annotation == _submitSignalAnnotation)
     {
-        newAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kSubmitSignalAnnotationView];
-        if (newAnnotationView == nil)
+        MKPinAnnotationView *pinAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kSubmitSignalAnnotationView];
+        if (pinAnnotationView == nil)
         {
-            newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kSubmitSignalAnnotationView];
-            newAnnotationView.pinTintColor = kButtonBlueColor;
-            newAnnotationView.animatesDrop = YES;
-            newAnnotationView.draggable = YES;
-            newAnnotationView.canShowCallout = NO;
+            pinAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kSubmitSignalAnnotationView];
+            pinAnnotationView.pinTintColor = kButtonBlueColor;
+            pinAnnotationView.animatesDrop = YES;
+            pinAnnotationView.draggable = YES;
+            pinAnnotationView.canShowCallout = NO;
         }
         else
         {
-            newAnnotationView.annotation = annotation;
-            newAnnotationView.alpha = 1.0f;
+            pinAnnotationView.annotation = annotation;
+            pinAnnotationView.alpha = 1.0f;
         }
         
-        [newAnnotationView setSelected:YES animated:YES];
+        [pinAnnotationView setSelected:YES animated:YES];
         
-        _submitSignalAnnotationView = newAnnotationView;
+        newAnnotationView = pinAnnotationView;
+        _submitSignalAnnotationView = pinAnnotationView;
     }
     else
     {
-        newAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
+        newAnnotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
         if (newAnnotationView == nil)
         {
-            newAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kStandardSignalAnnotationView];
+            newAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kStandardSignalAnnotationView];
             newAnnotationView.canShowCallout = YES;
+            
+            FINAnnotation *ann = (FINAnnotation *)annotation;
+            GeoPoint *geoPoint = ann.geoPoint;
+            NSString *status = [geoPoint.metadata objectForKey:@"status"];
+            UIImage *pinImage;
+            if ([status isEqualToString:@"2"])
+            {
+                pinImage = [UIImage imageNamed:@"pin_green.png"];
+            }
+            else if ([status isEqualToString:@"1"])
+            {
+                pinImage = [UIImage imageNamed:@"pin_orange.png"];
+            }
+            else
+            {
+                pinImage = [UIImage imageNamed:@"pin_red.png"];
+            }
+            
+            newAnnotationView.image = pinImage;
+            newAnnotationView.centerOffset = CGPointMake(0, -20);
             
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];

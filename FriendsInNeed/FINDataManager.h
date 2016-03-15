@@ -12,6 +12,7 @@
 #define kSignalTitleKey         @"title"
 #define kSignalAuthorKey        @"author"
 #define kSignalDateSubmittedKey @"dateSubmitted"
+#define kSignalStatusKey        @"status"
 #define kNotificationSignalID   @"NotificationSignalID"
 #define kDefaultMapRegion       4000
 

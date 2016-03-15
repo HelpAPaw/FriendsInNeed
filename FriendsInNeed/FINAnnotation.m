@@ -29,41 +29,61 @@
 
 - (void)updateAnnotationSubtitle
 {
-    BackendlessUser *author = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
-    if ([author isKindOfClass:[BackendlessUser class]])
-    {
-        self.subtitle = [NSString stringWithFormat:@"Submitted by %@", author.name];
-    }
+//    BackendlessUser *author = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+//    if ([author isKindOfClass:[BackendlessUser class]])
+//    {
+//        self.subtitle = [NSString stringWithFormat:@"Submitted by %@", author.name];
+//    }
+//    
+//    NSString *dateSubmittedString = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
+//    if ([dateSubmittedString isKindOfClass:[NSString class]])
+//    {
+//        FINDataManager *dataManager = [FINDataManager sharedManager];
+//        NSDate *submitDate = [dataManager.signalDateFormatter dateFromString:dateSubmittedString];
+//        if (submitDate)
+//        {
+//            NSTimeInterval timeInterval = fabs([submitDate timeIntervalSinceNow]);
+//            NSString *passedTime;
+//            
+//            if (timeInterval < 60)
+//            {
+//                passedTime = @"seconds";
+//            }
+//            else if (timeInterval < 2 * 60)
+//            {
+//                passedTime = @"a minute";
+//            }
+//            else if (timeInterval < 60 * 60)
+//            {
+//                passedTime = [NSString stringWithFormat:@"%d minutes", (int)(timeInterval / 60)];
+//            }
+//            else
+//            {
+//                passedTime = [NSString stringWithFormat:@"%d hours", (int)(timeInterval / (60 * 60))];
+//            }
+//            
+//            self.subtitle = [NSString stringWithFormat:@"%@; %@ ago", self.subtitle, passedTime];
+//        }
+//    }
     
-    NSString *dateSubmittedString = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
-    if ([dateSubmittedString isKindOfClass:[NSString class]])
+    NSString *status = [_geoPoint.metadata objectForKey:kSignalStatusKey];
+    NSString *statusString;
+    if ([status isKindOfClass:[NSString class]])
     {
-        FINDataManager *dataManager = [FINDataManager sharedManager];
-        NSDate *submitDate = [dataManager.signalDateFormatter dateFromString:dateSubmittedString];
-        if (submitDate)
+        if ([status isEqualToString:@"2"])
         {
-            NSTimeInterval timeInterval = fabs([submitDate timeIntervalSinceNow]);
-            NSString *passedTime;
-            
-            if (timeInterval < 60)
-            {
-                passedTime = @"seconds";
-            }
-            else if (timeInterval < 2 * 60)
-            {
-                passedTime = @"a minute";
-            }
-            else if (timeInterval < 60 * 60)
-            {
-                passedTime = [NSString stringWithFormat:@"%d minutes", (int)(timeInterval / 60)];
-            }
-            else
-            {
-                passedTime = [NSString stringWithFormat:@"%d hours", (int)(timeInterval / (60 * 60))];
-            }
-            
-            self.subtitle = [NSString stringWithFormat:@"%@; %@ ago", self.subtitle, passedTime];
+            statusString = @"Solved";
         }
+        else if ([status isEqualToString:@"1"])
+        {
+            statusString = @"Somebody on the way";
+        }
+        else
+        {
+            statusString = @"Awaiting help";
+        }
+        
+        self.subtitle = [NSString stringWithFormat:@"Status: %@", statusString];
     }
 }
 

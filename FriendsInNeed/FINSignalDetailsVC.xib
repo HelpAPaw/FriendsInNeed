@@ -45,18 +45,25 @@
                         <outlet property="delegate" destination="-1" id="wC1-4M-QxA"/>
                     </connections>
                 </tableView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2sk-0j-nHc">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2sk-0j-nHc">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                    <color key="backgroundColor" red="0.98823529409999999" green="0.51372549020000002" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="s0s-Sb-g7f"/>
                     </constraints>
                     <items>
                         <barButtonItem title="Close" id="POe-oe-99d">
-                            <color key="tintColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="onCloseButton:" destination="-1" id="pBO-Pl-upQ"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="eDr-Au-pbb"/>
+                        <barButtonItem title="Signal Details" id="P1R-1f-zoc">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="PoC-nA-A67"/>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="K4h-L5-tHV"/>
                     </items>
                 </toolbar>
             </subviews>

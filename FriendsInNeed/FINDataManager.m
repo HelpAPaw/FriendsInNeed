@@ -180,7 +180,7 @@
     coordinate.longitude = locationCoordinate.longitude;
     FINDataManager *dataManager = [FINDataManager sharedManager];
     NSString *submitDate = [dataManager.signalDateFormatter stringFromDate:[NSDate date]];
-    NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate};
+    NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {

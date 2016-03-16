@@ -9,6 +9,7 @@
 #import "FINSignalDetailsVC.h"
 #import "FINDataManager.h"
 #import "FINSignalDetailsCell.h"
+#import "FINGlobalConstants.pch"
 
 #define kTitleIndex     0
 #define kAuthorIndex    1
@@ -50,8 +51,18 @@
 {
     [super viewDidLoad];
     
-    _tableView.contentInset = UIEdgeInsetsMake(_toolbar.frame.size.height, 0.0f, 0.0f, 0.0f);
+//    _tableView.contentInset = UIEdgeInsetsMake(_toolbar.frame.size.height, 0.0f, 0.0f, 0.0f);
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
+    
+    self.navigationItem.title = @"Signals Details";
+    
+    _toolbar.layer.shadowColor = [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:0.5f].CGColor;
+    _toolbar.layer.shadowOpacity = 1.0f;
+    _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
+    
+    NSString *backButtonText = @"Close";
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)didReceiveMemoryWarning

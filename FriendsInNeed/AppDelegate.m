@@ -10,6 +10,7 @@
 #import "Backendless.h"
 #import "FINMapVC.h"
 #import "FINDataManager.h"
+#import "FINGlobalConstants.pch"
 
 #define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
 #define BCKNDLSS_SECRET_KEY     @"9F8B017B-2890-A887-FFD5-63D6A5302100"
@@ -31,9 +32,16 @@
     
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     // Override point for customization after application launch.
     FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
-    self.window.rootViewController = mapVC;
+    [[UINavigationBar appearance] setBarTintColor:kCustomOrange];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    [[UINavigationBar appearance] setTranslucent:NO];
+     UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
+    
+    self.window.rootViewController = navController;
     [self.window makeKeyAndVisible];
     _mapVC = mapVC;
     

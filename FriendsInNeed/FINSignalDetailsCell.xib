@@ -30,14 +30,14 @@
                         <attributedString key="attributedText">
                             <fragment content="Signal from ">
                                 <attributes>
-                                    <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue"/>
                                     <font key="NSOriginalFont" size="12" name="HelveticaNeue"/>
                                 </attributes>
                             </fragment>
                             <fragment content="Milen Marinov">
                                 <attributes>
-                                    <color key="NSColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
                                     <font key="NSOriginalFont" size="12" name="HelveticaNeue-Italic"/>
                                 </attributes>
@@ -53,13 +53,13 @@
                         <attributedString key="attributedText">
                             <fragment content="Submitted on ">
                                 <attributes>
-                                    <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue"/>
                                 </attributes>
                             </fragment>
                             <fragment content="14.03.2016, 15:17">
                                 <attributes>
-                                    <color key="NSColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
                                 </attributes>
                             </fragment>

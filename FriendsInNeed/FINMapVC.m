@@ -12,7 +12,7 @@
 #import "FINAnnotation.h"
 #import "FINSignalDetailsVC.h"
 
-#define kAddSignalViewYposition 30.0f
+#define kAddSignalViewYposition 15.0f
 #define kAddSignalViewYbounce   10.0f
 #define kButtonBlueColor [UIColor colorWithRed:13.0f/255.0f green:95.0f/255.0f blue:255.0f/255.0f alpha:1.0f]
 #define kSubmitSignalAnnotationView     @"SubmitSignalAnnotationView"
@@ -53,9 +53,11 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
+    _addSignalButton.tintColor = [UIColor redColor];
     _addSignalButton.layer.shadowOpacity = 1.0f;
-    _addSignalButton.layer.shadowColor = kButtonBlueColor.CGColor;
-    _addSignalButton.layer.shadowOffset = CGSizeMake(0, 0);
+    _addSignalButton.layer.shadowColor = [UIColor redColor].CGColor;
+    _addSignalButton.layer.shadowOffset = CGSizeMake(0, 0);    
+    _addSignalButton.alpha = 0.0f;
     
     _addSignalView.layer.cornerRadius = 5.0f;
     _addSignalView.layer.shadowOpacity = 1.0f;
@@ -67,6 +69,24 @@
     UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
     [panGR setDelegate:self];
     [_mapView addGestureRecognizer:panGR];
+    
+    self.navigationItem.title = @"Signals Map";
+    
+//    NSString *backButtonText = @"Map";
+//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:nil action:nil];
+//    self.navigationItem.backBarButtonItem = backButton;
+    
+    UIImage *addImage = [UIImage imageNamed:@"ic_add"];
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [addButton setFrame:CGRectMake(0, 0, addImage.size.width, addImage.size.height)];
+    [addButton setImage:addImage forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(onAddSignalButton:) forControlEvents:UIControlEventTouchUpInside];
+    [addButton setShowsTouchWhenHighlighted:YES];
+    UIBarButtonItem *addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    self.navigationItem.rightBarButtonItem = addBarButton;
+    
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"] style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.leftBarButtonItem = menuButton;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -120,13 +140,11 @@
 - (void)toggleSubmitMode
 {
     CGFloat rotationAngle;
-    UIColor *buttonColor;
     if (!_submitMode)
     {
         [self updateMapToLastKnownUserLocation];
         
         rotationAngle = -3.25f;
-        buttonColor = [UIColor redColor];
         
         // Add a pin to the map to select location of the signal
         CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
@@ -139,15 +157,12 @@
     else
     {
         rotationAngle = 0.0f;
-        buttonColor = kButtonBlueColor;
     }
     
     
     [UIView animateWithDuration:0.3f animations:^{
         
         _addSignalButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
-        _addSignalButton.tintColor = buttonColor;
-        _addSignalButton.layer.shadowColor = buttonColor.CGColor;
         
         CGRect frame = _addSignalView.frame;
         if (_submitMode)
@@ -156,10 +171,14 @@
             
             // Fade pin before removal
             _submitSignalAnnotationView.alpha = 0.0f;
+            
+            _addSignalButton.alpha = 0.0f;
         }
         else
         {
             frame.origin.y = kAddSignalViewYposition + kAddSignalViewYbounce;
+            
+            _addSignalButton.alpha = 1.0f;
         }
         _addSignalView.frame = frame;
         
@@ -436,8 +455,19 @@
 {
     FINAnnotation *annotation = (FINAnnotation *)view.annotation;
     FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithGeoPoint:annotation.geoPoint];
-    signalDetailsVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [self presentViewController:signalDetailsVC animated:YES completion:^{}];
+    signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    
+    
+    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
+    navController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    [self presentViewController:navController animated:YES completion:^{}];
+    
+    
+//    [self presentViewController:signalDetailsVC animated:YES completion:^{}];
+    
+//    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
+//    self.navigationController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+//    [self.navigationController pushViewController:signalDetailsVC animated:YES];
 }
 
 @end

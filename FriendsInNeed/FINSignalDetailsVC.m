@@ -9,6 +9,7 @@
 #import "FINSignalDetailsVC.h"
 #import "FINDataManager.h"
 #import "FINSignalDetailsCell.h"
+#import "FINSignalDetailsCommentCell.h"
 #import "FINGlobalConstants.pch"
 
 #define kTitleIndex     0
@@ -21,6 +22,8 @@
 
 #define kCellIdentifierGeneral    @"GeneralCell"
 #define kCellIdentifierDetails    @"DetailsCell"
+#define kCellIdentifierStatus     @"StatusCell"
+#define kCellIdentifierComment    @"CommentCell"
 
 
 #define kCellIdentifierTitle    @"TitleCell"
@@ -33,6 +36,8 @@
 @property (strong, nonatomic) IBOutlet UIView *detailsView;
 
 @property (strong, nonatomic) GeoPoint *geoPoint;
+
+@property (strong, nonatomic) NSArray *comments;
 
 @end
 
@@ -53,6 +58,7 @@
     
 //    _tableView.contentInset = UIEdgeInsetsMake(_toolbar.frame.size.height, 0.0f, 0.0f, 0.0f);
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
+    [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     
     self.navigationItem.title = @"Signals Details";
     
@@ -63,6 +69,8 @@
     NSString *backButtonText = @"Close";
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
     self.navigationItem.leftBarButtonItem = backButton;
+    
+    _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,42 +92,64 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 4+3;
 }
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    NSString *title;
+//    switch (section) {
+//        case 1:
+//            title = @"Status";
+//            break;
+//            
+//        default:
+//            title = @"";
+//            break;
+//    }
+//    
+//    return title;
+//}
 
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 //{
+//    if (section != 1)
+//    {
+//        UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
+//        view.backgroundColor = [UIColor greenColor];
+//        return view;
+//    }
+//    
 //    UILabel *label = [[UILabel alloc] init];
 //    label.textColor = [UIColor grayColor];
 //    [label sizeToFit];
 //    
-//    NSString *labelText = @"";
-//    switch (section) {
-//        case kTitleIndex:
-//            labelText = kTitleLabel;
-//            break;
-//        case kAuthorIndex:
-//            labelText = kAuthorLabel;
-//            break;
-//        case kDateIndex:
-//            labelText = kDateLabel;
-//            break;
-//            
-//        default:
-//            break;
-//    }
+////    NSString *labelText = @"";
+////    switch (section) {
+////        case kTitleIndex:
+////            labelText = kTitleLabel;
+////            break;
+////        case kAuthorIndex:
+////            labelText = kAuthorLabel;
+////            break;
+////        case kDateIndex:
+////            labelText = kDateLabel;
+////            break;
+////            
+////        default:
+////            break;
+////    }
 //    
-//    label.text = labelText;
+//    label.text = @"Status";
 //    
 //    CGRect containerFrame = label.frame;
 //    containerFrame.size.height += 10;
 //    containerFrame.size.width  += 10;
 //    UIView *container = [[UIView alloc] initWithFrame:containerFrame];
-////    container.backgroundColor = [UIColor blueColor];
 //    
 //    [container addSubview:label];
 //    
-//    return container;
+//    return label;
 //}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -138,49 +168,128 @@
             }
             
             cell = detailsCell;
-        }
             break;
+        }
         case 1:
-            cell.textLabel.text = @"I'm here but I don't see the dog...";
+        {
+            UITableViewCell *statusLabelCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierGeneral];
+            if (!statusLabelCell)
+            {
+                statusLabelCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierGeneral];
+                statusLabelCell.backgroundColor = [UIColor clearColor];
+                statusLabelCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                statusLabelCell.indentationLevel = 0;
+                statusLabelCell.textLabel.textColor = [UIColor grayColor];
+            }
+            
+            statusLabelCell.textLabel.text = @"Status";
+            
+            cell = statusLabelCell;
+            break;
+        }
         case 2:
-            cell.textLabel.text = @"Found it! Now I need a car! Somebody?";
+        {
+            UITableViewCell *statusCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierStatus];
+            if (!statusCell)
+            {
+                statusCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierStatus];
+                statusCell.backgroundColor = [UIColor clearColor];
+//                statusCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            [statusCell.imageView setImage:[UIImage imageNamed:@"pin_red"]];
+            statusCell.textLabel.text = @"Help needed";
+            statusCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
+            cell = statusCell;
+            break;
+        }
         case 3:
-            cell.textLabel.text = @"I'm coming!";
+        {
+            UITableViewCell *statusLabelCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierGeneral];
+            if (!statusLabelCell)
+            {
+                statusLabelCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierGeneral];
+                statusLabelCell.backgroundColor = [UIColor clearColor];
+                statusLabelCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                statusLabelCell.indentationLevel = 0;
+                statusLabelCell.textLabel.textColor = [UIColor grayColor];
+            }
+            
+            statusLabelCell.textLabel.text = @"Comments";
+            
+            cell = statusLabelCell;
+            break;
+        }
             
         default:
+        {
+            FINSignalDetailsCommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
+            if (!commentCell)
+            {
+                commentCell = [[FINSignalDetailsCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierComment];
+                commentCell.backgroundColor = [UIColor clearColor];
+                commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            }
+            
+            NSString *comment;
+            NSString *author;
+            switch (indexPath.row) {
+                case 4:
+                    comment = @"Heading there, will let you know when I arrive.";
+                    author = @"Milen Marinov";
+                    break;
+                case 5:
+                    comment = @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!";
+                    author = @"Milen Marinov";
+                    break;
+                case 6:
+                    comment = @"I'm coming...";
+                    author = @"Ivan Petrov";
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            [commentCell setCommentText:_comments[indexPath.row - 4]];
+            [commentCell setAuthor:author];
+            
+            cell = commentCell;
+            break;
+        }
+            
             break;
     }
-    
-//    NSString *cellText = @"";
-//    switch (indexPath.section)
-//    {
-//        case kTitleIndex:
-//            cellText = [_geoPoint.metadata objectForKey:kSignalTitleKey];
-//            break;
-//            
-//        case kAuthorIndex:
-//        {
-//            BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
-//            cellText = user.name;
-//        }
-//            break;
-//            
-//        case kDateIndex:
-//            cellText = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//    
-//    cell.textLabel.text = cellText;
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    return 150.0f;
+    float height;
+    switch (indexPath.row) {
+        case 0:
+            height = 150.0f;
+            break;
+        case 2:
+            height = 55.0f;
+            break;
+        case 4:
+        case 5:
+        case 6:
+        {
+            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:_comments[indexPath.row - 4] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+            CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 150} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+            height = ceilf(rect.size.height) + 55;
+            break;
+        }
+            
+        default:
+            height = 44.0f;
+            break;
+    }
+    return height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

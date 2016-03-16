@@ -30,6 +30,8 @@
 		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
 		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
+		F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */; };
+		F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */; };
 		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
@@ -72,6 +74,9 @@
 		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
+		F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsCommentCell.h; sourceTree = "<group>"; };
+		F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsCommentCell.m; sourceTree = "<group>"; };
+		F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsCommentCell.xib; sourceTree = "<group>"; };
 		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
 		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
@@ -162,6 +167,9 @@
 				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
 				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
 				F338000C1C96325B0080FACD /* FINSignalDetailsCell.xib */,
+				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
+				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
+				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -271,6 +279,7 @@
 				F338001B1C978BA50080FACD /* pin_orange.png in Resources */,
 				F338001F1C98C59D0080FACD /* ic_add.png in Resources */,
 				F33800191C978BA50080FACD /* pin_green.png in Resources */,
+				F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */,
 				F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */,
 				F338001A1C978BA50080FACD /* pin_green@2x.png in Resources */,
 				F3C484791C75514D0067A169 /* FINMapVC.xib in Resources */,
@@ -334,6 +343,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */,
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,

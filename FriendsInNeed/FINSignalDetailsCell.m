@@ -8,6 +8,13 @@
 
 #import "FINSignalDetailsCell.h"
 
+@interface FINSignalDetailsCell ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *imgPhotoView;
+@property (weak, nonatomic) IBOutlet UILabel *lbPhotoNumber;
+
+@end
+
 @implementation FINSignalDetailsCell
 
 - (void)awakeFromNib {
@@ -32,6 +39,13 @@
     [super layoutSubviews];
     
     self.backgroundColor = [UIColor clearColor];
+    _imgPhotoView.layer.cornerRadius = 5.0f;
+    _imgPhotoView.layer.borderWidth = 0.5f;
+    _imgPhotoView.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    _lbPhotoNumber.layer.cornerRadius = _lbPhotoNumber.frame.size.height / 2;
+    _lbPhotoNumber.layer.borderWidth = 0.5f;
+    _lbPhotoNumber.layer.borderColor = [UIColor blackColor].CGColor;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

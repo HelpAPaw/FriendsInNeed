@@ -426,11 +426,13 @@
             newAnnotationView.rightCalloutAccessoryView = rightButton;
             
             // Add a custom image to the left side of the callout.
-            UIImageView *signalImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_paw.png"]];
+            UIImageView *signalImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"borislava.JPG"]];
             CGRect imageFrame = signalImage.frame;
             imageFrame.size.height = newAnnotationView.frame.size.height;
             imageFrame.size.width  = newAnnotationView.frame.size.height;
             signalImage.frame = imageFrame;
+            signalImage.clipsToBounds = YES;
+            signalImage.layer.cornerRadius = 5.0f;
             newAnnotationView.leftCalloutAccessoryView = signalImage;
         }
         else

@@ -15,7 +15,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="609" height="163"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_paw.png" translatesAutoresizingMaskIntoConstraints="NO" id="i7Z-IZ-R4E" userLabel="Photo">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="borislava.JPG" translatesAutoresizingMaskIntoConstraints="NO" id="i7Z-IZ-R4E" userLabel="Photo">
                         <rect key="frame" x="8" y="8" width="128" height="128"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="128" id="2ld-zR-owd"/>
@@ -33,6 +33,7 @@
                                     <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue"/>
                                     <font key="NSOriginalFont" size="12" name="HelveticaNeue"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                             <fragment content="Milen Marinov">
@@ -40,6 +41,7 @@
                                     <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
                                     <font key="NSOriginalFont" size="12" name="HelveticaNeue-Italic"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                         </attributedString>
@@ -55,21 +57,29 @@
                                 <attributes>
                                     <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                             <fragment content="14.03.2016, 15:17">
                                 <attributes>
                                     <color key="NSColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
                                     <font key="NSFont" size="12" name="HelveticaNeue-Italic"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                 </attributes>
                             </fragment>
                         </attributedString>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dog hit by a car" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxU-LU-43t" userLabel="Title">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dog hit by a car" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxU-LU-43t" userLabel="Title">
                         <rect key="frame" x="152" y="8" width="441" height="86"/>
-                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
-                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xe4-u3-AGd" userLabel="Photo Number">
+                        <rect key="frame" x="61" y="125" width="21" height="21"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -89,10 +99,14 @@
                     <constraint firstItem="UQT-kp-Xll" firstAttribute="leading" secondItem="i7Z-IZ-R4E" secondAttribute="trailing" constant="16" id="wtW-tH-ene"/>
                 </constraints>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="imgPhotoView" destination="i7Z-IZ-R4E" id="CPs-yF-PJU"/>
+                <outlet property="lbPhotoNumber" destination="Xe4-u3-AGd" id="Dsc-Ff-MGA"/>
+            </connections>
             <point key="canvasLocation" x="543.5" y="488"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_paw.png" width="256" height="256"/>
+        <image name="borislava.JPG" width="3072" height="2304"/>
     </resources>
 </document>

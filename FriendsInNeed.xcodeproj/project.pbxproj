@@ -33,7 +33,7 @@
 		F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */; };
 		F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */; };
 		F39C39371C99C849007A2D8E /* borislava.JPG in Resources */ = {isa = PBXBuildFile; fileRef = F39C39361C99C849007A2D8E /* borislava.JPG */; };
-		F39C39391C99CFA5007A2D8E /* cat_on_roof.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F39C39381C99CFA5007A2D8E /* cat_on_roof.jpg */; };
+		F39C393B1C9A99F3007A2D8E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F39C393A1C9A99F3007A2D8E /* logo.png */; };
 		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
@@ -65,7 +65,7 @@
 		F33800201C98C7DF0080FACD /* ic_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_add@2x.png"; sourceTree = "<group>"; };
 		F33800221C98CA350080FACD /* ic_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_menu.png; sourceTree = "<group>"; };
 		F33800241C98CAE70080FACD /* ic_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@2x.png"; sourceTree = "<group>"; };
-		F38B72EB1C00E04F00FBE20C /* FriendsInNeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FriendsInNeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F38B72EB1C00E04F00FBE20C /* Paws In Need.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Paws In Need.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F38B72EF1C00E04F00FBE20C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F38B72F11C00E04F00FBE20C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F38B72F21C00E04F00FBE20C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsCommentCell.m; sourceTree = "<group>"; };
 		F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsCommentCell.xib; sourceTree = "<group>"; };
 		F39C39361C99C849007A2D8E /* borislava.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = borislava.JPG; sourceTree = "<group>"; };
-		F39C39381C99CFA5007A2D8E /* cat_on_roof.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cat_on_roof.jpg; sourceTree = "<group>"; };
+		F39C393A1C9A99F3007A2D8E /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
 		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
 		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
@@ -139,7 +139,7 @@
 		F38B72EC1C00E04F00FBE20C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F38B72EB1C00E04F00FBE20C /* FriendsInNeed.app */,
+				F38B72EB1C00E04F00FBE20C /* Paws In Need.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,7 +190,7 @@
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F39C39381C99CFA5007A2D8E /* cat_on_roof.jpg */,
+				F39C393A1C9A99F3007A2D8E /* logo.png */,
 				F39C39361C99C849007A2D8E /* borislava.JPG */,
 				F33800221C98CA350080FACD /* ic_menu.png */,
 				F33800241C98CAE70080FACD /* ic_menu@2x.png */,
@@ -211,9 +211,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F38B72EA1C00E04F00FBE20C /* FriendsInNeed */ = {
+		F38B72EA1C00E04F00FBE20C /* Paws In Need */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "FriendsInNeed" */;
+			buildConfigurationList = F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Paws In Need" */;
 			buildPhases = (
 				7D134C2DEDBC0C35FC079CB3 /* Check Pods Manifest.lock */,
 				F38B72E71C00E04F00FBE20C /* Sources */,
@@ -226,9 +226,9 @@
 			);
 			dependencies = (
 			);
-			name = FriendsInNeed;
+			name = "Paws In Need";
 			productName = FriendsInNeed;
-			productReference = F38B72EB1C00E04F00FBE20C /* FriendsInNeed.app */;
+			productReference = F38B72EB1C00E04F00FBE20C /* Paws In Need.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -263,7 +263,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F38B72EA1C00E04F00FBE20C /* FriendsInNeed */,
+				F38B72EA1C00E04F00FBE20C /* Paws In Need */,
 			);
 		};
 /* End PBXProject section */
@@ -280,7 +280,6 @@
 				F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */,
 				F33800141C97872F0080FACD /* pin_red@2x.png in Resources */,
 				F39C39371C99C849007A2D8E /* borislava.JPG in Resources */,
-				F39C39391C99CFA5007A2D8E /* cat_on_roof.jpg in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
 				F338000E1C96325B0080FACD /* FINSignalDetailsCell.xib in Resources */,
 				F3C484741C6C111D0067A169 /* FINLoginVC.xib in Resources */,
@@ -290,6 +289,7 @@
 				F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */,
 				F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */,
 				F338001A1C978BA50080FACD /* pin_green@2x.png in Resources */,
+				F39C393B1C9A99F3007A2D8E /* logo.png in Resources */,
 				F3C484791C75514D0067A169 /* FINMapVC.xib in Resources */,
 				F33800231C98CA350080FACD /* ic_menu.png in Resources */,
 				F33800121C9785A10080FACD /* pin_red.png in Resources */,
@@ -496,7 +496,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "FriendsInNeed" */ = {
+		F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Paws In Need" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F38B73061C00E04F00FBE20C /* Debug */,

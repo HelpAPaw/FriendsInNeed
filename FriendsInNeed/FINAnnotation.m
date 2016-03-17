@@ -80,7 +80,7 @@
         }
         else
         {
-            statusString = @"Awaiting help";
+            statusString = @"Help needed";
         }
         
         self.subtitle = [NSString stringWithFormat:@"Status: %@", statusString];

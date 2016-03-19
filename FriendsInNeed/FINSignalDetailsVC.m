@@ -25,6 +25,25 @@
 #define kCellIdentifierStatus     @"StatusCell"
 #define kCellIdentifierComment    @"CommentCell"
 
+//#define kSectionIndexDetails       0
+//#define kSectionIndexStatusHeader  1
+
+enum {
+    kSectionIndexDetails,
+    kSectionIndexStatusHeader,
+    kSectionIndexStatus,
+    kSectionIndexCommentsHeader,
+    kSectionIndexComments,
+    kSectionIndexCount
+};
+
+enum {
+    kCellIndexStatusSelected,
+    kCellIndexStatus0,
+    kCellIndexStatus1,
+    kCellIndexStatus2,
+};
+
 
 #define kCellIdentifierTitle    @"TitleCell"
 #define kCellIdentifierAuthor   @"AuthorCell"
@@ -33,11 +52,12 @@
 @interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) IBOutlet UIView *detailsView;
 
 @property (strong, nonatomic) GeoPoint *geoPoint;
 
 @property (strong, nonatomic) NSArray *comments;
+@property (assign, nonatomic) BOOL statusIsExpanded;
+@property (assign, nonatomic) NSUInteger status;
 
 @end
 
@@ -71,6 +91,9 @@
     self.navigationItem.leftBarButtonItem = backButton;
     
     _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
+    
+    _statusIsExpanded = NO;
+    _status = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -87,12 +110,22 @@
 #pragma mark - TableView data source and delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return kSectionIndexCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4+3;
+    NSInteger rows = 1;
+    if ( (section == kSectionIndexStatus) && (_statusIsExpanded) )
+    {
+        rows = 4;
+    }
+    else if (section == kSectionIndexComments)
+    {
+        rows = _comments.count;
+    }
+    
+    return rows;
 }
 
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -156,8 +189,8 @@
 {
     UITableViewCell *cell;
     
-    switch (indexPath.row) {
-        case 0:
+    switch (indexPath.section) {
+        case kSectionIndexDetails:
         {
             FINSignalDetailsCell *detailsCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierDetails];
             if (!detailsCell)
@@ -170,7 +203,7 @@
             cell = detailsCell;
             break;
         }
-        case 1:
+        case kSectionIndexStatusHeader:
         {
             UITableViewCell *statusLabelCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierGeneral];
             if (!statusLabelCell)
@@ -187,38 +220,106 @@
             cell = statusLabelCell;
             break;
         }
-        case 2:
+        case kSectionIndexStatus:
         {
             UITableViewCell *statusCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierStatus];
             if (!statusCell)
             {
                 statusCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierStatus];
                 statusCell.backgroundColor = [UIColor clearColor];
-//                statusCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                statusCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            [statusCell.imageView setImage:[UIImage imageNamed:@"pin_red"]];
-            statusCell.textLabel.text = @"Help needed";
-            statusCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            UIImage *statusImage;
+            NSString *statusString;
+            switch (indexPath.row) {
+                case kCellIndexStatusSelected:
+                    if (_statusIsExpanded)
+                    {
+                        statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown_reversed"]];
+                    }
+                    else
+                    {
+                        statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown"]];
+                    }
+                    
+                    statusImage = [UIImage imageNamed:@"pin_red"];
+                    statusString = @"Help needed";
+                    break;
+                    
+                case kCellIndexStatus0:
+                    
+                    statusImage = [UIImage imageNamed:@"pin_red"];
+                    statusString = @"Help needed";
+//                    statusCell.indentationLevel = 3;
+                    if (_status == (indexPath.row - 1))
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
+                    else
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryNone;
+                    }
+                    statusCell.accessoryView = nil;
+                    break;
+                    
+                case kCellIndexStatus1:
+                    
+                    statusImage = [UIImage imageNamed:@"pin_orange"];
+                    statusString = @"Somebody on the way";
+                    //                    statusCell.indentationLevel = 3;
+                    if (_status == (indexPath.row - 1))
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
+                    else
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryNone;
+                    }
+                    statusCell.accessoryView = nil;
+                    break;
+                    
+                case kCellIndexStatus2:
+                    
+                    statusImage = [UIImage imageNamed:@"pin_green"];
+                    statusString = @"Solved";
+                    //                    statusCell.indentationLevel = 3;
+                    if (_status == (indexPath.row - 1))
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    }
+                    else
+                    {
+                        statusCell.accessoryType = UITableViewCellAccessoryNone;
+                    }
+                    statusCell.accessoryView = nil;
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            [statusCell.imageView setImage:statusImage];
+            statusCell.textLabel.text = statusString;
             
             cell = statusCell;
             break;
         }
-        case 3:
+        case kSectionIndexCommentsHeader:
         {
-            UITableViewCell *statusLabelCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierGeneral];
-            if (!statusLabelCell)
+            UITableViewCell *commentsLabelCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierGeneral];
+            if (!commentsLabelCell)
             {
-                statusLabelCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierGeneral];
-                statusLabelCell.backgroundColor = [UIColor clearColor];
-                statusLabelCell.selectionStyle = UITableViewCellSelectionStyleNone;
-                statusLabelCell.indentationLevel = 0;
-                statusLabelCell.textLabel.textColor = [UIColor grayColor];
+                commentsLabelCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierGeneral];
+                commentsLabelCell.backgroundColor = [UIColor clearColor];
+                commentsLabelCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                commentsLabelCell.indentationLevel = 0;
+                commentsLabelCell.textLabel.textColor = [UIColor grayColor];
             }
             
-            statusLabelCell.textLabel.text = @"Comments";
+            commentsLabelCell.textLabel.text = @"Comments";
             
-            cell = statusLabelCell;
+            cell = commentsLabelCell;
             break;
         }
             
@@ -235,15 +336,15 @@
             NSString *comment;
             NSString *author;
             switch (indexPath.row) {
-                case 4:
+                case 0:
                     comment = @"Heading there, will let you know when I arrive.";
                     author = @"Milen Marinov";
                     break;
-                case 5:
+                case 1:
                     comment = @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!";
                     author = @"Milen Marinov";
                     break;
-                case 6:
+                case 2:
                     comment = @"I'm coming...";
                     author = @"Ivan Petrov";
                     break;
@@ -252,7 +353,7 @@
                     break;
             }
             
-            [commentCell setCommentText:_comments[indexPath.row - 4]];
+            [commentCell setCommentText:_comments[indexPath.row]];
             [commentCell setAuthor:author];
             
             cell = commentCell;
@@ -268,18 +369,16 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     float height;
-    switch (indexPath.row) {
-        case 0:
+    switch (indexPath.section) {
+        case kSectionIndexDetails:
             height = 150.0f;
             break;
-        case 2:
+        case kSectionIndexStatus:
             height = 55.0f;
             break;
-        case 4:
-        case 5:
-        case 6:
+        case kSectionIndexComments:
         {
-            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:_comments[indexPath.row - 4] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:_comments[indexPath.row] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
             CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 150} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
             height = ceilf(rect.size.height) + 55;
             break;
@@ -294,12 +393,18 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-}
-
-- (BOOL)prefersStatusBarHidden
-{
-    return NO;
+    if (indexPath.section == kSectionIndexStatus)
+    {
+        if (indexPath.row == kCellIndexStatusSelected)
+        {
+            _statusIsExpanded = !_statusIsExpanded;
+        }
+        else
+        {
+            _status = indexPath.row - 1;
+        }
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (IBAction)onCloseButton:(id)sender

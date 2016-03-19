@@ -89,6 +89,13 @@
     self.navigationItem.leftBarButtonItem = menuButton;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self initMapVC];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -109,6 +116,12 @@
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
+    [self initMapVC];
+}
+
+#pragma mark
+- (void)initMapVC
+{
     [self updateMapToLastKnownUserLocation];
     
 #warning What happens when last location is different from current location? Or current location is unavailable?
@@ -118,7 +131,6 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
-#pragma mark
 - (void)updateMapToLastKnownUserLocation
 {
     CLLocation *lastKnownUserLocation = [_locationManager getLastKnownUserLocation];

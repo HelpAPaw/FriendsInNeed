@@ -7,6 +7,7 @@
 //
 
 #import "FINDataManager.h"
+#import "FINSignal.h"
 
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"

@@ -38,8 +38,8 @@ enum {
 };
 
 enum {
-    kCellIndexStatusSelected,
-    kCellIndexStatus0,
+    kCellIndexStatusSelected = 0,
+    kCellIndexStatus0 = 0,
     kCellIndexStatus1,
     kCellIndexStatus2,
 };
@@ -118,7 +118,7 @@ enum {
     NSInteger rows = 1;
     if ( (section == kSectionIndexStatus) && (_statusIsExpanded) )
     {
-        rows = 4;
+        rows = 3;
     }
     else if (section == kSectionIndexComments)
     {
@@ -232,71 +232,63 @@ enum {
             
             UIImage *statusImage;
             NSString *statusString;
-            switch (indexPath.row) {
-                case kCellIndexStatusSelected:
-                    if (_statusIsExpanded)
-                    {
-                        statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown_reversed"]];
-                    }
-                    else
-                    {
-                        statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown"]];
-                    }
-                    
-                    statusImage = [UIImage imageNamed:@"pin_red"];
-                    statusString = @"Help needed";
-                    break;
-                    
-                case kCellIndexStatus0:
-                    
-                    statusImage = [UIImage imageNamed:@"pin_red"];
-                    statusString = @"Help needed";
-//                    statusCell.indentationLevel = 3;
-                    if (_status == (indexPath.row - 1))
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
-                    }
-                    else
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryNone;
-                    }
-                    statusCell.accessoryView = nil;
-                    break;
-                    
-                case kCellIndexStatus1:
-                    
-                    statusImage = [UIImage imageNamed:@"pin_orange"];
-                    statusString = @"Somebody on the way";
-                    //                    statusCell.indentationLevel = 3;
-                    if (_status == (indexPath.row - 1))
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
-                    }
-                    else
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryNone;
-                    }
-                    statusCell.accessoryView = nil;
-                    break;
-                    
-                case kCellIndexStatus2:
-                    
-                    statusImage = [UIImage imageNamed:@"pin_green"];
-                    statusString = @"Solved";
-                    //                    statusCell.indentationLevel = 3;
-                    if (_status == (indexPath.row - 1))
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
-                    }
-                    else
-                    {
-                        statusCell.accessoryType = UITableViewCellAccessoryNone;
-                    }
-                    statusCell.accessoryView = nil;
-                    break;
-                    
-                default:
-                    break;
+            
+            if (_statusIsExpanded == NO)
+            {
+                statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown"]];
+                
+                switch (_status) {
+                    case 0:
+                        statusImage = [UIImage imageNamed:@"pin_red"];
+                        statusString = @"Help needed";
+                        break;
+                    case 1:
+                        statusImage = [UIImage imageNamed:@"pin_orange"];
+                        statusString = @"Somebody on the way";
+                        break;
+                    case 2:
+                        statusImage = [UIImage imageNamed:@"pin_green"];
+                        statusString = @"Solved";
+                        break;
+                        
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (indexPath.row) {
+                    case kCellIndexStatus0:
+                        
+                        statusImage = [UIImage imageNamed:@"pin_red"];
+                        statusString = @"Help needed";
+                        break;
+                        
+                    case kCellIndexStatus1:
+                        
+                        statusImage = [UIImage imageNamed:@"pin_orange"];
+                        statusString = @"Somebody on the way";
+                        break;
+                        
+                    case kCellIndexStatus2:
+                        
+                        statusImage = [UIImage imageNamed:@"pin_green"];
+                        statusString = @"Solved";
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
+                if (_status == indexPath.row)
+                {
+                    statusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                }
+                else
+                {
+                    statusCell.accessoryType = UITableViewCellAccessoryNone;
+                }
+                statusCell.accessoryView = nil;
             }
             
             [statusCell.imageView setImage:statusImage];
@@ -395,16 +387,35 @@ enum {
 {
     if (indexPath.section == kSectionIndexStatus)
     {
-        if (indexPath.row == kCellIndexStatusSelected)
+        NSTimeInterval delay = 0.0f;
+        if (_statusIsExpanded)
         {
-            _statusIsExpanded = !_statusIsExpanded;
+            if (_status != indexPath.row)
+            {
+                UITableViewCell *oldStatusCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_status inSection:indexPath.section]];
+                oldStatusCell.accessoryType = UITableViewCellAccessoryNone;
+                
+                _status = indexPath.row;
+                UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
+                newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            else
+            {
+                _statusIsExpanded = !_statusIsExpanded;
+                [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:delay];
+            }
         }
         else
         {
-            _status = indexPath.row - 1;
+            _statusIsExpanded = !_statusIsExpanded;
+            [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:delay];
         }
-        [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+}
+
+- (void)reloadStatusSection
+{
+    [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexStatus] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (IBAction)onCloseButton:(id)sender

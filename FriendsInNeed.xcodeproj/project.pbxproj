@@ -40,6 +40,7 @@
 		F39C39471C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F39C39411C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png */; };
 		F39C39481C9D8C1C007A2D8E /* ic_dropdown@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F39C39421C9D8C1C007A2D8E /* ic_dropdown@3x.png */; };
 		F39C39491C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F39C39431C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png */; };
+		F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C394B1C9EA305007A2D8E /* FINSignal.m */; };
 		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
@@ -93,6 +94,8 @@
 		F39C39411C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_dropdown_reversed@2x.png"; sourceTree = "<group>"; };
 		F39C39421C9D8C1C007A2D8E /* ic_dropdown@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_dropdown@3x.png"; sourceTree = "<group>"; };
 		F39C39431C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_dropdown_reversed@3x.png"; sourceTree = "<group>"; };
+		F39C394A1C9EA305007A2D8E /* FINSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignal.h; sourceTree = "<group>"; };
+		F39C394B1C9EA305007A2D8E /* FINSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignal.m; sourceTree = "<group>"; };
 		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
 		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
@@ -171,12 +174,6 @@
 				F3C484751C75514D0067A169 /* FINMapVC.h */,
 				F3C484761C75514D0067A169 /* FINMapVC.m */,
 				F3C484771C75514D0067A169 /* FINMapVC.xib */,
-				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
-				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
-				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
-				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
-				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
-				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
 				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
 				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
 				F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */,
@@ -186,6 +183,11 @@
 				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
 				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
 				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
+				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
+				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
+				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
+				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
+				F39C394D1C9EA428007A2D8E /* Model */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -197,6 +199,17 @@
 				F38B72EF1C00E04F00FBE20C /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F39C394D1C9EA428007A2D8E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F39C394A1C9EA305007A2D8E /* FINSignal.h */,
+				F39C394B1C9EA305007A2D8E /* FINSignal.m */,
+				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
+				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
@@ -380,6 +393,7 @@
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
+				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,

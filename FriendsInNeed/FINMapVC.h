@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FINDataManager.h"
 #import "FINLocationManager.h"
+#import "FINSignalDetailsVC.h"
 
-@interface FINMapVC : UIViewController <FINSignalsMapDelegate, FINLocationManagerMapDelegate>
+@interface FINMapVC : UIViewController <FINSignalsMapDelegate, FINLocationManagerMapDelegate, FINSignalDetailsVCDelegate>
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
 - (void)updateMapToLocation:(CLLocation *)location;

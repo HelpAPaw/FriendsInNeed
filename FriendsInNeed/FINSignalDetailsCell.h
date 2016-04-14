@@ -10,4 +10,8 @@
 
 @interface FINSignalDetailsCell : UITableViewCell
 
+- (void)setTitle:(NSString *)title;
+- (void)setAuthor:(NSString *)author;
+- (void)setDate:(NSString *)date;
+
 @end

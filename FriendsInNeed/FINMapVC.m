@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FINLoginVC.h"
 #import "FINAnnotation.h"
-#import "FINSignalDetailsVC.h"
 
 #define kAddSignalViewYposition 15.0f
 #define kAddSignalViewYbounce   10.0f
@@ -413,26 +412,6 @@
             newAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kStandardSignalAnnotationView];
             newAnnotationView.canShowCallout = YES;
             
-            FINAnnotation *ann = (FINAnnotation *)annotation;
-            GeoPoint *geoPoint = ann.geoPoint;
-            NSString *status = [geoPoint.metadata objectForKey:@"status"];
-            UIImage *pinImage;
-            if ([status isEqualToString:@"2"])
-            {
-                pinImage = [UIImage imageNamed:@"pin_green.png"];
-            }
-            else if ([status isEqualToString:@"1"])
-            {
-                pinImage = [UIImage imageNamed:@"pin_orange.png"];
-            }
-            else
-            {
-                pinImage = [UIImage imageNamed:@"pin_red.png"];
-            }
-            
-            newAnnotationView.image = pinImage;
-            newAnnotationView.centerOffset = CGPointMake(0, -20);
-            
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
             newAnnotationView.rightCalloutAccessoryView = rightButton;
@@ -440,8 +419,8 @@
             // Add a custom image to the left side of the callout.
             UIImageView *signalImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"borislava.JPG"]];
             CGRect imageFrame = signalImage.frame;
-            imageFrame.size.height = newAnnotationView.frame.size.height;
-            imageFrame.size.width  = newAnnotationView.frame.size.height;
+            imageFrame.size.height = 44.0;//newAnnotationView.frame.size.height;
+            imageFrame.size.width  = 44.0;//newAnnotationView.frame.size.height;
             signalImage.frame = imageFrame;
             signalImage.clipsToBounds = YES;
             signalImage.layer.cornerRadius = 5.0f;
@@ -451,6 +430,26 @@
         {
             newAnnotationView.annotation = annotation;
         }
+        
+        FINAnnotation *ann = (FINAnnotation *)annotation;
+        GeoPoint *geoPoint = ann.geoPoint;
+        NSString *status = [geoPoint.metadata objectForKey:@"status"];
+        UIImage *pinImage;
+        if ([status isEqualToString:@"2"])
+        {
+            pinImage = [UIImage imageNamed:@"pin_green.png"];
+        }
+        else if ([status isEqualToString:@"1"])
+        {
+            pinImage = [UIImage imageNamed:@"pin_orange.png"];
+        }
+        else
+        {
+            pinImage = [UIImage imageNamed:@"pin_red.png"];
+        }
+        
+        newAnnotationView.image = pinImage;
+        newAnnotationView.centerOffset = CGPointMake(0, -20);
     }
     
     return newAnnotationView;
@@ -468,7 +467,8 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     FINAnnotation *annotation = (FINAnnotation *)view.annotation;
-    FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithGeoPoint:annotation.geoPoint];
+    FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithAnnotation:annotation];
+    signalDetailsVC.delegate = self;
     signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     
     
@@ -482,6 +482,12 @@
 //    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
 //    self.navigationController.modalPresentationStyle = UIModalPresentationOverFullScreen;
 //    [self.navigationController pushViewController:signalDetailsVC animated:YES];
+}
+
+- (void)refreshAnnotation:(FINAnnotation *)annotation
+{
+    [_mapView removeAnnotation:annotation];
+    [_mapView addAnnotation:annotation];
 }
 
 @end

@@ -187,7 +187,7 @@
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
 				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
-				F39C394D1C9EA428007A2D8E /* Model */,
+				F39C394D1C9EA428007A2D8E /* Models */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -201,7 +201,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F39C394D1C9EA428007A2D8E /* Model */ = {
+		F39C394D1C9EA428007A2D8E /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				F39C394A1C9EA305007A2D8E /* FINSignal.h */,
@@ -209,7 +209,7 @@
 				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
 				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
 			);
-			name = Model;
+			name = Models;
 			sourceTree = "<group>";
 		};
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {

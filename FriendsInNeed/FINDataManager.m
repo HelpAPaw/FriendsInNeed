@@ -7,7 +7,6 @@
 //
 
 #import "FINDataManager.h"
-#import "FINSignal.h"
 
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
@@ -191,6 +190,21 @@
     } error:^(Fault *fault) {
         
         completion(nil, fault);
+    }];
+}
+
+- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion
+{
+    GeoPoint *point = [signal geoPoint];
+    [point.metadata setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kSignalStatusKey];
+    
+    [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
+        
+        signal.geoPoint = returnedGeoPoint;
+        completion(nil);
+    } error:^(Fault *fault) {
+        
+        completion(fault);
     }];
 }
 

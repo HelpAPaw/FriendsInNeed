@@ -12,6 +12,9 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhotoView;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhotoNumber;
+@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
+@property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
+@property (weak, nonatomic) IBOutlet UILabel *lbDate;
 
 @end
 
@@ -52,6 +55,21 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+}
+
+- (void)setTitle:(NSString *)title
+{
+    _lbTitle.text = title;
+}
+
+- (void)setAuthor:(NSString *)author
+{
+    _lbAuthor.text = [NSString stringWithFormat:@"%@", author];
+}
+
+- (void)setDate:(NSString *)date
+{
+    _lbDate.text = [NSString stringWithFormat:@"%@", date];
 }
 
 @end

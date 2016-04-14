@@ -8,11 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "Backendless.h"
+#import "FINSignal.h"
 
-#define kSignalTitleKey         @"title"
-#define kSignalAuthorKey        @"author"
-#define kSignalDateSubmittedKey @"dateSubmitted"
-#define kSignalStatusKey        @"status"
 #define kNotificationSignalID   @"NotificationSignalID"
 #define kDefaultMapRegion       4000
 
@@ -29,6 +26,7 @@
 - (void)getSignalsForNewLocation:(CLLocation *)location;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion;
+- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSDateFormatter   *signalDateFormatter;

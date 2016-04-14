@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
+#import "Backendless.h"
+
+#define kSignalTitleKey         @"title"
+#define kSignalAuthorKey        @"author"
+#define kSignalDateSubmittedKey @"dateSubmitted"
+#define kSignalStatusKey        @"status"
 
 typedef NS_ENUM(NSUInteger, FINSignalStatus) {
     FINSignalStatus0,
@@ -17,12 +23,25 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 
 @interface FINSignal : NSObject
 
-@property (strong, nonatomic) NSString                  *signalID;
-@property (strong, nonatomic) NSString                  *title;
-@property (strong, nonatomic) NSString                  *author;
-@property (strong, nonatomic) NSDate                    *date;
-@property (assign, nonatomic) FINSignalStatus           status;
-@property (assign, nonatomic) CLLocationCoordinate2D    coordinate;
+@property (strong, nonatomic) GeoPoint *geoPoint;
 
+- (id)initWithGeoPoint:(GeoPoint *)geoPoint;
+
+
+- (NSString *)signalID;
+
+- (NSString *)title;
+- (void)setTitle:(NSString *)newTitle;
+
+- (NSString *)author;
+- (void)setAuthor:(NSString *)newAuthor;
+
+- (NSDate *)date;
+- (void)setDate:(NSDate *)newDate;
+
+- (FINSignalStatus)status;
+- (void)setStatus:(FINSignalStatus)newStatus;
+
+- (CLLocationCoordinate2D)coordinate;
 
 @end

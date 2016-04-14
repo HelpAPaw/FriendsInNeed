@@ -53,6 +53,7 @@ enum {
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (strong, nonatomic) FINAnnotation *annotation;
 @property (strong, nonatomic) GeoPoint *geoPoint;
 
 @property (strong, nonatomic) NSArray *comments;
@@ -68,6 +69,32 @@ enum {
     self = [self init];
     
     _geoPoint = geoPoint;
+    
+    return self;
+}
+
+- (FINSignalDetailsVC *)initWithAnnotation:(FINAnnotation *)annotation
+{
+    self = [self init];
+    
+    _annotation = annotation;
+    _geoPoint = annotation.geoPoint;
+    
+    
+#warning TEMP
+    NSString *statusString = [_geoPoint.metadata objectForKey:kSignalStatusKey];
+    if ([statusString isEqualToString:@"2"])
+    {
+        _status = FINSignalStatus2;
+    }
+    else if ([statusString isEqualToString:@"1"])
+    {
+        _status = FINSignalStatus1;
+    }
+    else
+    {
+        _status = FINSignalStatus0;
+    }
     
     return self;
 }
@@ -93,7 +120,6 @@ enum {
     _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
     
     _statusIsExpanded = NO;
-    _status = 0;
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,7 +136,7 @@ enum {
 #pragma mark - TableView data source and delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return kSectionIndexCount;
+    return kSectionIndexCount-2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -128,63 +154,6 @@ enum {
     return rows;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    NSString *title;
-//    switch (section) {
-//        case 1:
-//            title = @"Status";
-//            break;
-//            
-//        default:
-//            title = @"";
-//            break;
-//    }
-//    
-//    return title;
-//}
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    if (section != 1)
-//    {
-//        UIView *view = [[UIView alloc] initWithFrame:CGRectZero];
-//        view.backgroundColor = [UIColor greenColor];
-//        return view;
-//    }
-//    
-//    UILabel *label = [[UILabel alloc] init];
-//    label.textColor = [UIColor grayColor];
-//    [label sizeToFit];
-//    
-////    NSString *labelText = @"";
-////    switch (section) {
-////        case kTitleIndex:
-////            labelText = kTitleLabel;
-////            break;
-////        case kAuthorIndex:
-////            labelText = kAuthorLabel;
-////            break;
-////        case kDateIndex:
-////            labelText = kDateLabel;
-////            break;
-////            
-////        default:
-////            break;
-////    }
-//    
-//    label.text = @"Status";
-//    
-//    CGRect containerFrame = label.frame;
-//    containerFrame.size.height += 10;
-//    containerFrame.size.width  += 10;
-//    UIView *container = [[UIView alloc] initWithFrame:containerFrame];
-//    
-//    [container addSubview:label];
-//    
-//    return label;
-//}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
@@ -199,6 +168,10 @@ enum {
                 detailsCell.backgroundColor = [UIColor clearColor];
                 detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
+            
+            [detailsCell setTitle:[_geoPoint.metadata objectForKey:kSignalTitleKey]];
+            [detailsCell setAuthor:((BackendlessUser *)[_geoPoint.metadata objectForKey:kSignalAuthorKey]).name];
+            [detailsCell setDate:[_geoPoint.metadata objectForKey:kSignalDateSubmittedKey]];
             
             cell = detailsCell;
             break;
@@ -387,7 +360,6 @@ enum {
 {
     if (indexPath.section == kSectionIndexStatus)
     {
-        NSTimeInterval delay = 0.0f;
         if (_statusIsExpanded)
         {
             if (_status != indexPath.row)
@@ -398,17 +370,22 @@ enum {
                 _status = indexPath.row;
                 UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
                 newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+                
+                FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:_geoPoint];
+                [[FINDataManager sharedManager] setStatus:_status forSignal:signal completion:^(Fault *fault) {
+                    if (fault == nil) {
+                        _annotation.geoPoint = signal.geoPoint;
+                    }
+                }];
             }
-            else
-            {
-                _statusIsExpanded = !_statusIsExpanded;
-                [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:delay];
-            }
+            
+            _statusIsExpanded = !_statusIsExpanded;
+            [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
         }
         else
         {
             _statusIsExpanded = !_statusIsExpanded;
-            [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:delay];
+            [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.0];
         }
     }
 }
@@ -420,7 +397,10 @@ enum {
 
 - (IBAction)onCloseButton:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:^{}];
+    [self.delegate refreshAnnotation:_annotation];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
 }
 
 @end

@@ -225,15 +225,14 @@
 
 - (IBAction)onSendButton:(id)sender
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
-    if (!currentUser)
+    if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
         [self showLoginScreen];
         return;
     }
     
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate completion:^(GeoPoint *savedGeoPoint, Fault *fault) {
-        if (savedGeoPoint)
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate completion:^(FINSignal *savedSignal, Fault *fault) {
+        if (savedSignal)
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
                                                                            message:@"Your signal was submitted."
@@ -245,7 +244,7 @@
                                                                   }];
             [alert addAction:defaultAction];
             [self presentViewController:alert animated:YES completion:^{}];
-            [self addAnnotationToMapFromGeoPoint:savedGeoPoint];
+            [self addAnnotationToMapFromSignal:savedSignal];
             
             [_signalTitleField setText:@""];
         }
@@ -278,7 +277,7 @@
     [self.tabBarController setSelectedIndex:0];
 }
 
-- (void)addAnnotationToMapFromGeoPoint:(GeoPoint *)geoPoint
+- (void)addAnnotationToMapFromSignal:(FINSignal *)signal
 {
     BOOL alreadyPresent = NO;
     for (FINAnnotation *ann in _mapView.annotations)
@@ -289,12 +288,12 @@
         }
         else
         {
-            if ([ann.geoPoint.objectId isEqualToString:_focusSignalID])
+            if ([ann.signal.signalID isEqualToString:_focusSignalID])
             {
                 [self focusAnnotation:ann];
             }
             
-            if ([ann.geoPoint.objectId isEqualToString:geoPoint.objectId] == YES)
+            if ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
             {
                 alreadyPresent = YES;
                 break;
@@ -304,10 +303,10 @@
     
     if (alreadyPresent == NO)
     {
-        FINAnnotation *annotation = [[FINAnnotation alloc] initWithGeoPoint:geoPoint];
+        FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
         [_mapView addAnnotation:annotation];
         
-        if ([annotation.geoPoint.objectId isEqualToString:_focusSignalID])
+        if ([annotation.signal.signalID isEqualToString:_focusSignalID])
         {
             [self focusAnnotation:annotation];
         }
@@ -325,27 +324,23 @@
 {
     _focusSignalID = focusSignalID;
     
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
-    query.whereClause = [NSString stringWithFormat:@"objectid='%@'", focusSignalID];
-    [query includeMeta:YES];
-    [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
-        NSLog(@"%@", collection.data);
-        
-        if (collection.data.count > 0)
+    [[FINDataManager sharedManager] getSignalWithID:focusSignalID completion:^(FINSignal *signal, Fault *fault) {
+        if (signal)
         {
-            GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
-            [self addAnnotationToMapFromGeoPoint:geoPoint];
+            [self addAnnotationToMapFromSignal:signal];
         }
-    } error:^(Fault *error) {
-        NSLog(@"%@", error.detail);
+        else
+        {
+            NSLog(@"Failed to get signal for ID %@", focusSignalID);
+        }
     }];
 }
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals
 {
-    for (GeoPoint *geoPoint in nearbySignals)
+    for (FINSignal *signal in nearbySignals)
     {
-        [self addAnnotationToMapFromGeoPoint:geoPoint];
+        [self addAnnotationToMapFromSignal:signal];
     }
 }
 
@@ -432,22 +427,7 @@
         }
         
         FINAnnotation *ann = (FINAnnotation *)annotation;
-        GeoPoint *geoPoint = ann.geoPoint;
-        NSString *status = [geoPoint.metadata objectForKey:@"status"];
-        UIImage *pinImage;
-        if ([status isEqualToString:@"2"])
-        {
-            pinImage = [UIImage imageNamed:@"pin_green.png"];
-        }
-        else if ([status isEqualToString:@"1"])
-        {
-            pinImage = [UIImage imageNamed:@"pin_orange.png"];
-        }
-        else
-        {
-            pinImage = [UIImage imageNamed:@"pin_red.png"];
-        }
-        
+        UIImage *pinImage = [ann.signal createStatusImage];
         newAnnotationView.image = pinImage;
         newAnnotationView.centerOffset = CGPointMake(0, -20);
     }

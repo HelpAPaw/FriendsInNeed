@@ -54,7 +54,6 @@ enum {
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
-@property (strong, nonatomic) GeoPoint *geoPoint;
 
 @property (strong, nonatomic) NSArray *comments;
 @property (assign, nonatomic) BOOL statusIsExpanded;
@@ -64,37 +63,12 @@ enum {
 
 @implementation FINSignalDetailsVC
 
-- (FINSignalDetailsVC *)initWithGeoPoint:(GeoPoint *)geoPoint
-{
-    self = [self init];
-    
-    _geoPoint = geoPoint;
-    
-    return self;
-}
-
 - (FINSignalDetailsVC *)initWithAnnotation:(FINAnnotation *)annotation
 {
     self = [self init];
     
     _annotation = annotation;
-    _geoPoint = annotation.geoPoint;
-    
-    
-#warning TEMP
-    NSString *statusString = [_geoPoint.metadata objectForKey:kSignalStatusKey];
-    if ([statusString isEqualToString:@"2"])
-    {
-        _status = FINSignalStatus2;
-    }
-    else if ([statusString isEqualToString:@"1"])
-    {
-        _status = FINSignalStatus1;
-    }
-    else
-    {
-        _status = FINSignalStatus0;
-    }
+    _status = _annotation.signal.status;
     
     return self;
 }
@@ -120,6 +94,11 @@ enum {
     _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
     
     _statusIsExpanded = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,9 +148,9 @@ enum {
                 detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             
-            [detailsCell setTitle:[_geoPoint.metadata objectForKey:kSignalTitleKey]];
-            [detailsCell setAuthor:((BackendlessUser *)[_geoPoint.metadata objectForKey:kSignalAuthorKey]).name];
-            [detailsCell setDate:[_geoPoint.metadata objectForKey:kSignalDateSubmittedKey]];
+            [detailsCell setTitle:_annotation.signal.title];
+            [detailsCell setAuthor:_annotation.signal.author];
+            [detailsCell setDate:_annotation.signal.dateString];
             
             cell = detailsCell;
             break;
@@ -371,10 +350,9 @@ enum {
                 UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
                 newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 
-                FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:_geoPoint];
-                [[FINDataManager sharedManager] setStatus:_status forSignal:signal completion:^(Fault *fault) {
+                [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(Fault *fault) {
                     if (fault == nil) {
-                        _annotation.geoPoint = signal.geoPoint;
+#warning Error handling
                     }
                 }];
             }

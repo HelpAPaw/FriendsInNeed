@@ -25,11 +25,12 @@
 
 - (void)getSignalsForNewLocation:(CLLocation *)location;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion;
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(FINSignal *savedSignal, Fault *fault))completion;
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion;
+- (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, Fault *fault))completion;
+- (BOOL)userIsLogged;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
-@property (strong, nonatomic) NSDateFormatter   *signalDateFormatter;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;
 
 @end

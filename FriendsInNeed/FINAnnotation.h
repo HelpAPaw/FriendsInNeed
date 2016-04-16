@@ -7,13 +7,13 @@
 //
 
 #import <MapKit/MapKit.h>
-#import "Backendless.h"
+#import "FINSignal.h"
 
 @interface FINAnnotation : MKPointAnnotation
 
-@property (strong, nonatomic) GeoPoint *geoPoint;
+@property (strong, nonatomic) FINSignal *signal;
 
-- (FINAnnotation *)initWithGeoPoint:(GeoPoint *)geoPoint;
+- (FINAnnotation *)initWithSignal:(FINSignal *)signal;
 - (void)updateAnnotationSubtitle;
 
 @end

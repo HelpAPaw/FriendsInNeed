@@ -35,12 +35,6 @@
 {
     self = [super init];
     
-    _signalDateFormatter = [NSDateFormatter new];
-    NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    [_signalDateFormatter setLocale:enUSPOSIXLocale];
-    [_signalDateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [_signalDateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    
     _nearbySignals = [NSMutableArray new];
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
@@ -87,30 +81,38 @@
         NSMutableArray *tempNearbySignals = [NSMutableArray new];
         for (GeoPoint *receivedGeoPoint in response.data)
         {
+            // Is this protection really needed!?
             if (!receivedGeoPoint)
             {
                 continue;
             }
+            // Convert received GeoPoint to FINSignal
+            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
             
+            // Check if the signal is already present
             BOOL alreadyPresent = NO;
-            for (GeoPoint *oldGeoPoint in _nearbySignals)
+            for (FINSignal *signal in _nearbySignals)
             {
-                if ([oldGeoPoint.objectId isEqualToString:receivedGeoPoint.objectId])
+                if ([signal.signalID isEqualToString:receivedSignal.signalID])
                 {
                     alreadyPresent = YES;
+                    break;
                 }
             }
+            // If not, then it is new; add it to newSignals array
             if (alreadyPresent == NO)
             {
-                [newSignals addObject:receivedGeoPoint];
-                NSLog(@"New signal: %@", [receivedGeoPoint.metadata objectForKey:kSignalTitleKey]);
+                [newSignals addObject:receivedSignal];
+                NSLog(@"New signal: %@", receivedSignal.title);
             }
             
-            [tempNearbySignals addObject:receivedGeoPoint];
+            // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
+            [tempNearbySignals addObject:receivedSignal];
         }
         
         _nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
         
+        // If application is currently active show received signals on map
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
             [_mapDelegate updateMapWithNearbySignals:_nearbySignals];
@@ -121,11 +123,11 @@
             {
                 [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
                 
-                for (GeoPoint *geoPoint in newSignals)
+                for (FINSignal *signal in newSignals)
                 {
                     UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                    localNotification.alertBody  = [geoPoint.metadata objectForKey:kSignalTitleKey];
-                    localNotification.userInfo = [NSDictionary dictionaryWithObject:geoPoint.objectId forKey:kNotificationSignalID];
+                    localNotification.alertBody  = signal.title;
+                    localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
                     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
                 }
                 
@@ -171,22 +173,23 @@
     }
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(GeoPoint *savedGeoPoint, Fault *fault))completion
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(FINSignal *savedSignal, Fault *fault))completion
 {
     BackendlessUser *currentUser = backendless.userService.currentUser;
     
     GEO_POINT coordinate;
     coordinate.latitude = locationCoordinate.latitude;
     coordinate.longitude = locationCoordinate.longitude;
-    FINDataManager *dataManager = [FINDataManager sharedManager];
-    NSString *submitDate = [dataManager.signalDateFormatter stringFromDate:[NSDate date]];
+    NSString *submitDate = [[FINSignal geoPointDateFormatter] stringFromDate:[NSDate date]];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     
-    [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
+    [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
         
-        [_nearbySignals addObject:returnedGeoPoint];
-        completion(returnedGeoPoint, nil);
+        FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
+        [_nearbySignals addObject:savedSignal];
+        
+        completion(savedSignal, nil);
     } error:^(Fault *fault) {
         
         completion(nil, fault);
@@ -196,7 +199,7 @@
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion
 {
     GeoPoint *point = [signal geoPoint];
-    [point.metadata setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kSignalStatusKey];
+    [point.metadata setObject:[NSString stringWithFormat:@"%lu", status] forKey:kSignalStatusKey];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
         
@@ -206,6 +209,32 @@
         
         completion(fault);
     }];
+}
+
+- (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, Fault *fault))completion
+{
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
+    query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
+    [query includeMeta:YES];
+    [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
+        
+        if (collection.data.count > 0)
+        {
+            GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
+            FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
+            
+            completion(signal, nil);
+        }
+    } error:^(Fault *error) {
+        completion(nil, error);
+    }];
+}
+
+- (BOOL)userIsLogged
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    
+    return (currentUser != nil);
 }
 
 @end

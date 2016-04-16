@@ -25,6 +25,8 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 
 @property (strong, nonatomic) GeoPoint *geoPoint;
 
++ (NSDateFormatter *)geoPointDateFormatter;
+
 - (id)initWithGeoPoint:(GeoPoint *)geoPoint;
 
 
@@ -34,8 +36,8 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 - (void)setTitle:(NSString *)newTitle;
 
 - (NSString *)author;
-- (void)setAuthor:(NSString *)newAuthor;
 
+- (NSString *)dateString;
 - (NSDate *)date;
 - (void)setDate:(NSDate *)newDate;
 
@@ -43,5 +45,8 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 - (void)setStatus:(FINSignalStatus)newStatus;
 
 - (CLLocationCoordinate2D)coordinate;
+
+
+- (UIImage *)createStatusImage;
 
 @end

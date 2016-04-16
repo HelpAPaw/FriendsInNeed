@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Backendless.h"
 #import "FINAnnotation.h"
 
 @protocol FINSignalDetailsVCDelegate <NSObject>
@@ -20,7 +19,6 @@
 
 @property (weak, nonatomic) id <FINSignalDetailsVCDelegate> delegate;
 
-- (FINSignalDetailsVC *)initWithGeoPoint:(GeoPoint *)geoPoint;
 - (FINSignalDetailsVC *)initWithAnnotation:(FINAnnotation *)annotation;
 
 @end

@@ -33,27 +33,6 @@
     
     _geoPoint = geoPoint;
     
-//    _title = [geoPoint.metadata objectForKey:kSignalTitleKey];
-//    _author = [geoPoint.metadata objectForKey:kSignalAuthorKey];
-//    _signalID = geoPoint.objectId;
-//    
-//    
-//    _date = [[[FINDataManager sharedManager] signalDateFormatter] dateFromString:[geoPoint.metadata objectForKey:kSignalDateSubmittedKey]];
-//    
-//    NSString *statusString = [geoPoint.metadata objectForKey:kSignalStatusKey];
-//    if ([statusString isEqualToString:@"2"])
-//    {
-//        _status = FINSignalStatus2;
-//    }
-//    else if ([statusString isEqualToString:@"1"])
-//    {
-//        _status = FINSignalStatus1;
-//    }
-//    else
-//    {
-//        _status = FINSignalStatus0;
-//    }
-    
     return self;
 }
 
@@ -77,14 +56,17 @@
 
 - (NSString *)author
 {
-    return [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    return user.name;
 }
 
-- (void)setAuthor:(NSString *)newAuthor
+
+- (NSString *)dateString
 {
-    [_geoPoint.metadata setObject:newAuthor forKey:kSignalAuthorKey];
+    NSString *dateString = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
+    
+    return dateString;
 }
-
 
 - (NSDate *)date
 {
@@ -152,26 +134,27 @@
 }
 
 
-- (UIImage *)newStatusImage
+- (UIImage *)createStatusImage
 {
     UIImage *statusImage;
+    FINSignalStatus status = [self status];
     
-//    switch (_status) {
-//        case FINSignalStatus2:
-//            statusImage = [UIImage imageNamed:@"pin_green.png"];
-//            break;
-//            
-//        case FINSignalStatus1:
-//            statusImage = [UIImage imageNamed:@"pin_orange.png"];
-//            break;
-//            
-//        case FINSignalStatus0:
-//            statusImage = [UIImage imageNamed:@"pin_red.png"];
-//            break;
-//            
-//        default:
-//            break;
-//    }
+    switch (status) {
+        case FINSignalStatus2:
+            statusImage = [UIImage imageNamed:@"pin_green.png"];
+            break;
+            
+        case FINSignalStatus1:
+            statusImage = [UIImage imageNamed:@"pin_orange.png"];
+            break;
+            
+        case FINSignalStatus0:
+            statusImage = [UIImage imageNamed:@"pin_red.png"];
+            break;
+            
+        default:
+            break;
+    }
     
     return statusImage;
 }

@@ -7,7 +7,7 @@
 //
 
 #import "FINLoginVC.h"
-#import "Backendless.h"
+#import "FINDataManager.h"
 
 #define REGISTER_SEGMENT    0
 #define LOGIN_SEGMENT       1
@@ -101,44 +101,43 @@
     if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
     {
         //TODO: add input validation
-        BackendlessUser *user = [BackendlessUser new];
-        user.email = _emailTextField.text;
-        user.name = _nameTextField.text;
-        user.password = _passwordTextField.text;
         
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
         
-        [backendless.userService registering:user response:^void (BackendlessUser *registeredUser) {
+        [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(Fault *fault) {
+            
             [_activityIndicator stopAnimating];
             _registerLoginButton.enabled = YES;
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
-                                                                           message:@"A confirmation link has been sent on your email. Please click it to complete your registration."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                      [self setupLoginView];
-                                                                      [_segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
-        } error:^void (Fault *fault) {
-            [_activityIndicator stopAnimating];
-            _registerLoginButton.enabled = YES;
-            
-            NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                           message:errorMessage
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
+            if (!fault)
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
+                                                                               message:@"A confirmation link has been sent on your email. Please click it to complete your registration."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          [self setupLoginView];
+                                                                          [_segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
+            }
+            else
+            {
+                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                                                                               message:errorMessage
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
+            }
         }];
     }
     else
@@ -146,35 +145,38 @@
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
         
-        [backendless.userService login:_emailTextField.text password:_passwordTextField.text response:^void (BackendlessUser *loggeduser) {
+        [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(Fault *fault) {
+            
             [_activityIndicator stopAnimating];
             _registerLoginButton.enabled = YES;
             
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
-                                                                           message:@"You are now logged in and can submit signals."
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                      [self dismissViewControllerAnimated:YES completion:^{}];
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
-        } error:^void (Fault *fault) {
-            [_activityIndicator stopAnimating];
-            _registerLoginButton.enabled = YES;
-            
-            NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                           message:errorMessage
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
+            if (!fault)
+            {
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
+                                                                               message:@"You are now logged in and can submit signals."
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          [self dismissViewControllerAnimated:YES completion:^{}];
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
+            }
+            else 
+            {
+                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                                                                               message:errorMessage
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
+            }
         }];
     }
 }

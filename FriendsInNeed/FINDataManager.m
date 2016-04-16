@@ -237,4 +237,31 @@
     return (currentUser != nil);
 }
 
+- (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion
+{
+    BackendlessUser *user = [BackendlessUser new];
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    
+    [backendless.userService registering:user response:^void (BackendlessUser *registeredUser) {
+        
+        completion(nil);
+    } error:^void (Fault *fault) {
+        
+        completion(fault);
+    }];
+}
+
+- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion
+{
+    [backendless.userService login:email password:password response:^void (BackendlessUser *loggeduser) {
+        
+        completion(nil);
+    } error:^void (Fault *fault) {
+        
+        completion(fault);
+    }];
+}
+
 @end

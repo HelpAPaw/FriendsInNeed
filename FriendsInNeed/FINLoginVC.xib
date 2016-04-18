@@ -87,7 +87,7 @@
                                 <constraint firstAttribute="height" constant="60" id="rFM-4u-7Hd"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K16-C2-XCi">
@@ -98,7 +98,7 @@
                                 <constraint firstAttribute="height" constant="21" id="jM8-LJ-OEj"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sas-B9-08t" userLabel="Email Text Field">
@@ -124,7 +124,7 @@
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="290" id="in7-UN-YPw"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aLU-m9-fxe" userLabel="Password Text Field">
@@ -150,7 +150,7 @@
                                 <constraint firstAttribute="width" constant="290" id="hxf-1G-tDB"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wdr-Ti-WQ7" userLabel="Name Text Field">
@@ -168,16 +168,18 @@
                             </connections>
                         </textField>
                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Bge-ec-XTM">
-                            <rect key="frame" x="290" y="343" width="20" height="20"/>
+                            <rect key="frame" x="290" y="323" width="20" height="20"/>
                         </activityIndicatorView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbC-vS-778">
-                            <rect key="frame" x="250" y="371" width="100" height="30"/>
+                            <rect key="frame" x="250" y="345" width="100" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Suf-Xz-Q4u"/>
                                 <constraint firstAttribute="height" constant="30" id="iYg-wb-q5z"/>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="vR9-Bz-n0K"/>
                                 <constraint firstAttribute="width" constant="100" id="wWd-yS-4Nc"/>
                             </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="22"/>
+                            <color key="tintColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="Register"/>
                             <connections>
                                 <action selector="onRegisterButton:" destination="-1" eventType="touchUpInside" id="gA2-gn-KkO"/>
@@ -185,7 +187,7 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="8" id="3G3-BY-gJT"/>
+                        <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="2" id="3G3-BY-gJT"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="top" secondItem="saT-hO-LZA" secondAttribute="bottom" constant="8" id="6AQ-Bo-z4U"/>
                         <constraint firstItem="saT-hO-LZA" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="CWD-pI-C9n"/>
                         <constraint firstItem="aLU-m9-fxe" firstAttribute="top" secondItem="ma8-2h-gbd" secondAttribute="bottom" constant="8" id="Cbi-qR-eU5"/>
@@ -203,7 +205,7 @@
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="ow1-W4-3GM"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="r5g-i4-XP8"/>
                         <constraint firstItem="ma8-2h-gbd" firstAttribute="top" secondItem="Sas-B9-08t" secondAttribute="bottom" constant="20" id="r7O-pJ-ihI"/>
-                        <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="wdr-Ti-WQ7" secondAttribute="bottom" constant="64" id="uei-BP-7ba"/>
+                        <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="wdr-Ti-WQ7" secondAttribute="bottom" constant="38" id="uei-BP-7ba"/>
                         <constraint firstItem="aLU-m9-fxe" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="vgP-7l-LZ4"/>
                         <constraint firstItem="ma8-2h-gbd" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="zOi-zc-9aA"/>
                     </constraints>

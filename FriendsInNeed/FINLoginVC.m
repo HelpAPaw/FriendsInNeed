@@ -35,6 +35,7 @@
     // Do any additional setup after loading the view from its nib.
     [_topToolbar setBarTintColor:kCustomOrange];
     [_toolbarBackground setBackgroundColor:kCustomOrange];
+    [_registerLoginButton setTintColor:kCustomOrange];
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];

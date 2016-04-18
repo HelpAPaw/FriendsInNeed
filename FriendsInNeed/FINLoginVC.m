@@ -8,11 +8,14 @@
 
 #import "FINLoginVC.h"
 #import "FINDataManager.h"
+#import "FINGlobalConstants.pch"
 
 #define REGISTER_SEGMENT    0
 #define LOGIN_SEGMENT       1
 
 @interface FINLoginVC ()
+@property (weak, nonatomic) IBOutlet UIToolbar *topToolbar;
+@property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *containerScrollView;
 @property (weak, nonatomic) IBOutlet UILabel *hintLabel;
@@ -30,6 +33,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [_topToolbar setBarTintColor:kCustomOrange];
+    [_toolbarBackground setBackgroundColor:kCustomOrange];
+    
+    UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
+    [self.view addGestureRecognizer:cGR];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,9 +50,13 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)prefersStatusBarHidden
+#pragma mark - Gesture Recognizers
+- (void)onContainerTap:(UITapGestureRecognizer *)sender
 {
-    return NO;
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        [self.view endEditing:YES];
+    }
 }
 
 - (IBAction)onRegisterLoginSwitch:(id)sender
@@ -75,6 +87,8 @@
             [_registerLoginButton setTitle:@"Register" forState:UIControlStateNormal];
             [_registerLoginButton layoutIfNeeded];
         }];
+        
+        _passwordTextField.returnKeyType = UIReturnKeyNext;
     } completion:^(BOOL finished){}];
 }
 
@@ -88,6 +102,13 @@
         _registerLoginButton.titleLabel.text = @"Login";
         //To keep the title after state changes (e.g. user taps)
         [_registerLoginButton setTitle:@"Login" forState:UIControlStateNormal];
+        
+        _passwordTextField.returnKeyType = UIReturnKeyGo;
+        
+        if ([_nameTextField isFirstResponder])
+        {
+            [_nameTextField resignFirstResponder];
+        }
     } completion:^(BOOL finished){}];
 }
 
@@ -179,6 +200,40 @@
             }
         }];
     }
+}
+
+#pragma mark - UITextField Delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == _emailTextField)
+    {
+        [textField resignFirstResponder];
+        [_passwordTextField becomeFirstResponder];
+    }
+    else if (textField == _passwordTextField)
+    {
+        [textField resignFirstResponder];
+        
+        // If in register mode, go to name text field
+        if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
+        {
+            [_nameTextField becomeFirstResponder];
+        }
+        // If in login mode do login
+        else
+        {
+            [self onRegisterButton:_registerLoginButton];
+        }
+    }
+    else if (textField == _nameTextField)
+    {
+        [textField resignFirstResponder];
+        // We are obviously in register mode so do register
+        [self onRegisterButton:_registerLoginButton];
+    }
+    
+    return YES;
 }
 
 @end

@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
+@property (weak, nonatomic) IBOutlet UIButton *btnCall;
 
 @end
 
@@ -70,6 +71,12 @@
 - (void)setDate:(NSString *)date
 {
     _lbDate.text = [NSString stringWithFormat:@"%@", date];
+}
+
+- (IBAction)onCallButton:(id)sender
+{
+    NSString *phoneNumber = [@"telprompt://" stringByAppendingString:@"0887379576"];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
 }
 
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -23,7 +23,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gCA-Lc-iFK" userLabel="Author">
-                        <rect key="frame" x="152" y="94" width="441" height="21"/>
+                        <rect key="frame" x="152" y="94" width="419" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="ENY-AL-0hp"/>
                         </constraints>
@@ -104,6 +104,18 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zSG-km-x6o">
+                        <rect key="frame" x="571" y="90" width="30" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="2hA-sF-QbV"/>
+                            <constraint firstAttribute="height" constant="30" id="3iI-nZ-iJ8"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="12"/>
+                        <state key="normal" title="Call"/>
+                        <connections>
+                            <action selector="onCallButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Sbe-Rh-Rr1"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="UQT-kp-Xll" firstAttribute="bottom" secondItem="i7Z-IZ-R4E" secondAttribute="bottom" id="02r-s9-WIt"/>
@@ -112,16 +124,19 @@
                     <constraint firstItem="oxU-LU-43t" firstAttribute="leading" secondItem="i7Z-IZ-R4E" secondAttribute="trailing" constant="16" id="Opv-5w-tB7"/>
                     <constraint firstItem="gCA-Lc-iFK" firstAttribute="top" secondItem="oxU-LU-43t" secondAttribute="bottom" id="Q8f-3M-Noi"/>
                     <constraint firstItem="i7Z-IZ-R4E" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="V6A-bi-Sbz"/>
+                    <constraint firstItem="zSG-km-x6o" firstAttribute="centerY" secondItem="gCA-Lc-iFK" secondAttribute="centerY" id="YYq-Ej-fFr"/>
                     <constraint firstItem="oxU-LU-43t" firstAttribute="top" secondItem="i7Z-IZ-R4E" secondAttribute="top" id="bsl-vc-Lnz"/>
+                    <constraint firstItem="zSG-km-x6o" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="c8w-FJ-bIP"/>
                     <constraint firstItem="UQT-kp-Xll" firstAttribute="trailing" secondItem="oxU-LU-43t" secondAttribute="trailing" id="gZw-SV-6lc"/>
                     <constraint firstItem="gCA-Lc-iFK" firstAttribute="leading" secondItem="oxU-LU-43t" secondAttribute="leading" id="iOX-Yg-tuy"/>
                     <constraint firstAttribute="trailingMargin" secondItem="oxU-LU-43t" secondAttribute="trailing" constant="8" id="jk7-i5-fVA"/>
-                    <constraint firstItem="gCA-Lc-iFK" firstAttribute="trailing" secondItem="oxU-LU-43t" secondAttribute="trailing" id="k4E-nh-GQc"/>
+                    <constraint firstItem="zSG-km-x6o" firstAttribute="leading" secondItem="gCA-Lc-iFK" secondAttribute="trailing" id="jrq-U1-Ccq"/>
                     <constraint firstItem="i7Z-IZ-R4E" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="nkh-pT-uPP"/>
                     <constraint firstItem="UQT-kp-Xll" firstAttribute="leading" secondItem="i7Z-IZ-R4E" secondAttribute="trailing" constant="16" id="wtW-tH-ene"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="btnCall" destination="zSG-km-x6o" id="5hA-Do-rJ8"/>
                 <outlet property="imgPhotoView" destination="i7Z-IZ-R4E" id="CPs-yF-PJU"/>
                 <outlet property="lbAuthor" destination="gCA-Lc-iFK" id="obT-Kb-TLe"/>
                 <outlet property="lbDate" destination="UQT-kp-Xll" id="9DR-9e-yNt"/>

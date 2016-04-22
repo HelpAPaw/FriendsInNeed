@@ -141,12 +141,9 @@ enum {
         case kSectionIndexDetails:
         {
             FINSignalDetailsCell *detailsCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierDetails];
-            if (!detailsCell)
-            {
-                detailsCell = [[FINSignalDetailsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierDetails];
-                detailsCell.backgroundColor = [UIColor clearColor];
-                detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
+            
+            detailsCell.backgroundColor = [UIColor clearColor];
+            detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             [detailsCell setTitle:_annotation.signal.title];
             [detailsCell setAuthor:_annotation.signal.author];

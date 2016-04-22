@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BDF70FBDD8B3EDC940189AB8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5187B2923EAE761D01AA93E /* libPods.a */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
+		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
 		F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */; };
 		F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */; };
 		F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */; };
@@ -55,6 +56,7 @@
 		A5187B2923EAE761D01AA93E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
+		F32711CD1CCABC5D00E51AEA /* ic_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call.png; sourceTree = "<group>"; };
 		F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsVC.h; sourceTree = "<group>"; };
 		F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsVC.m; sourceTree = "<group>"; };
 		F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsVC.xib; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F32711CD1CCABC5D00E51AEA /* ic_call.png */,
 				F39C393E1C9D8C1C007A2D8E /* ic_dropdown.png */,
 				F39C393F1C9D8C1C007A2D8E /* ic_dropdown@2x.png */,
 				F39C39401C9D8C1C007A2D8E /* ic_dropdown_reversed.png */,
@@ -304,6 +307,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */,
 				F39C39491C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
 				F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */,

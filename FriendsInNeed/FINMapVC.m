@@ -474,31 +474,14 @@
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
             newAnnotationView.rightCalloutAccessoryView = rightButton;
-            
-            // Add a custom image to the left side of the callout.
-            UIImage *signalImage;
-            if (ann.signal.photo)
-            {
-                signalImage = ann.signal.photo;
-            }
-            else 
-            {
-                signalImage = [UIImage imageNamed:@"ic_paw"];
-            }
-            UIImageView *signalImageView = [[UIImageView alloc] initWithImage:signalImage];
-            CGRect imageFrame = signalImageView.frame;
-            imageFrame.size.height = 44.0;//newAnnotationView.frame.size.height;
-            imageFrame.size.width  = 44.0;//newAnnotationView.frame.size.height;
-            signalImageView.frame = imageFrame;
-            signalImageView.clipsToBounds = YES;
-            signalImageView.layer.cornerRadius = 5.0f;
-            [signalImageView setContentMode:UIViewContentModeScaleAspectFill];
-            newAnnotationView.leftCalloutAccessoryView = signalImageView;
         }
         else
         {
             newAnnotationView.annotation = annotation;
         }
+        
+        // Add a default image to the left side of the callout.
+        [self setImage:[UIImage imageNamed:@"ic_paw"] forAnnotationView:newAnnotationView];
         
         UIImage *pinImage = [ann.signal createStatusImage];
         newAnnotationView.image = pinImage;
@@ -514,6 +497,12 @@
     {
         FINAnnotation *annotation = (FINAnnotation *)view.annotation;
         [annotation updateAnnotationSubtitle];
+        
+        // If there is a signal photo, set ti as the left accessory view
+        if (annotation.signal.photo)
+        {
+            [self setImage:annotation.signal.photo forAnnotationView:view];
+        }
     }
 }
 
@@ -535,6 +524,19 @@
 //    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
 //    self.navigationController.modalPresentationStyle = UIModalPresentationOverFullScreen;
 //    [self.navigationController pushViewController:signalDetailsVC animated:YES];
+}
+
+- (void)setImage:(UIImage *)image forAnnotationView:(MKAnnotationView *)annotationView
+{
+    UIImageView *signalImageView = [[UIImageView alloc] initWithImage:image];
+    CGRect imageFrame = signalImageView.frame;
+    imageFrame.size.height = 44.0;
+    imageFrame.size.width  = 44.0;
+    signalImageView.frame = imageFrame;
+    signalImageView.clipsToBounds = YES;
+    signalImageView.layer.cornerRadius = 5.0f;
+    [signalImageView setContentMode:UIViewContentModeScaleAspectFill];
+    annotationView.leftCalloutAccessoryView = signalImageView;
 }
 
 - (void)refreshAnnotation:(FINAnnotation *)annotation

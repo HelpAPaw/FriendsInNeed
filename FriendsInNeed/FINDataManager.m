@@ -215,7 +215,7 @@
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion
 {
     GeoPoint *point = [signal geoPoint];
-    [point.metadata setObject:[NSString stringWithFormat:@"%lu", status] forKey:kSignalStatusKey];
+    [point.metadata setObject:[NSString stringWithFormat:@"%lu", (unsigned long)status] forKey:kSignalStatusKey];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
         

@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
+@property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
@@ -80,6 +82,8 @@
         _hintLabel.text = @"You need to register before you can submit signals";
         _nameLabel.hidden = NO;
         _nameTextField.hidden = NO;
+        _phoneLabel.hidden = NO;
+        _phoneTextField.hidden = NO;
         
         [UIView performWithoutAnimation:^{
             //For immediate change
@@ -99,6 +103,9 @@
         _hintLabel.text = @"Please enter your credentials";
         _nameLabel.hidden = YES;
         _nameTextField.hidden = YES;
+        _phoneLabel.hidden = YES;
+        _phoneTextField.hidden = YES;
+        
         //For immediate change
         _registerLoginButton.titleLabel.text = @"Login";
         //To keep the title after state changes (e.g. user taps)
@@ -109,6 +116,10 @@
         if ([_nameTextField isFirstResponder])
         {
             [_nameTextField resignFirstResponder];
+        }
+        else if ([_phoneTextField isFirstResponder])
+        {
+            [_phoneTextField resignFirstResponder];
         }
     } completion:^(BOOL finished){}];
 }
@@ -226,6 +237,12 @@
         {
             [self onRegisterButton:_registerLoginButton];
         }
+    }
+    else if (textField == _nameTextField)
+    {
+        [textField resignFirstResponder];
+        // We are obviously in register mode so do register
+        [self onRegisterButton:_registerLoginButton];
     }
     else if (textField == _nameTextField)
     {

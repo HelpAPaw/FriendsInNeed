@@ -33,9 +33,10 @@
     
     self.vCellContainer.layer.cornerRadius = 5.0f;
     self.vCellContainer.layer.borderWidth = 1.0f;
-    self.vCellContainer.layer.borderColor = [UIColor grayColor].CGColor;
+    self.vCellContainer.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     self.vCellContainer.layer.shadowOffset = CGSizeMake(0, 0);
-    self.vCellContainer.layer.shadowOpacity = 0.5;
+//    self.vCellContainer.layer.shadowOpacity = 0.5;
+    self.vCellContainer.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     self.backgroundColor = [UIColor clearColor];
 }
 

@@ -91,8 +91,8 @@
     UIBarButtonItem *addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
     self.navigationItem.rightBarButtonItem = addBarButton;
     
-//    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(showLoginScreen)];
-//    self.navigationItem.leftBarButtonItem = menuButton;
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(showLoginScreen)];
+    self.navigationItem.leftBarButtonItem = menuButton;
 }
 
 - (void)viewWillAppear:(BOOL)animated

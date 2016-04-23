@@ -57,10 +57,18 @@
 }
 
 
-- (NSString *)author
+- (NSString *)authorName;
 {
     BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    
     return user.name;
+}
+
+- (NSString *)authorPhone
+{    
+    BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    
+    return [user getProperty:@"phoneNumber"];;
 }
 
 

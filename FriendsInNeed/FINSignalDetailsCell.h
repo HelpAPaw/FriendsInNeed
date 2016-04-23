@@ -10,6 +10,8 @@
 
 @interface FINSignalDetailsCell : UITableViewCell
 
+@property (strong, nonatomic) NSString *phoneNumber;
+
 - (void)setTitle:(NSString *)title;
 - (void)setAuthor:(NSString *)author;
 - (void)setDate:(NSString *)date;

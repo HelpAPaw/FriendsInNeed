@@ -146,12 +146,14 @@ enum {
             detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             [detailsCell setTitle:_annotation.signal.title];
-            [detailsCell setAuthor:_annotation.signal.author];
+            [detailsCell setAuthor:_annotation.signal.authorName];
+            [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
             [detailsCell setDate:_annotation.signal.dateString];
             if (_annotation.signal.photo)
             {
                 [detailsCell setPhoto:_annotation.signal.photo];
             }
+            
             
             cell = detailsCell;
             break;

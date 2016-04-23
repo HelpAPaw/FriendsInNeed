@@ -30,7 +30,7 @@
 {
     self = [super initWithCoder:aDecoder];
     
-    if(self)
+    if (self)
     {
         //Changes here after init'ing self
     }
@@ -44,8 +44,10 @@
     
     self.backgroundColor = [UIColor clearColor];
     _imgPhotoView.layer.cornerRadius = 5.0f;
-    _imgPhotoView.layer.borderWidth = 0.5f;
-    _imgPhotoView.layer.borderColor = [UIColor blackColor].CGColor;
+//    _imgPhotoView.layer.borderWidth = 0.5f;
+//    _imgPhotoView.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    [_imgPhotoView setContentMode:UIViewContentModeScaleAspectFill];
     
     _lbPhotoNumber.layer.cornerRadius = _lbPhotoNumber.frame.size.height / 2;
     _lbPhotoNumber.layer.borderWidth = 0.5f;
@@ -71,6 +73,11 @@
 - (void)setDate:(NSString *)date
 {
     _lbDate.text = [NSString stringWithFormat:@"%@", date];
+}
+
+- (void)setPhoto:(UIImage *)photo
+{
+    _imgPhotoView.image = photo;
 }
 
 - (IBAction)onCallButton:(id)sender

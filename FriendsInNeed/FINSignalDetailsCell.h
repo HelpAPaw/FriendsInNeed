@@ -13,5 +13,6 @@
 - (void)setTitle:(NSString *)title;
 - (void)setAuthor:(NSString *)author;
 - (void)setDate:(NSString *)date;
+- (void)setPhoto:(UIImage *)photo;
 
 @end

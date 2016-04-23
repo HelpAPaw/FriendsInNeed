@@ -21,6 +21,7 @@
                 <outlet property="toolbarBackground" destination="STi-ZM-raM" id="AwE-zP-32v"/>
                 <outlet property="topToolbar" destination="ocI-Gl-ZIK" id="oZw-tA-4uP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="whyButton" destination="60E-TK-uuz" id="KKg-gy-iCC"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -213,16 +214,25 @@
                                 <action selector="onRegisterButton:" destination="-1" eventType="touchUpInside" id="gA2-gn-KkO"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60E-TK-uuz">
+                            <rect key="frame" x="406" y="276" width="39" height="30"/>
+                            <state key="normal" title="Why?"/>
+                            <connections>
+                                <action selector="onWhyPhoneButton:" destination="-1" eventType="touchUpInside" id="fxb-7D-kRa"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="2" id="3G3-BY-gJT"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="top" secondItem="saT-hO-LZA" secondAttribute="bottom" constant="3" id="6AQ-Bo-z4U"/>
                         <constraint firstItem="Bge-ec-XTM" firstAttribute="top" secondItem="atK-Ne-sKb" secondAttribute="bottom" constant="14" id="9qF-u9-UyT"/>
+                        <constraint firstItem="60E-TK-uuz" firstAttribute="trailing" secondItem="atK-Ne-sKb" secondAttribute="trailing" id="CVU-jt-ngX"/>
                         <constraint firstItem="saT-hO-LZA" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="CWD-pI-C9n"/>
                         <constraint firstItem="aLU-m9-fxe" firstAttribute="top" secondItem="ma8-2h-gbd" secondAttribute="bottom" constant="3" id="Cbi-qR-eU5"/>
                         <constraint firstItem="saT-hO-LZA" firstAttribute="top" secondItem="aLU-m9-fxe" secondAttribute="bottom" constant="15" id="HmN-5n-19T"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="ChW-NI-d1N" secondAttribute="bottom" constant="3" id="I0p-li-4Z5"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="top" secondItem="HPy-Be-HpR" secondAttribute="top" constant="15" id="IvO-Xt-Hpv"/>
+                        <constraint firstItem="atK-Ne-sKb" firstAttribute="trailing" secondItem="ChW-NI-d1N" secondAttribute="trailing" id="Mpf-Oq-oPJ"/>
                         <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="30" id="Ofh-9Q-pt6"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="V55-1V-vb4"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="ChW-NI-d1N" secondAttribute="bottom" constant="3" id="Vzc-6r-Njd"/>
@@ -234,6 +244,7 @@
                         <constraint firstAttribute="bottom" secondItem="wbC-vS-778" secondAttribute="bottom" constant="80" id="fLt-7Q-uWm"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="leading" secondItem="HPy-Be-HpR" secondAttribute="leading" constant="30" id="fVe-AM-2j2"/>
                         <constraint firstItem="Sas-B9-08t" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="hAX-al-IUp"/>
+                        <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="60E-TK-uuz" secondAttribute="bottom" id="kEv-am-Wqp"/>
                         <constraint firstItem="Sas-B9-08t" firstAttribute="top" secondItem="K16-C2-XCi" secondAttribute="bottom" constant="3" id="kat-UG-LJd"/>
                         <constraint firstItem="ChW-NI-d1N" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="op7-ki-p7g"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="ow1-W4-3GM"/>

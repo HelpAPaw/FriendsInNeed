@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
+@property (weak, nonatomic) IBOutlet UIButton *whyButton;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
@@ -84,6 +85,7 @@
         _nameTextField.hidden = NO;
         _phoneLabel.hidden = NO;
         _phoneTextField.hidden = NO;
+        _whyButton.hidden = NO;
         
         [UIView performWithoutAnimation:^{
             //For immediate change
@@ -105,6 +107,7 @@
         _nameTextField.hidden = YES;
         _phoneLabel.hidden = YES;
         _phoneTextField.hidden = YES;
+        _whyButton.hidden = YES;
         
         //For immediate change
         _registerLoginButton.titleLabel.text = @"Login";
@@ -241,10 +244,9 @@
     else if (textField == _nameTextField)
     {
         [textField resignFirstResponder];
-        // We are obviously in register mode so do register
-        [self onRegisterButton:_registerLoginButton];
+        [_phoneTextField becomeFirstResponder];
     }
-    else if (textField == _nameTextField)
+    else if (textField == _phoneTextField)
     {
         [textField resignFirstResponder];
         // We are obviously in register mode so do register
@@ -252,6 +254,18 @@
     }
     
     return YES;
+}
+
+- (IBAction)onWhyPhoneButton:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Why do you want my phone number?"
+                                                                   message:@"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"I see"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:^{}];
 }
 
 @end

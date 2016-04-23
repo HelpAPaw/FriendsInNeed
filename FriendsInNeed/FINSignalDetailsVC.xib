@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINSignalDetailsVC">
             <connections>
+                <outlet property="addCommentLC" destination="axv-YF-hyD" id="KMX-nQ-MXW"/>
                 <outlet property="addCommentView" destination="EqL-OR-4XC" id="fyT-kP-RxE"/>
                 <outlet property="tableView" destination="sZv-Fz-eoz" id="De1-gk-WO2"/>
                 <outlet property="toolbar" destination="2sk-0j-nHc" id="zGW-Ym-fvV"/>
@@ -90,13 +91,6 @@
                             </view>
                             <blurEffect style="light"/>
                         </visualEffectView>
-                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KR9-Nq-9qd" userLabel="Line separator">
-                            <rect key="frame" x="0.0" y="0.0" width="600" height="1"/>
-                            <color key="backgroundColor" white="0.85301041666666666" alpha="1" colorSpace="calibratedWhite"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="ftF-3v-NaN"/>
-                            </constraints>
-                        </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oh9-5j-fyg">
                             <rect key="frame" x="554" y="8" width="38" height="30"/>
                             <constraints>
@@ -119,14 +113,11 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="cBo-dQ-Niv" firstAttribute="top" secondItem="EqL-OR-4XC" secondAttribute="top" id="0dN-OB-9qv"/>
-                        <constraint firstAttribute="trailing" secondItem="KR9-Nq-9qd" secondAttribute="trailing" id="BRx-9f-axC"/>
                         <constraint firstAttribute="bottom" secondItem="oh9-5j-fyg" secondAttribute="bottom" constant="8" id="FjY-Wq-ahg"/>
                         <constraint firstAttribute="trailing" secondItem="oh9-5j-fyg" secondAttribute="trailing" constant="8" id="Tts-OQ-Tcv"/>
-                        <constraint firstItem="KR9-Nq-9qd" firstAttribute="top" secondItem="EqL-OR-4XC" secondAttribute="top" id="WXd-le-aSP"/>
                         <constraint firstItem="oh9-5j-fyg" firstAttribute="leading" secondItem="MFc-mG-mRb" secondAttribute="trailing" constant="8" id="XaI-yd-08H"/>
                         <constraint firstItem="MFc-mG-mRb" firstAttribute="top" secondItem="EqL-OR-4XC" secondAttribute="top" constant="8" id="hM4-46-cti"/>
                         <constraint firstItem="MFc-mG-mRb" firstAttribute="leading" secondItem="EqL-OR-4XC" secondAttribute="leading" constant="8" id="i5C-ys-nIx"/>
-                        <constraint firstItem="KR9-Nq-9qd" firstAttribute="leading" secondItem="EqL-OR-4XC" secondAttribute="leading" id="iB8-t4-nAT"/>
                         <constraint firstAttribute="trailing" secondItem="cBo-dQ-Niv" secondAttribute="trailing" id="mg6-NB-Qux"/>
                         <constraint firstAttribute="bottom" secondItem="cBo-dQ-Niv" secondAttribute="bottom" id="rZo-7O-elS"/>
                         <constraint firstAttribute="bottom" secondItem="MFc-mG-mRb" secondAttribute="bottom" constant="8" id="w1d-tW-9W1"/>

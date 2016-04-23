@@ -52,6 +52,7 @@ enum {
 @interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *addCommentView;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
 
@@ -77,7 +78,7 @@ enum {
 {
     [super viewDidLoad];
     
-//    _tableView.contentInset = UIEdgeInsetsMake(_toolbar.frame.size.height, 0.0f, 0.0f, 0.0f);
+    _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, _addCommentView.frame.size.height, 0.0f);
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     
@@ -87,18 +88,34 @@ enum {
     _toolbar.layer.shadowOpacity = 1.0f;
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
     
+    // Add upper line border on the comment view
+    CALayer *upperBorder = [CALayer layer];
+    upperBorder.backgroundColor = [[UIColor colorWithWhite:0.8f alpha:1.0f] CGColor];
+    upperBorder.frame = CGRectMake(0, 0, CGRectGetWidth(_addCommentView.frame), 0.5f);
+    [_addCommentView.layer addSublayer:upperBorder];
+    
+    _addCommentView.layer.shadowOffset = CGSizeMake(0, -2);
+    _addCommentView.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    
     NSString *backButtonText = @"Close";
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
     self.navigationItem.leftBarButtonItem = backButton;
     
-    _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
+    _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming...", @"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
     
     _statusIsExpanded = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,7 +132,24 @@ enum {
 #pragma mark - TableView data source and delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return kSectionIndexCount-2;
+    return kSectionIndexCount;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [self determineIfAddCommentShadowShouldBeVisible];
+}
+
+- (void)determineIfAddCommentShadowShouldBeVisible
+{
+    if ((_tableView.contentOffset.y + _tableView.frame.size.height - _addCommentView.frame.size.height) >= _tableView.contentSize.height)
+    {
+        _addCommentView.layer.shadowOpacity = 0.0f;
+    }
+    else
+    {
+        _addCommentView.layer.shadowOpacity = 1.0f;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

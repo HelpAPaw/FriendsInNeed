@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="addSignalButton" destination="ttH-Qm-6yO" id="4MH-vp-Oho"/>
                 <outlet property="addSignalView" destination="1V9-Vl-MM8" id="xgx-bH-yTF"/>
+                <outlet property="btnPhoto" destination="7PG-tS-RcE" id="KQO-Dc-l9y"/>
                 <outlet property="mapView" destination="Vzw-BA-6AS" id="yuT-dx-yfK"/>
                 <outlet property="signalTitleField" destination="gGJ-xu-E0V" id="Dut-G5-5zI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="Brj-wt-V4N"/>
@@ -56,25 +57,42 @@
                         <constraint firstAttribute="width" constant="46" id="8az-Nt-Rrn"/>
                         <constraint firstAttribute="height" constant="30" id="VHK-FT-ieE"/>
                     </constraints>
-                    <state key="normal" title="Send"/>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                    <state key="normal" title="Send">
+                        <color key="titleColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
                     <connections>
                         <action selector="onSendButton:" destination="-1" eventType="touchUpInside" id="2sc-Ry-hD2"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
-                    <rect key="frame" x="2" y="2" width="435" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="signal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
+                    <rect key="frame" x="34" y="2" width="405" height="30"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PG-tS-RcE" userLabel="Photo Button">
+                    <rect key="frame" x="2" y="2" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="FHC-Hi-yf9"/>
+                        <constraint firstAttribute="height" constant="30" id="MWr-bY-VZ0"/>
+                    </constraints>
+                    <state key="normal" image="ic_camera.png"/>
+                    <connections>
+                        <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="1TQ-Ne-IYT"/>
+                <constraint firstItem="7PG-tS-RcE" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="6Uh-oP-5NZ"/>
                 <constraint firstAttribute="bottom" secondItem="VRP-un-208" secondAttribute="bottom" constant="2" id="Dw1-SK-sF0"/>
                 <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
-                <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" constant="2" id="Oor-5C-VMS"/>
+                <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="7PG-tS-RcE" secondAttribute="trailing" constant="2" id="NvF-h9-llb"/>
+                <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="Oor-5C-VMS"/>
                 <constraint firstItem="VRP-un-208" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="gM2-gN-ujb"/>
+                <constraint firstAttribute="bottom" secondItem="7PG-tS-RcE" secondAttribute="bottom" constant="2" id="iXV-7e-kfw"/>
+                <constraint firstItem="7PG-tS-RcE" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="iZM-Fr-dIR"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="pfm-tb-KO6"/>
                 <constraint firstAttribute="bottom" secondItem="gGJ-xu-E0V" secondAttribute="bottom" constant="2" id="wgb-Fo-uwn"/>
             </constraints>
@@ -83,4 +101,7 @@
             <point key="canvasLocation" x="631.5" y="0.0"/>
         </view>
     </objects>
+    <resources>
+        <image name="ic_camera.png" width="25" height="20"/>
+    </resources>
 </document>

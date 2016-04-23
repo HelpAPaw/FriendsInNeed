@@ -18,12 +18,13 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate>
+@interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *addSignalButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
+@property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
@@ -31,6 +32,8 @@
 @property (assign, nonatomic) BOOL submitMode;
 @property (strong, nonatomic) MKPointAnnotation *submitSignalAnnotation;
 @property (weak, nonatomic) MKAnnotationView *submitSignalAnnotationView;
+@property (assign, nonatomic) UIImagePickerControllerSourceType photoSource;
+@property (strong, nonatomic) UIImage *signalPhoto;
 
 @end
 
@@ -63,13 +66,17 @@
     _addSignalView.layer.shadowColor = [UIColor grayColor].CGColor;
     _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
     
+    _btnPhoto.layer.cornerRadius = 5.0f;
+    _btnPhoto.clipsToBounds = YES;
+    [[_btnPhoto imageView] setContentMode: UIViewContentModeScaleAspectFill];
+    
     _submitMode = NO;
     
     UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
     [panGR setDelegate:self];
     [_mapView addGestureRecognizer:panGR];
     
-    self.navigationItem.title = @"Signals Map";
+    self.navigationItem.title = @"Help a Paw";
     
 //    NSString *backButtonText = @"Map";
 //    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:nil action:nil];
@@ -99,13 +106,16 @@
 {
     [super viewDidAppear:animated];
     
-    CGRect frame = _addSignalView.frame;
-    frame.size.width = self.view.frame.size.width - 30.0f;
-    frame.origin.x = 15.0f;
-    frame.origin.y = - frame.size.height;
-    _addSignalView.frame = frame;
-    
-    [self.view addSubview:_addSignalView];
+    if (_submitMode == NO)
+    {
+        CGRect frame = _addSignalView.frame;
+        frame.size.width = self.view.frame.size.width - 30.0f;
+        frame.origin.x = 15.0f;
+        frame.origin.y = - frame.size.height;
+        _addSignalView.frame = frame;
+        
+        [self.view addSubview:_addSignalView];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -205,6 +215,10 @@
                     // Remove pin and annotation
                     [_mapView removeAnnotation:_submitSignalAnnotation];
                     _submitSignalAnnotation = nil;
+                    
+                    // Reset photo button
+                    [_btnPhoto setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
+                    _signalPhoto = nil;
                 }
                 else
                 {
@@ -231,7 +245,7 @@
         return;
     }
     
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate completion:^(FINSignal *savedSignal, Fault *fault) {
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, Fault *fault) {
         if (savedSignal)
         {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
@@ -266,6 +280,54 @@
     
     
     [_signalTitleField resignFirstResponder];
+}
+
+- (IBAction)onAttachPhotoButton:(id)sender
+{
+    UIAlertController *photoModeAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [self setPhotoSourceCamera];
+        [self showPhotoPicker];
+    }];
+    UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [self setPhotoSourceSavedPhotos];
+        [self showPhotoPicker];
+    }];
+    [photoModeAlert addAction:takePhoto];
+    [photoModeAlert addAction:chooseExisting];
+    [self presentViewController:photoModeAlert animated:YES completion:^{}];
+}
+
+- (void)setPhotoSourceCamera
+{
+    _photoSource = UIImagePickerControllerSourceTypeCamera;
+}
+
+- (void)setPhotoSourceSavedPhotos
+{
+    _photoSource = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+}
+
+- (void)showPhotoPicker
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.sourceType = _photoSource;
+    if (_photoSource == UIImagePickerControllerSourceTypeCamera)
+    {
+        picker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
+        picker.showsCameraControls = YES;
+    }
+    [self presentViewController:picker animated:YES completion:^ {}];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    _signalPhoto = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    [_btnPhoto setImage:_signalPhoto forState:UIControlStateNormal];
+    
+    [picker dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)showLoginScreen
@@ -401,6 +463,8 @@
     }
     else
     {
+        FINAnnotation *ann = (FINAnnotation *)annotation;
+        
         newAnnotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
         if (newAnnotationView == nil)
         {
@@ -412,21 +476,30 @@
             newAnnotationView.rightCalloutAccessoryView = rightButton;
             
             // Add a custom image to the left side of the callout.
-            UIImageView *signalImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"borislava.JPG"]];
-            CGRect imageFrame = signalImage.frame;
+            UIImage *signalImage;
+            if (ann.signal.photo)
+            {
+                signalImage = ann.signal.photo;
+            }
+            else 
+            {
+                signalImage = [UIImage imageNamed:@"ic_paw"];
+            }
+            UIImageView *signalImageView = [[UIImageView alloc] initWithImage:signalImage];
+            CGRect imageFrame = signalImageView.frame;
             imageFrame.size.height = 44.0;//newAnnotationView.frame.size.height;
             imageFrame.size.width  = 44.0;//newAnnotationView.frame.size.height;
-            signalImage.frame = imageFrame;
-            signalImage.clipsToBounds = YES;
-            signalImage.layer.cornerRadius = 5.0f;
-            newAnnotationView.leftCalloutAccessoryView = signalImage;
+            signalImageView.frame = imageFrame;
+            signalImageView.clipsToBounds = YES;
+            signalImageView.layer.cornerRadius = 5.0f;
+            [signalImageView setContentMode:UIViewContentModeScaleAspectFill];
+            newAnnotationView.leftCalloutAccessoryView = signalImageView;
         }
         else
         {
             newAnnotationView.annotation = annotation;
         }
         
-        FINAnnotation *ann = (FINAnnotation *)annotation;
         UIImage *pinImage = [ann.signal createStatusImage];
         newAnnotationView.image = pinImage;
         newAnnotationView.centerOffset = CGPointMake(0, -20);

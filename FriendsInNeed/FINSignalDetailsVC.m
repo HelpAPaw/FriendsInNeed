@@ -148,6 +148,10 @@ enum {
             [detailsCell setTitle:_annotation.signal.title];
             [detailsCell setAuthor:_annotation.signal.author];
             [detailsCell setDate:_annotation.signal.dateString];
+            if (_annotation.signal.photo)
+            {
+                [detailsCell setPhoto:_annotation.signal.photo];
+            }
             
             cell = detailsCell;
             break;

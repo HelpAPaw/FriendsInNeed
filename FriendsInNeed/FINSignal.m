@@ -33,7 +33,18 @@
     
     _geoPoint = geoPoint;
     
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        [self getSignalPhoto];
+//    });
+    
     return self;
+}
+
+- (void)getSignalPhoto
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/7381F40A-5BA6-6CB5-FF82-1F0334A63B00/v1/files/%@.jpeg", [self signalID]]];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    _photo = [[UIImage alloc] initWithData:data];
 }
 
 

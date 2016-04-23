@@ -173,7 +173,7 @@
     }
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate completion:(void (^)(FINSignal *savedSignal, Fault *fault))completion
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, Fault *fault))completion
 {
     BackendlessUser *currentUser = backendless.userService.currentUser;
     
@@ -188,6 +188,12 @@
         
         FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
         [_nearbySignals addObject:savedSignal];
+        
+        if (photo)
+        {
+            NSString *fileName = [NSString stringWithFormat:@"%@.jpeg", savedSignal.signalID];
+            BackendlessFile *uploadedFile = [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1)];
+        }
         
         completion(savedSignal, nil);
     } error:^(Fault *fault) {

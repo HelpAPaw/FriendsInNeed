@@ -53,6 +53,7 @@ enum {
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
 
@@ -104,11 +105,25 @@ enum {
     _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming...", @"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
     
     _statusIsExpanded = NO;
+    
+    UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
+    cGR.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:cGR];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -116,6 +131,19 @@ enum {
     [super viewDidAppear:animated];
     
     [self determineIfAddCommentShadowShouldBeVisible];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -129,6 +157,15 @@ enum {
     return UIStatusBarStyleDefault;
 }
 
+#pragma mark - Gesture Recognizers
+- (void)onContainerTap:(UITapGestureRecognizer *)sender
+{
+    if (sender.state == UIGestureRecognizerStateEnded)
+    {
+        [self.view endEditing:YES];
+    }
+}
+
 #pragma mark - TableView data source and delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -137,6 +174,7 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    
     [self determineIfAddCommentShadowShouldBeVisible];
 }
 
@@ -307,12 +345,8 @@ enum {
         default:
         {
             FINSignalDetailsCommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
-            if (!commentCell)
-            {
-                commentCell = [[FINSignalDetailsCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierComment];
-                commentCell.backgroundColor = [UIColor clearColor];
-                commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
+            
+            commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             NSString *comment;
             NSString *author;
@@ -415,6 +449,45 @@ enum {
     [self.delegate refreshAnnotation:_annotation];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
         
+    }];
+}
+
+#pragma mark - Keyboard show/hide management
+- (void)keyboardWillShow:(NSNotification *)note
+{
+    // get keyboard size and animation duration
+    CGRect keyboardFrame;
+    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
+    
+    // get the height since this is the main value that we need.
+    CGFloat kbSizeH = keyboardFrame.size.height;
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        CGRect frame = _addCommentView.frame;
+        frame.origin.y -= kbSizeH;
+        _addCommentView.frame = frame;
+        
+        _addCommentLC.constant = kbSizeH;
+        [_addCommentView setNeedsLayout];
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)note
+{
+    // get keyboard size and animation duration
+    CGRect keyboardFrame;
+    [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
+    
+    // get the height since this is the main value that we need.
+    CGFloat kbSizeH = keyboardFrame.size.height;
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        CGRect frame = _addCommentView.frame;
+        frame.origin.y += kbSizeH;
+        _addCommentView.frame = frame;
+        
+        _addCommentLC.constant = 0.0f;
+        [_addCommentView setNeedsLayout];
     }];
 }
 

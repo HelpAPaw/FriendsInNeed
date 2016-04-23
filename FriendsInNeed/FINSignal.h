@@ -36,7 +36,8 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 - (NSString *)title;
 - (void)setTitle:(NSString *)newTitle;
 
-- (NSString *)author;
+- (NSString *)authorName;
+- (NSString *)authorPhone;
 
 - (NSString *)dateString;
 - (NSDate *)date;

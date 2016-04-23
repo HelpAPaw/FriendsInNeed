@@ -52,6 +52,15 @@
     _lbPhotoNumber.layer.cornerRadius = _lbPhotoNumber.frame.size.height / 2;
     _lbPhotoNumber.layer.borderWidth = 0.5f;
     _lbPhotoNumber.layer.borderColor = [UIColor blackColor].CGColor;
+    
+    if (_phoneNumber)
+    {
+        _btnCall.hidden = NO;
+    }
+    else
+    {
+        _btnCall.hidden = YES;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -78,6 +87,19 @@
 - (void)setPhoto:(UIImage *)photo
 {
     _imgPhotoView.image = photo;
+}
+
+- (void)setPhoneNumber:(NSString *)phoneNumber
+{
+    if (phoneNumber)
+    {
+        _phoneNumber = phoneNumber;
+        _btnCall.hidden = NO;
+    }
+    else
+    {
+        _btnCall.hidden = YES;
+    }
 }
 
 - (IBAction)onCallButton:(id)sender

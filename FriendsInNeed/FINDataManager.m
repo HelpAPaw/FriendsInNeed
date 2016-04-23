@@ -15,6 +15,7 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
+@property (strong, nonatomic) NSMutableDictionary *signalPhotosCache;
 
 @end
 
@@ -37,6 +38,7 @@
     self = [super init];
     
     _nearbySignals = [NSMutableArray new];
+    _signalPhotosCache = [NSMutableDictionary new];
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     
@@ -132,11 +134,17 @@
                     [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
                 }
                 
-                completionHandler(UIBackgroundFetchResultNewData);
+                if (completionHandler)
+                {
+                    completionHandler(UIBackgroundFetchResultNewData);
+                }
             }
             else
             {
-                completionHandler(UIBackgroundFetchResultNoData);
+                if (completionHandler)
+                {
+                    completionHandler(UIBackgroundFetchResultNoData);
+                }
             }
         }
         
@@ -276,9 +284,23 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        signal.photo = [[UIImage alloc] initWithData:data];
+        UIImage *cachedImage = [_signalPhotosCache objectForKey:signal.signalID];
+        if (cachedImage)
+        {
+            signal.photo = cachedImage;
+        }
+        else
+        {
+            NSLog(@"Getting photo for signal %@", signal.signalID);
+            
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            signal.photo = [[UIImage alloc] initWithData:data];
+            if (signal.photo)
+            {
+                [_signalPhotosCache setObject:signal.photo forKey:signal.signalID];
+            }
+        }
     });
 }
 

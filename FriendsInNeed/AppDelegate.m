@@ -12,10 +12,6 @@
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
 
-#define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
-#define BCKNDLSS_SECRET_KEY     @"***REMOVED***"
-#define BCKNDLSS_VERSION_NUM    @"v1"
-
 @interface AppDelegate ()
 
 @property (weak, nonatomic) FINMapVC *mapVC;

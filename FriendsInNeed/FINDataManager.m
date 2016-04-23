@@ -10,6 +10,7 @@
 
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
+#define kSignalPhotosDirectory      @"signal_photos"
 
 @interface FINDataManager ()
 
@@ -187,12 +188,13 @@
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
         
         FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
+        savedSignal.photo = photo;
         [_nearbySignals addObject:savedSignal];
         
         if (photo)
         {
-            NSString *fileName = [NSString stringWithFormat:@"%@.jpeg", savedSignal.signalID];
-            BackendlessFile *uploadedFile = [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1)];
+            NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
+            [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1)];
         }
         
         completion(savedSignal, nil);
@@ -268,6 +270,16 @@
         
         completion(fault);
     }];
+}
+
+- (void)getPhotoForSignal:(FINSignal *)signal
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        signal.photo = [[UIImage alloc] initWithData:data];
+    });
 }
 
 @end

@@ -10,6 +10,10 @@
 #import "Backendless.h"
 #import "FINSignal.h"
 
+#define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
+#define BCKNDLSS_SECRET_KEY     @"***REMOVED***"
+#define BCKNDLSS_VERSION_NUM    @"v1"
+
 #define kNotificationSignalID   @"NotificationSignalID"
 #define kDefaultMapRegion       4000
 
@@ -31,6 +35,7 @@
 - (BOOL)userIsLogged;
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion;
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion;
+- (void)getPhotoForSignal:(FINSignal *)signal;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;

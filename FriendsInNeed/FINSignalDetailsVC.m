@@ -56,10 +56,11 @@ enum {
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
-
 @property (strong, nonatomic) NSArray *comments;
 @property (assign, nonatomic) BOOL statusIsExpanded;
 @property (assign, nonatomic) NSUInteger status;
+@property (assign, nonatomic) CGFloat keyboardHeight;
+@property (assign, nonatomic) BOOL keybaordIsShown;
 
 @end
 
@@ -174,13 +175,22 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
     [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)determineIfAddCommentShadowShouldBeVisible
 {
-    if ((_tableView.contentOffset.y + _tableView.frame.size.height - _addCommentView.frame.size.height) >= _tableView.contentSize.height)
+    CGFloat keyboardCompensation;
+    if (_keybaordIsShown)
+    {
+        keyboardCompensation = _keyboardHeight;
+    }
+    else
+    {
+        keyboardCompensation = 0.0f;
+    }
+    
+    if ((_tableView.contentOffset.y + _tableView.frame.size.height - _addCommentView.frame.size.height - keyboardCompensation) >= _tableView.contentSize.height)
     {
         _addCommentView.layer.shadowOpacity = 0.0f;
     }
@@ -447,48 +457,62 @@ enum {
 - (IBAction)onCloseButton:(id)sender
 {
     [self.delegate refreshAnnotation:_annotation];
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
 
 #pragma mark - Keyboard show/hide management
 - (void)keyboardWillShow:(NSNotification *)note
 {
-    // get keyboard size and animation duration
+    // Get the keyboard height
     CGRect keyboardFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
-    
-    // get the height since this is the main value that we need.
-    CGFloat kbSizeH = keyboardFrame.size.height;
+    _keyboardHeight = keyboardFrame.size.height;
     
     [UIView animateWithDuration:0.3f animations:^{
+        
+        // Move the comment view above the keyboard
         CGRect frame = _addCommentView.frame;
-        frame.origin.y -= kbSizeH;
+        frame.origin.y -= _keyboardHeight;
         _addCommentView.frame = frame;
         
-        _addCommentLC.constant = kbSizeH;
+        // Modify its bottom constraint, too
+        _addCommentLC.constant = _keyboardHeight;
         [_addCommentView setNeedsLayout];
+        
+        // And extend the table view so it can be scrolled all the way
+        UIEdgeInsets insets = _tableView.contentInset;
+        insets.bottom += _keyboardHeight;
+        _tableView.contentInset = insets;
     }];
+    
+    _keybaordIsShown = YES;
+    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)keyboardWillHide:(NSNotification *)note
 {
-    // get keyboard size and animation duration
+    // Get the keyboard height
     CGRect keyboardFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
-    
-    // get the height since this is the main value that we need.
-    CGFloat kbSizeH = keyboardFrame.size.height;
+    _keyboardHeight = keyboardFrame.size.height;
     
     [UIView animateWithDuration:0.3f animations:^{
+        
+        // Return comment and table views to their original state
         CGRect frame = _addCommentView.frame;
-        frame.origin.y += kbSizeH;
+        frame.origin.y += _keyboardHeight;
         _addCommentView.frame = frame;
         
         _addCommentLC.constant = 0.0f;
         [_addCommentView setNeedsLayout];
+        
+        UIEdgeInsets insets = _tableView.contentInset;
+        insets.bottom -= _keyboardHeight;
+        _tableView.contentInset = insets;
     }];
+    
+    _keybaordIsShown = NO;
+    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 @end

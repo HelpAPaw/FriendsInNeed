@@ -304,4 +304,37 @@
     });
 }
 
+- (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, Fault *fault))completion
+{
+    BackendlessDataQuery *query = [BackendlessDataQuery query];
+    query.whereClause = [NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID];
+    QueryOptions *queryOptions = [QueryOptions query];
+    queryOptions.sortBy = [NSArray arrayWithObject:@"created"];
+    query.queryOptions = queryOptions;
+    
+    [backendless.persistenceService find:[FINComment class] dataQuery:query response:^(BackendlessCollection *collection) {
+        
+        completion(collection.data, nil);
+    } error:^(Fault *fault) {
+        
+        completion(nil, fault);
+    }];
+}
+
+- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, Fault *fault))completion
+{
+    FINComment *comment = [FINComment new];
+    comment.text = commentText;
+    comment.author = backendless.userService.currentUser;
+    comment.signalID = signal.signalID;
+    
+    [backendless.persistenceService save:comment response:^(FINComment *comment) {
+        
+        completion(comment, nil);
+    } error:^(Fault *fault) {
+        
+        completion(nil, fault);
+    }];
+}
+
 @end

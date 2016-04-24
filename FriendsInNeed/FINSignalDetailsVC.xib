@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINSignalDetailsVC">
             <connections>
                 <outlet property="addCommentLC" destination="axv-YF-hyD" id="KMX-nQ-MXW"/>
+                <outlet property="addCommentTextField" destination="MFc-mG-mRb" id="fkt-Wa-38U"/>
                 <outlet property="addCommentView" destination="EqL-OR-4XC" id="fyT-kP-RxE"/>
                 <outlet property="tableView" destination="sZv-Fz-eoz" id="De1-gk-WO2"/>
                 <outlet property="toolbar" destination="2sk-0j-nHc" id="zGW-Ym-fvV"/>
@@ -100,6 +101,9 @@
                             <state key="normal" title="Send">
                                 <color key="titleColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
+                            <connections>
+                                <action selector="onAddCommentButton:" destination="-1" eventType="touchUpInside" id="4qS-w1-wEe"/>
+                            </connections>
                         </button>
                         <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MFc-mG-mRb">
                             <rect key="frame" x="8" y="8" width="538" height="30"/>

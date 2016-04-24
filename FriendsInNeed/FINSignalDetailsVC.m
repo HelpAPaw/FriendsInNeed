@@ -11,6 +11,7 @@
 #import "FINSignalDetailsCell.h"
 #import "FINSignalDetailsCommentCell.h"
 #import "FINGlobalConstants.pch"
+#import "FINComment.h"
 
 #define kTitleIndex     0
 #define kAuthorIndex    1
@@ -25,8 +26,6 @@
 #define kCellIdentifierStatus     @"StatusCell"
 #define kCellIdentifierComment    @"CommentCell"
 
-//#define kSectionIndexDetails       0
-//#define kSectionIndexStatusHeader  1
 
 enum {
     kSectionIndexDetails,
@@ -53,10 +52,11 @@ enum {
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
+@property (weak, nonatomic) IBOutlet UITextField *addCommentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
-@property (strong, nonatomic) NSArray *comments;
+@property (strong, nonatomic) NSMutableArray *comments;
 @property (assign, nonatomic) BOOL statusIsExpanded;
 @property (assign, nonatomic) NSUInteger status;
 @property (assign, nonatomic) CGFloat keyboardHeight;
@@ -72,6 +72,7 @@ enum {
     
     _annotation = annotation;
     _status = _annotation.signal.status;
+    _comments = [NSMutableArray new];
     
     return self;
 }
@@ -79,6 +80,19 @@ enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+#warning Show loading indicator while comments are loading
+    [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, Fault *fault) {
+        if (!fault)
+        {
+            [_comments addObjectsFromArray:comments];
+            [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        else
+        {
+#warning error handling
+        }
+    }];
     
     _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, _addCommentView.frame.size.height, 0.0f);
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
@@ -102,8 +116,6 @@ enum {
     NSString *backButtonText = @"Close";
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
     self.navigationItem.leftBarButtonItem = backButton;
-    
-    _comments = @[@"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming...", @"Heading there, will let you know when I arrive.", @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!", @"I'm coming..."];
     
     _statusIsExpanded = NO;
     
@@ -163,7 +175,12 @@ enum {
 {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
-        [self.view endEditing:YES];
+        // End editing only if tap was outside of add comment view
+        CGPoint tap = [sender locationInView:self.view];
+        if (CGRectContainsPoint(_addCommentView.frame, tap) == NO)
+        {
+            [self.view endEditing:YES];
+        }
     }
 }
 
@@ -358,28 +375,10 @@ enum {
             
             commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            NSString *comment;
-            NSString *author;
-            switch (indexPath.row) {
-                case 0:
-                    comment = @"Heading there, will let you know when I arrive.";
-                    author = @"Milen Marinov";
-                    break;
-                case 1:
-                    comment = @"I'm here. The dog can't move, probably has a broken leg. Need a car to transport him to the vet!";
-                    author = @"Milen Marinov";
-                    break;
-                case 2:
-                    comment = @"I'm coming...";
-                    author = @"Ivan Petrov";
-                    break;
-                    
-                default:
-                    break;
-            }
+            FINComment *comment = _comments[indexPath.row];
             
-            [commentCell setCommentText:_comments[indexPath.row]];
-            [commentCell setAuthor:author];
+            [commentCell setCommentText:comment.text];
+            [commentCell setAuthor:comment.author.name];
             
             cell = commentCell;
             break;
@@ -403,7 +402,8 @@ enum {
             break;
         case kSectionIndexComments:
         {
-            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:_comments[indexPath.row] attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+            FINComment *comment = _comments[indexPath.row];
+            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
             CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 150} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
             height = ceilf(rect.size.height) + 55;
             break;
@@ -460,6 +460,28 @@ enum {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
 
+- (IBAction)onAddCommentButton:(id)sender
+{
+    [_addCommentTextField resignFirstResponder];
+#warning Loading indicator
+    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal completion:^(FINComment *comment, Fault *fault) {
+        if (!fault)
+        {
+            [_comments addObject:comment];
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_comments indexOfObject:comment] inSection:kSectionIndexComments];
+            [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            
+            _addCommentTextField.text = @"";
+        }
+        else
+        {
+#warning show error
+        }
+    }];
+}
+
 #pragma mark - Keyboard show/hide management
 - (void)keyboardWillShow:(NSNotification *)note
 {
@@ -467,6 +489,11 @@ enum {
     CGRect keyboardFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
     _keyboardHeight = keyboardFrame.size.height;
+    
+    // Extend the table view so it can be scrolled all the way
+    UIEdgeInsets insets = _tableView.contentInset;
+    insets.bottom += _keyboardHeight;
+    _tableView.contentInset = insets;
     
     [UIView animateWithDuration:0.3f animations:^{
         
@@ -478,11 +505,6 @@ enum {
         // Modify its bottom constraint, too
         _addCommentLC.constant = _keyboardHeight;
         [_addCommentView setNeedsLayout];
-        
-        // And extend the table view so it can be scrolled all the way
-        UIEdgeInsets insets = _tableView.contentInset;
-        insets.bottom += _keyboardHeight;
-        _tableView.contentInset = insets;
     }];
     
     _keybaordIsShown = YES;
@@ -496,6 +518,11 @@ enum {
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
     _keyboardHeight = keyboardFrame.size.height;
     
+    // Restore original table view insets
+    UIEdgeInsets insets = _tableView.contentInset;
+    insets.bottom -= _keyboardHeight;
+    _tableView.contentInset = insets;
+    
     [UIView animateWithDuration:0.3f animations:^{
         
         // Return comment and table views to their original state
@@ -505,10 +532,6 @@ enum {
         
         _addCommentLC.constant = 0.0f;
         [_addCommentView setNeedsLayout];
-        
-        UIEdgeInsets insets = _tableView.contentInset;
-        insets.bottom -= _keyboardHeight;
-        _tableView.contentInset = insets;
     }];
     
     _keybaordIsShown = NO;

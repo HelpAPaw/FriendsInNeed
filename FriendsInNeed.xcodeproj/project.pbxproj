@@ -15,6 +15,7 @@
 		F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711D31CCAFE7100E51AEA /* ic_camera.png */; };
 		F32711DB1CCB8CFF00E51AEA /* ic_camera@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711D91CCB8CFF00E51AEA /* ic_camera@2x.png */; };
 		F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711DA1CCB8CFF00E51AEA /* ic_camera@3x.png */; };
+		F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */ = {isa = PBXBuildFile; fileRef = F32711DE1CCCCA3D00E51AEA /* FINComment.m */; };
 		F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */; };
 		F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */; };
 		F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */; };
@@ -66,6 +67,8 @@
 		F32711D31CCAFE7100E51AEA /* ic_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_camera.png; sourceTree = "<group>"; };
 		F32711D91CCB8CFF00E51AEA /* ic_camera@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_camera@2x.png"; sourceTree = "<group>"; };
 		F32711DA1CCB8CFF00E51AEA /* ic_camera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_camera@3x.png"; sourceTree = "<group>"; };
+		F32711DD1CCCCA3D00E51AEA /* FINComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINComment.h; sourceTree = "<group>"; };
+		F32711DE1CCCCA3D00E51AEA /* FINComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINComment.m; sourceTree = "<group>"; };
 		F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsVC.h; sourceTree = "<group>"; };
 		F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsVC.m; sourceTree = "<group>"; };
 		F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsVC.xib; sourceTree = "<group>"; };
@@ -218,6 +221,8 @@
 				F39C394B1C9EA305007A2D8E /* FINSignal.m */,
 				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
 				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
+				F32711DD1CCCCA3D00E51AEA /* FINComment.h */,
+				F32711DE1CCCCA3D00E51AEA /* FINComment.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -419,6 +424,7 @@
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
+				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

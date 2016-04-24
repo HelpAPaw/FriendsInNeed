@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Backendless.h"
 #import "FINSignal.h"
+#import "FINComment.h"
 
 #define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
 #define BCKNDLSS_SECRET_KEY     @"9F8B017B-2890-A887-FFD5-63D6A5302100"
@@ -36,6 +37,8 @@
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion;
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion;
 - (void)getPhotoForSignal:(FINSignal *)signal;
+- (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, Fault *fault))completion;
+- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, Fault *fault))completion;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;

@@ -196,16 +196,25 @@
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
         
         FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
-        savedSignal.photo = photo;
         [_nearbySignals addObject:savedSignal];
         
         if (photo)
         {
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
-            [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1)];
+            [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
+                
+                savedSignal.photo = photo;
+                completion(savedSignal, nil);
+            } error:^(Fault *fault) {
+                
+                completion(savedSignal, fault);
+            }];
+        }
+        else
+        {
+            completion(savedSignal, nil);
         }
         
-        completion(savedSignal, nil);
     } error:^(Fault *fault) {
         
         completion(nil, fault);

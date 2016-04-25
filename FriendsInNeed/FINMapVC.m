@@ -25,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
+@property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *liSendSignal;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
@@ -245,26 +247,31 @@
         return;
     }
     
+    [self setSendingSignalMode];
     [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, Fault *fault) {
+        
+        [self resetSendingSignalMode];
+        
         if (savedSignal)
         {
+            [self toggleSubmitMode];
+            
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
                                                                            message:@"Your signal was submitted."
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                                     style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {
-                                                                      [self toggleSubmitMode];
+                                                                      // Add new annotation to map and focus it when OK button is pressed
+                                                                      self.focusSignalID = savedSignal.signalID;
+                                                                      [self addAnnotationToMapFromSignal:savedSignal];
                                                                   }];
             [alert addAction:defaultAction];
             [self presentViewController:alert animated:YES completion:^{}];
-            [self addAnnotationToMapFromSignal:savedSignal];
-            
-            [_signalTitleField setText:@""];
         }
         else
         {
-            NSLog(@"%@", fault.description);
+#warning Handle case when signal is saved but photo is not
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
                                                                            message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.description]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
@@ -277,7 +284,6 @@
             [self presentViewController:alert animated:YES completion:^{}];
         }
     }];
-    
     
     [_signalTitleField resignFirstResponder];
 }
@@ -326,8 +332,24 @@
 {
     _signalPhoto = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
     [_btnPhoto setImage:_signalPhoto forState:UIControlStateNormal];
+    if (_photoSource == UIImagePickerControllerSourceTypeCamera)
+    {
+        UIImageWriteToSavedPhotosAlbum(_signalPhoto, nil, nil, nil);
+    }
     
     [picker dismissViewControllerAnimated:YES completion:^{}];
+}
+
+- (void)setSendingSignalMode
+{
+    _btnSendSignal.hidden = YES;
+    [_liSendSignal startAnimating];
+}
+
+- (void)resetSendingSignalMode
+{
+    _btnSendSignal.hidden = NO;
+    [_liSendSignal stopAnimating];
 }
 
 - (void)showLoginScreen

@@ -84,7 +84,7 @@
                         <action selector="onSendButton:" destination="-1" eventType="touchUpInside" id="2sc-Ry-hD2"/>
                     </connections>
                 </button>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-D4-pOj">
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-D4-pOj">
                     <rect key="frame" x="452" y="7" width="20" height="20"/>
                 </activityIndicatorView>
             </subviews>

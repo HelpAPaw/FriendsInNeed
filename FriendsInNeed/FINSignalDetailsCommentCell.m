@@ -11,6 +11,7 @@
 @interface FINSignalDetailsCommentCell()
 
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthorLabel;
+@property (weak, nonatomic) IBOutlet UILabel *lbDateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lbCommentLabel;
 @property (weak, nonatomic) IBOutlet UIView *vCellContainer;
 
@@ -52,9 +53,14 @@
     _lbCommentLabel.text = text;
 }
 
-- (void)setAuthor:(NSString *)text
+- (void)setAuthor:(NSString *)author
 {
-    _lbAuthorLabel.text = text;
+    _lbAuthorLabel.text = author;
+}
+
+- (void)setDate:(NSString *)date
+{
+    _lbDateLabel.text = date;
 }
 
 @end

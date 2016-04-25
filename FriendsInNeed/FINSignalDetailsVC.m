@@ -64,6 +64,7 @@ enum {
 @property (assign, nonatomic) CGFloat keyboardHeight;
 @property (assign, nonatomic) BOOL keybaordIsShown;
 @property (assign, nonatomic) BOOL commentsAreLoaded;
+@property (strong, nonatomic) NSDateFormatter *dateFormatter;
 
 @end
 
@@ -77,6 +78,11 @@ enum {
     _status = _annotation.signal.status;
     _comments = [NSMutableArray new];
     _commentsAreLoaded = NO;
+    
+    _dateFormatter = [NSDateFormatter new];
+    [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     return self;
 }
@@ -93,6 +99,7 @@ enum {
         {
             [_comments addObjectsFromArray:comments];
             [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self determineIfAddCommentShadowShouldBeVisible];
         }
         else
         {
@@ -260,7 +267,7 @@ enum {
             [detailsCell setTitle:_annotation.signal.title];
             [detailsCell setAuthor:_annotation.signal.authorName];
             [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
-            [detailsCell setDate:_annotation.signal.dateString];
+            [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.date]];
             if (_annotation.signal.photo)
             {
                 [detailsCell setPhoto:_annotation.signal.photo];
@@ -394,6 +401,7 @@ enum {
                 
                 [commentCell setCommentText:comment.text];
                 [commentCell setAuthor:comment.author.name];
+                [commentCell setDate:[_dateFormatter stringFromDate:comment.created]];
                 
                 cell = commentCell;
             }

@@ -25,6 +25,8 @@
 #define kCellIdentifierDetails    @"DetailsCell"
 #define kCellIdentifierStatus     @"StatusCell"
 #define kCellIdentifierComment    @"CommentCell"
+#define kCellIdentifierLoading    @"LoadingCell"
+
 
 
 enum {
@@ -61,6 +63,7 @@ enum {
 @property (assign, nonatomic) NSUInteger status;
 @property (assign, nonatomic) CGFloat keyboardHeight;
 @property (assign, nonatomic) BOOL keybaordIsShown;
+@property (assign, nonatomic) BOOL commentsAreLoaded;
 
 @end
 
@@ -73,6 +76,7 @@ enum {
     _annotation = annotation;
     _status = _annotation.signal.status;
     _comments = [NSMutableArray new];
+    _commentsAreLoaded = NO;
     
     return self;
 }
@@ -83,6 +87,8 @@ enum {
     
 #warning Show loading indicator while comments are loading
     [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, Fault *fault) {
+        
+        _commentsAreLoaded = YES;
         if (!fault)
         {
             [_comments addObjectsFromArray:comments];
@@ -226,7 +232,14 @@ enum {
     }
     else if (section == kSectionIndexComments)
     {
-        rows = _comments.count;
+        if (_commentsAreLoaded)
+        {
+            rows = _comments.count;
+        }
+        else
+        {
+            rows = 1;
+        }
     }
     
     return rows;
@@ -371,16 +384,41 @@ enum {
             
         default:
         {
-            FINSignalDetailsCommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
-            
-            commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-            FINComment *comment = _comments[indexPath.row];
-            
-            [commentCell setCommentText:comment.text];
-            [commentCell setAuthor:comment.author.name];
-            
-            cell = commentCell;
+            if (_commentsAreLoaded)
+            {
+                FINSignalDetailsCommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
+                
+                commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                
+                FINComment *comment = _comments[indexPath.row];
+                
+                [commentCell setCommentText:comment.text];
+                [commentCell setAuthor:comment.author.name];
+                
+                cell = commentCell;
+            }
+            else 
+            {
+                UITableViewCell *loadingCommentsCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierLoading];
+                if (!loadingCommentsCell)
+                {
+                    loadingCommentsCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifierLoading];
+                    loadingCommentsCell.backgroundColor = [UIColor clearColor];
+                    loadingCommentsCell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
+                    // Create a loading indicator
+                    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                    [activityIndicator startAnimating];
+                    // Place it in the center
+                    CGRect indicatorFrame = activityIndicator.frame;
+                    indicatorFrame.origin.x = (self.view.frame.size.width - indicatorFrame.size.width) / 2;
+                    activityIndicator.frame = indicatorFrame;
+                    // Add it to the cell
+                    [loadingCommentsCell addSubview:activityIndicator];
+                }
+                
+                cell = loadingCommentsCell;
+            }
             break;
         }
             
@@ -402,10 +440,17 @@ enum {
             break;
         case kSectionIndexComments:
         {
-            FINComment *comment = _comments[indexPath.row];
-            NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
-            CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 150} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
-            height = ceilf(rect.size.height) + 55;
+            if (_commentsAreLoaded)
+            {
+                FINComment *comment = _comments[indexPath.row];
+                NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+                CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 150} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+                height = ceilf(rect.size.height) + 55;
+            }
+            else 
+            {
+                height = 44.0f;
+            }
             break;
         }
             

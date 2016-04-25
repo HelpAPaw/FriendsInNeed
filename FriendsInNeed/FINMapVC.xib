@@ -10,6 +10,8 @@
                 <outlet property="addSignalButton" destination="ttH-Qm-6yO" id="4MH-vp-Oho"/>
                 <outlet property="addSignalView" destination="1V9-Vl-MM8" id="xgx-bH-yTF"/>
                 <outlet property="btnPhoto" destination="7PG-tS-RcE" id="KQO-Dc-l9y"/>
+                <outlet property="btnSendSignal" destination="VRP-un-208" id="cjZ-fx-oTn"/>
+                <outlet property="liSendSignal" destination="bHt-D4-pOj" id="qo2-2F-86l"/>
                 <outlet property="mapView" destination="Vzw-BA-6AS" id="yuT-dx-yfK"/>
                 <outlet property="signalTitleField" destination="gGJ-xu-E0V" id="Dut-G5-5zI"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="Brj-wt-V4N"/>
@@ -51,6 +53,23 @@
             <rect key="frame" x="0.0" y="0.0" width="487" height="34"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PG-tS-RcE" userLabel="Photo Button">
+                    <rect key="frame" x="2" y="2" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="FHC-Hi-yf9"/>
+                        <constraint firstAttribute="height" constant="30" id="MWr-bY-VZ0"/>
+                    </constraints>
+                    <state key="normal" image="ic_camera.png"/>
+                    <connections>
+                        <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
+                    </connections>
+                </button>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="signal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
+                    <rect key="frame" x="34" y="2" width="405" height="30"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRP-un-208">
                     <rect key="frame" x="439" y="2" width="46" height="30"/>
                     <constraints>
@@ -65,26 +84,13 @@
                         <action selector="onSendButton:" destination="-1" eventType="touchUpInside" id="2sc-Ry-hD2"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="signal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
-                    <rect key="frame" x="34" y="2" width="405" height="30"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PG-tS-RcE" userLabel="Photo Button">
-                    <rect key="frame" x="2" y="2" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="30" id="FHC-Hi-yf9"/>
-                        <constraint firstAttribute="height" constant="30" id="MWr-bY-VZ0"/>
-                    </constraints>
-                    <state key="normal" image="ic_camera.png"/>
-                    <connections>
-                        <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
-                    </connections>
-                </button>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-D4-pOj">
+                    <rect key="frame" x="452" y="7" width="20" height="20"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="VRP-un-208" secondAttribute="centerY" id="09p-pt-l1l"/>
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="6Uh-oP-5NZ"/>
                 <constraint firstAttribute="bottom" secondItem="VRP-un-208" secondAttribute="bottom" constant="2" id="Dw1-SK-sF0"/>
                 <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
@@ -94,6 +100,7 @@
                 <constraint firstAttribute="bottom" secondItem="7PG-tS-RcE" secondAttribute="bottom" constant="2" id="iXV-7e-kfw"/>
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="iZM-Fr-dIR"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="pfm-tb-KO6"/>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="vke-fx-Jun"/>
                 <constraint firstAttribute="bottom" secondItem="gGJ-xu-E0V" secondAttribute="bottom" constant="2" id="wgb-Fo-uwn"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

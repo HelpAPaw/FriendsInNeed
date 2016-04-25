@@ -10,6 +10,8 @@
                 <outlet property="addCommentLC" destination="axv-YF-hyD" id="KMX-nQ-MXW"/>
                 <outlet property="addCommentTextField" destination="MFc-mG-mRb" id="fkt-Wa-38U"/>
                 <outlet property="addCommentView" destination="EqL-OR-4XC" id="fyT-kP-RxE"/>
+                <outlet property="sendCommentButton" destination="oh9-5j-fyg" id="Iw6-60-yj7"/>
+                <outlet property="sendCommentLoadingIndicator" destination="eHn-rW-mYG" id="fD7-aQ-LBc"/>
                 <outlet property="tableView" destination="sZv-Fz-eoz" id="De1-gk-WO2"/>
                 <outlet property="toolbar" destination="2sk-0j-nHc" id="zGW-Ym-fvV"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -92,6 +94,17 @@
                             </view>
                             <blurEffect style="light"/>
                         </visualEffectView>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MFc-mG-mRb">
+                            <rect key="frame" x="8" y="8" width="538" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="xFw-6W-80k"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="send"/>
+                            <connections>
+                                <outlet property="delegate" destination="-1" id="V7H-4J-YJ9"/>
+                            </connections>
+                        </textField>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oh9-5j-fyg">
                             <rect key="frame" x="554" y="8" width="38" height="30"/>
                             <constraints>
@@ -105,25 +118,22 @@
                                 <action selector="onAddCommentButton:" destination="-1" eventType="touchUpInside" id="4qS-w1-wEe"/>
                             </connections>
                         </button>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter a comment" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MFc-mG-mRb">
-                            <rect key="frame" x="8" y="8" width="538" height="30"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="30" id="xFw-6W-80k"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits"/>
-                        </textField>
+                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eHn-rW-mYG">
+                            <rect key="frame" x="563" y="13" width="20" height="20"/>
+                        </activityIndicatorView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="cBo-dQ-Niv" firstAttribute="top" secondItem="EqL-OR-4XC" secondAttribute="top" id="0dN-OB-9qv"/>
                         <constraint firstAttribute="bottom" secondItem="oh9-5j-fyg" secondAttribute="bottom" constant="8" id="FjY-Wq-ahg"/>
+                        <constraint firstItem="eHn-rW-mYG" firstAttribute="centerY" secondItem="oh9-5j-fyg" secondAttribute="centerY" id="RQL-3Y-5hB"/>
                         <constraint firstAttribute="trailing" secondItem="oh9-5j-fyg" secondAttribute="trailing" constant="8" id="Tts-OQ-Tcv"/>
                         <constraint firstItem="oh9-5j-fyg" firstAttribute="leading" secondItem="MFc-mG-mRb" secondAttribute="trailing" constant="8" id="XaI-yd-08H"/>
                         <constraint firstItem="MFc-mG-mRb" firstAttribute="top" secondItem="EqL-OR-4XC" secondAttribute="top" constant="8" id="hM4-46-cti"/>
                         <constraint firstItem="MFc-mG-mRb" firstAttribute="leading" secondItem="EqL-OR-4XC" secondAttribute="leading" constant="8" id="i5C-ys-nIx"/>
                         <constraint firstAttribute="trailing" secondItem="cBo-dQ-Niv" secondAttribute="trailing" id="mg6-NB-Qux"/>
                         <constraint firstAttribute="bottom" secondItem="cBo-dQ-Niv" secondAttribute="bottom" id="rZo-7O-elS"/>
+                        <constraint firstItem="eHn-rW-mYG" firstAttribute="centerX" secondItem="oh9-5j-fyg" secondAttribute="centerX" id="u8S-yA-tZG"/>
                         <constraint firstAttribute="bottom" secondItem="MFc-mG-mRb" secondAttribute="bottom" constant="8" id="w1d-tW-9W1"/>
                         <constraint firstItem="cBo-dQ-Niv" firstAttribute="leading" secondItem="EqL-OR-4XC" secondAttribute="leading" id="wg4-ye-Ax5"/>
                     </constraints>

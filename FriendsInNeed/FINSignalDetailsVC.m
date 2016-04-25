@@ -56,6 +56,8 @@ enum {
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
 @property (weak, nonatomic) IBOutlet UITextField *addCommentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
+@property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *sendCommentLoadingIndicator;
 
 @property (strong, nonatomic) FINAnnotation *annotation;
 @property (strong, nonatomic) NSMutableArray *comments;
@@ -516,8 +518,12 @@ enum {
 - (IBAction)onAddCommentButton:(id)sender
 {
     [_addCommentTextField resignFirstResponder];
-#warning Loading indicator
+
+    [self setSendingCommentMode];
     [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal completion:^(FINComment *comment, Fault *fault) {
+        
+        [self resetSendingCommentMode];
+        
         if (!fault)
         {
             [_comments addObject:comment];
@@ -533,6 +539,30 @@ enum {
 #warning show error
         }
     }];
+}
+
+- (void)setSendingCommentMode
+{
+    _sendCommentButton.hidden = YES;
+    [_sendCommentLoadingIndicator startAnimating];
+}
+
+- (void)resetSendingCommentMode
+{
+    _sendCommentButton.hidden = NO;
+    [_sendCommentLoadingIndicator stopAnimating];
+}
+
+#pragma mark - UITextField Delegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == _addCommentTextField)
+    {
+        [self onAddCommentButton:_sendCommentButton];
+    }
+    
+    return YES;
 }
 
 #pragma mark - Keyboard show/hide management

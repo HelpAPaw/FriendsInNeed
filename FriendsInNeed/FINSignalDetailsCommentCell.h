@@ -11,6 +11,7 @@
 @interface FINSignalDetailsCommentCell : UITableViewCell
 
 - (void)setCommentText:(NSString *)text;
-- (void)setAuthor:(NSString *)text;
+- (void)setAuthor:(NSString *)author;
+- (void)setDate:(NSString *)date;
 
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "FINSignal.h"
-#import "FINDataManager.h"
 
 @implementation FINSignal
 
@@ -33,8 +32,6 @@
     self = [super init];
     
     _geoPoint = geoPoint;
-    
-    [[FINDataManager sharedManager] getPhotoForSignal:self];
     
     return self;
 }

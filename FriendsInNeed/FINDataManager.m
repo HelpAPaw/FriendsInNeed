@@ -91,6 +91,7 @@
             }
             // Convert received GeoPoint to FINSignal
             FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
+            [self getPhotoForSignal:receivedSignal];
             
             // Check if the signal is already present
             BOOL alreadyPresent = NO;
@@ -247,6 +248,7 @@
         {
             GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
             FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
+            [self getPhotoForSignal:signal];
             
             completion(signal, nil);
         }

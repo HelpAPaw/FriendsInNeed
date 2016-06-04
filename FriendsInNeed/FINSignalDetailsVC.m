@@ -12,6 +12,7 @@
 #import "FINSignalDetailsCommentCell.h"
 #import "FINGlobalConstants.pch"
 #import "FINComment.h"
+#import "FINError.h"
 
 #define kTitleIndex     0
 #define kAuthorIndex    1
@@ -93,11 +94,10 @@ enum {
 {
     [super viewDidLoad];
     
-#warning Show loading indicator while comments are loading
-    [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, Fault *fault) {
+    [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, FINError *error) {
         
         _commentsAreLoaded = YES;
-        if (!fault)
+        if (!error)
         {
             [_comments addObjectsFromArray:comments];
             [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -486,8 +486,8 @@ enum {
                 UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
                 newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 
-                [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(Fault *fault) {
-                    if (fault == nil) {
+                [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
+                    if (error == nil) {
 #warning Error handling
                     }
                 }];
@@ -520,11 +520,11 @@ enum {
     [_addCommentTextField resignFirstResponder];
 
     [self setSendingCommentMode];
-    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal completion:^(FINComment *comment, Fault *fault) {
+    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal completion:^(FINComment *comment, FINError *error) {
         
         [self resetSendingCommentMode];
         
-        if (!fault)
+        if (!error)
         {
             [_comments addObject:comment];
             

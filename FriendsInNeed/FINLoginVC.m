@@ -9,6 +9,7 @@
 #import "FINLoginVC.h"
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
+#import "FINError.h"
 
 #define REGISTER_SEGMENT    0
 #define LOGIN_SEGMENT       1
@@ -141,12 +142,12 @@
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
         
-        [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(Fault *fault) {
+        [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
             
             [_activityIndicator stopAnimating];
             _registerLoginButton.enabled = YES;
             
-            if (!fault)
+            if (!error)
             {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
                                                                                message:@"A confirmation link has been sent on your email. Please click it to complete your registration."
@@ -162,7 +163,7 @@
             }
             else
             {
-                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
+                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message];
                 
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
                                                                                message:errorMessage
@@ -181,12 +182,12 @@
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
         
-        [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(Fault *fault) {
+        [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
             
             [_activityIndicator stopAnimating];
             _registerLoginButton.enabled = YES;
             
-            if (!fault)
+            if (!error)
             {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
                                                                                message:@"You are now logged in and can submit signals."
@@ -201,7 +202,7 @@
             }
             else 
             {
-                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.message];
+                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message];
                 
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
                                                                                message:errorMessage

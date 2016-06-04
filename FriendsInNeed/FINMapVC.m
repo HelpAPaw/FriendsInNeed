@@ -248,7 +248,7 @@
     }
     
     [self setSendingSignalMode];
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, Fault *fault) {
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, FINError *error) {
         
         [self resetSendingSignalMode];
         
@@ -273,7 +273,7 @@
         {
 #warning Handle case when signal is saved but photo is not
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                           message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", fault.description]
+                                                                           message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                                     style:UIAlertActionStyleDefault
@@ -408,7 +408,7 @@
 {
     _focusSignalID = focusSignalID;
     
-    [[FINDataManager sharedManager] getSignalWithID:focusSignalID completion:^(FINSignal *signal, Fault *fault) {
+    [[FINDataManager sharedManager] getSignalWithID:focusSignalID completion:^(FINSignal *signal, FINError *error) {
         if (signal)
         {
             [self addAnnotationToMapFromSignal:signal];
@@ -416,6 +416,7 @@
         else
         {
             NSLog(@"Failed to get signal for ID %@", focusSignalID);
+#warning Error handling
         }
     }];
 }

@@ -30,6 +30,7 @@
 		F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800201C98C7DF0080FACD /* ic_add@2x.png */; };
 		F33800231C98CA350080FACD /* ic_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800221C98CA350080FACD /* ic_menu.png */; };
 		F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800241C98CAE70080FACD /* ic_menu@2x.png */; };
+		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
 		F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FD1C00E04F00FBE20C /* Assets.xcassets */; };
@@ -86,6 +87,8 @@
 		F33800201C98C7DF0080FACD /* ic_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_add@2x.png"; sourceTree = "<group>"; };
 		F33800221C98CA350080FACD /* ic_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_menu.png; sourceTree = "<group>"; };
 		F33800241C98CAE70080FACD /* ic_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@2x.png"; sourceTree = "<group>"; };
+		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
+		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help a Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help a Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F38B72EF1C00E04F00FBE20C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F38B72F11C00E04F00FBE20C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -223,6 +226,8 @@
 				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
 				F32711DD1CCCCA3D00E51AEA /* FINComment.h */,
 				F32711DE1CCCCA3D00E51AEA /* FINComment.m */,
+				F381ACCC1CE07E0B0050B238 /* FINError.h */,
+				F381ACCD1CE07E0B0050B238 /* FINError.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -420,6 +425,7 @@
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,
+				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,

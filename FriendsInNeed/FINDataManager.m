@@ -183,7 +183,7 @@
     }
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, Fault *fault))completion
+- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
     BackendlessUser *currentUser = backendless.userService.currentUser;
     
@@ -208,7 +208,8 @@
                 completion(savedSignal, nil);
             } error:^(Fault *fault) {
                 
-                completion(savedSignal, fault);
+                FINError *error = [[FINError alloc] initWithFault:fault];
+                completion(savedSignal, error);
             }];
         }
         else
@@ -218,11 +219,12 @@
         
     } error:^(Fault *fault) {
         
-        completion(nil, fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(nil, error);
     }];
 }
 
-- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(Fault *fault))completion
+- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(FINError *error))completion
 {
     GeoPoint *point = [signal geoPoint];
     [point.metadata setObject:[NSString stringWithFormat:@"%lu", (unsigned long)status] forKey:kSignalStatusKey];
@@ -233,11 +235,12 @@
         completion(nil);
     } error:^(Fault *fault) {
         
-        completion(fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(error);
     }];
 }
 
-- (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, Fault *fault))completion
+- (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
@@ -252,7 +255,9 @@
             
             completion(signal, nil);
         }
-    } error:^(Fault *error) {
+    } error:^(Fault *fault) {
+        
+        FINError *error = [[FINError alloc] initWithFault:fault];
         completion(nil, error);
     }];
 }
@@ -264,7 +269,7 @@
     return (currentUser != nil);
 }
 
-- (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion
+- (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
     BackendlessUser *user = [BackendlessUser new];
     user.name = name;
@@ -276,18 +281,20 @@
         completion(nil);
     } error:^void (Fault *fault) {
         
-        completion(fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(error);
     }];
 }
 
-- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(Fault *fault))completion
+- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
     [backendless.userService login:email password:password response:^void (BackendlessUser *loggeduser) {
         
         completion(nil);
     } error:^void (Fault *fault) {
         
-        completion(fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(error);
     }];
 }
 
@@ -315,7 +322,7 @@
     });
 }
 
-- (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, Fault *fault))completion
+- (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion
 {
     BackendlessDataQuery *query = [BackendlessDataQuery query];
     query.whereClause = [NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID];
@@ -328,11 +335,12 @@
         completion(collection.data, nil);
     } error:^(Fault *fault) {
         
-        completion(nil, fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(nil, error);
     }];
 }
 
-- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, Fault *fault))completion
+- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion
 {
     FINComment *comment = [FINComment new];
     comment.text = commentText;
@@ -344,7 +352,8 @@
         completion(comment, nil);
     } error:^(Fault *fault) {
         
-        completion(nil, fault);
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(nil, error);
     }];
 }
 

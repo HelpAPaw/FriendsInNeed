@@ -91,7 +91,6 @@
             }
             // Convert received GeoPoint to FINSignal
             FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
-            [self getPhotoForSignal:receivedSignal];
             
             // Check if the signal is already present
             BOOL alreadyPresent = NO;
@@ -108,6 +107,8 @@
             {
                 [newSignals addObject:receivedSignal];
                 NSLog(@"New signal: %@", receivedSignal.title);
+                
+                [self getPhotoForSignal:receivedSignal];
             }
             
             // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished

@@ -41,7 +41,7 @@
     
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
-    _locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [_locationManager requestAlwaysAuthorization];
     
     return self;

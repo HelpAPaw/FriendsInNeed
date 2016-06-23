@@ -247,6 +247,22 @@
         return;
     }
     
+    // Input validation
+    if ((_signalTitleField.text == nil) || [_signalTitleField.text isEqualToString:@""])
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Empty description"
+                                                                       message:@"Please enter a description of the signal."
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {
+                                                                  [self dismissViewControllerAnimated:YES completion:nil];
+                                                              }];
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:^{}];
+        return;
+    }
+    
     [self setSendingSignalMode];
     [_dataManager submitNewSignalWithTitle:_signalTitleField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, FINError *error) {
         

@@ -191,7 +191,8 @@
     GEO_POINT coordinate;
     coordinate.latitude = locationCoordinate.latitude;
     coordinate.longitude = locationCoordinate.longitude;
-    NSString *submitDate = [[FINSignal geoPointDateFormatter] stringFromDate:[NSDate date]];
+    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
+    NSString *submitDate = [NSString stringWithFormat:@"%lu", (long)(timeInterval * 1000)];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     

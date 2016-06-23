@@ -272,8 +272,16 @@
         {
             [self toggleSubmitMode];
             
+            NSMutableString *message = [NSMutableString stringWithString:@"Your signal was submitted."];
+            
+            // Signal saved but photo was not
+            if (error)
+            {
+                [message appendFormat:@"\nHowever, the attached photo was not. The problem is:\n%@", error.message];
+            }
+            
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
-                                                                           message:@"Your signal was submitted."
+                                                                           message:message
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
                                                                     style:UIAlertActionStyleDefault
@@ -287,17 +295,7 @@
         }
         else
         {
-#warning Handle case when signal is saved but photo is not
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                           message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                      [self dismissViewControllerAnimated:YES completion:nil];
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
+            [self showAlertForError:error];
         }
     }];
     
@@ -432,7 +430,8 @@
         else
         {
             NSLog(@"Failed to get signal for ID %@", focusSignalID);
-#warning Error handling
+
+            [self showAlertForError:error];
         }
     }];
 }
@@ -556,13 +555,6 @@
     UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
     navController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:navController animated:YES completion:^{}];
-    
-    
-//    [self presentViewController:signalDetailsVC animated:YES completion:^{}];
-    
-//    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
-//    self.navigationController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-//    [self.navigationController pushViewController:signalDetailsVC animated:YES];
 }
 
 - (void)setImage:(UIImage *)image forAnnotationView:(MKAnnotationView *)annotationView
@@ -582,6 +574,20 @@
 {
     [_mapView removeAnnotation:annotation];
     [_mapView addAnnotation:annotation];
+}
+
+- (void)showAlertForError:(FINError *)error
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                                                                   message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              [self dismissViewControllerAnimated:YES completion:nil];
+                                                          }];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:^{}];
 }
 
 @end

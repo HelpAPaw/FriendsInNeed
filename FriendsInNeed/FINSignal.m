@@ -28,7 +28,15 @@
 
 - (NSString *)title
 {
-    return [_geoPoint.metadata objectForKey:kSignalTitleKey];
+    id title = [_geoPoint.metadata objectForKey:kSignalTitleKey];
+    
+    // Protection for wrong type. Usually NSNull if signal was recorded with empty title.
+    if (![title isKindOfClass:[NSString class]])
+    {
+        title = @"(empty description)";
+    }
+    
+    return title;
 }
 
 - (void)setTitle:(NSString *)newTitle

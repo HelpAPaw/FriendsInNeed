@@ -10,23 +10,6 @@
 
 @implementation FINSignal
 
-+ (NSDateFormatter *)geoPointDateFormatter
-{
-    static NSDateFormatter *dateFormatter;
-    
-    if (dateFormatter == nil)
-    {
-        NSDateFormatter *geoPointDateFormatter = [NSDateFormatter new];
-        NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        [geoPointDateFormatter setLocale:enUSPOSIXLocale];
-        [geoPointDateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        [geoPointDateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        dateFormatter = geoPointDateFormatter;
-    }
-    
-    return dateFormatter;
-}
-
 - (id)initWithGeoPoint:(GeoPoint *)geoPoint
 {
     self = [super init];
@@ -78,14 +61,18 @@
 
 - (NSDate *)date
 {
-    NSString *dateString = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
+    NSString *dateSubmitted = [_geoPoint.metadata objectForKey:kSignalDateSubmittedKey];
+    long long unixTimestamp = dateSubmitted.longLongValue;
+    NSTimeInterval timeInterval = unixTimestamp / 1000.0;
     
-    return [[FINSignal geoPointDateFormatter] dateFromString:dateString];
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+    
+    return date;
 }
 
 - (void)setDate:(NSDate *)newDate
 {
-    [_geoPoint.metadata setObject:[[FINSignal geoPointDateFormatter] stringFromDate:newDate] forKey:kSignalDateSubmittedKey];
+    [_geoPoint.metadata setObject:[NSNumber numberWithDouble:[newDate timeIntervalSince1970]] forKey:kSignalDateSubmittedKey];
 }
 
 

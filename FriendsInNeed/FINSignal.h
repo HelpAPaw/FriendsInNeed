@@ -26,8 +26,6 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 @property (strong, nonatomic) GeoPoint *geoPoint;
 @property (strong, nonatomic) UIImage  *photo;
 
-+ (NSDateFormatter *)geoPointDateFormatter;
-
 - (id)initWithGeoPoint:(GeoPoint *)geoPoint;
 
 

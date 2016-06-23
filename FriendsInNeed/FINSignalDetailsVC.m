@@ -85,7 +85,6 @@ enum {
     _dateFormatter = [NSDateFormatter new];
     [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [_dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-    [_dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     
     return self;
 }

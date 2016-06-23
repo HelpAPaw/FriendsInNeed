@@ -104,7 +104,7 @@ enum {
         }
         else
         {
-#warning error handling
+            [self showAlertForError:error];
         }
     }];
     
@@ -487,7 +487,7 @@ enum {
                 
                 [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error == nil) {
-#warning Error handling
+                        [self showAlertForError:error];
                     }
                 }];
             }
@@ -535,7 +535,7 @@ enum {
         }
         else
         {
-#warning show error
+            [self showAlertForError:error];
         }
     }];
 }
@@ -618,6 +618,21 @@ enum {
     
     _keybaordIsShown = NO;
     [self determineIfAddCommentShadowShouldBeVisible];
+}
+
+
+- (void)showAlertForError:(FINError *)error
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                                                                   message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                              [self dismissViewControllerAnimated:YES completion:nil];
+                                                          }];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:^{}];
 }
 
 @end

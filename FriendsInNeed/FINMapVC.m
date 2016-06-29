@@ -135,7 +135,6 @@
 {
     [self updateMapToLastKnownUserLocation];
     
-#warning What happens when last location is different from current location? Or current location is unavailable?
     [_dataManager getNewSignalsForLastLocationWithCompletionHandler:nil];
     [_locationManager updateUserLocation];
     

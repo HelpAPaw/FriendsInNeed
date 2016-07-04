@@ -376,7 +376,7 @@
 
 - (void)addAnnotationToMapFromSignal:(FINSignal *)signal
 {
-    BOOL alreadyPresent = NO;
+    // Remove old annotation if present
     for (FINAnnotation *ann in _mapView.annotations)
     {
         if ([ann isKindOfClass:[FINAnnotation class]] == NO)
@@ -392,21 +392,19 @@
             
             if ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
             {
-                alreadyPresent = YES;
+                [_mapView removeAnnotation:ann];
                 break;
             }
         }
     }
     
-    if (alreadyPresent == NO)
+    // Add new annotation
+    FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
+    [_mapView addAnnotation:annotation];
+    
+    if ([annotation.signal.signalID isEqualToString:_focusSignalID])
     {
-        FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
-        [_mapView addAnnotation:annotation];
-        
-        if ([annotation.signal.signalID isEqualToString:_focusSignalID])
-        {
-            [self focusAnnotation:annotation];
-        }
+        [self focusAnnotation:annotation];
     }
 }
 
@@ -439,7 +437,9 @@
 {
     for (FINSignal *signal in nearbySignals)
     {
-        [self addAnnotationToMapFromSignal:signal];
+        [UIView animateWithDuration:0.3 animations:^{
+            [self addAnnotationToMapFromSignal:signal];
+        }];
     }
 }
 

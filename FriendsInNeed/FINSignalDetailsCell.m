@@ -91,7 +91,7 @@
 
 - (void)setPhoneNumber:(NSString *)phoneNumber
 {
-    if (phoneNumber)
+    if (phoneNumber && [phoneNumber isKindOfClass:[NSString class]])
     {
         _phoneNumber = phoneNumber;
         _btnCall.hidden = NO;

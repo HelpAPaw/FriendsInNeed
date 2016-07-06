@@ -121,6 +121,7 @@
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
             [_mapDelegate updateMapWithNearbySignals:_nearbySignals];
+            completionHandler(UIBackgroundFetchResultNewData);
         }
         else
         {
@@ -162,7 +163,7 @@
     _lastSignalCheckLocation = location;
 }
 
-- (void)getSignalsForNewLocation:(CLLocation *)location
+- (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // Do not check if delta distance is below threshold
     if (   (_lastSignalCheckLocation != nil)
@@ -172,7 +173,7 @@
     }
     else
     {
-        [self getSignalsForLocation:location withCompletionHandler:nil];
+        [self getSignalsForLocation:location withCompletionHandler:completionHandler];
     }
 }
 

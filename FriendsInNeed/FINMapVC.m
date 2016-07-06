@@ -28,6 +28,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *liSendSignal;
 
+@property (strong, nonatomic) UIBarButtonItem *addBarButton;
+@property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
+@property (strong, nonatomic) UIBarButtonItem *refreshingBarButton;
+
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
 
@@ -80,10 +84,7 @@
     
     self.navigationItem.title = @"Help a Paw";
     
-//    NSString *backButtonText = @"Map";
-//    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:nil action:nil];
-//    self.navigationItem.backBarButtonItem = backButton;
-    
+    // Create add bar button
     UIImage *addImage = [UIImage imageNamed:@"ic_add"];
     UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [addButton setFrame:CGRectMake(0, 0, addImage.size.width, addImage.size.height)];
@@ -91,7 +92,18 @@
     [addButton addTarget:self action:@selector(onAddSignalButton:) forControlEvents:UIControlEventTouchUpInside];
     [addButton setShowsTouchWhenHighlighted:YES];
     UIBarButtonItem *addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
-    self.navigationItem.rightBarButtonItem = addBarButton;
+    _addBarButton = addBarButton;
+    
+    // Create refresh bar button
+    _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTapped:)];
+    
+    // Create loading bar button
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator setFrame:CGRectMake(0, 0, 30, 30)];
+    [activityIndicator startAnimating];
+    _refreshingBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    
+    [self setupReadyMode];
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(showLoginScreen)];
     self.navigationItem.leftBarButtonItem = menuButton;
@@ -135,7 +147,8 @@
 {
     [self updateMapToLastKnownUserLocation];
     
-    [_dataManager getNewSignalsForLastLocationWithCompletionHandler:nil];
+    [self refresh];
+    
     [_locationManager updateUserLocation];
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -456,8 +469,7 @@
     {
         [_signalTitleField resignFirstResponder];
         
-        CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
-        [_dataManager getSignalsForNewLocation:newCenter];
+        [self refresh];
     }
 }
 
@@ -587,6 +599,33 @@
                                                           }];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+}
+
+
+#pragma mark - Refresh
+- (void)refreshButtonTapped:(id)sender
+{
+    [self refresh];
+}
+
+- (void)refresh
+{
+    [self setupRefreshingMode];
+    
+    CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
+    [_dataManager getSignalsForLocation:newCenter withCompletionHandler:^(UIBackgroundFetchResult result) {
+        [self setupReadyMode];
+    }];
+}
+
+- (void)setupRefreshingMode
+{
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshingBarButton];
+}
+
+- (void)setupReadyMode
+{
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton];
 }
 
 @end

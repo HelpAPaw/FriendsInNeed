@@ -35,11 +35,12 @@
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
 
-@property (assign, nonatomic) BOOL submitMode;
+@property (assign, nonatomic) BOOL isInSubmitMode;
 @property (strong, nonatomic) MKPointAnnotation *submitSignalAnnotation;
 @property (weak, nonatomic) MKAnnotationView *submitSignalAnnotationView;
 @property (assign, nonatomic) UIImagePickerControllerSourceType photoSource;
 @property (strong, nonatomic) UIImage *signalPhoto;
+@property (assign, nonatomic) BOOL viewDidAppearOnce;
 
 @end
 
@@ -48,6 +49,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _viewDidAppearOnce = NO;
     
     _locationManager = [FINLocationManager sharedManager];
     _locationManager.mapDelegate = self;
@@ -76,7 +79,7 @@
     _btnPhoto.clipsToBounds = YES;
     [[_btnPhoto imageView] setContentMode: UIViewContentModeScaleAspectFill];
     
-    _submitMode = NO;
+    _isInSubmitMode = NO;
     
     UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
     [panGR setDelegate:self];
@@ -113,14 +116,21 @@
 {
     [super viewWillAppear:animated];
     
-    [self initMapVC];
+//    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    {
+        if (_viewDidAppearOnce == NO)
+        {
+            [self initMapVC];
+            _viewDidAppearOnce = YES;
+        }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (_submitMode == NO)
+    if (_isInSubmitMode == NO)
     {
         CGRect frame = _addSignalView.frame;
         frame.size.width = self.view.frame.size.width - 30.0f;
@@ -130,6 +140,13 @@
         
         [self.view addSubview:_addSignalView];
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    _focusSignalID = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -175,7 +192,7 @@
 - (void)toggleSubmitMode
 {
     CGFloat rotationAngle;
-    if (!_submitMode)
+    if (_isInSubmitMode == NO)
     {
         [self updateMapToLastKnownUserLocation];
         
@@ -200,7 +217,7 @@
         _addSignalButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
         
         CGRect frame = _addSignalView.frame;
-        if (_submitMode)
+        if (_isInSubmitMode)
         {
             frame.origin.y += kAddSignalViewYbounce;
             
@@ -222,7 +239,7 @@
         {
             [UIView animateWithDuration:0.3f animations:^{
                 CGRect frame = _addSignalView.frame;
-                if (_submitMode)
+                if (_isInSubmitMode)
                 {
                     frame.origin.y = - frame.size.height;
                     
@@ -241,7 +258,7 @@
                 _addSignalView.frame = frame;
             }];
             
-            _submitMode = !_submitMode;
+            _isInSubmitMode = !_isInSubmitMode;
         }
     }];
 }
@@ -299,7 +316,7 @@
                                                                     style:UIAlertActionStyleDefault
                                                                   handler:^(UIAlertAction * action) {
                                                                       // Add new annotation to map and focus it when OK button is pressed
-                                                                      self.focusSignalID = savedSignal.signalID;
+                                                                      _focusSignalID = savedSignal.signalID;
                                                                       [self addAnnotationToMapFromSignal:savedSignal];
                                                                   }];
             [alert addAction:defaultAction];
@@ -398,11 +415,6 @@
         }
         else
         {
-            if ([ann.signal.signalID isEqualToString:_focusSignalID])
-            {
-                [self focusAnnotation:ann];
-            }
-            
             if ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
             {
                 [_mapView removeAnnotation:ann];
@@ -425,7 +437,6 @@
 {
     [_mapView selectAnnotation:annotation animated:YES];
     [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
-    _focusSignalID = nil;
 }
 
 - (void)setFocusSignalID:(NSString *)focusSignalID
@@ -448,12 +459,31 @@
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals
 {
+    [self removeAllSignalAnnotationsFromMap];
+    
     for (FINSignal *signal in nearbySignals)
     {
         [UIView animateWithDuration:0.3 animations:^{
             [self addAnnotationToMapFromSignal:signal];
         }];
     }
+}
+
+- (void)removeAllSignalAnnotationsFromMap
+{
+    NSArray *mapAnnotations = [_mapView annotations];
+    NSMutableArray *signalAnnotations = [NSMutableArray new];
+    
+    // Remove only signal annotations
+    for (id annotation in mapAnnotations)
+    {
+        if ([annotation isKindOfClass:[FINAnnotation class]])
+        {
+            [signalAnnotations addObject:annotation];
+        }
+    }
+    
+    [_mapView removeAnnotations:signalAnnotations];
 }
 
 #pragma mark - Pan Gesture Recognizer Delegate
@@ -465,11 +495,14 @@
 
 - (void)didDragMap:(UIGestureRecognizer*)gestureRecognizer
 {
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+    if (_isInSubmitMode == NO)
     {
-        [_signalTitleField resignFirstResponder];
-        
-        [self refresh];
+        if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+        {
+            [_signalTitleField resignFirstResponder];
+            
+            [self refresh];
+        }
     }
 }
 

@@ -46,7 +46,11 @@
     
     
     UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-    [_mapVC setFocusSignalID:[notification.userInfo objectForKey:kNotificationSignalID]];
+    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
+    if (focusSignalID)
+    {        
+        [_mapVC setFocusSignalID:focusSignalID];
+    }
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     

@@ -486,7 +486,7 @@ enum {
                 newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
                 
                 [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
-                    if (error == nil) {
+                    if (error != nil) {
                         [self showAlertForError:error];
                     }
                 }];

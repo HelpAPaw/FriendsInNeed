@@ -106,10 +106,10 @@
             if (alreadyPresent == NO)
             {
                 [newSignals addObject:receivedSignal];
-                NSLog(@"New signal: %@", receivedSignal.title);
-                
-                [self getPhotoForSignal:receivedSignal];
+                NSLog(@"New signal: %@", receivedSignal.title);                
             }
+            
+            [self getPhotoForSignal:receivedSignal];
             
             // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
             [tempNearbySignals addObject:receivedSignal];

@@ -121,7 +121,10 @@
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
             [_mapDelegate updateMapWithNearbySignals:_nearbySignals];
-            completionHandler(UIBackgroundFetchResultNewData);
+            if (completionHandler)
+            {                
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
         }
         else
         {

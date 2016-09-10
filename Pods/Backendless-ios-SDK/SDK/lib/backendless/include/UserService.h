@@ -21,7 +21,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class BackendlessUser, Fault;
+@class BackendlessUser, Fault, UserProperty;
 @protocol IResponder;
 // FB
 @class FBSDKAccessToken;
@@ -30,7 +30,7 @@
 
 @interface UserService : NSObject
 
-@property (strong, nonatomic, readonly) BackendlessUser *currentUser;
+@property (strong, nonatomic) BackendlessUser *currentUser;
 @property (readonly) BOOL isStayLoggedIn;
 
 // switch on/off the persistent user mode
@@ -40,34 +40,43 @@
 -(BackendlessUser *)registering:(BackendlessUser *)user;
 -(BackendlessUser *)update:(BackendlessUser *)user;
 -(BackendlessUser *)login:(NSString *)login password:(NSString *)password;
+-(BackendlessUser *)findById:(NSString *)objectId;
 -(id)logout;
 -(NSNumber *)isValidUserToken;
 -(id)restorePassword:(NSString *)login;
--(NSArray *)describeUserClass;
+-(NSArray<UserProperty*> *)describeUserClass;
 -(id)user:(NSString *)user assignRole:(NSString *)role;
 -(id)user:(NSString *)user unassignRole:(NSString *)role;
--(NSArray *)getUserRoles;
--(id)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary *)fieldsMapping;
--(id)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary *)fieldsMapping;
+-(NSArray<NSString*> *)getUserRoles;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping;
+-(BackendlessUser *)loginWithGoogleSignInSDK:(NSString *)idToken accessToken:(NSString *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping;
+-(id)resendEmailConfirmation:(NSString *)email;
 
 // sync methods with fault option
 -(BackendlessUser *)registering:(BackendlessUser *)user error:(Fault **)fault;
 -(BackendlessUser *)update:(BackendlessUser *)user error:(Fault **)fault;
 -(BackendlessUser *)login:(NSString *)login password:(NSString *)password error:(Fault **)fault;
+-(BackendlessUser *)findById:(NSString *)objectId error:(Fault **)fault;
 -(BOOL)logoutError:(Fault **)fault;
 -(NSNumber *)isValidUserTokenError:(Fault **)fault;
 -(BOOL)restorePassword:(NSString *)login error:(Fault **)fault;
--(NSArray *)describeUserClassError:(Fault **)fault;
+-(NSArray<UserProperty*> *)describeUserClassError:(Fault **)fault;
 -(BOOL)user:(NSString *)user assignRole:(NSString *)role error:(Fault **)fault;
 -(BOOL)user:(NSString *)user unassignRole:(NSString *)role error:(Fault **)fault;
--(NSArray *)getUserRolesError:(Fault **)fault;
--(BackendlessUser *)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary *)fieldsMapping error:(Fault **)fault;
--(BackendlessUser *)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary *)fieldsMapping error:(Fault **)fault;
+-(NSArray<NSString*> *)getUserRolesError:(Fault **)fault;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping error:(Fault **)fault;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping error:(Fault **)fault;
+-(BackendlessUser *)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping error:(Fault **)fault;
+-(BackendlessUser *)loginWithGoogleSignInSDK:(NSString *)idToken accessToken:(NSString *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping error:(Fault **)fault;
+-(BOOL)resendEmailConfirmation:(NSString *)email error:(Fault **)fault;
 
 // async methods with responder
 -(void)registering:(BackendlessUser *)user responder:(id <IResponder>)responder;
 -(void)update:(BackendlessUser *)user responder:(id <IResponder>)responder;
 -(void)login:(NSString *)login password:(NSString *)password responder:(id <IResponder>)responder;
+-(void)findById:(NSString *)objectId responder:(id <IResponder>)responder;
 -(void)logout:(id <IResponder>)responder;
 -(void)isValidUserToken:(id <IResponder>)responder;
 -(void)restorePassword:(NSString *)login responder:(id <IResponder>)responder;
@@ -75,37 +84,56 @@
 -(void)user:(NSString *)user assignRole:(NSString *)role responder:(id <IResponder>)responder;
 -(void)user:(NSString *)user unassignRole:(NSString *)role responder:(id <IResponder>)responder;
 -(void)getUserRoles:(id <IResponder>)responder;
--(void)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary *)fieldsMapping responder:(id <IResponder>)responder;
--(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary *)fieldsMapping responder:(id <IResponder>)responder;
+-(void)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping responder:(id <IResponder>)responder;
+-(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping responder:(id <IResponder>)responder;
+-(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping responder:(id <IResponder>)responder;
+-(void)loginWithGoogleSignInSDK:(NSString *)idToken accessToken:(NSString *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping responder:(id<IResponder>)responder;
+-(void)resendEmailConfirmation:(NSString *)email responder:(id <IResponder>)responder;
 
 // async methods with block-based callbacks
 -(void)registering:(BackendlessUser *)user response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)update:(BackendlessUser *)user response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)login:(NSString *)login password:(NSString *)password response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)findById:(NSString *)objectId response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)logout:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)isValidUserToken:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)restorePassword:(NSString *)login response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)describeUserClass:(void(^)(NSArray *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)describeUserClass:(void(^)(NSArray<UserProperty*> *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)user:(NSString *)user assignRole:(NSString *)role response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)user:(NSString *)user unassignRole:(NSString *)role response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)getUserRoles:(void(^)(NSArray *))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary *)fieldsMapping response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary *)fieldsMapping response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)getUserRoles:(void(^)(NSArray<NSString*> *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)loginWithFacebookSDK:(FBSession *)session user:(NSDictionary<FBGraphUser> *)user fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)loginWithFacebookSDK:(FBSDKAccessToken *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)loginWithGoogleSignInSDK:(NSString *)idToken accessToken:(NSString *)accessToken permissions:(NSArray<NSString*> *)permissions fieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping response:(void(^)(BackendlessUser *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)resendEmailConfirmation:(NSString *)email response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
 
-// async methods of social easy logins
--(void)easyLoginWithFacebookFieldsMapping:(NSDictionary *)fieldsMapping permissions:(NSArray *)permissions response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)easyLoginWithTwitterFieldsMapping:(NSDictionary *)fieldsMapping response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)easyLoginWithFacebookFieldsMapping:(NSDictionary *)fieldsMapping permissions:(NSArray *)permissions responder:(id<IResponder>)responder;
--(void)easyLoginWithTwitterFieldsMapping:(NSDictionary *)fieldsMapping responder:(id<IResponder>)responder;
--(void)easyLoginWithFacebookFieldsMapping:(NSDictionary *)fieldsMapping permissions:(NSArray *)permissions;
--(void)easyLoginWithTwitterFieldsMapping:(NSDictionary *)fieldsMapping;
+// methods of social easy logins
+// Facebook
+-(void)easyLoginWithFacebookFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions;
+-(void)easyLoginWithFacebookFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions responder:(id<IResponder>)responder;
+-(void)easyLoginWithFacebookFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
+// Twitter
+-(void)easyLoginWithTwitterFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping;
+-(void)easyLoginWithTwitterFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping responder:(id<IResponder>)responder;
+-(void)easyLoginWithTwitterFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
+// Google+
+-(void)easyLoginWithGooglePlusFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions;
+-(void)easyLoginWithGooglePlusFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions responder:(id<IResponder>)responder;
+-(void)easyLoginWithGooglePlusFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions response:(void (^)(NSNumber *))responseBlock error:(void (^)(Fault *))errorBlock;
 
 // utilites
 -(id)handleOpenURL:(NSURL *)url;
-
+-(void)handleOpenURL:(NSURL *)url completion:(void(^)(BackendlessUser *))completion;
+    
 // persistent user
 -(BOOL)getPersistentUser;
 -(BOOL)setPersistentUser;
 -(BOOL)resetPersistentUser;
+
+// test
+-(void)easyLoginWithFacebookUrlFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions responder:(id<IResponder>)responder;
+-(void)easyLoginWithFacebookUrlFieldsMapping:(NSDictionary<NSString*,NSString*> *)fieldsMapping permissions:(NSArray<NSString*> *)permissions response:(void(^)(NSString *))responseBlock error:(void(^)(Fault *))errorBlock;
+
 
 @end

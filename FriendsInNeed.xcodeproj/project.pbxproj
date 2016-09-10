@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BDF70FBDD8B3EDC940189AB8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5187B2923EAE761D01AA93E /* libPods.a */; };
+		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
 		F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */; };
@@ -57,9 +57,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		130D544EDB2D6D1886C7427D /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		5664ED9628DD1F8B09D8C45C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		A5187B2923EAE761D01AA93E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
+		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
 		F32711CD1CCABC5D00E51AEA /* ic_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call.png; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		F33800241C98CAE70080FACD /* ic_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@2x.png"; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
-		F38B72EB1C00E04F00FBE20C /* Help a Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help a Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F38B72EF1C00E04F00FBE20C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F38B72F11C00E04F00FBE20C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F38B72F21C00E04F00FBE20C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -130,28 +130,28 @@
 			files = (
 				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
 				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
-				BDF70FBDD8B3EDC940189AB8 /* libPods.a in Frameworks */,
+				ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		CBE972083B1E3D0201383665 /* Frameworks */ = {
+		8E90546007900DD9E3332797 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A5187B2923EAE761D01AA93E /* libPods.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EBE9D4552892B35ABB41AB30 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5664ED9628DD1F8B09D8C45C /* Pods.debug.xcconfig */,
-				130D544EDB2D6D1886C7427D /* Pods.release.xcconfig */,
+				5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */,
+				E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		CE84D0F938D153CA1EAC0401 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				850A53F660CB027165B53E3D /* libPods-Help A Paw.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		F38B72E21C00E04F00FBE20C = {
@@ -162,15 +162,15 @@
 				F38B73081C00E39D00FBE20C /* MapKit.framework */,
 				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				F38B72EC1C00E04F00FBE20C /* Products */,
-				EBE9D4552892B35ABB41AB30 /* Pods */,
-				CBE972083B1E3D0201383665 /* Frameworks */,
+				8E90546007900DD9E3332797 /* Pods */,
+				CE84D0F938D153CA1EAC0401 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		F38B72EC1C00E04F00FBE20C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F38B72EB1C00E04F00FBE20C /* Help a Paw.app */,
+				F38B72EB1C00E04F00FBE20C /* Help A Paw.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -267,24 +267,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F38B72EA1C00E04F00FBE20C /* Help a Paw */ = {
+		F38B72EA1C00E04F00FBE20C /* Help A Paw */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Help a Paw" */;
+			buildConfigurationList = F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Help A Paw" */;
 			buildPhases = (
-				7D134C2DEDBC0C35FC079CB3 /* Check Pods Manifest.lock */,
+				06338AEF86EDAAC628D667F9 /* [CP] Check Pods Manifest.lock */,
 				F38B72E71C00E04F00FBE20C /* Sources */,
 				F38B72E81C00E04F00FBE20C /* Frameworks */,
 				F38B72E91C00E04F00FBE20C /* Resources */,
-				D856607F76088696F1DD31DC /* Embed Pods Frameworks */,
-				4474E929C89BC227DEF234DC /* Copy Pods Resources */,
+				FCDABA93DD9378850C7334DA /* [CP] Embed Pods Frameworks */,
+				AFB23CDC957966B2E62B51AC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Help a Paw";
+			name = "Help A Paw";
 			productName = FriendsInNeed;
-			productReference = F38B72EB1C00E04F00FBE20C /* Help a Paw.app */;
+			productReference = F38B72EB1C00E04F00FBE20C /* Help A Paw.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -319,7 +319,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F38B72EA1C00E04F00FBE20C /* Help a Paw */,
+				F38B72EA1C00E04F00FBE20C /* Help A Paw */,
 			);
 		};
 /* End PBXProject section */
@@ -366,29 +366,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4474E929C89BC227DEF234DC /* Copy Pods Resources */ = {
+		06338AEF86EDAAC628D667F9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7D134C2DEDBC0C35FC079CB3 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,19 +381,34 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		D856607F76088696F1DD31DC /* Embed Pods Frameworks */ = {
+		AFB23CDC957966B2E62B51AC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FCDABA93DD9378850C7334DA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -532,7 +532,7 @@
 		};
 		F38B73061C00E04F00FBE20C /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5664ED9628DD1F8B09D8C45C /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
@@ -544,7 +544,7 @@
 		};
 		F38B73071C00E04F00FBE20C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 130D544EDB2D6D1886C7427D /* Pods.release.xcconfig */;
+			baseConfigurationReference = E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
@@ -566,7 +566,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Help a Paw" */ = {
+		F38B73051C00E04F00FBE20C /* Build configuration list for PBXNativeTarget "Help A Paw" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F38B73061C00E04F00FBE20C /* Debug */,

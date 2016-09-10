@@ -1,10 +1,12 @@
 PODS:
-  - Backendless-ios-SDK (2.0.16)
+  - Backendless-ios-SDK (3.0.37)
 
 DEPENDENCIES:
-  - Backendless-ios-SDK (~> 2.0.0)
+  - Backendless-ios-SDK
 
 SPEC CHECKSUMS:
-  Backendless-ios-SDK: 66f2ef2806adaf25dc48d63e96591407f0daf73b
+  Backendless-ios-SDK: e506d3252e14e315f8b45dd19a7824cc07dbafa2
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: e0cd95fc3feed111c082d6dadaf82da2b0f4a356
+
+COCOAPODS: 1.0.1

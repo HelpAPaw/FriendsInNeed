@@ -6,18 +6,27 @@
 //  Copyright (c) 2013 The Midnight Coders, Inc. All rights reserved.
 //
 
+// mode
 #define IS_MEDIA_ENCODER 1
-
 #define TIMESTAMP_BY_HOST_TIMER 0
 #define USE_AUDIO_TIMESTAMP 1
+#define USE_AUDIO_TIMESTAMP_CORRECTION 1
+#define IS_VIDEO_BUFFERING 1
+#define OFF_REALTIME_BUFFERING 1
+#define REMOVE_BUFFERS_ON_PAUSE 0
+
+// probe
+#define __SETTING_SAMPLERATE__ 0
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 
-#define isEchoCancellation [MPMediaData getEchoCancellationOn]
-#define echoCancellationOn [MPMediaData setEchoCancellationOn:YES]
-#define echoCancellationOff [MPMediaData setEchoCancellationOn:NO]
+#define AUDIO_SAMPLE_RATE 16000
+#define AUDIO_BIT_RATE 64000
+#define AUDIO_CHANNELS 1
+
+#define isEchoCancellation YES
 
 #define MP_RTMP_CLIENT_IS_CONNECTED @"RTMP.Client.isConnected"
 #define MP_RTMP_CLIENT_STREAM_IS_CREATED @"RTMP.Client.Stream.isCreated"
@@ -28,13 +37,14 @@
 #define MP_STREAM_IS_BUSY @"streamIsBusy"
 #define MP_RESOURCE_TEMPORARILY_UNAVAILABLE @"Resource temporarily unavailable" 
 
+#define MP_NETSTREAM_PUBLISH_DENIED @"NetStream.Publish.Denied"
 #define MP_NETSTREAM_PUBLISH_START @"NetStream.Publish.Start"
 #define MP_NETSTREAM_PLAY_START @"NetStream.Play.Start"
 #define MP_NETSTREAM_PLAY_STREAM_NOT_FOUND @"NetStream.Play.StreamNotFound"
 
 #define MP_STREAM_SHOULD_VALID_CONNECT @"You should use a valid 'connect', 'attach' or 'stream' method for making the new stream"
 #define MP_STREAM_SHOULD_DISCONNECT @"You should use 'disconnect' method before making the new stream"
-#define MP_STREAM_SHOULD_STOP @"You should use 'stop' method before making the new stream"
+#define MP_STREAM_SHOULD_STOP @"You should use 'stop' method before making the new stream or changing the options of existing stream"
 
 typedef enum {
     MP_VIDEO_CODEC_NONE,
@@ -87,6 +97,15 @@ typedef enum {
 	MP_AUDIO_PCM_DBL,
 } MPAudioPCMType;
 
+
+#if IS_VIDEO_BUFFERING
+@interface MPVideoFrame : NSObject
+@property (nonatomic, retain) UIImage *image;
+@property int64_t timestamp;
++(MPVideoFrame *)videoFrame:(UIImage *)image timestamp:(int64_t)timestamp;
+@end
+#endif
+
 @interface MPMediaData : NSObject
 @property uint8_t *data;
 @property size_t size;
@@ -109,13 +128,20 @@ typedef enum {
 -(id)initWithData:(uint8_t *)data size:(size_t)size timestamp:(uint)timestamp;
 #endif
 
+#if 0
 +(void)setEchoCancellationOn:(BOOL)isOn;
 +(BOOL)getEchoCancellationOn;
+#endif
++(NSError *)setAudioSampleRate:(double)sampleRate;
++(double)getAudioSampleRate;
 +(BOOL)setAudioStreamBasicDescription:(AudioStreamBasicDescription *)streamDescription pcmType:(MPAudioPCMType)pcmType;
++(BOOL)setAudioStreamBasicDescription:(AudioStreamBasicDescription *)streamDescription pcmType:(MPAudioPCMType)pcmType channels:(int)channels sampleRate:(int)sampleRate;
 +(void)setAVAudioSessionCategoryPlayAndRecord:(AVAudioSessionCategoryOptions)options;
 +(void)routeAudioToSpeaker;
 +(uint64_t)hostTimeMs:(uint64_t)nanosec;
 +(uint64_t)hostTimeMs;
++(NSString *)descriptionForAudioFormat:(AudioStreamBasicDescription *)audioFormat;
++(NSString *)descriptionForStandardFlags:(UInt32) mFormatFlags;
 @end
 
 @protocol MPIMediaStream <NSObject>
@@ -137,6 +163,9 @@ typedef enum {
 -(void)cleanupStream;
 -(void)setVideoCustom:(uint)fps width:(uint)width height:(uint)height;
 -(void)setAudioBitrate:(uint)bitRate;
+#if __SETTING_SAMPLERATE__
+-(void)setSampleRate:(uint)sampleRate;
+#endif
 -(int)addVideoFrame:(uint8_t *)data dataSize:(size_t)size pts:(CMTime)pts duration:(CMTime)duration;
 #if USE_AUDIO_TIMESTAMP
 -(int)addAudioSamples:(uint8_t *)data dataSize:(size_t)size timestampMs:(int64_t)timestampMs hostTimeMs:(int64_t)hostTimeMs;

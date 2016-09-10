@@ -21,13 +21,14 @@
 
 #import <Foundation/Foundation.h>
 #import "DataPermission.h"
+#import "MapDrivenDataStore.h"
 
 #define PERSIST_OBJECT_ID @"objectId"
 #define PERSIST_CLASS(CLASS) [backendless.persistenceService of:[CLASS class]]
 
 extern NSString *LOAD_ALL_RELATIONS;
 
-@class BackendlessCollection, QueryOptions, BackendlessDataQuery, Fault;
+@class BackendlessCollection, QueryOptions, BackendlessDataQuery, Fault, ObjectProperty;
 @protocol IResponder, IDataStore;
 
 
@@ -36,7 +37,7 @@ extern NSString *LOAD_ALL_RELATIONS;
 @property (strong, nonatomic, readonly) DataPermission *permissions;
 
 // sync methods with fault return (as exception)
--(NSArray *)describe:(NSString *)classCanonicalName;
+-(NSArray<ObjectProperty*> *)describe:(NSString *)classCanonicalName;
 -(NSDictionary *)save:(NSString *)entityName entity:(NSDictionary *)entity;
 -(NSDictionary *)update:(NSString *)entityName entity:(NSDictionary *)entity sid:(NSString *)sid;
 -(id)save:(id)entity;
@@ -62,9 +63,11 @@ extern NSString *LOAD_ALL_RELATIONS;
 -(NSNumber *)remove:(id)entity;
 -(NSNumber *)remove:(Class)entity sid:(NSString *)sid;
 -(id)removeAll:(Class)entity dataQuery:(BackendlessDataQuery *)dataQuery;
+-(BackendlessCollection *)getView:(NSString *)viewName dataQuery:(BackendlessDataQuery *)dataQuery;
+-(BackendlessCollection *)callStoredProcedure:(NSString *)spName arguments:(NSDictionary *)arguments;
 
 // sync methods with fault option
--(NSArray *)describe:(NSString *)classCanonicalName error:(Fault **)fault;
+-(NSArray<ObjectProperty*> *)describe:(NSString *)classCanonicalName error:(Fault **)fault;
 -(NSDictionary *)save:(NSString *)entityName entity:(NSDictionary *)entity error:(Fault **)fault;
 -(NSDictionary *)update:(NSString *)entityName entity:(NSDictionary *)entity sid:(NSString *)sid error:(Fault **)fault;
 -(id)save:(id)entity error:(Fault **)fault;
@@ -87,9 +90,11 @@ extern NSString *LOAD_ALL_RELATIONS;
 -(id)findById:(NSString *)entityName sid:(NSString *)sid relations:(NSArray *)relations error:(Fault **)fault;
 -(id)findById:(NSString *)entityName sid:(NSString *)sid relations:(NSArray *)relations relationsDepth:(int)relationsDepth error:(Fault **)fault;
 -(id)findByClassId:(Class)entity sid:(NSString *)sid error:(Fault **)fault;
--(BOOL)remove:(id)entity error:(Fault **)fault;
--(BOOL)remove:(Class)entity sid:(NSString *)sid error:(Fault **)fault;
--(BOOL)removeAll:(Class)entity dataQuery:(BackendlessDataQuery *)dataQuery error:(Fault **)fault;
+-(NSNumber *)remove:(id)entity error:(Fault **)fault;
+-(NSNumber *)remove:(Class)entity sid:(NSString *)sid error:(Fault **)fault;
+-(BackendlessCollection *)removeAll:(Class)entity dataQuery:(BackendlessDataQuery *)dataQuery error:(Fault **)fault;
+-(BackendlessCollection *)getView:(NSString *)viewName dataQuery:(BackendlessDataQuery *)dataQuery error:(Fault **)fault;
+-(BackendlessCollection *)callStoredProcedure:(NSString *)spName arguments:(NSDictionary *)arguments error:(Fault **)fault;
 
 // async methods with responder
 -(void)describe:(NSString *)classCanonicalName responder:(id <IResponder>)responder;
@@ -118,9 +123,11 @@ extern NSString *LOAD_ALL_RELATIONS;
 -(void)remove:(id)entity responder:(id <IResponder>)responder;
 -(void)remove:(Class)entity sid:(NSString *)sid responder:(id <IResponder>)responder;
 -(void)removeAll:(Class)entity dataQuery:(BackendlessDataQuery *)dataQuery responder:(id <IResponder>)responder;
+-(void)getView:(NSString *)viewName dataQuery:(BackendlessDataQuery *)dataQuery responder:(id <IResponder>)responder;
+-(void)callStoredProcedure:(NSString *)spName arguments:(NSDictionary *)arguments responder:(id <IResponder>)responder;
 
 // async methods with block-based callbacks
--(void)describe:(NSString *)classCanonicalName response:(void(^)(NSArray *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)describe:(NSString *)classCanonicalName response:(void(^)(NSArray<ObjectProperty*> *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)save:(NSString *)entityName entity:(NSDictionary *)entity response:(void(^)(NSDictionary *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)update:(NSString *)entityName entity:(NSDictionary *)entity sid:(NSString *)sid response:(void(^)(NSDictionary *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)save:(id)entity response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
@@ -146,13 +153,21 @@ extern NSString *LOAD_ALL_RELATIONS;
 -(void)remove:(id)entity response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)remove:(Class)entity sid:(NSString *)sid response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)removeAll:(Class)entity dataQuery:(BackendlessDataQuery *)dataQuery response:(void(^)(BackendlessCollection *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)getView:(NSString *)viewName dataQuery:(BackendlessDataQuery *)dataQuery response:(void(^)(BackendlessCollection *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)callStoredProcedure:(NSString *)spName arguments:(NSDictionary *)arguments response:(void(^)(BackendlessCollection *))responseBlock error:(void(^)(Fault *))errorBlock;
 
 // IDataStore class factory
 -(id <IDataStore>)of:(Class)entityClass;
+// MapDrivenDataStore factory
+-(MapDrivenDataStore *)ofTable:(NSString *)tableName;
 
 // utilites
 -(id)getObjectId:(id)object;
 -(NSDictionary *)getObjectMetadata:(id)object;
 -(void)mapTableToClass:(NSString *)tableName type:(Class)type;
+-(NSString *)typeClassName:(Class)entity;
+-(NSString *)objectClassName:(id)object;
+-(NSDictionary *)propertyDictionary:(id)object;
+-(id)propertyObject:(id)object;
 
 @end

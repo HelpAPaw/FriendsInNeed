@@ -22,7 +22,7 @@
 #import <Foundation/Foundation.h>
 #import "FilePermission.h"
 
-@class BackendlessFile, Fault, BackendlessCollection;
+@class BackendlessFile, Fault, BackendlessCollection, BEFileInfo;
 @protocol IResponder;
 
 @interface FileService : NSObject
@@ -38,11 +38,13 @@
 -(BackendlessFile *)saveFile:(NSString *)path fileName:(NSString *)fileName content:(NSData *)content overwriteIfExist:(BOOL)overwrite;
 -(BackendlessFile *)saveFile:(NSString *)filePathName content:(NSData *)content;
 -(BackendlessFile *)saveFile:(NSString *)filePathName content:(NSData *)content overwriteIfExist:(BOOL)overwrite;
--(id)renameFile:(NSString *)oldPathName newName:(NSString *)newName;
--(id)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName;
--(id)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName;
+-(NSString *)renameFile:(NSString *)oldPathName newName:(NSString *)newName;
+-(NSString *)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName;
+-(NSString *)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName;
+// BackendlessCollection <BEFileInfo *>
 -(BackendlessCollection *)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive;
 -(BackendlessCollection *)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive pagesize:(int)pagesize offset:(int)offset;
+-(NSNumber *)exists:(NSString *)path;
 
 // sync methods with fault option
 -(BackendlessFile *)upload:(NSString *)path content:(NSData *)content error:(Fault **)fault;
@@ -53,11 +55,13 @@
 -(BackendlessFile *)saveFile:(NSString *)path fileName:(NSString *)fileName content:(NSData *)content overwriteIfExist:(BOOL)overwrite error:(Fault **)fault;
 -(BackendlessFile *)saveFile:(NSString *)filePathName content:(NSData *)content error:(Fault **)fault;
 -(BackendlessFile *)saveFile:(NSString *)filePathName content:(NSData *)content overwriteIfExist:(BOOL)overwrite error:(Fault **)fault;
--(BOOL)renameFile:(NSString *)oldPathName newName:(NSString *)newName error:(Fault **)fault;
--(BOOL)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName error:(Fault **)fault;
--(BOOL)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName error:(Fault **)fault;
+-(NSString *)renameFile:(NSString *)oldPathName newName:(NSString *)newName error:(Fault **)fault;
+-(NSString *)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName error:(Fault **)fault;
+-(NSString *)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName error:(Fault **)fault;
+// BackendlessCollection <BEFileInfo *>
 -(BackendlessCollection *)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive error:(Fault **)fault;
 -(BackendlessCollection *)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive pagesize:(int)pagesize offset:(int)offset error:(Fault **)fault;
+-(NSNumber *)exists:(NSString *)path error:(Fault **)fault;
 
 // async methods with responder
 -(void)upload:(NSString *)path content:(NSData *)content responder:(id <IResponder>)responder;
@@ -73,6 +77,7 @@
 -(void)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName responder:(id <IResponder>)responder;
 -(void)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive responder:(id <IResponder>)responder;
 -(void)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive pagesize:(int)pagesize offset:(int)offset responder:(id <IResponder>)responder;
+-(void)exists:(NSString *)path responder:(id <IResponder>)responder;
 
 // async methods with block-based callbacks
 -(void)upload:(NSString *)path content:(NSData *)content response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
@@ -83,10 +88,12 @@
 -(void)saveFile:(NSString *)path fileName:(NSString *)fileName content:(NSData *)content overwriteIfExist:(BOOL)overwrite response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)saveFile:(NSString *)filePathName content:(NSData *)content response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)saveFile:(NSString *)filePathName content:(NSData *)content overwriteIfExist:(BOOL)overwrite response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)renameFile:(NSString *)oldPathName newName:(NSString *)newName response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName response:(void(^)(BackendlessFile *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)renameFile:(NSString *)oldPathName newName:(NSString *)newName response:(void(^)(NSString *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)copyFile:(NSString *)sourcePathName target:(NSString *)targetPathName response:(void(^)(NSString *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)moveFile:(NSString *)sourcePathName target:(NSString *)targetPathName response:(void(^)(NSString *))responseBlock error:(void(^)(Fault *))errorBlock;
+// BackendlessCollection <BEFileInfo *>
 -(void)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive response:(void(^)(BackendlessCollection *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)listing:(NSString *)path pattern:(NSString *)pattern recursive:(BOOL)recursive pagesize:(int)pagesize offset:(int)offset response:(void(^)(BackendlessCollection *))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)exists:(NSString *)path response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
 
 @end

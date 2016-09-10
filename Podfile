@@ -1,1 +1,3 @@
-pod "Backendless-ios-SDK", "~>2.0.0"
+target "Help A Paw" do
+	pod "Backendless-ios-SDK"
+end

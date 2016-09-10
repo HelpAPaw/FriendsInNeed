@@ -14,6 +14,8 @@
  *******************************************************************************************************/
 #define __types [Types sharedInstance]
 
+#define TYPES_AMF_DESERIALIZE_POSTPROCESSOR_ON 0
+
 @interface Types : NSObject {
 	NSMutableDictionary	*abstractMappings;
 	NSMutableDictionary	*clientMappings;
@@ -21,6 +23,7 @@
 }
 @property (nonatomic, retain) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, retain) NSString *swiftClassPrefix;
 
 // Singleton accessor:  this is how you should ALWAYS get a reference to the class instance.  Never init your own. 
 +(Types *)sharedInstance;
@@ -39,14 +42,16 @@
 +(NSString *)objectClassName:(id)obj;
 +(NSString *)typeClassName:(Class)type;
 +(NSString *)insideTypeClassName:(Class)type;
-+(id)classInstance:(Class)type;
-+(Class)classByName:(NSString *)className;
+-(id)classInstance:(Class)type;
+-(Class)classByName:(NSString *)className;
 +(id)classInstanceByClassName:(NSString *)className;
 +(BOOL)isAssignableFrom:(Class)type toObject:(id)obj;
 +(NSArray *)propertyKeys:(id)obj;
 +(NSArray *)propertyAttributes:(id)obj;
 +(NSDictionary *)propertyKeysWithAttributes:(id)obj;
 +(NSDictionary *)propertyDictionary:(id)obj;
+// get swift class prefix from the caller class (usually AppDelegate), item = [NSThread callStackSymbols][1];
+-(void)makeSwiftClassPrefix:(NSString *)item;
 // target/plist options
 +(NSString *)targetName;
 +(NSDictionary *)getInfoPlist;
@@ -70,11 +75,13 @@
 @interface NSObject (AMF)
 -(id)onAMFSerialize;
 -(id)onAMFDeserialize;
++(id)pastAMFDeserialize:(id)obj;
 @end
 
 @interface NSString (Chars)
 -(NSString *)firstCharToUpper;
 -(NSString *)stringByTrimmingWhitespace;
++(NSString *)randomString:(int)numCharacters;
 @end
 
 @interface NSObject (Properties)
@@ -84,5 +91,8 @@
 -(BOOL)resolveProperty:(NSString *)name;
 -(BOOL)resolveProperty:(NSString *)name value:(id)value;
 -(BOOL)resolveProperties:(NSDictionary *)properties;
+-(BOOL)replaceProperty:(NSString *)name;
+-(BOOL)replaceProperties:(NSArray *)names;
+-(BOOL)replaceAllProperties;
 @end
 

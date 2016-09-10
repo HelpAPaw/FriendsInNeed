@@ -23,7 +23,8 @@
 @protocol IVideoPlayer, IAudioPlayer, MPIMediaStreamEvent;
 
 @interface MPMediaDecoder : NSObject
-
+@property (nonatomic, assign, readonly) id stream;
+@property (nonatomic, assign) UIImageView *streamImageView;
 @property (nonatomic, assign) id <MPIMediaStreamEvent> delegate;
 @property (nonatomic, retain) id <IVideoPlayer> video;
 @property (nonatomic, retain) id <IAudioPlayer> audio;

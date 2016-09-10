@@ -22,11 +22,10 @@
 #import <Foundation/Foundation.h>
 
 @interface PublishOptions : NSObject
-
 @property (strong, nonatomic) NSString *publisherId;
-@property (strong, nonatomic) NSDictionary *headers;
 @property (strong, nonatomic) NSString *subtopic;
 
 -(BOOL)addHeader:(NSString *)key value:(NSString *)value;
-
+-(BOOL)removeHeader:(NSString *)key;
+-(void)assignHeaders:(NSDictionary *)headers;
 @end

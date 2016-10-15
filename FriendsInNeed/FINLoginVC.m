@@ -189,16 +189,7 @@
             
             if (!error)
             {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
-                                                                               message:@"You are now logged in and can submit signals."
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                          [self dismissViewControllerAnimated:YES completion:^{}];
-                                                                      }];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:^{}];
+                [self dismissViewControllerAnimated:YES completion:^{}];
             }
             else 
             {

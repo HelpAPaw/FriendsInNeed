@@ -298,6 +298,7 @@
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = NJRZ88GCVL;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -535,6 +536,7 @@
 			baseConfigurationReference = 5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;
@@ -547,6 +549,7 @@
 			baseConfigurationReference = E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;

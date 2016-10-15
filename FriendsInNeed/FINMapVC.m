@@ -301,26 +301,30 @@
         {
             [self toggleSubmitMode];
             
-            NSMutableString *message = [NSMutableString stringWithString:@"Your signal was submitted."];
-            
             // Signal saved but photo was not
             if (error)
             {
-                [message appendFormat:@"\nHowever, the attached photo was not. The problem is:\n%@", error.message];
+                NSMutableString *message = [NSMutableString stringWithFormat:@"Your signal was submitted but the attached photo was not. The problem is:\n%@", error.message];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
+                                                                               message:message
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                          // Add new annotation to map and focus it when OK button is pressed
+                                                                          _focusSignalID = savedSignal.signalID;
+                                                                          [self addAnnotationToMapFromSignal:savedSignal];
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
             }
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
-                                                                           message:message
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                      // Add new annotation to map and focus it when OK button is pressed
-                                                                      _focusSignalID = savedSignal.signalID;
-                                                                      [self addAnnotationToMapFromSignal:savedSignal];
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
+            else
+            {
+                // Add new annotation to map and focus it when OK button is pressed
+                _focusSignalID = savedSignal.signalID;
+                [self addAnnotationToMapFromSignal:savedSignal];
+            }
         }
         else
         {

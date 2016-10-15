@@ -504,7 +504,7 @@
         if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
         {
             [_signalTitleField resignFirstResponder];
-            
+            _focusSignalID = nil;
             [self refresh];
         }
     }
@@ -642,6 +642,7 @@
 #pragma mark - Refresh
 - (void)refreshButtonTapped:(id)sender
 {
+    _focusSignalID = nil;
     [self refresh];
 }
 

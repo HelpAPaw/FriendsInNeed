@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
+		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
+		F31FDD2B1DC4ABFC00076B56 /* FINMenuVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
 		F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */; };
 		F32711D21CCAFBAD00E51AEA /* ic_call@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711D01CCAFBAD00E51AEA /* ic_call@3x.png */; };
@@ -62,6 +64,9 @@
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
+		F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuVC.h; sourceTree = "<group>"; };
+		F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuVC.m; sourceTree = "<group>"; };
+		F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuVC.xib; sourceTree = "<group>"; };
 		F32711CD1CCABC5D00E51AEA /* ic_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call.png; sourceTree = "<group>"; };
 		F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_call@2x.png"; sourceTree = "<group>"; };
 		F32711D01CCAFBAD00E51AEA /* ic_call@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_call@3x.png"; sourceTree = "<group>"; };
@@ -203,6 +208,9 @@
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
 				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
+				F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */,
+				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
+				F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */,
 				F39C394D1C9EA428007A2D8E /* Models */,
 			);
 			path = FriendsInNeed;
@@ -339,6 +347,7 @@
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
 				F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */,
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
+				F31FDD2B1DC4ABFC00076B56 /* FINMenuVC.xib in Resources */,
 				F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */,
 				F33800141C97872F0080FACD /* pin_red@2x.png in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
@@ -432,6 +441,7 @@
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
+				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

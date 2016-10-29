@@ -10,6 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FINLoginVC.h"
 #import "FINAnnotation.h"
+#import <ViewDeck/ViewDeck.h>
 
 #define kAddSignalViewYposition 15.0f
 #define kAddSignalViewYbounce   10.0f
@@ -108,7 +109,10 @@
     
     [self setupReadyMode];
     
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"] style:UIBarButtonItemStylePlain target:self action:@selector(showLoginScreen)];
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(menuButtonTapped:)];
     self.navigationItem.leftBarButtonItem = menuButton;
 }
 
@@ -664,6 +668,13 @@
 - (void)setupReadyMode
 {
     self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton];
+}
+
+#pragma mark - Menu
+
+- (void)menuButtonTapped:(id)sender
+{
+    [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
 }
 
 @end

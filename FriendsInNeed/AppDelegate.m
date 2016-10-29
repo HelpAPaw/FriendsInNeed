@@ -9,8 +9,10 @@
 #import "AppDelegate.h"
 #import "Backendless.h"
 #import "FINMapVC.h"
+#import "FINMenuVC.h"
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
+#import <ViewDeck/ViewDeck.h>
 
 @interface AppDelegate ()
 
@@ -37,7 +39,12 @@
     [[UINavigationBar appearance] setTranslucent:NO];
      UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
     
-    self.window.rootViewController = navController;
+    FINMenuVC *menuVC = [[FINMenuVC alloc] initWithNibName:nil bundle:nil];
+    
+    IIViewDeckController *viewDeckController = [[IIViewDeckController alloc] initWithCenterViewController:navController
+                                                                                      leftViewController:menuVC];
+    
+    self.window.rootViewController = viewDeckController;
     [self.window makeKeyAndVisible];
     _mapVC = mapVC;
     

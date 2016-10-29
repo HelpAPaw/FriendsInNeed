@@ -23,7 +23,7 @@ c. if you use OSX:
 - Save Podfile, return to Terminal window and run $ pod install. Once all of the pod data is downloaded, Xcode project workspace file will be created. This should be the file you use everyday to create your app.
 - Open .xcworkspace file to launch your project.
 
-- If you use Swift, add to your briging header file the following
+- If you use Swift, add to your bridging header file the following
 
 a. for 'Backendless-ios-SDK':
     #import "Backendless.h"
@@ -46,3 +46,9 @@ b. for other pods:
 To create a new project, follow the guide: 'getting-started'
 
 If you need to update your existing project to iOS 9.x, follow the guide: 'Update Project with Backendless SDK for iOS9'
+
+============= WHAT'S NEW? ============================================
+
+3.0.43:
+1. Support for emoji is added in PersisitenceSevrice (Data).
+

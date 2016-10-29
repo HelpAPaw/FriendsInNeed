@@ -1,12 +1,15 @@
 PODS:
-  - Backendless-ios-SDK (3.0.38)
+  - Backendless-ios-SDK (3.0.43)
+  - ViewDeck (3.0.0)
 
 DEPENDENCIES:
   - Backendless-ios-SDK
+  - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless-ios-SDK: 3f99765ddc9af450063402af8db084a6fd635895
+  Backendless-ios-SDK: b53ffb135b571af9526f01ea1a171e682b7b4d0b
+  ViewDeck: 9ad8c4ca95ffe21245ee411515c424807e6c7cfa
 
-PODFILE CHECKSUM: e0cd95fc3feed111c082d6dadaf82da2b0f4a356
+PODFILE CHECKSUM: 3902d33e6c56fe42f28fc014c2d80025379d9da9
 
 COCOAPODS: 1.0.1

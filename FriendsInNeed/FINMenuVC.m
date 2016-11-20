@@ -9,6 +9,7 @@
 #import "FINMenuVC.h"
 #import "FINLoginVC.h"
 #import <ViewDeck/ViewDeck.h>
+#import "FINDataManager.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -25,6 +26,7 @@ enum
 };
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *usernameLabel;
 
 @end
 
@@ -38,10 +40,39 @@ enum
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kMenuCell];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    
+    [self refreshLoginStatus];
+}
+
+- (void)refreshLoginStatus
+{
+    [self setupUsernameLabel];
+    [self reloadLoginCell];
+}
+
+- (void)setupUsernameLabel
+{
+    FINDataManager *dataManager = [FINDataManager sharedManager];
+    if ([dataManager userIsLogged])
+    {
+        NSString *userName = [dataManager getUserName];
+        NSString *userEmail = [dataManager getUserEmail];
+        _usernameLabel.text = [NSString stringWithFormat:@"%@ (%@)", userName, userEmail];
+        _usernameLabel.hidden = NO;
+    }
+    else
+    {
+        _usernameLabel.hidden = YES;
+    }
+}
+
+- (void)reloadLoginCell
+{
+    NSIndexPath *loginIndexPath = [NSIndexPath indexPathForRow:kLogin inSection:0];
+    [_tableView reloadRowsAtIndexPaths:@[loginIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - UITableViewDataSource
@@ -64,8 +95,17 @@ enum
     switch (indexPath.row)
     {
         case kLogin:
-            title = @"Login";
+        {
+            if ([[FINDataManager sharedManager] userIsLogged])
+            {
+                title = @"Logout";
+            }
+            else
+            {
+                title = @"Login";
+            }
             break;
+        }
         case kSettings:
             title = @"Settings";
             break;
@@ -100,11 +140,24 @@ enum
     {
         case kLogin:
         {
-            [self.viewDeckController closeSide:YES];
-            
-            FINLoginVC *loginVC = [[FINLoginVC alloc] init];
-            loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-            [self presentViewController:loginVC animated:YES completion:^{}];
+            if ([[FINDataManager sharedManager] userIsLogged])
+            {
+                // TODO: add loading indicator
+                [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
+                    // TODO: handle error
+                    
+                    [self refreshLoginStatus];
+                }];
+            }
+            else
+            {
+                [self.viewDeckController closeSide:YES];
+                
+                FINLoginVC *loginVC = [[FINLoginVC alloc] init];
+                loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                [self presentViewController:loginVC animated:YES completion:^{}];
+
+            }
             break;
         }
             

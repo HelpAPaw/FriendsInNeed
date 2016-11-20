@@ -275,6 +275,20 @@
     return (currentUser != nil);
 }
 
+- (NSString *)getUserName
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    
+    return currentUser.name;
+}
+
+- (NSString *)getUserEmail
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    
+    return currentUser.email;
+}
+
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
     BackendlessUser *user = [BackendlessUser new];
@@ -299,6 +313,16 @@
         completion(nil);
     } error:^void (Fault *fault) {
         
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completion(error);
+    }];
+}
+
+- (void)logoutWithCompletion:(void (^)(FINError *error))completion
+{
+    [backendless.userService logout:^void (id idOfSomething) {
+        completion(nil);
+    } error:^void (Fault *fault) {
         FINError *error = [[FINError alloc] initWithFault:fault];
         completion(error);
     }];

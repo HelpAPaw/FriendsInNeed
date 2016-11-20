@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINMenuVC">
             <connections>
                 <outlet property="tableView" destination="tJm-sg-3Ej" id="eWu-Kh-gyZ"/>
+                <outlet property="usernameLabel" destination="qGN-52-SGt" id="WYF-Q2-yBt"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -28,24 +29,32 @@
                     </constraints>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tJm-sg-3Ej">
-                    <rect key="frame" x="0.0" y="128" width="375" height="539"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <rect key="frame" x="0.0" y="172.5" width="375" height="494.5"/>
+                    <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="ruB-jx-jkL"/>
                         <outlet property="delegate" destination="-1" id="WU4-2g-6Pk"/>
                     </connections>
                 </tableView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Milen Marinov (username@server.com)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="qGN-52-SGt" userLabel="Username Label">
+                    <rect key="frame" x="16" y="136" width="343" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
-            <color key="backgroundColor" red="1" green="0.58823529411764708" blue="0.25882352941176467" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="tJm-sg-3Ej" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="bottom" id="0tD-cH-511"/>
                 <constraint firstItem="KpZ-8l-rlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="8Lf-48-EXd"/>
-                <constraint firstItem="tJm-sg-3Ej" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="bottom" id="G50-wN-TgJ"/>
                 <constraint firstItem="KpZ-8l-rlj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="J9i-ZC-2RX"/>
+                <constraint firstItem="qGN-52-SGt" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="bottom" constant="8" id="JVr-Ud-bya"/>
+                <constraint firstItem="tJm-sg-3Ej" firstAttribute="top" secondItem="qGN-52-SGt" secondAttribute="bottom" constant="16" id="KgQ-is-dal"/>
                 <constraint firstItem="tJm-sg-3Ej" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ri6-jE-aeS"/>
                 <constraint firstAttribute="trailing" secondItem="KpZ-8l-rlj" secondAttribute="trailing" id="aZX-8a-Pzc"/>
                 <constraint firstAttribute="trailing" secondItem="tJm-sg-3Ej" secondAttribute="trailing" id="cU4-YL-SbF"/>
+                <constraint firstItem="qGN-52-SGt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="jmC-DS-SQy"/>
                 <constraint firstAttribute="bottom" secondItem="tJm-sg-3Ej" secondAttribute="bottom" id="sed-DQ-ZQi"/>
+                <constraint firstAttribute="trailing" secondItem="qGN-52-SGt" secondAttribute="trailing" constant="16" id="uz4-Le-eYc"/>
             </constraints>
             <point key="canvasLocation" x="-158.5" y="54.5"/>
         </view>

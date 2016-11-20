@@ -29,6 +29,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintRegister;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintLogin;
 
 @end
 
@@ -88,6 +90,9 @@
         _phoneTextField.hidden = NO;
         _whyButton.hidden = NO;
         
+        _loadingIndicatorTopConstraintLogin.active = NO;
+        _loadingIndicatorTopConstraintRegister.active = YES;
+        
         [UIView performWithoutAnimation:^{
             //For immediate change
             _registerLoginButton.titleLabel.text = @"Register";
@@ -109,6 +114,9 @@
         _phoneLabel.hidden = YES;
         _phoneTextField.hidden = YES;
         _whyButton.hidden = YES;
+        
+        _loadingIndicatorTopConstraintLogin.active = YES;
+        _loadingIndicatorTopConstraintRegister.active = NO;
         
         //For immediate change
         _registerLoginButton.titleLabel.text = @"Login";

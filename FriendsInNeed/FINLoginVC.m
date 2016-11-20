@@ -11,8 +11,8 @@
 #import "FINGlobalConstants.pch"
 #import "FINError.h"
 
-#define REGISTER_SEGMENT    0
-#define LOGIN_SEGMENT       1
+#define REGISTER_SEGMENT    1
+#define LOGIN_SEGMENT       0
 
 @interface FINLoginVC ()
 @property (weak, nonatomic) IBOutlet UIToolbar *topToolbar;
@@ -36,7 +36,8 @@
 
 @implementation FINLoginVC
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [_topToolbar setBarTintColor:kCustomOrange];
@@ -45,16 +46,6 @@
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Gesture Recognizers
@@ -70,7 +61,7 @@
 {
     UISegmentedControl *segControl = (UISegmentedControl *)sender;
     
-    if (segControl.selectedSegmentIndex == 1)
+    if (segControl.selectedSegmentIndex == LOGIN_SEGMENT)
     {
         [self setupLoginView];
     }
@@ -83,7 +74,7 @@
 - (void)setupRegistrationView
 {
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        _hintLabel.text = @"You need to register before you can submit signals";
+        _hintLabel.text = @"Become a member";
         _nameLabel.hidden = NO;
         _nameTextField.hidden = NO;
         _phoneLabel.hidden = NO;

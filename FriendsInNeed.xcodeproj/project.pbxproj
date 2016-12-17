@@ -38,6 +38,8 @@
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
 		F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FD1E0555D200A61060 /* ic_close_x@3x.png */; };
 		F35906021E05821C00A61060 /* FINMailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906011E05821C00A61060 /* FINMailComposer.m */; };
+		F35906071E058D4200A61060 /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906051E058D4200A61060 /* FINFaqVC.m */; };
+		F35906081E058D4200A61060 /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F35906061E058D4200A61060 /* FINFaqVC.xib */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -108,6 +110,9 @@
 		F35905FD1E0555D200A61060 /* ic_close_x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@3x.png"; sourceTree = "<group>"; };
 		F35906011E05821C00A61060 /* FINMailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMailComposer.m; sourceTree = "<group>"; };
 		F35906031E05823800A61060 /* FINMailComposer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINMailComposer.h; sourceTree = "<group>"; };
+		F35906041E058D4200A61060 /* FINFaqVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqVC.h; sourceTree = "<group>"; };
+		F35906051E058D4200A61060 /* FINFaqVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqVC.m; sourceTree = "<group>"; };
+		F35906061E058D4200A61060 /* FINFaqVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqVC.xib; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,6 +244,9 @@
 				F35905F81E054EE800A61060 /* FINAboutVC.xib */,
 				F35906031E05823800A61060 /* FINMailComposer.h */,
 				F35906011E05821C00A61060 /* FINMailComposer.m */,
+				F35906041E058D4200A61060 /* FINFaqVC.h */,
+				F35906051E058D4200A61060 /* FINFaqVC.m */,
+				F35906061E058D4200A61060 /* FINFaqVC.xib */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -377,6 +385,7 @@
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
 				F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */,
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
+				F35906081E058D4200A61060 /* FINFaqVC.xib in Resources */,
 				F31FDD2B1DC4ABFC00076B56 /* FINMenuVC.xib in Resources */,
 				F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */,
 				F33800141C97872F0080FACD /* pin_red@2x.png in Resources */,
@@ -474,6 +483,7 @@
 				F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
+				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,

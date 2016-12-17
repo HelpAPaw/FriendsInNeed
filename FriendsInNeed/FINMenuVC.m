@@ -11,6 +11,7 @@
 #import <ViewDeck/ViewDeck.h>
 #import "FINDataManager.h"
 #import "FINMenuCell.h"
+#import "FINAboutVC.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -91,10 +92,6 @@ enum
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FINMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:kMenuCell];
-//    if (cell == nil)
-//    {
-//        cell = [FINMenuCell ini]
-//    }
     
     NSString *title;
     switch (indexPath.row)
@@ -164,6 +161,12 @@ enum
             }
             break;
         }
+        case kAbout:
+        {
+            FINAboutVC *aboutVC = [[FINAboutVC alloc] initWithNibName:nil bundle:nil];
+            [self presentViewController:aboutVC animated:YES completion:nil];
+        }
+        
             
         default:
             break;

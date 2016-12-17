@@ -7,6 +7,7 @@
 //
 
 #import "FINFaqVC.h"
+#import "FINFaqCell.h"
 
 #define kQuestionCellIdentifier @"QuestionCellIdentifier"
 
@@ -21,7 +22,7 @@
 
 @end
 
-@interface FINFaqVC () <UITableViewDataSource>
+@interface FINFaqVC () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -36,6 +37,7 @@
     // Do any additional setup after loading the view from its nib.
     
     _tableView.contentInset = UIEdgeInsetsMake(_closeButton.frame.size.height + 10, 0, 0, 0);
+    [_tableView registerNib:[UINib nibWithNibName:@"FINFaqCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:kQuestionCellIdentifier];
     
     _questionsAndAnswers = [NSMutableArray new];
     for (int i = 0; i < 5; i++) {
@@ -69,18 +71,19 @@
 {
     return _questionsAndAnswers.count;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kQuestionCellIdentifier];
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kQuestionCellIdentifier];
-    }
+    FINFaqCell *cell = [tableView dequeueReusableCellWithIdentifier:kQuestionCellIdentifier];
     
     FINQnA *qna = _questionsAndAnswers[indexPath.row];
-    cell.textLabel.text = qna.question;
-    cell.detailTextLabel.text = qna.answer;
+    [cell setQuestion:qna.question];
+    [cell setAnswer:qna.answer];
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 113.0;
 }
 
 @end

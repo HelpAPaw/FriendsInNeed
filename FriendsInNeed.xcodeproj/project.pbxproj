@@ -56,6 +56,8 @@
 		F3C484741C6C111D0067A169 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C484721C6C111D0067A169 /* FINLoginVC.xib */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
 		F3C484791C75514D0067A169 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C484771C75514D0067A169 /* FINMapVC.xib */; };
+		F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */; };
+		F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -126,6 +128,9 @@
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
 		F3C484771C75514D0067A169 /* FINMapVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMapVC.xib; sourceTree = "<group>"; };
+		F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuCell.h; sourceTree = "<group>"; };
+		F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuCell.m; sourceTree = "<group>"; };
+		F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +217,9 @@
 				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
 				F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */,
 				F39C394D1C9EA428007A2D8E /* Models */,
+				F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */,
+				F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */,
+				F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -357,6 +365,7 @@
 				F39C39441C9D8C1C007A2D8E /* ic_dropdown.png in Resources */,
 				F32711DB1CCB8CFF00E51AEA /* ic_camera@2x.png in Resources */,
 				F338001B1C978BA50080FACD /* pin_orange.png in Resources */,
+				F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */,
 				F39C39481C9D8C1C007A2D8E /* ic_dropdown@3x.png in Resources */,
 				F338001F1C98C59D0080FACD /* ic_add.png in Resources */,
 				F33800191C978BA50080FACD /* pin_green.png in Resources */,
@@ -438,6 +447,7 @@
 				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
+				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,

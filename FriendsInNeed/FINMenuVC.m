@@ -13,6 +13,7 @@
 #import "FINMenuCell.h"
 #import "FINAboutVC.h"
 #import "FINMailComposer.h"
+#import "FINFaqVC.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -161,6 +162,11 @@ enum
 
             }
             break;
+        }
+        case kFAQ:
+        {
+            FINFaqVC *facVC = [[FINFaqVC alloc] initWithNibName:nil bundle:nil];
+            [self presentViewController:facVC animated:YES completion:nil];
         }
         case kFeedback:
         {

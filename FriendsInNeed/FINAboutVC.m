@@ -7,6 +7,7 @@
 //
 
 #import "FINAboutVC.h"
+#import "FINMailComposer.h"
 
 @interface FINAboutVC ()
 
@@ -38,6 +39,7 @@
 }
 
 - (IBAction)onContactButtonTapped:(id)sender {
+    [[FINMailComposer sharedComposer] presentMailComposerFrom:self];
 }
 
 @end

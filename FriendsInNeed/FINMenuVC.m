@@ -10,6 +10,7 @@
 #import "FINLoginVC.h"
 #import <ViewDeck/ViewDeck.h>
 #import "FINDataManager.h"
+#import "FINMenuCell.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -37,7 +38,7 @@ enum
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kMenuCell];
+    [_tableView registerNib:[UINib nibWithNibName:@"FINMenuCell" bundle:nil] forCellReuseIdentifier:kMenuCell];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -89,7 +90,11 @@ enum
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kMenuCell];
+    FINMenuCell *cell = [tableView dequeueReusableCellWithIdentifier:kMenuCell];
+//    if (cell == nil)
+//    {
+//        cell = [FINMenuCell ini]
+//    }
     
     NSString *title;
     switch (indexPath.row)
@@ -122,10 +127,9 @@ enum
         default:
             break;
     }
-    cell.textLabel.text = title;
     
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor whiteColor];
+    [cell setTitle:title];
+    
     cell.indentationLevel = 2;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     

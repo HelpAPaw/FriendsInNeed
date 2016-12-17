@@ -37,6 +37,7 @@
 		F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FB1E0555D200A61060 /* ic_close_x.png */; };
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
 		F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FD1E0555D200A61060 /* ic_close_x@3x.png */; };
+		F35906021E05821C00A61060 /* FINMailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906011E05821C00A61060 /* FINMailComposer.m */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -105,6 +106,8 @@
 		F35905FB1E0555D200A61060 /* ic_close_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_x.png; sourceTree = "<group>"; };
 		F35905FC1E0555D200A61060 /* ic_close_x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@2x.png"; sourceTree = "<group>"; };
 		F35905FD1E0555D200A61060 /* ic_close_x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@3x.png"; sourceTree = "<group>"; };
+		F35906011E05821C00A61060 /* FINMailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMailComposer.m; sourceTree = "<group>"; };
+		F35906031E05823800A61060 /* FINMailComposer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINMailComposer.h; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,6 +237,8 @@
 				F35905F61E054EE800A61060 /* FINAboutVC.h */,
 				F35905F71E054EE800A61060 /* FINAboutVC.m */,
 				F35905F81E054EE800A61060 /* FINAboutVC.xib */,
+				F35906031E05823800A61060 /* FINMailComposer.h */,
+				F35906011E05821C00A61060 /* FINMailComposer.m */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -472,6 +477,7 @@
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
+				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
 			);

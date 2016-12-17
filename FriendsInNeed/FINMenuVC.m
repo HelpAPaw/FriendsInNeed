@@ -12,6 +12,7 @@
 #import "FINDataManager.h"
 #import "FINMenuCell.h"
 #import "FINAboutVC.h"
+#import "FINMailComposer.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -20,7 +21,7 @@
 enum
 {
     kLogin,
-    kSettings,
+//    kSettings,
     kFAQ,
     kFeedback,
     kAbout,
@@ -108,9 +109,9 @@ enum
             }
             break;
         }
-        case kSettings:
-            title = @"Settings";
-            break;
+//        case kSettings:
+//            title = @"Settings";
+//            break;
         case kFAQ:
             title = @"FAQ";
             break;
@@ -161,13 +162,16 @@ enum
             }
             break;
         }
+        case kFeedback:
+        {
+            [[FINMailComposer sharedComposer] presentMailComposerFrom:self];
+        }
         case kAbout:
         {
             FINAboutVC *aboutVC = [[FINAboutVC alloc] initWithNibName:nil bundle:nil];
             [self presentViewController:aboutVC animated:YES completion:nil];
         }
-        
-            
+          
         default:
             break;
     }

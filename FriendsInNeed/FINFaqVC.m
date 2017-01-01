@@ -36,14 +36,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    _tableView.contentInset = UIEdgeInsetsMake(_closeButton.frame.size.height + 10, 0, 0, 0);
+    _tableView.contentInset = UIEdgeInsetsMake(_closeButton.frame.size.height + 20, 0, 0, 0);
     [_tableView registerNib:[UINib nibWithNibName:@"FINFaqCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:kQuestionCellIdentifier];
     
     _questionsAndAnswers = [NSMutableArray new];
     for (int i = 0; i < 5; i++) {
         FINQnA *qna = [FINQnA new];
-        qna.question = @"This is a question?";
-        qna.answer = @"And this is an answer?";
+        NSString *question = [NSString stringWithFormat:@"Q%d", i+1];
+        NSString *answer   = [NSString stringWithFormat:@"A%d", i+1];
+        qna.question = NSLocalizedString(question, nil);
+        qna.answer = NSLocalizedString(answer, nil);
         [_questionsAndAnswers addObject:qna];
     }
 }
@@ -74,6 +76,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     FINFaqCell *cell = [tableView dequeueReusableCellWithIdentifier:kQuestionCellIdentifier];
+    
+    cell.backgroundColor = [UIColor clearColor];
     
     FINQnA *qna = _questionsAndAnswers[indexPath.row];
     [cell setQuestion:qna.question];

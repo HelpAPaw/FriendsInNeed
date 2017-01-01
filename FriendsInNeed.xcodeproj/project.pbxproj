@@ -42,6 +42,7 @@
 		F35906081E058D4200A61060 /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F35906061E058D4200A61060 /* FINFaqVC.xib */; };
 		F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F359060A1E059CC700A61060 /* FINFaqCell.m */; };
 		F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F359060B1E059CC700A61060 /* FINFaqCell.xib */; };
+		F370875F1E197BA2005B24D8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F370875E1E197BA2005B24D8 /* Localizable.strings */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -118,6 +119,7 @@
 		F35906091E059CC700A61060 /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
 		F359060A1E059CC700A61060 /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
 		F359060B1E059CC700A61060 /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
+		F370875E1E197BA2005B24D8 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +217,7 @@
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
 				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
+				F39C394D1C9EA428007A2D8E /* Models */,
 				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				F38B72F11C00E04F00FBE20C /* AppDelegate.h */,
 				F38B72F21C00E04F00FBE20C /* AppDelegate.m */,
@@ -240,7 +243,6 @@
 				F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */,
 				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
 				F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */,
-				F39C394D1C9EA428007A2D8E /* Models */,
 				F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */,
 				F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */,
 				F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */,
@@ -313,6 +315,7 @@
 				F33800131C97872F0080FACD /* pin_red@2x.png */,
 				F33800111C9785A10080FACD /* pin_red.png */,
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
+				F370875E1E197BA2005B24D8 /* Localizable.strings */,
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
@@ -389,6 +392,7 @@
 				F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */,
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
+				F370875F1E197BA2005B24D8 /* Localizable.strings in Resources */,
 				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
 				F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,

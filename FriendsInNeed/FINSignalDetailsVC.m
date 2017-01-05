@@ -127,8 +127,8 @@ enum {
     _addCommentView.layer.shadowOffset = CGSizeMake(0, -2);
     _addCommentView.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     
-    NSString *backButtonText = @"Close";
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:backButtonText style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_close_x_white"] style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
+    
     self.navigationItem.leftBarButtonItem = backButton;
     
     _statusIsExpanded = NO;

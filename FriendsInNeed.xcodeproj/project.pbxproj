@@ -32,6 +32,9 @@
 		F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800201C98C7DF0080FACD /* ic_add@2x.png */; };
 		F33800231C98CA350080FACD /* ic_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800221C98CA350080FACD /* ic_menu.png */; };
 		F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800241C98CAE70080FACD /* ic_menu@2x.png */; };
+		F3439D7F1E1F01BC003857DB /* ic_close_x_white.png in Resources */ = {isa = PBXBuildFile; fileRef = F3439D7C1E1F01BC003857DB /* ic_close_x_white.png */; };
+		F3439D801E1F01BC003857DB /* ic_close_x_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F3439D7D1E1F01BC003857DB /* ic_close_x_white@2x.png */; };
+		F3439D811E1F01BC003857DB /* ic_close_x_white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F3439D7E1E1F01BC003857DB /* ic_close_x_white@3x.png */; };
 		F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35905F71E054EE800A61060 /* FINAboutVC.m */; };
 		F35905FA1E054EE800A61060 /* FINAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F35905F81E054EE800A61060 /* FINAboutVC.xib */; };
 		F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FB1E0555D200A61060 /* ic_close_x.png */; };
@@ -105,6 +108,9 @@
 		F33800201C98C7DF0080FACD /* ic_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_add@2x.png"; sourceTree = "<group>"; };
 		F33800221C98CA350080FACD /* ic_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_menu.png; sourceTree = "<group>"; };
 		F33800241C98CAE70080FACD /* ic_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@2x.png"; sourceTree = "<group>"; };
+		F3439D7C1E1F01BC003857DB /* ic_close_x_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_x_white.png; sourceTree = "<group>"; };
+		F3439D7D1E1F01BC003857DB /* ic_close_x_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x_white@2x.png"; sourceTree = "<group>"; };
+		F3439D7E1E1F01BC003857DB /* ic_close_x_white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x_white@3x.png"; sourceTree = "<group>"; };
 		F35905F61E054EE800A61060 /* FINAboutVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAboutVC.h; sourceTree = "<group>"; };
 		F35905F71E054EE800A61060 /* FINAboutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAboutVC.m; sourceTree = "<group>"; };
 		F35905F81E054EE800A61060 /* FINAboutVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINAboutVC.xib; sourceTree = "<group>"; };
@@ -288,6 +294,9 @@
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F3439D7C1E1F01BC003857DB /* ic_close_x_white.png */,
+				F3439D7D1E1F01BC003857DB /* ic_close_x_white@2x.png */,
+				F3439D7E1E1F01BC003857DB /* ic_close_x_white@3x.png */,
 				F35905FB1E0555D200A61060 /* ic_close_x.png */,
 				F35905FC1E0555D200A61060 /* ic_close_x@2x.png */,
 				F35905FD1E0555D200A61060 /* ic_close_x@3x.png */,
@@ -389,12 +398,15 @@
 			files = (
 				F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */,
 				F39C39491C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png in Resources */,
+				F3439D801E1F01BC003857DB /* ic_close_x_white@2x.png in Resources */,
 				F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */,
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
 				F370875F1E197BA2005B24D8 /* Localizable.strings in Resources */,
+				F3439D7F1E1F01BC003857DB /* ic_close_x_white.png in Resources */,
 				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
 				F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */,
+				F3439D811E1F01BC003857DB /* ic_close_x_white@3x.png in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
 				F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */,
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,

@@ -24,8 +24,8 @@
 
 @interface FINFaqVC () <UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *closeButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *toolbar;
 @property (strong) NSMutableArray *questionsAndAnswers;
 
 @end
@@ -36,7 +36,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    _tableView.contentInset = UIEdgeInsetsMake(_closeButton.frame.size.height + 20, 0, 0, 0);
+    _toolbar.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+    _toolbar.layer.shadowOpacity = 1.0f;
+    _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
+    
+    _tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
     [_tableView registerNib:[UINib nibWithNibName:@"FINFaqCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:kQuestionCellIdentifier];
     
     _questionsAndAnswers = [NSMutableArray new];

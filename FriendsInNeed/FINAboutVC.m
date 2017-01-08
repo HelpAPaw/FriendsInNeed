@@ -11,6 +11,7 @@
 
 @interface FINAboutVC ()
 @property (weak, nonatomic) IBOutlet UIView *toolbar;
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
 
 @end
 
@@ -23,6 +24,11 @@
     _toolbar.layer.shadowColor = [UIColor lightGrayColor].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
+    
+    // Set the version label text
+    NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
+    NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];
+    _versionLabel.text = [NSString stringWithFormat:@"v%@ (%@)", version, build];
 }
 
 - (IBAction)onCloseButtonTapped:(id)sender {

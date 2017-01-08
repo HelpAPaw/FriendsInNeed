@@ -41,10 +41,12 @@
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
     
     _tableView.contentInset = UIEdgeInsetsMake(15, 0, 0, 0);
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 100;
     [_tableView registerNib:[UINib nibWithNibName:@"FINFaqCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:kQuestionCellIdentifier];
     
     _questionsAndAnswers = [NSMutableArray new];
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 4; i++) {
         FINQnA *qna = [FINQnA new];
         NSString *question = [NSString stringWithFormat:@"Q%d", i+1];
         NSString *answer   = [NSString stringWithFormat:@"A%d", i+1];
@@ -54,20 +56,6 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 - (IBAction)onCloseButtonTapped:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -88,10 +76,6 @@
     [cell setAnswer:qna.answer];
     
     return cell;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 113.0;
 }
 
 @end

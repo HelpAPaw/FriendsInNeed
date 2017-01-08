@@ -7,12 +7,10 @@
 */
 
 "Q1" = "How does this app work?";
-"A1" = "Answer 1";
-"Q2" = "How does this app work?";
-"A2" = "Answer 2";
-"Q3" = "How does this app work?";
-"A3" = "Answer 3";
-"Q4" = "How does this app work?";
-"A4" = "Answer 4";
-"Q5" = "How does this app work?";
-"A5" = "Answer 5";
+"A1" = "If you see a stray animal that needs help but for some reason cannot provide the help yourself you can submit a signal that marks the place and describes the situation. Other people that are nearby will receive a notification about it. Hopefully someone will react to the signal and help the animal.";
+"Q2" = "Who are the people that will help those animals?";
+"A2" = "Help A Paw connects a network of volunteers that care about animals - just like you!";
+"Q3" = "How does the status of the signal change?";
+"A3" = "When a signal is submitted it starts with status 'Help needed'. When somebody decides to answer the signal he/she changes the status to 'Somebody on the way' so that other people know. If for example the person arrives at the place but needs some assistance the status can be changed back to 'Help needed'. When the animal finally receives the needed help the signal is marked as 'Solved'. Signals are color-coded in red, orange and green according to their status.";
+"Q4" = "Does this app track my location?";
+"A4" = "No. Your location is obtained and used only locally on your device. It will not be recorded on a server or used with any other purpose beside notifiying you of animals in need in your area.";

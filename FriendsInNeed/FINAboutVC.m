@@ -10,6 +10,7 @@
 #import "FINMailComposer.h"
 
 @interface FINAboutVC ()
+@property (weak, nonatomic) IBOutlet UIView *toolbar;
 
 @end
 
@@ -18,22 +19,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    _toolbar.layer.shadowColor = [UIColor lightGrayColor].CGColor;
+    _toolbar.layer.shadowOpacity = 1.0f;
+    _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 - (IBAction)onCloseButtonTapped:(id)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

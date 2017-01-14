@@ -351,8 +351,11 @@
         [self setPhotoSourceSavedPhotos];
         [self showPhotoPicker];
     }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
     [photoModeAlert addAction:takePhoto];
     [photoModeAlert addAction:chooseExisting];
+    [photoModeAlert addAction:cancel];
     [self presentViewController:photoModeAlert animated:YES completion:^{}];
 }
 

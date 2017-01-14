@@ -24,8 +24,12 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This permission is needed so that you can take photos and attach them to signals</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>In order to alert you about animals in need around you the application needs to know your current location.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This permission is needed so that you can attach photos from your photo library to signals</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

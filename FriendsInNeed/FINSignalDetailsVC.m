@@ -13,6 +13,7 @@
 #import "FINGlobalConstants.pch"
 #import "FINComment.h"
 #import "FINError.h"
+#import "FINLoginVC.h"
 
 #define kTitleIndex     0
 #define kAuthorIndex    1
@@ -472,6 +473,12 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([[FINDataManager sharedManager] userIsLogged] == NO)
+    {
+        [self showLoginScreen];
+        return;
+    }
+    
     if (indexPath.section == kSectionIndexStatus)
     {
         if (_statusIsExpanded)
@@ -516,6 +523,12 @@ enum {
 
 - (IBAction)onAddCommentButton:(id)sender
 {
+    if ([[FINDataManager sharedManager] userIsLogged] == NO)
+    {
+        [self showLoginScreen];
+        return;
+    }
+    
     [_addCommentTextField resignFirstResponder];
 
     [self setSendingCommentMode];
@@ -633,6 +646,14 @@ enum {
                                                           }];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+}
+
+
+- (void)showLoginScreen
+{
+    FINLoginVC *loginVC = [[FINLoginVC alloc] init];
+    loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [self presentViewController:loginVC animated:YES completion:^{}];
 }
 
 @end

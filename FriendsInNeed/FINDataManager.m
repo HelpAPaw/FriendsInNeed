@@ -160,7 +160,10 @@
         
         _lastSignalCheckLocation = nil;
         
-        completionHandler(UIBackgroundFetchResultFailed);
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultFailed);
+        }
     }];
     
     _lastSignalCheckLocation = location;

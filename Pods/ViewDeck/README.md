@@ -12,7 +12,7 @@
 
 ViewDeck is a framework to manage side menus of all kinds. It supports left and right menus and manages the presentation of the side menus both programmatically and through user gestures.
 
-The hart of ViewDeck is `IIViewDeckController`, which is a container view controller. You can then assign your center view controller to it as well as side view controllers. `IIViewDeckController` makes sure your content view controllers are added to the view controller hierarchy their views are added to the view hierarchy when needed.
+The heart of ViewDeck is `IIViewDeckController`, which is a container view controller. You can then assign your center view controller to it as well as side view controllers. `IIViewDeckController` makes sure your content view controllers are added to the view controller hierarchy their views are added to the view hierarchy when needed.
 
 ViewDeck does not provide any kind of configurable menus. It is up to you to assign your center and side view controllers to ViewDeck so that ViewDeck can then take over and present them as necessary.
 
@@ -23,7 +23,7 @@ Of course ViewDeck plays nice with existing container view controllers such as `
 ## Requirements
 
 - Base SDK: iOS 10
-- Deployment Target: iOS 9.0 or greater
+- Deployment Target: iOS 8.0 or greater
 - Xcode 8.x
 
 ## Try it out
@@ -88,9 +88,11 @@ ViewDeck supports a left and a right side view controller. Each of these can be 
 
 You can also switch view controllers in mid flight. Just assign a view controller to the appropriate property and the view deck controller will do the rest:
 
-	// prepare view controllers
-	UIViewController* newController = [[UIViewController alloc] init];
-	self.viewDeckController.rightController = newController;
+```objc
+// prepare view controllers
+UIViewController* newController = [[UIViewController alloc] init];
+self.viewDeckController.rightController = newController;
+```
 
 You can also use this to remove a side controller by just setting it to `nil`.
 

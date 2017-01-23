@@ -13,6 +13,8 @@
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
 #import <ViewDeck/ViewDeck.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -28,6 +30,8 @@
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
     [backendless.userService setStayLoggedIn:YES];
     
+    [[Crashlytics sharedInstance] setDebugMode:YES];
+    [Fabric with:@[[Crashlytics class]]];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     

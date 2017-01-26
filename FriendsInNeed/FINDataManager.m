@@ -42,6 +42,19 @@
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     
+    NSNumber *isValidUserToken = @NO;
+    @try {
+        isValidUserToken = [backendless.userService isValidUserToken];
+    } @catch (NSException *exception) {
+        NSLog(@"Crashed with exception %@", exception);
+    } @catch (Fault *fault) {
+        NSLog(@"Fault: %@", fault);
+    }
+    if ([isValidUserToken boolValue] == NO)
+    {
+        [backendless.userService logout];
+    }
+    
     return self;
 }
 

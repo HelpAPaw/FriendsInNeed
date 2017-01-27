@@ -56,6 +56,8 @@ enum {
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
+@property (weak, nonatomic) IBOutlet UIVisualEffectView *addCommentBlurBackground1;
+@property (weak, nonatomic) IBOutlet UIVisualEffectView *addCommentBlurBackground2;
 @property (weak, nonatomic) IBOutlet UITextField *addCommentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
@@ -101,7 +103,7 @@ enum {
         {
             [_comments addObjectsFromArray:comments];
             [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self determineIfAddCommentShadowShouldBeVisible];
+//            [self determineIfAddCommentShadowShouldBeVisible];
         }
         else
         {
@@ -118,13 +120,7 @@ enum {
     _toolbar.layer.shadowColor = [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:0.5f].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
-    
-    // Add upper line border on the comment view
-    CALayer *upperBorder = [CALayer layer];
-    upperBorder.backgroundColor = [[UIColor colorWithWhite:0.8f alpha:1.0f] CGColor];
-    upperBorder.frame = CGRectMake(0, 0, CGRectGetWidth(_addCommentView.frame), 0.5f);
-    [_addCommentView.layer addSublayer:upperBorder];
-    
+       
     _addCommentView.layer.shadowOffset = CGSizeMake(0, -2);
     _addCommentView.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     
@@ -158,7 +154,15 @@ enum {
 {
     [super viewDidAppear:animated];
     
-    [self determineIfAddCommentShadowShouldBeVisible];
+    // Fix a problem with UIVisualEffectView in iOS 10
+    // http://stackoverflow.com/questions/39671408/uivisualeffectview-in-ios-10
+    [UIView animateWithDuration:0.3 animations:^{
+        _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    }];
+    
+    // Temporarily commented because it interferes with the blur view
+//    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -207,7 +211,7 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [self determineIfAddCommentShadowShouldBeVisible];
+//    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)determineIfAddCommentShadowShouldBeVisible
@@ -472,15 +476,15 @@ enum {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[FINDataManager sharedManager] userIsLogged] == NO)
-    {
-        [self showLoginScreen];
-        return;
-    }
-    
+{   
     if (indexPath.section == kSectionIndexStatus)
     {
+        if ([[FINDataManager sharedManager] userIsLogged] == NO)
+        {
+            [self showLoginScreen];
+            return;
+        }
+        
         if (_statusIsExpanded)
         {
             if (_status != indexPath.row)
@@ -603,7 +607,7 @@ enum {
     }];
     
     _keybaordIsShown = YES;
-    [self determineIfAddCommentShadowShouldBeVisible];
+//    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 - (void)keyboardWillHide:(NSNotification *)note
@@ -630,7 +634,7 @@ enum {
     }];
     
     _keybaordIsShown = NO;
-    [self determineIfAddCommentShadowShouldBeVisible];
+//    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
 

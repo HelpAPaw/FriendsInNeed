@@ -13,6 +13,7 @@ class CustomToolbar: UIToolbar {
      removes the hair line from toolbar
      */
     override func layoutSubviews() {
+        super.layoutSubviews()
         for single in self.subviews {
             for s in single.subviews {
                 if s.isKind(of: UIImageView.self) && s.frame.height < 2 {

@@ -115,7 +115,7 @@ enum {
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     
-    self.navigationItem.title = @"Signals Details";
+    self.navigationItem.title = NSLocalizedString(@"Signals Details",nil);
     
     _toolbar.layer.shadowColor = [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:0.5f].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;

@@ -1,0 +1,30 @@
+
+/* Class = "UILabel"; text = "You need to register before you can submit signals"; ObjectID = "5kY-zC-Bse"; */
+"5kY-zC-Bse.text" = "Трябва да се регистрирате преди да може да подавата сигнали";
+
+/* Class = "UIButton"; normalTitle = "Why?"; ObjectID = "60E-TK-uuz"; */
+"60E-TK-uuz.normalTitle" = "Защо?";
+
+/* Class = "UILabel"; text = "Phone:"; ObjectID = "ChW-NI-d1N"; */
+"ChW-NI-d1N.text" = "Тел:";
+
+/* Class = "UILabel"; text = "Email:"; ObjectID = "K16-C2-XCi"; */
+"K16-C2-XCi.text" = "Емейл:";
+
+/* Class = "UISegmentedControl"; Pzg-IJ-Iml.segmentTitles[0] = "Вход"; ObjectID = "Pzg-IJ-Iml"; */
+"Pzg-IJ-Iml.segmentTitles[0]" = "Вход";
+
+/* Class = "UISegmentedControl"; Pzg-IJ-Iml.segmentTitles[1] = "Регистрация"; ObjectID = "Pzg-IJ-Iml"; */
+"Pzg-IJ-Iml.segmentTitles[1]" = "Регистрация";
+
+/* Class = "UIBarButtonItem"; title = "Отмени"; ObjectID = "QzC-98-9as"; */
+"QzC-98-9as.title" = "Отмени";
+
+/* Class = "UILabel"; text = "Password:"; ObjectID = "ma8-2h-gbd"; */
+"ma8-2h-gbd.text" = "Парола:";
+
+/* Class = "UILabel"; text = "Name:"; ObjectID = "saT-hO-LZA"; */
+"saT-hO-LZA.text" = "Име:";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "wbC-vS-778"; */
+"wbC-vS-778.normalTitle" = "Вход";

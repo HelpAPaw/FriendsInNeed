@@ -26,18 +26,18 @@
     
     switch (_signal.status) {
         case FINSignalStatus2:
-            statusString = @"Solved";
+            statusString = NSLocalizedString(@"Solved",nil);
             break;
         case FINSignalStatus1:
-            statusString = @"Somebody on the way";
+            statusString = NSLocalizedString(@"Somebody on the way",nil);
             break;
             
         default:
-            statusString = @"Help needed";
+            statusString = NSLocalizedString(@"Help needed",nil);
             break;
     }
     
-    self.subtitle = [NSString stringWithFormat:@"Status: %@", statusString];
+    self.subtitle = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
 }
 
 @end

@@ -60,3 +60,7 @@
 "Somebody on the way" = "Някой е на път";
 "Solved" = "Решен";
 "Comments" = "Коментари";
+
+//Signal
+"(empty description)" = "(празно описание)";
+"Status: %@" = "Статус: %@";

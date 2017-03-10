@@ -11,11 +11,13 @@
 #import "FINGlobalConstants.pch"
 #import "FINError.h"
 
+#import "Help_A_Paw-Swift.h"
+
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
 @interface FINLoginVC ()
-@property (weak, nonatomic) IBOutlet UIToolbar *topToolbar;
+@property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *containerScrollView;

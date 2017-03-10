@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */; };
 		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
@@ -75,6 +76,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Help A Paw-Bridging-Header.h"; sourceTree = "<group>"; };
+		147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
@@ -220,6 +223,7 @@
 		F38B72ED1C00E04F00FBE20C /* FriendsInNeed */ = {
 			isa = PBXGroup;
 			children = (
+				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
 				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
@@ -263,6 +267,7 @@
 				F35906091E059CC700A61060 /* FINFaqCell.h */,
 				F359060A1E059CC700A61060 /* FINFaqCell.m */,
 				F359060B1E059CC700A61060 /* FINFaqCell.xib */,
+				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -366,6 +371,7 @@
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = NJRZ88GCVL;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -523,6 +529,7 @@
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
+				147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
@@ -638,12 +645,16 @@
 			baseConfigurationReference = 5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -652,11 +663,14 @@
 			baseConfigurationReference = E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

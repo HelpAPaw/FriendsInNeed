@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,7 +25,7 @@
                 <outlet property="registerLoginButton" destination="wbC-vS-778" id="IOw-VC-npA"/>
                 <outlet property="segmentControl" destination="Pzg-IJ-Iml" id="vZR-Hp-3fh"/>
                 <outlet property="toolbarBackground" destination="STi-ZM-raM" id="AwE-zP-32v"/>
-                <outlet property="topToolbar" destination="ocI-Gl-ZIK" id="oZw-tA-4uP"/>
+                <outlet property="topToolbar" destination="ocI-Gl-ZIK" id="6Ho-k6-Nii"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="whyButton" destination="60E-TK-uuz" id="KKg-gy-iCC"/>
             </connections>
@@ -39,7 +39,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocI-Gl-ZIK">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ocI-Gl-ZIK" customClass="CustomToolbar" customModule="Help_A_Paw" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                     <items>
                         <barButtonItem title="Cancel" id="QzC-98-9as">

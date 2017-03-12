@@ -14,16 +14,16 @@
 "Success!" = "Успех!";
 "A confirmation link has been sent on your email. Please click it to complete your registration." = "Линк за потвърждение е изпратен на имейла ви. Моля кликнете на него за да завършите регистрацията си.";
 "ОК" = "Добре";
-"Something went wrong! Server said:\n%@" = "Нещо се обърка! Сървъра каза:\n%@";
+"Something went wrong! Server said:\n%@" = "Нещо се обърка! Сървърът каза:\n%@";
 "Ooops!" = "Ооопс!";
 "Why do you want my phone number?" = "Защо искате телефонния ми номер?";
-"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted." = "Въвеждането на вашия телефонен номер  не се изисква за регистрацията. Въпреки това, ние силно ви препоръчваме да го направите, за да може да сев свържем с вас ако доброволец се нуждае от информация за сигнал, който сте подали.";
+"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted." = "Въвеждането на вашия телефонен номер  не се изисква за регистрацията. Въпреки това ние силно ви препоръчваме да го направите, за да може да сев свържем с вас ако доброволец се нуждае от информация за сигнал, който сте подали.";
 "I see" = "Разбрах";
 
 //FinMapVc.m
-"Empty description" = "Празмо описание";
+"Empty description" = "Празно описание";
 "Please enter a description of the signal." = "Моля въведете описание на сигнала.";
-"Your signal was submitted but the attached photo was not. The problem is:\n%@" = "Вашият сигнал беше приет, но снимката не. Проблема е:\n%@";
+"Your signal was submitted but the attached photo was not. The problem is:\n%@" = "Вашият сигнал беше приет, но снимката не. Проблемът е:\n%@";
 "Thank you!"= "Благодарим";
 "Take Photo" = "Направете снимка";
 "Choose Existing" = "Изберете съществуваща";
@@ -39,7 +39,6 @@
 //MailComposser.m
 "Your mail client is not set up.\nYou can reach us at help.a.paw.app@gmail.com" = "Вашият емейл клиент не е конфигуриран.\nВие може да се свържете с нас на help.a.paw@gmail.com";
 
-
 //AboutUs
 "Q1" = "Как работи това приложение?";
 "A1" = "Ако видите бездомно животно, което се нуждае от помощ, но по някаква причина не може да предоставите помощта си, можете да подадете сигнал, като отбележите мястото и опишите ситуацията. Други хора, които са наблизо ще получат известие за това. Надяваме се някой да реагира на сигнала и да помогне на животното.";
@@ -49,9 +48,6 @@
 "A3" = "Когато се подаде сигнал, той започва със статус 'Необходима помощ'. Когато някой реши да отговори на този сигнал / тя променя статуса си на 'Някой е на път', така че другите хора узнаят. Ако например лицето пристигне на мястото, но се нуждае от още помощ , то статута може да бъде променен обратно към 'Необходима помощ'. Когато животното накрая получава необходимата помощ сигналът е маркиран като 'Решен'. Сигналите са кодирани с цвят в червено, оранжево и зелено в зависимост от техния статус.";
 "Q4" = "Това приложение следи ли местоположението ми?";
 "A4" = "Не. Вашето местоположение се получава и използва само локално на устройството ви. Тя няма да бъде записано на сървъра или да се използва с някаква друга цел, освен да ви уведомим за животни в нужда във вашия район.";
-
-
-
 
 //SignalDetailsVC.m
 "Signals Details" = "Детайли на сигнала";

@@ -1,6 +1,6 @@
 PODS:
   - Backendless-ios-SDK (3.0.44)
-  - Crashlytics (3.8.3):
+  - Crashlytics (3.8.4):
     - Fabric (~> 1.6.3)
   - Fabric (1.6.11)
   - ViewDeck (3.1.0)
@@ -13,10 +13,10 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Backendless-ios-SDK: 4f7bec980154a9371ad9ba7edbf53e02b33a76e3
-  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
+  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
   Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
 PODFILE CHECKSUM: edcb44976baeee6a5919524c8a8cac238b35f6f1
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.0

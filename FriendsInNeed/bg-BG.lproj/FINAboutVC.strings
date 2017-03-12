@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "Contact us"; ObjectID = "Yt7-Wc-BCb"; */
+"Yt7-Wc-BCb.normalTitle" = "Свържете се с нас";
+
+/* Class = "UILabel"; text = "Help A Paw   "; ObjectID = "hAH-v4-6Vs"; */
+"hAH-v4-6Vs.text" = "Help A Paw   ";
+
+/* Class = "UILabel"; text = "© Milen Marinov 2017"; ObjectID = "l2N-z4-3II"; */
+"l2N-z4-3II.text" = "© Милен Маринов 2017";
+
+/* Class = "UILabel"; text = "About"; ObjectID = "vAr-ib-d49"; */
+"vAr-ib-d49.text" = "За приложението";
+
+/* Class = "UILabel"; text = "v1.0 (007)"; ObjectID = "zhZ-td-XqK"; */
+"zhZ-td-XqK.text" = "v1.0 (007)";

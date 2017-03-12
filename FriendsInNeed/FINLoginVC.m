@@ -11,11 +11,13 @@
 #import "FINGlobalConstants.pch"
 #import "FINError.h"
 
+#import "Help_A_Paw-Swift.h"
+
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
 @interface FINLoginVC ()
-@property (weak, nonatomic) IBOutlet UIToolbar *topToolbar;
+@property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 @property (weak, nonatomic) IBOutlet UIScrollView *containerScrollView;
@@ -74,7 +76,7 @@
 - (void)setupRegistrationView
 {
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        _hintLabel.text = @"Become a member";
+        _hintLabel.text = NSLocalizedString(@"Become a member", nil);
         _nameLabel.hidden = NO;
         _nameTextField.hidden = NO;
         _phoneLabel.hidden = NO;
@@ -86,9 +88,9 @@
         
         [UIView performWithoutAnimation:^{
             //For immediate change
-            _registerLoginButton.titleLabel.text = @"Register";
+            _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Register", nil)];
             //To keep the title after state changes (e.g. user taps)
-            [_registerLoginButton setTitle:@"Register" forState:UIControlStateNormal];
+            [_registerLoginButton setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal];
             [_registerLoginButton layoutIfNeeded];
         }];
         
@@ -99,7 +101,7 @@
 - (void)setupLoginView
 {
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
-        _hintLabel.text = @"Please enter your credentials";
+        _hintLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Please enter your credentials", nil)];
         _nameLabel.hidden = YES;
         _nameTextField.hidden = YES;
         _phoneLabel.hidden = YES;
@@ -110,9 +112,9 @@
         _loadingIndicatorTopConstraintRegister.active = NO;
         
         //For immediate change
-        _registerLoginButton.titleLabel.text = @"Login";
+        _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Login", nil)];
         //To keep the title after state changes (e.g. user taps)
-        [_registerLoginButton setTitle:@"Login" forState:UIControlStateNormal];
+        [_registerLoginButton setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
         
         _passwordTextField.returnKeyType = UIReturnKeyGo;
         
@@ -148,10 +150,10 @@
             
             if (!error)
             {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Success!"
-                                                                               message:@"A confirmation link has been sent on your email. Please click it to complete your registration."
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success!", nil)
+                                                                               message:NSLocalizedString(@"A confirmation link has been sent on your email. Please click it to complete your registration.",nil)
                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           [self setupLoginView];
@@ -162,12 +164,12 @@
             }
             else
             {
-                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message];
+                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
                                                                                message:errorMessage
                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                       }];
@@ -192,12 +194,12 @@
             }
             else 
             {
-                NSString *errorMessage = [NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message];
+                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
                                                                                message:errorMessage
                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                       }];
@@ -249,10 +251,10 @@
 
 - (IBAction)onWhyPhoneButton:(id)sender
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Why do you want my phone number?"
-                                                                   message:@"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted."
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Why do you want my phone number?",nil)
+                                                                   message:NSLocalizedString(@"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted.",nil)
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"I see"
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"I see",nil)
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];

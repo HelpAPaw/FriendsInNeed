@@ -102,11 +102,11 @@ enum
         {
             if ([[FINDataManager sharedManager] userIsLogged])
             {
-                title = @"Logout";
+                title = NSLocalizedString(@"Logout",nil);
             }
             else
             {
-                title = @"Login";
+                title = NSLocalizedString(@"Login",nil);
             }
             break;
         }
@@ -114,13 +114,13 @@ enum
 //            title = @"Settings";
 //            break;
         case kFAQ:
-            title = @"FAQ";
+            title = NSLocalizedString(@"FAQ",nil);
             break;
         case kFeedback:
-            title = @"Feedback";
+            title = NSLocalizedString(@"Feedback",nil);
             break;
         case kAbout:
-            title = @"About";
+            title = NSLocalizedString(@"About",nil);
             break;
             
         default:

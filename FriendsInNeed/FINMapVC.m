@@ -283,10 +283,10 @@
     // Input validation
     if ((_signalTitleField.text == nil) || [_signalTitleField.text isEqualToString:@""])
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Empty description"
-                                                                       message:@"Please enter a description of the signal."
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Empty description",nil)
+                                                                       message:NSLocalizedString(@"Please enter a description of the signal.",nil)
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                 style:UIAlertActionStyleDefault
                                                               handler:^(UIAlertAction * action) {
                                                                   [self dismissViewControllerAnimated:YES completion:nil];
@@ -308,12 +308,12 @@
             // Signal saved but photo was not
             if (error)
             {
-                NSMutableString *message = [NSMutableString stringWithFormat:@"Your signal was submitted but the attached photo was not. The problem is:\n%@", error.message];
+                NSMutableString *message = [NSMutableString stringWithFormat:NSLocalizedString(@"Your signal was submitted but the attached photo was not. The problem is:\n%@",nil), error.message];
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Thank you!"
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Thank you!",nil)
                                                                                message:message
                                                                         preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           // Add new annotation to map and focus it when OK button is pressed
@@ -343,15 +343,15 @@
 {
     UIAlertController *photoModeAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:@"Take Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [self setPhotoSourceCamera];
         [self showPhotoPicker];
     }];
-    UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:@"Choose Existing" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+    UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose Existing",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
         [self setPhotoSourceSavedPhotos];
         [self showPhotoPicker];
     }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil) style:UIAlertActionStyleCancel handler:nil];
     
     [photoModeAlert addAction:takePhoto];
     [photoModeAlert addAction:chooseExisting];
@@ -631,10 +631,10 @@
 
 - (void)showAlertForError:(FINError *)error
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                   message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
+                                                                   message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message]
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                                               [self dismissViewControllerAnimated:YES completion:nil];

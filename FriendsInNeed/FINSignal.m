@@ -33,7 +33,7 @@
     // Protection for wrong type. Usually NSNull if signal was recorded with empty title.
     if (![title isKindOfClass:[NSString class]])
     {
-        title = @"(empty description)";
+        title = NSLocalizedString(@"(empty description)",nil);
     }
     
     return title;

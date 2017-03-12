@@ -7,10 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */; };
+		1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA721E73011B006F0B0E /* FINMenuVC.xib */; };
+		1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA771E730663006F0B0E /* FINFaqVC.xib */; };
+		1420BA7A1E7306A4006F0B0E /* FINAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */; };
+		1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */; };
+		147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */; };
+		147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D011E72D47E007B1017 /* FINLoginVC.xib */; };
+		147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D0B1E72E6D2007B1017 /* Localizable.strings */; };
+		148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148912CE1E72F94A00655DD0 /* FINMapVC.xib */; };
 		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
-		F31FDD2B1DC4ABFC00076B56 /* FINMenuVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
 		F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */; };
 		F32711D21CCAFBAD00E51AEA /* ic_call@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711D01CCAFBAD00E51AEA /* ic_call@3x.png */; };
@@ -19,9 +27,7 @@
 		F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711DA1CCB8CFF00E51AEA /* ic_camera@3x.png */; };
 		F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */ = {isa = PBXBuildFile; fileRef = F32711DE1CCCCA3D00E51AEA /* FINComment.m */; };
 		F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */; };
-		F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */; };
 		F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */; };
-		F338000E1C96325B0080FACD /* FINSignalDetailsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F338000C1C96325B0080FACD /* FINSignalDetailsCell.xib */; };
 		F33800121C9785A10080FACD /* pin_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800111C9785A10080FACD /* pin_red.png */; };
 		F33800141C97872F0080FACD /* pin_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800131C97872F0080FACD /* pin_red@2x.png */; };
 		F33800191C978BA50080FACD /* pin_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800151C978BA50080FACD /* pin_green.png */; };
@@ -36,16 +42,13 @@
 		F3439D801E1F01BC003857DB /* ic_close_x_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F3439D7D1E1F01BC003857DB /* ic_close_x_white@2x.png */; };
 		F3439D811E1F01BC003857DB /* ic_close_x_white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F3439D7E1E1F01BC003857DB /* ic_close_x_white@3x.png */; };
 		F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35905F71E054EE800A61060 /* FINAboutVC.m */; };
-		F35905FA1E054EE800A61060 /* FINAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F35905F81E054EE800A61060 /* FINAboutVC.xib */; };
 		F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FB1E0555D200A61060 /* ic_close_x.png */; };
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
 		F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FD1E0555D200A61060 /* ic_close_x@3x.png */; };
 		F35906021E05821C00A61060 /* FINMailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906011E05821C00A61060 /* FINMailComposer.m */; };
 		F35906071E058D4200A61060 /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906051E058D4200A61060 /* FINFaqVC.m */; };
-		F35906081E058D4200A61060 /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F35906061E058D4200A61060 /* FINFaqVC.xib */; };
 		F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F359060A1E059CC700A61060 /* FINFaqCell.m */; };
 		F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F359060B1E059CC700A61060 /* FINFaqCell.xib */; };
-		F370875F1E197BA2005B24D8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F370875E1E197BA2005B24D8 /* Localizable.strings */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -67,14 +70,31 @@
 		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
-		F3C484741C6C111D0067A169 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C484721C6C111D0067A169 /* FINLoginVC.xib */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
-		F3C484791C75514D0067A169 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C484771C75514D0067A169 /* FINMapVC.xib */; };
 		F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */; };
 		F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1420BA6D1E72FF40006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.xib"; sourceTree = "<group>"; };
+		1420BA6F1E72FF4A006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsVC.xib; sourceTree = "<group>"; };
+		1420BA711E73011B006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMenuVC.xib; sourceTree = "<group>"; };
+		1420BA741E73011D006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMenuVC.strings"; sourceTree = "<group>"; };
+		1420BA761E730663006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINFaqVC.xib; sourceTree = "<group>"; };
+		1420BA791E730666006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINFaqVC.strings"; sourceTree = "<group>"; };
+		1420BA7B1E7306A4006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINAboutVC.xib; sourceTree = "<group>"; };
+		1420BA7E1E7306A7006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINAboutVC.strings"; sourceTree = "<group>"; };
+		1420BA801E730854006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsCell.xib; sourceTree = "<group>"; };
+		1420BA841E7308B9006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.xib"; sourceTree = "<group>"; };
+		147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Help A Paw-Bridging-Header.h"; sourceTree = "<group>"; };
+		147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
+		147F2CF81E72D2EC007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		147F2D021E72D48F007B1017 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINLoginVC.xib; sourceTree = "<group>"; };
+		147F2D061E72DC9B007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINLoginVC.strings"; sourceTree = "<group>"; };
+		147F2D0A1E72E6D2007B1017 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
+		148912D11E72FC2F00655DD0 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINMapVC.xib"; sourceTree = "<group>"; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,7 +102,6 @@
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
 		F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuVC.h; sourceTree = "<group>"; };
 		F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuVC.m; sourceTree = "<group>"; };
-		F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuVC.xib; sourceTree = "<group>"; };
 		F32711CD1CCABC5D00E51AEA /* ic_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call.png; sourceTree = "<group>"; };
 		F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_call@2x.png"; sourceTree = "<group>"; };
 		F32711D01CCAFBAD00E51AEA /* ic_call@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_call@3x.png"; sourceTree = "<group>"; };
@@ -93,10 +112,8 @@
 		F32711DE1CCCCA3D00E51AEA /* FINComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINComment.m; sourceTree = "<group>"; };
 		F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsVC.h; sourceTree = "<group>"; };
 		F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsVC.m; sourceTree = "<group>"; };
-		F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsVC.xib; sourceTree = "<group>"; };
 		F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsCell.h; sourceTree = "<group>"; };
 		F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsCell.m; sourceTree = "<group>"; };
-		F338000C1C96325B0080FACD /* FINSignalDetailsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsCell.xib; sourceTree = "<group>"; };
 		F33800111C9785A10080FACD /* pin_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin_red.png; sourceTree = "<group>"; };
 		F33800131C97872F0080FACD /* pin_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pin_red@2x.png"; sourceTree = "<group>"; };
 		F33800151C978BA50080FACD /* pin_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin_green.png; sourceTree = "<group>"; };
@@ -113,7 +130,6 @@
 		F3439D7E1E1F01BC003857DB /* ic_close_x_white@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x_white@3x.png"; sourceTree = "<group>"; };
 		F35905F61E054EE800A61060 /* FINAboutVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAboutVC.h; sourceTree = "<group>"; };
 		F35905F71E054EE800A61060 /* FINAboutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAboutVC.m; sourceTree = "<group>"; };
-		F35905F81E054EE800A61060 /* FINAboutVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINAboutVC.xib; sourceTree = "<group>"; };
 		F35905FB1E0555D200A61060 /* ic_close_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_x.png; sourceTree = "<group>"; };
 		F35905FC1E0555D200A61060 /* ic_close_x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@2x.png"; sourceTree = "<group>"; };
 		F35905FD1E0555D200A61060 /* ic_close_x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@3x.png"; sourceTree = "<group>"; };
@@ -121,11 +137,9 @@
 		F35906031E05823800A61060 /* FINMailComposer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINMailComposer.h; sourceTree = "<group>"; };
 		F35906041E058D4200A61060 /* FINFaqVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqVC.h; sourceTree = "<group>"; };
 		F35906051E058D4200A61060 /* FINFaqVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqVC.m; sourceTree = "<group>"; };
-		F35906061E058D4200A61060 /* FINFaqVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqVC.xib; sourceTree = "<group>"; };
 		F35906091E059CC700A61060 /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
 		F359060A1E059CC700A61060 /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
 		F359060B1E059CC700A61060 /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
-		F370875E1E197BA2005B24D8 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,10 +170,8 @@
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
 		F3C484701C6C111D0067A169 /* FINLoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLoginVC.h; sourceTree = "<group>"; };
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
-		F3C484721C6C111D0067A169 /* FINLoginVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINLoginVC.xib; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
-		F3C484771C75514D0067A169 /* FINMapVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMapVC.xib; sourceTree = "<group>"; };
 		F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuCell.h; sourceTree = "<group>"; };
 		F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuCell.m; sourceTree = "<group>"; };
 		F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuCell.xib; sourceTree = "<group>"; };
@@ -220,6 +232,7 @@
 		F38B72ED1C00E04F00FBE20C /* FriendsInNeed */ = {
 			isa = PBXGroup;
 			children = (
+				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
 				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
@@ -229,16 +242,16 @@
 				F38B72F21C00E04F00FBE20C /* AppDelegate.m */,
 				F3C484701C6C111D0067A169 /* FINLoginVC.h */,
 				F3C484711C6C111D0067A169 /* FINLoginVC.m */,
-				F3C484721C6C111D0067A169 /* FINLoginVC.xib */,
+				147F2D011E72D47E007B1017 /* FINLoginVC.xib */,
 				F3C484751C75514D0067A169 /* FINMapVC.h */,
 				F3C484761C75514D0067A169 /* FINMapVC.m */,
-				F3C484771C75514D0067A169 /* FINMapVC.xib */,
+				148912CE1E72F94A00655DD0 /* FINMapVC.xib */,
 				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
 				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
-				F33800071C8E3F320080FACD /* FINSignalDetailsVC.xib */,
+				1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */,
 				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
 				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
-				F338000C1C96325B0080FACD /* FINSignalDetailsCell.xib */,
+				1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */,
 				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
 				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
 				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
@@ -248,21 +261,22 @@
 				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
 				F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */,
 				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
-				F31FDD291DC4ABFC00076B56 /* FINMenuVC.xib */,
+				1420BA721E73011B006F0B0E /* FINMenuVC.xib */,
 				F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */,
 				F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */,
 				F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */,
 				F35905F61E054EE800A61060 /* FINAboutVC.h */,
 				F35905F71E054EE800A61060 /* FINAboutVC.m */,
-				F35905F81E054EE800A61060 /* FINAboutVC.xib */,
+				1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */,
 				F35906031E05823800A61060 /* FINMailComposer.h */,
 				F35906011E05821C00A61060 /* FINMailComposer.m */,
 				F35906041E058D4200A61060 /* FINFaqVC.h */,
 				F35906051E058D4200A61060 /* FINFaqVC.m */,
-				F35906061E058D4200A61060 /* FINFaqVC.xib */,
+				1420BA771E730663006F0B0E /* FINFaqVC.xib */,
 				F35906091E059CC700A61060 /* FINFaqCell.h */,
 				F359060A1E059CC700A61060 /* FINFaqCell.m */,
 				F359060B1E059CC700A61060 /* FINFaqCell.xib */,
+				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -324,7 +338,7 @@
 				F33800131C97872F0080FACD /* pin_red@2x.png */,
 				F33800111C9785A10080FACD /* pin_red.png */,
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
-				F370875E1E197BA2005B24D8 /* Localizable.strings */,
+				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
@@ -366,6 +380,7 @@
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = NJRZ88GCVL;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -381,6 +396,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"bg-BG",
 			);
 			mainGroup = F38B72E21C00E04F00FBE20C;
 			productRefGroup = F38B72EC1C00E04F00FBE20C /* Products */;
@@ -403,22 +419,22 @@
 				F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */,
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
-				F370875F1E197BA2005B24D8 /* Localizable.strings in Resources */,
+				147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */,
 				F3439D7F1E1F01BC003857DB /* ic_close_x_white.png in Resources */,
 				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
-				F33800091C8E3F320080FACD /* FINSignalDetailsVC.xib in Resources */,
+				1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */,
 				F3439D811E1F01BC003857DB /* ic_close_x_white@3x.png in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
 				F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */,
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
-				F35906081E058D4200A61060 /* FINFaqVC.xib in Resources */,
-				F31FDD2B1DC4ABFC00076B56 /* FINMenuVC.xib in Resources */,
+				1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */,
+				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
 				F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */,
 				F33800141C97872F0080FACD /* pin_red@2x.png in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
-				F338000E1C96325B0080FACD /* FINSignalDetailsCell.xib in Resources */,
-				F3C484741C6C111D0067A169 /* FINLoginVC.xib in Resources */,
+				1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */,
+				147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */,
 				F39C39441C9D8C1C007A2D8E /* ic_dropdown.png in Resources */,
 				F32711DB1CCB8CFF00E51AEA /* ic_camera@2x.png in Resources */,
 				F338001B1C978BA50080FACD /* pin_orange.png in Resources */,
@@ -432,11 +448,11 @@
 				F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */,
 				F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */,
 				F338001A1C978BA50080FACD /* pin_green@2x.png in Resources */,
-				F35905FA1E054EE800A61060 /* FINAboutVC.xib in Resources */,
+				1420BA7A1E7306A4006F0B0E /* FINAboutVC.xib in Resources */,
 				F39C39451C9D8C1C007A2D8E /* ic_dropdown@2x.png in Resources */,
 				F39C393B1C9A99F3007A2D8E /* logo.png in Resources */,
 				F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */,
-				F3C484791C75514D0067A169 /* FINMapVC.xib in Resources */,
+				148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */,
 				F33800231C98CA350080FACD /* ic_menu.png in Resources */,
 				F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */,
 				F33800121C9785A10080FACD /* pin_red.png in Resources */,
@@ -523,6 +539,7 @@
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
+				147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
@@ -536,10 +553,83 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1420BA6D1E72FF40006F0B0E /* bg-BG */,
+				1420BA6F1E72FF4A006F0B0E /* Base */,
+			);
+			name = FINSignalDetailsVC.xib;
+			sourceTree = "<group>";
+		};
+		1420BA721E73011B006F0B0E /* FINMenuVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1420BA711E73011B006F0B0E /* Base */,
+				1420BA741E73011D006F0B0E /* bg-BG */,
+			);
+			name = FINMenuVC.xib;
+			sourceTree = "<group>";
+		};
+		1420BA771E730663006F0B0E /* FINFaqVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1420BA761E730663006F0B0E /* Base */,
+				1420BA791E730666006F0B0E /* bg-BG */,
+			);
+			name = FINFaqVC.xib;
+			sourceTree = "<group>";
+		};
+		1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1420BA7B1E7306A4006F0B0E /* Base */,
+				1420BA7E1E7306A7006F0B0E /* bg-BG */,
+			);
+			name = FINAboutVC.xib;
+			sourceTree = "<group>";
+		};
+		1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1420BA801E730854006F0B0E /* Base */,
+				1420BA841E7308B9006F0B0E /* bg-BG */,
+			);
+			name = FINSignalDetailsCell.xib;
+			sourceTree = "<group>";
+		};
+		147F2D011E72D47E007B1017 /* FINLoginVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				147F2D021E72D48F007B1017 /* Base */,
+				147F2D061E72DC9B007B1017 /* bg-BG */,
+			);
+			name = FINLoginVC.xib;
+			sourceTree = "<group>";
+		};
+		147F2D0B1E72E6D2007B1017 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				147F2D0A1E72E6D2007B1017 /* en */,
+				147F2D0C1E72E6D9007B1017 /* bg-BG */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		148912CE1E72F94A00655DD0 /* FINMapVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				148912CD1E72F94A00655DD0 /* Base */,
+				148912D11E72FC2F00655DD0 /* bg-BG */,
+			);
+			name = FINMapVC.xib;
+			sourceTree = "<group>";
+		};
 		F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F38B73001C00E04F00FBE20C /* Base */,
+				147F2CF81E72D2EC007B1017 /* bg-BG */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -551,6 +641,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -597,6 +688,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -638,12 +730,16 @@
 			baseConfigurationReference = 5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -652,11 +748,14 @@
 			baseConfigurationReference = E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Milen.FriendsInNeed;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

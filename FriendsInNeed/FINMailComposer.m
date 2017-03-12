@@ -33,7 +33,7 @@
     }
     else
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops", nil)
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
                                                                        message:NSLocalizedString(@"Your mail client is not set up.\nYou can reach us at help.a.paw.app@gmail.com", nil)
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)

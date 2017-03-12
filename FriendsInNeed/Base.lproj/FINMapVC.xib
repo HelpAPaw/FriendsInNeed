@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINMapVC">
+            <connections>
+                <outlet property="addSignalButton" destination="ttH-Qm-6yO" id="4MH-vp-Oho"/>
+                <outlet property="addSignalView" destination="1V9-Vl-MM8" id="xgx-bH-yTF"/>
+                <outlet property="btnPhoto" destination="7PG-tS-RcE" id="KQO-Dc-l9y"/>
+                <outlet property="btnSendSignal" destination="VRP-un-208" id="cjZ-fx-oTn"/>
+                <outlet property="liSendSignal" destination="bHt-D4-pOj" id="qo2-2F-86l"/>
+                <outlet property="mapView" destination="Vzw-BA-6AS" id="yuT-dx-yfK"/>
+                <outlet property="signalTitleField" destination="gGJ-xu-E0V" id="Dut-G5-5zI"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="Brj-wt-V4N"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT" userLabel="Main View">
+            <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzw-BA-6AS">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="cgi-WK-N7P"/>
+                    </connections>
+                </mapView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ttH-Qm-6yO">
+                    <rect key="frame" x="278" y="462" width="22" height="22"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onAddSignalButton:" destination="-1" eventType="touchUpInside" id="ZEh-w4-6gG"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Vzw-BA-6AS" secondAttribute="trailing" id="1L4-vy-sW4"/>
+                <constraint firstItem="Vzw-BA-6AS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7HH-Qn-u3B"/>
+                <constraint firstAttribute="bottom" secondItem="ttH-Qm-6yO" secondAttribute="bottom" constant="20" id="JIG-0F-Jlh"/>
+                <constraint firstAttribute="bottom" secondItem="Vzw-BA-6AS" secondAttribute="bottom" id="Rlx-L2-fvx"/>
+                <constraint firstItem="Vzw-BA-6AS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pUk-6q-AIT"/>
+                <constraint firstAttribute="trailing" secondItem="ttH-Qm-6yO" secondAttribute="trailing" constant="20" id="ykJ-5t-Mcu"/>
+            </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+        </view>
+        <view alpha="0.90000000000000002" contentMode="scaleToFill" id="1V9-Vl-MM8">
+            <rect key="frame" x="0.0" y="0.0" width="487" height="34"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PG-tS-RcE" userLabel="Photo Button">
+                    <rect key="frame" x="2" y="2" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="30" id="FHC-Hi-yf9"/>
+                        <constraint firstAttribute="height" constant="30" id="MWr-bY-VZ0"/>
+                    </constraints>
+                    <state key="normal" image="ic_camera.png"/>
+                    <connections>
+                        <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
+                    </connections>
+                </button>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="signal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
+                    <rect key="frame" x="34" y="2" width="405" height="30"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRP-un-208">
+                    <rect key="frame" x="439" y="2" width="46" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="46" id="8az-Nt-Rrn"/>
+                        <constraint firstAttribute="height" constant="30" id="VHK-FT-ieE"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                    <state key="normal" title="Send">
+                        <color key="titleColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onSendButton:" destination="-1" eventType="touchUpInside" id="2sc-Ry-hD2"/>
+                    </connections>
+                </button>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-D4-pOj">
+                    <rect key="frame" x="452" y="7" width="20" height="20"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="VRP-un-208" secondAttribute="centerY" id="09p-pt-l1l"/>
+                <constraint firstItem="7PG-tS-RcE" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="6Uh-oP-5NZ"/>
+                <constraint firstAttribute="bottom" secondItem="VRP-un-208" secondAttribute="bottom" constant="2" id="Dw1-SK-sF0"/>
+                <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
+                <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="7PG-tS-RcE" secondAttribute="trailing" constant="2" id="NvF-h9-llb"/>
+                <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="Oor-5C-VMS"/>
+                <constraint firstItem="VRP-un-208" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="gM2-gN-ujb"/>
+                <constraint firstAttribute="bottom" secondItem="7PG-tS-RcE" secondAttribute="bottom" constant="2" id="iXV-7e-kfw"/>
+                <constraint firstItem="7PG-tS-RcE" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="iZM-Fr-dIR"/>
+                <constraint firstItem="gGJ-xu-E0V" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="2" id="pfm-tb-KO6"/>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="vke-fx-Jun"/>
+                <constraint firstAttribute="bottom" secondItem="gGJ-xu-E0V" secondAttribute="bottom" constant="2" id="wgb-Fo-uwn"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="631.5" y="0.0"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_camera.png" width="25" height="20"/>
+    </resources>
+</document>

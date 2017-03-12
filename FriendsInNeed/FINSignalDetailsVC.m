@@ -115,7 +115,7 @@ enum {
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     
-    self.navigationItem.title = @"Signals Details";
+    self.navigationItem.title = NSLocalizedString(@"Signals Details",nil);
     
     _toolbar.layer.shadowColor = [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:0.5f].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;
@@ -295,7 +295,7 @@ enum {
                 statusLabelCell.textLabel.textColor = [UIColor grayColor];
             }
             
-            statusLabelCell.textLabel.text = @"Status";
+            statusLabelCell.textLabel.text = NSLocalizedString(@"Status",nil);
             
             cell = statusLabelCell;
             break;
@@ -320,15 +320,15 @@ enum {
                 switch (_status) {
                     case 0:
                         statusImage = [UIImage imageNamed:@"pin_red"];
-                        statusString = @"Help needed";
+                        statusString = NSLocalizedString(@"Help needed",nil);
                         break;
                     case 1:
                         statusImage = [UIImage imageNamed:@"pin_orange"];
-                        statusString = @"Somebody on the way";
+                        statusString = NSLocalizedString(@"Somebody on the way",nil);
                         break;
                     case 2:
                         statusImage = [UIImage imageNamed:@"pin_green"];
-                        statusString = @"Solved";
+                        statusString =NSLocalizedString(@"Solved",nil);
                         break;
                         
                     default:
@@ -341,19 +341,19 @@ enum {
                     case kCellIndexStatus0:
                         
                         statusImage = [UIImage imageNamed:@"pin_red"];
-                        statusString = @"Help needed";
+                        statusString = NSLocalizedString(@"Help needed",nil);
                         break;
                         
                     case kCellIndexStatus1:
                         
                         statusImage = [UIImage imageNamed:@"pin_orange"];
-                        statusString = @"Somebody on the way";
+                        statusString = NSLocalizedString(@"Somebody on the way",nil);
                         break;
                         
                     case kCellIndexStatus2:
                         
                         statusImage = [UIImage imageNamed:@"pin_green"];
-                        statusString = @"Solved";
+                        statusString = NSLocalizedString(@"Solved",nil);
                         break;
                         
                     default:
@@ -389,7 +389,7 @@ enum {
                 commentsLabelCell.textLabel.textColor = [UIColor grayColor];
             }
             
-            commentsLabelCell.textLabel.text = @"Comments";
+            commentsLabelCell.textLabel.text = NSLocalizedString(@"Comments",nil);
             
             cell = commentsLabelCell;
             break;
@@ -640,10 +640,10 @@ enum {
 
 - (void)showAlertForError:(FINError *)error
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Ooops!"
-                                                                   message:[NSString stringWithFormat:@"Something went wrong! Server said:\n%@", error.message]
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
+                                                                   message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message]
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK"
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                                               [self dismissViewControllerAnimated:YES completion:nil];

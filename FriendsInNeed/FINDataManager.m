@@ -15,7 +15,6 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
-@property (strong, nonatomic) NSMutableDictionary *signalPhotosCache;
 
 @end
 
@@ -38,7 +37,6 @@
     self = [super init];
     
     _nearbySignals = [NSMutableArray new];
-    _signalPhotosCache = [NSMutableDictionary new];
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     
@@ -226,7 +224,7 @@
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
             [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
                 
-                savedSignal.photo = photo;
+               // savedSignal.photo = photo;
                 completion(savedSignal, nil);
             } error:^(Fault *fault) {
                 
@@ -346,26 +344,8 @@
 
 - (void)getPhotoForSignal:(FINSignal *)signal
 {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
     
-        UIImage *cachedImage = [_signalPhotosCache objectForKey:signal.signalID];
-        if (cachedImage)
-        {
-            signal.photo = cachedImage;
-        }
-        else
-        {
-            NSLog(@"Getting photo for signal %@", signal.signalID);
-            
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
-            NSData *data = [NSData dataWithContentsOfURL:url];
-            signal.photo = [[UIImage alloc] initWithData:data];
-            if (signal.photo)
-            {
-                [_signalPhotosCache setObject:signal.photo forKey:signal.signalID];
-            }
-        }
-//    });
+    signal.photoUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
 }
 
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion

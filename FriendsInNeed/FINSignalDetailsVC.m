@@ -15,6 +15,9 @@
 #import "FINError.h"
 #import "FINLoginVC.h"
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
+
 #define kTitleIndex     0
 #define kAuthorIndex    1
 #define kDateIndex      2
@@ -274,13 +277,15 @@ enum {
             [detailsCell setAuthor:_annotation.signal.authorName];
             [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
             [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.date]];
-            if (_annotation.signal.photo)
+            if (_annotation.signal.photoUrl)
             {
-                [detailsCell setPhoto:_annotation.signal.photo];
+                
+                [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
             
             
             cell = detailsCell;
+            
             break;
         }
         case kSectionIndexStatusHeader:
@@ -440,6 +445,20 @@ enum {
     }
     
     return cell;
+}
+// Code dublication with finMapVc
+-(void) imageGetterFrom:(NSURL *)url forCell:(FINSignalDetailsCell *)cell {
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager loadImageWithURL:url
+                      options:0
+                     progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {}
+                    completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        if (image && finished) {
+                            [cell setPhoto:image];
+                        }
+                    }];
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;

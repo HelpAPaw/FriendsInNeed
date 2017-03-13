@@ -12,6 +12,9 @@
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
+
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
@@ -223,9 +226,10 @@
         {
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
             [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
-                
-               // savedSignal.photo = photo;
-                completion(savedSignal, nil);
+                savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
+                [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
+                    completion(savedSignal, nil);
+                }];
             } error:^(Fault *fault) {
                 
                 FINError *error = [[FINError alloc] initWithFault:fault];

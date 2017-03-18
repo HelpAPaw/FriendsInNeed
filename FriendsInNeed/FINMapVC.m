@@ -12,6 +12,9 @@
 #import "FINAnnotation.h"
 #import <ViewDeck/ViewDeck.h>
 
+#import <SDWebImage/UIImageView+WebCache.h>
+
+
 #define kAddSignalViewYposition 15.0f
 #define kAddSignalViewYbounce   10.0f
 #define kButtonBlueColor [UIColor colorWithRed:13.0f/255.0f green:95.0f/255.0f blue:255.0f/255.0f alpha:1.0f]
@@ -589,10 +592,10 @@
         FINAnnotation *annotation = (FINAnnotation *)view.annotation;
         [annotation updateAnnotationSubtitle];
         
-        // If there is a signal photo, set ti as the left accessory view
-        if (annotation.signal.photo)
+        // If there is a signal photo, set it as the left accessory view
+        if (annotation.signal.photoUrl)
         {
-            [self setImage:annotation.signal.photo forAnnotationView:view];
+            [self imageGetterFrom:annotation.signal.photoUrl forAnnotationView:view];
         }
     }
 }
@@ -609,11 +612,27 @@
     navController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:navController animated:YES completion:^{}];
 }
-
+//Code dublication with FiNSignalDetailVC
+-(void) imageGetterFrom:(NSURL *)url forAnnotationView:(MKAnnotationView *)annotationView{
+    
+    SDWebImageManager *manager = [SDWebImageManager sharedManager];
+    [manager loadImageWithURL:url
+                      options:0
+                    progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {}
+     completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+         if (image && finished) {
+         printf("%ld", (long)cacheType);
+         [self setImage:image forAnnotationView:annotationView];
+         
+     }
+     }];
+    
+}
 - (void)setImage:(UIImage *)image forAnnotationView:(MKAnnotationView *)annotationView
 {
     UIImageView *signalImageView = [[UIImageView alloc] initWithImage:image];
     CGRect imageFrame = signalImageView.frame;
+    
     imageFrame.size.height = 44.0;
     imageFrame.size.width  = 44.0;
     signalImageView.frame = imageFrame;

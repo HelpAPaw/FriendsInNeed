@@ -123,7 +123,7 @@
                 NSLog(@"New signal: %@", receivedSignal.title);                
             }
             
-            [self getPhotoForSignal:receivedSignal];
+            receivedSignal.photoUrl = [self getPhotoUrlForSignal:receivedSignal];
             
             // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
             [tempNearbySignals addObject:receivedSignal];
@@ -275,7 +275,7 @@
         {
             GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
             FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
-            [self getPhotoForSignal:signal];
+            signal.photoUrl = [self getPhotoUrlForSignal:signal];
             
             completion(signal, nil);
         }
@@ -346,10 +346,9 @@
     }];
 }
 
-- (void)getPhotoForSignal:(FINSignal *)signal
+- (NSURL *)getPhotoUrlForSignal:(FINSignal *)signal
 {
-    
-    signal.photoUrl = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
 }
 
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion

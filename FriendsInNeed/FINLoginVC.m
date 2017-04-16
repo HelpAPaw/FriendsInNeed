@@ -12,7 +12,8 @@
 #import "FINError.h"
 
 #import "Help_A_Paw-Swift.h"
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
@@ -133,9 +134,43 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
+- (IBAction)onLoginButton:(id)sender {
+    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
+    [login
+     logInWithReadPermissions: @[@"public_profile"]
+     fromViewController:self
+     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+         if (error) {
+             NSLog(@"Process error");
+         } else if (result.isCancelled) {
+             NSLog(@"Cancelled");
+         } else {
+                     FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+                     @try {
+                         BackendlessUser *user = [backendless.userService loginWithFacebookSDK:token fieldsMapping:nil];
+                         [self dismiss];
+                         NSLog(@"USER: %@", user);
+                     }
+                     @catch (Fault *fault) {
+                         NSLog(@"openURL: %@", fault);
+                     }
+             
+             NSLog(@"Logged in");
+         }
+     }];
+}
+-(void)dismiss{
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        NSLog(@"Dismiss completed");
+    }];
+}
 
 - (IBAction)onRegisterButton:(id)sender
 {
+
+
+
     if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
     {
         //TODO: add input validation
@@ -209,7 +244,6 @@
         }];
     }
 }
-
 #pragma mark - UITextField Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FinLocationManager.h"
+#import "FINLocationManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

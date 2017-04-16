@@ -15,6 +15,8 @@
 #import <ViewDeck/ViewDeck.h>
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 
 @interface AppDelegate ()
 
@@ -26,6 +28,8 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    BOOL r = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                    didFinishLaunchingWithOptions:launchOptions];
     
     [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
     [backendless.userService setStayLoggedIn:YES];
@@ -65,7 +69,13 @@
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    return YES;
+    @try {
+        [backendless initAppFault];
+    }
+    @catch (Fault *fault) {
+        NSLog(@"didFinishLaunchingWithOptions: %@", fault);
+    }
+    return r;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -83,8 +93,57 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [FBSDKAppEvents activateApp];
 }
+   
+- (BOOL)application:(UIApplication *)application
+                openURL:(NSURL *)url
+                options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+        
+        BOOL result = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                      openURL:url
+                                                            sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                                   annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    
+    /*Doesnt work as shown in BackendlessUser tutorial
+    when this function gets called accsess token is stil nil
+     so we gonna do it differently 
+     */
+//        FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+//        @try {
+//            BackendlessUser *user = [backendless.userService loginWithFacebookSDK:token fieldsMapping:nil];
+//            NSLog(@"USER: %@", user);
+//        }
+//        @catch (Fault *fault) {
+//            NSLog(@"openURL: %@", fault);
+//        }
+        return result;
+    
+    }
+//- (BOOL)application:(UIApplication *)application
+//            openURL:(NSURL *)url
+//  sourceApplication:(NSString *)sourceApplication
+//         annotation:(id)annotation {
+//    BOOL result = [[FBSDKApplicationDelegate sharedInstance]
+//                   application:application
+//                   openURL:url
+//                   sourceApplication:sourceApplication
+//                   annotation:annotation];
+//
+//    FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+//     NSLog(@"openURL: %@", token);
+//    NSLog(result ? @"Yes" : @"No");
+//
+//
+//    @try {
+//       BackendlessUser *user = [backendless.userService loginWithFacebookSDK:token fieldsMapping:nil];
+//       NSLog(@"USER: %@", user);
+//    }
+//    @catch (Fault *fault) {
+//        NSLog(@"openURL: %@", fault);
+//    }
+//    return result;
+//}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
@@ -118,5 +177,8 @@
 {
     [[FINDataManager sharedManager] getNewSignalsForLastLocationWithCompletionHandler:completionHandler];
 }
+    
+    
+    
 
 @end

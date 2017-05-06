@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *whyButton;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
+@property (weak, nonatomic) IBOutlet UIButton *facebookLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintRegister;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintLogin;
@@ -49,6 +50,13 @@
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];
+}
+
+- (void)setupScrollViewContentSize
+{
+    CGSize scrollSize = _containerScrollView.contentSize;
+    scrollSize.height = _facebookLoginButton.frame.origin.y + _facebookLoginButton.frame.size.height + 20;
+    _containerScrollView.contentSize = scrollSize;
 }
 
 #pragma mark - Gesture Recognizers
@@ -96,7 +104,12 @@
         }];
         
         _passwordTextField.returnKeyType = UIReturnKeyNext;
-    } completion:^(BOOL finished){}];
+    } completion:^(BOOL finished){
+        if (finished)
+        {
+            [self setupScrollViewContentSize];
+        }
+    }];
 }
 
 - (void)setupLoginView
@@ -127,7 +140,12 @@
         {
             [_phoneTextField resignFirstResponder];
         }
-    } completion:^(BOOL finished){}];
+    } completion:^(BOOL finished){
+        if (finished)
+        {
+            [self setupScrollViewContentSize];
+        }
+    }];
 }
 
 - (IBAction)onCancelButton:(id)sender

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,6 +14,7 @@
                 <outlet property="activityIndicator" destination="Bge-ec-XTM" id="SDo-6r-6cA"/>
                 <outlet property="containerScrollView" destination="HPy-Be-HpR" id="Zbb-IT-2bd"/>
                 <outlet property="emailTextField" destination="Sas-B9-08t" id="DYx-Lx-riA"/>
+                <outlet property="facebookLoginButton" destination="dFX-Gd-gp1" id="9zl-pj-lKi"/>
                 <outlet property="hintLabel" destination="5kY-zC-Bse" id="Sat-FQ-lhO"/>
                 <outlet property="loadingIndicatorTopConstraintLogin" destination="6Wn-Fa-oq0" id="kOk-rv-eHL"/>
                 <outlet property="loadingIndicatorTopConstraintRegister" destination="9qF-u9-UyT" id="Nvb-pm-tKW"/>
@@ -228,19 +229,27 @@
                                 <action selector="onWhyPhoneButton:" destination="-1" eventType="touchUpInside" id="fxb-7D-kRa"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1">
-                            <rect key="frame" x="132" y="304" width="150" height="50"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pV-KB-Drb" userLabel="Facebook separator">
+                            <rect key="frame" x="0.0" y="304" width="414" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="150" id="3WB-eX-3b0"/>
-                                <constraint firstAttribute="height" constant="50" id="ZfC-E0-2EA"/>
+                                <constraint firstAttribute="height" constant="1" id="TSb-Cq-kRe"/>
                             </constraints>
-                            <state key="normal" backgroundImage="facebook-sign-in-button-png"/>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1" userLabel="Facebook button">
+                            <rect key="frame" x="42" y="325" width="330" height="110"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="330" id="Ao1-gx-IxU"/>
+                                <constraint firstAttribute="height" constant="110" id="svh-HA-TXj"/>
+                            </constraints>
+                            <state key="normal" image="facebook-sign-in-button-png"/>
                             <connections>
                                 <action selector="onLoginButton:" destination="-1" eventType="touchUpInside" id="3bQ-9R-Vki"/>
                             </connections>
                         </button>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="top" secondItem="2pV-KB-Drb" secondAttribute="bottom" constant="20" id="30m-yZ-cnW"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="2" id="3G3-BY-gJT"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="top" secondItem="saT-hO-LZA" secondAttribute="bottom" constant="3" id="6AQ-Bo-z4U"/>
                         <constraint firstItem="Bge-ec-XTM" firstAttribute="top" secondItem="aLU-m9-fxe" secondAttribute="bottom" constant="14" id="6Wn-Fa-oq0"/>
@@ -251,27 +260,29 @@
                         <constraint firstItem="saT-hO-LZA" firstAttribute="top" secondItem="aLU-m9-fxe" secondAttribute="bottom" constant="15" id="HmN-5n-19T"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="ChW-NI-d1N" secondAttribute="bottom" constant="3" id="I0p-li-4Z5"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="top" secondItem="HPy-Be-HpR" secondAttribute="top" constant="15" id="IvO-Xt-Hpv"/>
+                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="centerX" secondItem="atK-Ne-sKb" secondAttribute="centerX" id="LTt-VP-Bc2"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="trailing" secondItem="ChW-NI-d1N" secondAttribute="trailing" id="Mpf-Oq-oPJ"/>
                         <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="30" id="Ofh-9Q-pt6"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="V55-1V-vb4"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="ChW-NI-d1N" secondAttribute="bottom" constant="3" id="Vzc-6r-Njd"/>
-                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="top" secondItem="wbC-vS-778" secondAttribute="bottom" constant="40" id="Wcg-NX-9Xa"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="top" secondItem="5kY-zC-Bse" secondAttribute="bottom" id="X6G-vf-NoC"/>
                         <constraint firstItem="ChW-NI-d1N" firstAttribute="top" secondItem="wdr-Ti-WQ7" secondAttribute="bottom" constant="15" id="Xs1-dH-w8n"/>
                         <constraint firstItem="Bge-ec-XTM" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="bFe-CH-e1X"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="bKY-1h-k5G"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="2" id="c5n-VT-mj5"/>
                         <constraint firstAttribute="bottom" secondItem="wbC-vS-778" secondAttribute="bottom" constant="80" id="fLt-7Q-uWm"/>
+                        <constraint firstItem="2pV-KB-Drb" firstAttribute="top" secondItem="wbC-vS-778" secondAttribute="bottom" constant="40" id="fQd-it-nzH"/>
                         <constraint firstItem="5kY-zC-Bse" firstAttribute="leading" secondItem="HPy-Be-HpR" secondAttribute="leading" constant="30" id="fVe-AM-2j2"/>
                         <constraint firstItem="Sas-B9-08t" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="hAX-al-IUp"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="60E-TK-uuz" secondAttribute="bottom" id="kEv-am-Wqp"/>
                         <constraint firstItem="Sas-B9-08t" firstAttribute="top" secondItem="K16-C2-XCi" secondAttribute="bottom" constant="3" id="kat-UG-LJd"/>
-                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="centerX" secondItem="wbC-vS-778" secondAttribute="centerX" id="lQI-XX-OTu"/>
                         <constraint firstItem="ChW-NI-d1N" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="op7-ki-p7g"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="ow1-W4-3GM"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="r5g-i4-XP8"/>
                         <constraint firstItem="ma8-2h-gbd" firstAttribute="top" secondItem="Sas-B9-08t" secondAttribute="bottom" constant="15" id="r7O-pJ-ihI"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="tDE-53-6Yd"/>
+                        <constraint firstItem="2pV-KB-Drb" firstAttribute="leading" secondItem="HPy-Be-HpR" secondAttribute="leading" id="tjI-9e-kqQ"/>
+                        <constraint firstAttribute="trailing" secondItem="2pV-KB-Drb" secondAttribute="trailing" id="ulc-dG-gln"/>
                         <constraint firstItem="aLU-m9-fxe" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="vgP-7l-LZ4"/>
                         <constraint firstItem="ma8-2h-gbd" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="zOi-zc-9aA"/>
                     </constraints>

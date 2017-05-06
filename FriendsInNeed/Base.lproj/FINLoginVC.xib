@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -228,6 +228,17 @@
                                 <action selector="onWhyPhoneButton:" destination="-1" eventType="touchUpInside" id="fxb-7D-kRa"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1">
+                            <rect key="frame" x="132" y="304" width="150" height="50"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="150" id="3WB-eX-3b0"/>
+                                <constraint firstAttribute="height" constant="50" id="ZfC-E0-2EA"/>
+                            </constraints>
+                            <state key="normal" backgroundImage="facebook-sign-in-button-png"/>
+                            <connections>
+                                <action selector="onLoginButton:" destination="-1" eventType="touchUpInside" id="3bQ-9R-Vki"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstItem="wbC-vS-778" firstAttribute="top" secondItem="Bge-ec-XTM" secondAttribute="bottom" constant="2" id="3G3-BY-gJT"/>
@@ -244,6 +255,7 @@
                         <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="30" id="Ofh-9Q-pt6"/>
                         <constraint firstItem="wbC-vS-778" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="V55-1V-vb4"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="ChW-NI-d1N" secondAttribute="bottom" constant="3" id="Vzc-6r-Njd"/>
+                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="top" secondItem="wbC-vS-778" secondAttribute="bottom" constant="40" id="Wcg-NX-9Xa"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="top" secondItem="5kY-zC-Bse" secondAttribute="bottom" id="X6G-vf-NoC"/>
                         <constraint firstItem="ChW-NI-d1N" firstAttribute="top" secondItem="wdr-Ti-WQ7" secondAttribute="bottom" constant="15" id="Xs1-dH-w8n"/>
                         <constraint firstItem="Bge-ec-XTM" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="bFe-CH-e1X"/>
@@ -254,6 +266,7 @@
                         <constraint firstItem="Sas-B9-08t" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="hAX-al-IUp"/>
                         <constraint firstItem="atK-Ne-sKb" firstAttribute="top" secondItem="60E-TK-uuz" secondAttribute="bottom" id="kEv-am-Wqp"/>
                         <constraint firstItem="Sas-B9-08t" firstAttribute="top" secondItem="K16-C2-XCi" secondAttribute="bottom" constant="3" id="kat-UG-LJd"/>
+                        <constraint firstItem="dFX-Gd-gp1" firstAttribute="centerX" secondItem="wbC-vS-778" secondAttribute="centerX" id="lQI-XX-OTu"/>
                         <constraint firstItem="ChW-NI-d1N" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="op7-ki-p7g"/>
                         <constraint firstItem="wdr-Ti-WQ7" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="ow1-W4-3GM"/>
                         <constraint firstItem="K16-C2-XCi" firstAttribute="centerX" secondItem="HPy-Be-HpR" secondAttribute="centerX" id="r5g-i4-XP8"/>
@@ -292,4 +305,7 @@
             </constraints>
         </view>
     </objects>
+    <resources>
+        <image name="facebook-sign-in-button-png" width="800" height="300"/>
+    </resources>
 </document>

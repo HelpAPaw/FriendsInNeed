@@ -213,7 +213,8 @@
     coordinate.latitude = locationCoordinate.latitude;
     coordinate.longitude = locationCoordinate.longitude;
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
-    NSString *submitDate = [NSString stringWithFormat:@"%lu", (long)(timeInterval * 1000)];
+    NSString *submitDate = [NSString stringWithFormat:@"%.3f", timeInterval];
+    submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
     

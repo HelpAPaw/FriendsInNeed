@@ -21,6 +21,7 @@
 		14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */; };
 		14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */; };
 		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
+		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
@@ -107,6 +108,7 @@
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
+		F301FE021EDEBA1000880ECE /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
 		F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuVC.h; sourceTree = "<group>"; };
@@ -233,6 +235,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F301FE011EDEB99100880ECE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F301FE021EDEBA1000880ECE /* InputValidator.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
@@ -259,6 +269,7 @@
 		F38B72ED1C00E04F00FBE20C /* FriendsInNeed */ = {
 			isa = PBXGroup;
 			children = (
+				F301FE011EDEB99100880ECE /* Helpers */,
 				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
@@ -561,6 +572,7 @@
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
+				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,

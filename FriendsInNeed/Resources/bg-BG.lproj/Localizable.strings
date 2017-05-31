@@ -19,6 +19,7 @@
 "Why do you want my phone number?" = "Защо искате телефонния ми номер?";
 "Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted." = "Въвеждането на вашия телефонен номер  не се изисква за регистрацията. Въпреки това ние силно ви препоръчваме да го направите, за да може да сев свържем с вас ако доброволец се нуждае от информация за сигнал, който сте подали.";
 "I see" = "Разбрах";
+"Please fill all required fields" = "Моля попълнете всички задължителни полета";
 
 //FinMapVc.m
 "Empty description" = "Празно описание";

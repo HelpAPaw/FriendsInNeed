@@ -11,7 +11,7 @@
 #import "FINLoginVC.h"
 #import "FINAnnotation.h"
 #import <ViewDeck/ViewDeck.h>
-
+#import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 
@@ -284,18 +284,9 @@
     }
     
     // Input validation
-    if ((_signalTitleField.text == nil) || [_signalTitleField.text isEqualToString:@""])
+    BOOL validation = [InputValidator validateInputFor:@[_signalTitleField] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
+    if (!validation)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Empty description",nil)
-                                                                       message:NSLocalizedString(@"Please enter a description of the signal.",nil)
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {
-                                                                  [self dismissViewControllerAnimated:YES completion:nil];
-                                                              }];
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:^{}];
         return;
     }
     

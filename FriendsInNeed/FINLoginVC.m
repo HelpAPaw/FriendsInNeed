@@ -10,10 +10,10 @@
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
 #import "FINError.h"
-
 #import "Help_A_Paw-Swift.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
@@ -152,6 +152,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
+
 - (IBAction)onLoginButton:(id)sender {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login
@@ -177,8 +178,8 @@
          }
      }];
 }
--(void)dismiss{
-    
+-(void)dismiss
+{
     [self dismissViewControllerAnimated:YES completion:^{
         NSLog(@"Dismiss completed");
     }];
@@ -186,12 +187,13 @@
 
 - (IBAction)onRegisterButton:(id)sender
 {
-
-
-
     if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
     {
-        //TODO: add input validation
+        BOOL validation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField, _nameTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
+        if (!validation)
+        {
+            return;
+        }
         
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
@@ -233,6 +235,12 @@
     }
     else
     {
+        BOOL validation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
+        if (!validation)
+        {
+            return;
+        }
+        
         [_activityIndicator startAnimating];
         _registerLoginButton.enabled = NO;
         

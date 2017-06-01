@@ -189,8 +189,8 @@
 {
     if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
     {
-        BOOL validation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField, _nameTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
-        if (!validation)
+        BOOL inputValidation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField, _nameTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
+        if (!inputValidation)
         {
             return;
         }
@@ -235,8 +235,8 @@
     }
     else
     {
-        BOOL validation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
-        if (!validation)
+        BOOL inputValidation = [InputValidator validateInputFor:@[_emailTextField, _passwordTextField] message:NSLocalizedString(@"Please fill all required fields", nil) parent:self];
+        if (!inputValidation)
         {
             return;
         }

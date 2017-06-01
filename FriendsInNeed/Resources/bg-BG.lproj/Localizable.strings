@@ -57,6 +57,7 @@
 "Somebody on the way" = "Някой е на път";
 "Solved" = "Решен";
 "Comments" = "Коментари";
+"Please enter a comment" = "Моля въведете коментар";
 
 //Signal
 "(empty description)" = "(празно описание)";

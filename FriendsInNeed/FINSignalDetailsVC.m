@@ -14,7 +14,7 @@
 #import "FINComment.h"
 #import "FINError.h"
 #import "FINLoginVC.h"
-
+#import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 
@@ -549,6 +549,12 @@ enum {
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
         [self showLoginScreen];
+        return;
+    }
+    
+    BOOL inputValidation = [InputValidator validateInputFor:@[_addCommentTextField] message:NSLocalizedString(@"Please enter a comment", nil) parent:self];
+    if (!inputValidation)
+    {
         return;
     }
     

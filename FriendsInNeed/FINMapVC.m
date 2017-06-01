@@ -685,6 +685,8 @@
 
 - (void)menuButtonTapped:(id)sender
 {
+    [_signalTitleField resignFirstResponder];
+    
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
 }
 

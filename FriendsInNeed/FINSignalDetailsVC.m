@@ -220,7 +220,7 @@ enum {
 - (void)determineIfAddCommentShadowShouldBeVisible
 {
     CGFloat keyboardCompensation;
-    if (_keybaordIsShown)
+    if (_keyboardIsShown)
     {
         keyboardCompensation = _keyboardHeight;
     }
@@ -548,6 +548,7 @@ enum {
 {
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
+        [self.view endEditing:YES];
         [self showLoginScreen];
         return;
     }
@@ -609,6 +610,12 @@ enum {
 #pragma mark - Keyboard show/hide management
 - (void)keyboardWillShow:(NSNotification *)note
 {
+    // If keyboard is already shown there's nothing to do
+    if (_keyboardIsShown)
+    {
+        return;
+    }
+    
     // Get the keyboard height
     CGRect keyboardFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
@@ -631,7 +638,7 @@ enum {
         [_addCommentView setNeedsLayout];
     }];
     
-    _keybaordIsShown = YES;
+    _keyboardIsShown = YES;
 //    [self determineIfAddCommentShadowShouldBeVisible];
 }
 
@@ -658,7 +665,7 @@ enum {
         [_addCommentView setNeedsLayout];
     }];
     
-    _keybaordIsShown = NO;
+    _keyboardIsShown = NO;
 //    [self determineIfAddCommentShadowShouldBeVisible];
 }
 

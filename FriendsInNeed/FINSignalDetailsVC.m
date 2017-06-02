@@ -71,7 +71,7 @@ enum {
 @property (assign, nonatomic) BOOL statusIsExpanded;
 @property (assign, nonatomic) NSUInteger status;
 @property (assign, nonatomic) CGFloat keyboardHeight;
-@property (assign, nonatomic) BOOL keybaordIsShown;
+@property (assign, nonatomic) BOOL keyboardIsShown;
 @property (assign, nonatomic) BOOL commentsAreLoaded;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 

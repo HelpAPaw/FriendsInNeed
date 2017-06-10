@@ -76,6 +76,9 @@
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
+		F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */; };
+		F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */; };
+		F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */; };
 		F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */; };
 		F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */; };
 /* End PBXBuildFile section */
@@ -183,6 +186,9 @@
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
+		F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINSignalDetailsStatusChangeCommentCell.swift; sourceTree = "<group>"; };
+		F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsStatusChangeCommentCell.xib; sourceTree = "<group>"; };
+		F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINStatusHelper.swift; sourceTree = "<group>"; };
 		F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuCell.h; sourceTree = "<group>"; };
 		F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuCell.m; sourceTree = "<group>"; };
 		F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuCell.xib; sourceTree = "<group>"; };
@@ -239,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				F301FE021EDEBA1000880ECE /* InputValidator.swift */,
+				F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -293,6 +300,8 @@
 				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
 				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
 				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
+				F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */,
+				F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */,
 				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
@@ -496,6 +505,7 @@
 				148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */,
 				F33800231C98CA350080FACD /* ic_menu.png in Resources */,
 				F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */,
+				F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */,
 				F33800121C9785A10080FACD /* pin_red.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -574,6 +584,8 @@
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
+				F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */,
+				F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */,
 				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,
 				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,

@@ -53,11 +53,12 @@
 //SignalDetailsVC.m
 "Signals Details" = "Детайли на сигнала";
 "Status" = "Статус";
-"Help needed" = "Необходима помощ";
+"Help needed" = "Нужна е помощ";
 "Somebody on the way" = "Някой е на път";
 "Solved" = "Решен";
 "Comments" = "Коментари";
 "Please enter a comment" = "Моля въведете коментар";
+"%@ changed the status to\n\'%@\'" = "%@ смени статуса на\n\'%@\'";
 
 //Signal
 "(empty description)" = "(празно описание)";

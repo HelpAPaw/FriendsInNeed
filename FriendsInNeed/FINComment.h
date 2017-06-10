@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) NSString *signalID;
 @property (strong, nonatomic) NSString *text;
+@property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSDate *created;
 @property (strong, nonatomic) BackendlessUser *author;
 

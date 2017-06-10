@@ -387,4 +387,23 @@
     }];
 }
 
++ (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText
+{
+    NSError *jsonError;
+    NSData *objectData = [commentText dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&jsonError];
+    if (!jsonError)
+    {
+        NSNumber *newStatusCode = [json objectForKey:@"new"];
+        if (newStatusCode != nil)
+        {
+            return [newStatusCode integerValue];
+        }
+    }
+    
+    return 0;
+}
+
 @end

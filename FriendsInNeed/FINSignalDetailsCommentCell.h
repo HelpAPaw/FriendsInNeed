@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FINSignalDetailsCommentCell : UITableViewCell
+@protocol FINSignalDetailsCommentCellProtocol <NSObject>
+
+- (void)setCommentText:(NSString *)text;
+- (void)setDate:(NSString *)date;
+
+@end
+
+@interface FINSignalDetailsCommentCell : UITableViewCell <FINSignalDetailsCommentCellProtocol>
 
 - (void)setCommentText:(NSString *)text;
 - (void)setAuthor:(NSString *)author;

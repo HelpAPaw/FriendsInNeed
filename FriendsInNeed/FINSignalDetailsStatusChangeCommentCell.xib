@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="82" id="KGk-i7-Jjw" customClass="FINSignalDetailsStatusChangeCommentCell" customModule="Help_A_Paw" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="82"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="82"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:34 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ssM-dm-a1R" userLabel="Date Label">
+                        <rect key="frame" x="8" y="52.5" width="110" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="BV6-Ot-rb8"/>
+                            <constraint firstAttribute="width" constant="110" id="DLW-ts-LAL"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="italicSystem" pointSize="12"/>
+                        <color key="textColor" red="0.55000001190000003" green="0.55000001190000003" blue="0.55000001190000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Milen Marinov changed the status to 'Somebody on the way'" textAlignment="center" lineBreakMode="clip" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="V2u-46-Bg3" userLabel="Comment Label">
+                        <rect key="frame" x="54" y="8" width="258" height="41"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="253" verticalHuggingPriority="251" image="pin_red.png" translatesAutoresizingMaskIntoConstraints="NO" id="BR6-UD-ujv" userLabel="Status Image">
+                        <rect key="frame" x="18" y="12" width="24" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="24" id="R38-wH-3XL"/>
+                            <constraint firstAttribute="height" constant="30" id="WAu-K2-08s"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                <constraints>
+                    <constraint firstItem="ssM-dm-a1R" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="Dvb-z3-B67"/>
+                    <constraint firstItem="V2u-46-Bg3" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="HYV-CT-xGB"/>
+                    <constraint firstItem="BR6-UD-ujv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="4" id="SQt-qG-APK"/>
+                    <constraint firstItem="BR6-UD-ujv" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="10" id="VGT-f5-F3b"/>
+                    <constraint firstItem="V2u-46-Bg3" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="d6E-Jm-Y3K"/>
+                    <constraint firstAttribute="bottom" secondItem="ssM-dm-a1R" secondAttribute="bottom" constant="8" id="gKJ-pP-RqL"/>
+                    <constraint firstItem="ssM-dm-a1R" firstAttribute="top" secondItem="V2u-46-Bg3" secondAttribute="bottom" constant="3.5" id="icf-QP-hE5"/>
+                    <constraint firstItem="V2u-46-Bg3" firstAttribute="leading" secondItem="BR6-UD-ujv" secondAttribute="trailing" constant="12" id="x9u-a3-m4Y"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <connections>
+                <outlet property="imgStatusImageView" destination="BR6-UD-ujv" id="vUz-Ld-QG5"/>
+                <outlet property="lbCommentLabel" destination="V2u-46-Bg3" id="VUj-kN-a8M"/>
+                <outlet property="lbDateLabel" destination="ssM-dm-a1R" id="R0K-ip-zIk"/>
+            </connections>
+            <point key="canvasLocation" x="-49" y="85"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="pin_red.png" width="33" height="40"/>
+    </resources>
+</document>

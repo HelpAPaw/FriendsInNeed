@@ -44,6 +44,8 @@
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion;
 - (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion;
 
++ (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
+
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;
 

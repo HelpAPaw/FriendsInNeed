@@ -26,11 +26,12 @@
 #define kAuthorLabel    @"Author"
 #define kDateLabel      @"Date"
 
-#define kCellIdentifierGeneral    @"GeneralCell"
-#define kCellIdentifierDetails    @"DetailsCell"
-#define kCellIdentifierStatus     @"StatusCell"
-#define kCellIdentifierComment    @"CommentCell"
-#define kCellIdentifierLoading    @"LoadingCell"
+#define kCellIdentifierGeneral          @"GeneralCell"
+#define kCellIdentifierDetails          @"DetailsCell"
+#define kCellIdentifierStatus           @"StatusCell"
+#define kCellIdentifierComment          @"CommentCell"
+#define kCellIdentifierCommentStatus    @"CommentStatusCell"
+#define kCellIdentifierLoading          @"LoadingCell"
 
 
 
@@ -95,28 +96,35 @@ enum {
     return self;
 }
 
-- (void)viewDidLoad
+- (void)getComments
 {
-    [super viewDidLoad];
-    
     [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, FINError *error) {
         
         _commentsAreLoaded = YES;
         if (!error)
         {
+            _comments = [NSMutableArray new];
             [_comments addObjectsFromArray:comments];
-            [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationAutomatic];
-//            [self determineIfAddCommentShadowShouldBeVisible];
+            [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationFade];
+            //            [self determineIfAddCommentShadowShouldBeVisible];
         }
         else
         {
             [self showAlertForError:error];
         }
     }];
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self getComments];
     
     _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, _addCommentView.frame.size.height, 0.0f);
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
+    [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsStatusChangeCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierCommentStatus];
     
     self.navigationItem.title = NSLocalizedString(@"Signals Details",nil);
     
@@ -322,48 +330,13 @@ enum {
             {
                 statusCell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_dropdown"]];
                 
-                switch (_status) {
-                    case 0:
-                        statusImage = [UIImage imageNamed:@"pin_red"];
-                        statusString = NSLocalizedString(@"Help needed",nil);
-                        break;
-                    case 1:
-                        statusImage = [UIImage imageNamed:@"pin_orange"];
-                        statusString = NSLocalizedString(@"Somebody on the way",nil);
-                        break;
-                    case 2:
-                        statusImage = [UIImage imageNamed:@"pin_green"];
-                        statusString =NSLocalizedString(@"Solved",nil);
-                        break;
-                        
-                    default:
-                        break;
-                }
+                statusImage = [FINStatusHelper getStatusImageForCode:_status];
+                statusString = [FINStatusHelper getStatusNameForCode:_status];
             }
             else
             {
-                switch (indexPath.row) {
-                    case kCellIndexStatus0:
-                        
-                        statusImage = [UIImage imageNamed:@"pin_red"];
-                        statusString = NSLocalizedString(@"Help needed",nil);
-                        break;
-                        
-                    case kCellIndexStatus1:
-                        
-                        statusImage = [UIImage imageNamed:@"pin_orange"];
-                        statusString = NSLocalizedString(@"Somebody on the way",nil);
-                        break;
-                        
-                    case kCellIndexStatus2:
-                        
-                        statusImage = [UIImage imageNamed:@"pin_green"];
-                        statusString = NSLocalizedString(@"Solved",nil);
-                        break;
-                        
-                    default:
-                        break;
-                }
+                statusImage = [FINStatusHelper getStatusImageForCode:indexPath.row];
+                statusString = [FINStatusHelper getStatusNameForCode:indexPath.row];
                 
                 if (_status == indexPath.row)
                 {
@@ -404,19 +377,39 @@ enum {
         {
             if (_commentsAreLoaded)
             {
-                FINSignalDetailsCommentCell *commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
+                FINComment *comment = _comments[indexPath.row];
+                
+                UITableViewCell<FINSignalDetailsCommentCellProtocol> *commentCell;
+                NSString *commentText;
+                
+                if ([comment.type isEqualToString:@"status_change"])
+                {
+                    commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierCommentStatus];
+                    
+                    NSInteger newStatusCode = [FINDataManager getNewStatusCodeFromStatusChangedComment:comment.text];
+                    NSString *newStatusString = [FINStatusHelper getStatusNameForCode:newStatusCode];
+                    commentText = [NSString stringWithFormat:NSLocalizedString(@"%@ changed the status to\n\'%@\'", nil), comment.author.name, newStatusString];
+                    
+                    [(FINSignalDetailsStatusChangeCommentCell *)commentCell setStatusImage:[FINStatusHelper getStatusImageForCode:newStatusCode]];
+                } 
+                else
+                {
+                    commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
+                    
+                    [(FINSignalDetailsCommentCell *)commentCell setAuthor:comment.author.name];
+                    
+                    commentText = comment.text;
+                }
+                
                 
                 commentCell.selectionStyle = UITableViewCellSelectionStyleNone;
                 
-                FINComment *comment = _comments[indexPath.row];
-                
-                [commentCell setCommentText:comment.text];
-                [commentCell setAuthor:comment.author.name];
+                [commentCell setCommentText:commentText];
                 [commentCell setDate:[_dateFormatter stringFromDate:comment.created]];
                 
                 cell = commentCell;
             }
-            else 
+            else
             {
                 UITableViewCell *loadingCommentsCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierLoading];
                 if (!loadingCommentsCell)
@@ -518,6 +511,9 @@ enum {
                 [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error != nil) {
                         [self showAlertForError:error];
+                    }
+                    else {
+                        [self getComments];
                     }
                 }];
             }

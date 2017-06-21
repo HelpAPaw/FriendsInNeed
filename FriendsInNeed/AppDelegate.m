@@ -48,7 +48,12 @@
      UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
     
     FINMenuVC *menuVC = [[FINMenuVC alloc] initWithNibName:nil bundle:nil];
-    menuVC.preferredContentSize = CGSizeMake(self.window.frame.size.width - 60, self.window.frame.size.height);
+    
+    CGFloat maxMenuWidth = self.window.frame.size.width - 60;
+    CGFloat menuWidth = 315;
+    menuWidth = menuWidth < maxMenuWidth ? menuWidth : maxMenuWidth;
+    
+    menuVC.preferredContentSize = CGSizeMake(menuWidth, self.window.frame.size.height);
     
     IIViewDeckController *viewDeckController = [[IIViewDeckController alloc] initWithCenterViewController:navController
                                                                                       leftViewController:menuVC];

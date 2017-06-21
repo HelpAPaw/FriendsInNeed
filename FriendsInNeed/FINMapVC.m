@@ -25,7 +25,7 @@
 @interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UIButton *addSignalButton;
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
@@ -68,11 +68,11 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
-    _addSignalButton.tintColor = [UIColor redColor];
-    _addSignalButton.layer.shadowOpacity = 1.0f;
-    _addSignalButton.layer.shadowColor = [UIColor redColor].CGColor;
-    _addSignalButton.layer.shadowOffset = CGSizeMake(0, 0);    
-    _addSignalButton.alpha = 0.0f;
+    _cancelButton.tintColor = [UIColor redColor];
+    _cancelButton.layer.shadowOpacity = 1.0f;
+    _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
+    _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);    
+    _cancelButton.alpha = 0.0f;
     
     _addSignalView.layer.cornerRadius = 5.0f;
     _addSignalView.layer.shadowOpacity = 1.0f;
@@ -221,7 +221,7 @@
     
     [UIView animateWithDuration:0.3f animations:^{
         
-        _addSignalButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
+        _cancelButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
         
         CGRect frame = _addSignalView.frame;
         if (_isInSubmitMode)
@@ -231,13 +231,13 @@
             // Fade pin before removal
             _submitSignalAnnotationView.alpha = 0.0f;
             
-            _addSignalButton.alpha = 0.0f;
+            _cancelButton.alpha = 0.0f;
         }
         else
         {
             frame.origin.y = kAddSignalViewYposition + kAddSignalViewYbounce;
             
-            _addSignalButton.alpha = 1.0f;
+            _cancelButton.alpha = 1.0f;
         }
         _addSignalView.frame = frame;
         
@@ -257,6 +257,8 @@
                     // Reset photo button
                     [_btnPhoto setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
                     _signalPhoto = nil;
+                    
+                    [_signalTitleField resignFirstResponder];
                 }
                 else
                 {
@@ -503,13 +505,15 @@
 
 - (void)didDragMap:(UIGestureRecognizer*)gestureRecognizer
 {
-    if (_isInSubmitMode == NO)
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
-        if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
+        [_signalTitleField resignFirstResponder];
+        
+        if (_isInSubmitMode == NO)
         {
-            [_signalTitleField resignFirstResponder];
             _focusSignalID = nil;
             [self refresh];
+
         }
     }
 }

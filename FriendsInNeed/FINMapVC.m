@@ -350,6 +350,11 @@
     [photoModeAlert addAction:takePhoto];
     [photoModeAlert addAction:chooseExisting];
     [photoModeAlert addAction:cancel];
+    
+    UIPopoverPresentationController *popPresenter = [photoModeAlert popoverPresentationController];
+    popPresenter.sourceView = _btnPhoto;
+    popPresenter.sourceRect = _btnPhoto.bounds;
+    
     [self presentViewController:photoModeAlert animated:YES completion:^{}];
 }
 

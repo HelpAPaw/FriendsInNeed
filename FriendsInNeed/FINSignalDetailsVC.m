@@ -673,9 +673,7 @@ enum {
                                                             preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                             style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                                              [self dismissViewControllerAnimated:YES completion:nil];
-                                                          }];
+                                                          handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
 }

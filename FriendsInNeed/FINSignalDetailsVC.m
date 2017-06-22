@@ -549,7 +549,7 @@ enum {
         return;
     }
     
-    BOOL inputValidation = [InputValidator validateInputFor:@[_addCommentTextField] message:NSLocalizedString(@"Please enter a comment", nil) parent:self];
+    BOOL inputValidation = [InputValidator validateGeneralInputFor:@[_addCommentTextField] message:NSLocalizedString(@"Please enter a comment", nil) parent:self];
     if (!inputValidation)
     {
         return;

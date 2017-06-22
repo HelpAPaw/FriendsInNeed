@@ -14,6 +14,7 @@
 #import "FINAboutVC.h"
 #import "FINMailComposer.h"
 #import "FINFaqVC.h"
+#import "Help_A_Paw-Swift.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -64,7 +65,18 @@ enum
     {
         NSString *userName = [dataManager getUserName];
         NSString *userEmail = [dataManager getUserEmail];
-        _usernameLabel.text = [NSString stringWithFormat:@"%@ (%@)", userName, userEmail];
+        
+        NSString *labelText;
+        if ([InputValidator isValidEmail:userEmail])
+        {
+            labelText = [NSString stringWithFormat:@"%@ (%@)", userName, userEmail];
+        }
+        else
+        {
+            labelText = userName;
+        }
+        
+        _usernameLabel.text = labelText;
         _usernameLabel.hidden = NO;
     }
     else

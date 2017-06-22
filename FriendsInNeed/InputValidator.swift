@@ -33,7 +33,7 @@ import UIKit
     }
     
     static func validateEmail(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
-        return validateInput(for: fields, message: message, parent: parent, validator: isValidEmail(testStr:))
+        return validateInput(for: fields, message: message, parent: parent, validator: isValidEmail(_:))
     }
     
     static func hasText(testStr:String?) -> Bool {
@@ -45,7 +45,7 @@ import UIKit
         return false
     }
     
-    static func isValidEmail(testStr:String?) -> Bool {
+    static func isValidEmail(_ testStr:String?) -> Bool {
         
         guard testStr != nil else { return false }
         

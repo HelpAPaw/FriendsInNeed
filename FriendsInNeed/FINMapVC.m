@@ -139,9 +139,10 @@
     
     if (_isInSubmitMode == NO)
     {
+        [self resizeAddSignalViewForParentViewSize:self.view.frame.size];
+        
+        // Place view outside visible zone
         CGRect frame = _addSignalView.frame;
-        frame.size.width = self.view.frame.size.width - 30.0f;
-        frame.origin.x = 15.0f;
         frame.origin.y = - frame.size.height;
         _addSignalView.frame = frame;
         
@@ -154,6 +155,37 @@
     [super viewWillDisappear:animated];
     
     _focusSignalID = nil;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    // Code here will execute before the rotation begins.
+    // Equivalent to placing it in the deprecated method -[willRotateToInterfaceOrientation:duration:]
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+        // Place code here to perform animations during the rotation.
+        // You can pass nil or leave this block empty if not necessary.
+        [self resizeAddSignalViewForParentViewSize:size];
+        
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        
+        // Code here will execute after the rotation has finished.
+        // Equivalent to placing it in the deprecated method -[didRotateFromInterfaceOrientation:]
+        
+    }];
+}
+
+- (void)resizeAddSignalViewForParentViewSize:(CGSize)parentSize
+{
+    CGFloat margin = 15.0f;
+    
+    CGRect frame = _addSignalView.frame;
+    frame.size.width = parentSize.width - (2 * margin);
+    frame.origin.x = margin;
+    _addSignalView.frame = frame;
 }
 
 - (void)didReceiveMemoryWarning

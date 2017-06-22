@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 @objc class InputValidator: NSObject {
-    static func validateInput(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+    static func validateInput(for fields: Array<UITextField>, message: String, parent: UIViewController, validator: (String?) -> Bool) -> Bool {
         for textField in fields {
-            guard let text = textField.text, !text.isEmpty else {
+            if !validator(textField.text) {
                 // show error
                 let alert = UIAlertController(title: NSLocalizedString("Ooops!", comment: ""), message: message, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) in
@@ -26,5 +26,32 @@ import UIKit
         }
         
         return true
+    }
+    
+    static func validateGeneralInput(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+        return validateInput(for: fields, message: message, parent: parent, validator: hasText(testStr:))
+    }
+    
+    static func validateEmail(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+        return validateInput(for: fields, message: message, parent: parent, validator: isValidEmail(testStr:))
+    }
+    
+    static func hasText(testStr:String?) -> Bool {
+        
+        if !(testStr?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)! {
+            return true
+        }
+        
+        return false
+    }
+    
+    static func isValidEmail(testStr:String?) -> Bool {
+        
+        guard testStr != nil else { return false }
+        
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: testStr)
     }
 }

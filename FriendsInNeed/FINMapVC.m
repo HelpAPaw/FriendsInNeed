@@ -318,7 +318,7 @@
     }
     
     // Input validation
-    BOOL validation = [InputValidator validateInputFor:@[_signalTitleField] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
+    BOOL validation = [InputValidator validateGeneralInputFor:@[_signalTitleField] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
     if (!validation)
     {
         return;

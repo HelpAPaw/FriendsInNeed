@@ -53,6 +53,8 @@
     _lbPhotoNumber.layer.borderWidth = 0.5f;
     _lbPhotoNumber.layer.borderColor = [UIColor blackColor].CGColor;
     
+    _lbTitle.adjustsFontSizeToFitWidth = YES;
+    
     if (_phoneNumber)
     {
         _btnCall.hidden = NO;

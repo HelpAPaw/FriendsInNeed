@@ -20,6 +20,7 @@
 		14F14F861E9A098600977C8E /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */; };
 		14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */; };
 		14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */; };
+		17E21D2BEDD7A88D2D239F1C /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */; };
 		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
@@ -108,6 +109,7 @@
 		14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Help A Paw.entitlements"; sourceTree = "<group>"; };
+		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
 				ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */,
 				14F14F841E9A097400977C8E /* Bolts.framework in Frameworks */,
+				17E21D2BEDD7A88D2D239F1C /* libPods-Help A Paw.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +222,7 @@
 				14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */,
 				14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */,
 				14F14F831E9A097400977C8E /* Bolts.framework */,
+				4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */,
 			);
 			name = Frameworks;
 			path = FriendsInNeed/Resources;
@@ -421,13 +425,13 @@
 		F38B72E31C00E04F00FBE20C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Milen;
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = NJRZ88GCVL;
-						LastSwiftMigration = 0820;
+						LastSwiftMigration = 0900;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -519,13 +523,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Help A Paw-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AFB23CDC957966B2E62B51AC /* [CP] Copy Pods Resources */ = {
@@ -700,14 +707,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -747,14 +760,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -799,7 +818,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -820,7 +840,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

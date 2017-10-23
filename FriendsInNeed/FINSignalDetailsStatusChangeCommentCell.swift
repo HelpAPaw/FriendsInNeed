@@ -32,7 +32,7 @@ class FINSignalDetailsStatusChangeCommentCell: UITableViewCell, FINSignalDetails
         lbDateLabel.text = date
     }
     
-    func setStatusImage(_ image: UIImage) {
+    @objc func setStatusImage(_ image: UIImage) {
         imgStatusImageView.image = image
     }
     

@@ -9,7 +9,7 @@
 import Foundation
 
 class FINStatusHelper: NSObject {
-    static func getStatusNameForCode(_ code: Int) -> String {
+    @objc static func getStatusNameForCode(_ code: Int) -> String {
         switch code {
         case 2:
             return NSLocalizedString("Solved", comment: "")
@@ -20,7 +20,7 @@ class FINStatusHelper: NSObject {
         }
     }
     
-    static func getStatusImageForCode(_ code: Int) -> UIImage {
+    @objc static func getStatusImageForCode(_ code: Int) -> UIImage {
         switch code {
         case 2:
             return #imageLiteral(resourceName: "pin_green.png")

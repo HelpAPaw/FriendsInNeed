@@ -28,11 +28,11 @@ import UIKit
         return true
     }
     
-    static func validateGeneralInput(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+    @objc static func validateGeneralInput(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
         return validateInput(for: fields, message: message, parent: parent, validator: hasText(testStr:))
     }
     
-    static func validateEmail(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+    @objc static func validateEmail(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
         return validateInput(for: fields, message: message, parent: parent, validator: isValidEmail(_:))
     }
     
@@ -45,7 +45,7 @@ import UIKit
         return false
     }
     
-    static func isValidEmail(_ testStr:String?) -> Bool {
+    @objc static func isValidEmail(_ testStr:String?) -> Bool {
         
         guard testStr != nil else { return false }
         

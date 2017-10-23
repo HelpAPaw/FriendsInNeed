@@ -91,6 +91,11 @@
     center.longitude = location.coordinate.longitude;
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
     query.includeMeta = @YES;
+    
+    NSMutableArray *cats = [NSMutableArray new];
+    [cats addObject:@"Debug"];
+    query.categories = cats;
+    
     [backendless.geoService getPoints:query response:^(BackendlessCollection *response) {
         NSLog(@"Received %lu signals", (unsigned long)response.data.count);
         
@@ -216,7 +221,9 @@
     NSString *submitDate = [NSString stringWithFormat:@"%.3f", timeInterval];
     submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
-    GeoPoint *point = [GeoPoint geoPoint:coordinate categories:nil metadata:geoPointMeta];
+    NSMutableArray *cats = [NSMutableArray new];
+    [cats addObject:@"Debug"];
+    GeoPoint *point = [GeoPoint geoPoint:coordinate categories:cats metadata:geoPointMeta];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
         
@@ -267,7 +274,10 @@
 
 - (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:nil];
+    NSMutableArray *cats = [NSMutableArray new];
+    [cats addObject:@"Debug"];
+    
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:cats];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
     [query includeMeta:YES];
     [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {

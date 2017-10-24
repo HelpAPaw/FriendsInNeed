@@ -652,13 +652,12 @@
                       options:0
                     progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {}
      completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-         if (image && finished) {
-         printf("%ld", (long)cacheType);
-         [self setImage:image forAnnotationView:annotationView];
-         
-     }
+         if (image && finished)
+         {
+             printf("%ld", (long)cacheType);
+             [self setImage:image forAnnotationView:annotationView];
+         }
      }];
-    
 }
 - (void)setImage:(UIImage *)image forAnnotationView:(MKAnnotationView *)annotationView
 {

@@ -155,29 +155,34 @@
 
 - (IBAction)onLoginButton:(id)sender {
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login
-     logInWithReadPermissions: @[@"public_profile"]
-     fromViewController:self
-     handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+    [login logInWithReadPermissions: @[@"public_profile"]
+                 fromViewController:self
+                            handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          if (error) {
              NSLog(@"Process error");
          } else if (result.isCancelled) {
              NSLog(@"Cancelled");
          } else {
-                     FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
-                     @try {
-                         BackendlessUser *user = [backendless.userService loginWithFacebookSDK:token fieldsMapping:nil];
-                         [self dismiss];
-                         NSLog(@"USER: %@", user);
-                     }
-                     @catch (Fault *fault) {
-                         NSLog(@"openURL: %@", fault);
-                     }
+             @try {
+                 FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+                 NSString *userId = token.userID;
+                 NSString *tokenString = token.tokenString;
+                 NSDate *expirationDate = token.expirationDate;
+                 NSDictionary *fieldsMapping = @{@"email":@"email"};
+                 BackendlessUser *user = [backendless.userService loginWithFacebookSDK:userId tokenString:tokenString expirationDate:expirationDate fieldsMapping:fieldsMapping];
+                 
+                 [self dismiss];
+                 NSLog(@"USER: %@", user);
+             }
+             @catch (Fault *fault) {
+                 NSLog(@"openURL: %@", fault);
+             }
              
              NSLog(@"Logged in");
          }
      }];
 }
+
 -(void)dismiss
 {
     [self dismissViewControllerAnimated:YES completion:^{

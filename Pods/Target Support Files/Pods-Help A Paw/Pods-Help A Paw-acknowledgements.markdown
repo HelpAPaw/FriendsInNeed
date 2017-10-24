@@ -1,9 +1,9 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## Backendless-ios-SDK
+## Backendless
 
-Copyright (c) 2012-2016 by Backendless.com
+Copyright (c) 2012-2017 by Backendless.com
 
 ## Crashlytics
 

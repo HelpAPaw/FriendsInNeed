@@ -12,9 +12,9 @@
 #import "FINComment.h"
 #import "FINError.h"
 
-#define BCKNDLSS_APP_ID         @"7381F40A-5BA6-6CB5-FF82-1F0334A63B00"
-#define BCKNDLSS_SECRET_KEY     @"***REMOVED***"
-#define BCKNDLSS_VERSION_NUM    @"v1"
+#define BCKNDLSS_APP_ID         @"***REMOVED***"
+#define BCKNDLSS_IOS_API_KEY    @"***REMOVED***"
+#define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
 
 #define kNotificationSignalID   @"NotificationSignalID"
 #define kDefaultMapRegion       4000

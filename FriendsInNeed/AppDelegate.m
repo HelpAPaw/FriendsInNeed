@@ -31,7 +31,7 @@
     BOOL r = [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];
     
-    [backendless initApp:BCKNDLSS_APP_ID secret:BCKNDLSS_SECRET_KEY version:BCKNDLSS_VERSION_NUM];
+    [backendless initApp:BCKNDLSS_APP_ID APIKey:BCKNDLSS_IOS_API_KEY];
     [backendless.userService setStayLoggedIn:YES];
     
     [[Crashlytics sharedInstance] setDebugMode:YES];

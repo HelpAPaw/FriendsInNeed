@@ -96,12 +96,12 @@
     [cats addObject:@"Debug"];
     query.categories = cats;
     
-    [backendless.geoService getPoints:query response:^(BackendlessCollection *response) {
-        NSLog(@"Received %lu signals", (unsigned long)response.data.count);
+    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
+        NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
         
         NSMutableArray *newSignals = [NSMutableArray new];
         NSMutableArray *tempNearbySignals = [NSMutableArray new];
-        for (GeoPoint *receivedGeoPoint in response.data)
+        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
         {
             // Is this protection really needed!?
             if (!receivedGeoPoint)
@@ -233,7 +233,8 @@
         if (photo)
         {
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
-            [backendless.fileService upload:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
+            //TODO: check if files are correctly uploaded
+            [backendless.fileService saveFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
                 savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
                 [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
                     completion(savedSignal, nil);
@@ -280,11 +281,11 @@
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:cats];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
     [query includeMeta:YES];
-    [backendless.geoService getPoints:query response:^(BackendlessCollection *collection) {
+    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *geoPoints) {
         
-        if (collection.data.count > 0)
+        if (geoPoints.count > 0)
         {
-            GeoPoint *geoPoint = (GeoPoint *) collection.data.firstObject;
+            GeoPoint *geoPoint = (GeoPoint *) geoPoints.firstObject;
             FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
             signal.photoUrl = [self getPhotoUrlForSignal:signal];
             
@@ -325,7 +326,8 @@
     user.email = email;
     user.password = password;
     
-    [backendless.userService registering:user response:^void (BackendlessUser *registeredUser) {
+    //TODO: check if registration works
+    [backendless.userService registerUser:user response:^void (BackendlessUser *registeredUser) {
         
         completion(nil);
     } error:^void (Fault *fault) {
@@ -359,22 +361,20 @@
 
 - (NSURL *)getPhotoUrlForSignal:(FINSignal *)signal
 {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_VERSION_NUM, kSignalPhotosDirectory, signal.signalID]];
+    //TODO: check if photos are shown
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_REST_API_KEY, kSignalPhotosDirectory, signal.signalID]];
 }
 
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion
 {
-    BackendlessDataQuery *query = [BackendlessDataQuery query];
-    query.whereClause = [NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID];
-    QueryOptions *queryOptions = [QueryOptions query];
-    queryOptions.sortBy = [NSArray arrayWithObject:@"created"];
-    query.queryOptions = queryOptions;
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID]];
+    //TODO: check if comments are correctly sorted
+    [queryBuilder addSortBy:@"created"];
     
-    [backendless.persistenceService find:[FINComment class] dataQuery:query response:^(BackendlessCollection *collection) {
-        
-        completion(collection.data, nil);
+    [backendless.persistenceService findByClassId:[FINComment class] objectId:nil queryBuilder:queryBuilder response:^(NSArray<FINComment *> *comments) {
+        completion(comments, nil);
     } error:^(Fault *fault) {
-        
         FINError *error = [[FINError alloc] initWithFault:fault];
         completion(nil, error);
     }];

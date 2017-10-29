@@ -26,14 +26,6 @@
     _toolbar.layer.shadowOpacity = 1.0f;
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
     
-    _appNameLabel.layer.shadowColor = [UIColor lightGrayColor].CGColor;
-    _appNameLabel.layer.shadowOpacity = 1.0f;
-    _appNameLabel.layer.shadowOffset = (CGSize){0.0f, 2.0f};
-    
-    _versionLabel.layer.shadowColor = [UIColor lightGrayColor].CGColor;
-    _versionLabel.layer.shadowOpacity = 1.0f;
-    _versionLabel.layer.shadowOffset = (CGSize){0.0f, 2.0f};
-    
     // Set the version label text
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
     NSString *build = [[NSBundle mainBundle] objectForInfoDictionaryKey: (NSString *)kCFBundleVersionKey];

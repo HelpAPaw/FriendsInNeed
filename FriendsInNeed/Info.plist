@@ -65,7 +65,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This permission is needed so that you can take photos and attach them to signals</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>In order to alert you about animals in need around you the application needs to know your current location.</string>
+	<string>In order to alert you about animals that need help around you the application needs to know your current location. If you want to be notified even when you don't use the app - choose Always.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>In order to alert you about animals in need around you the application needs to know your current location.</string>
 	<key>NSLocationUsageDescription</key>

@@ -91,6 +91,7 @@
     center.longitude = location.coordinate.longitude;
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
     query.includeMeta = @YES;
+    query.whereClause = [NSString stringWithFormat:@"metadata.dateSubmitted > %@", [NSDate dateWithTimeIntervalSinceNow:(60 * 60 * 24 * 3)]];
     
     NSMutableArray *cats = [NSMutableArray new];
     [cats addObject:@"Debug"];

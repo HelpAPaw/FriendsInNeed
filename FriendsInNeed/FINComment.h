@@ -11,6 +11,7 @@
 
 @interface FINComment : NSObject
 
+@property (strong, nonatomic) NSString *objectId;
 @property (strong, nonatomic) NSString *signalID;
 @property (strong, nonatomic) NSString *text;
 @property (strong, nonatomic) NSString *type;

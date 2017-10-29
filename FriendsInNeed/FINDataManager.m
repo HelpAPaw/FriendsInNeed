@@ -233,7 +233,6 @@
         if (photo)
         {
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
-            //TODO: check if files are correctly uploaded
             [backendless.fileService saveFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
                 savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
                 [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
@@ -361,7 +360,6 @@
 
 - (NSURL *)getPhotoUrlForSignal:(FINSignal *)signal
 {
-    //TODO: check if photos are shown
     return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_REST_API_KEY, kSignalPhotosDirectory, signal.signalID]];
 }
 
@@ -387,9 +385,16 @@
     comment.author = backendless.userService.currentUser;
     comment.signalID = signal.signalID;
     
-    [backendless.persistenceService save:comment response:^(FINComment *comment) {
-        
-        completion(comment, nil);
+    id<IDataStore>commentsStore = [backendless.data of:[FINComment class]];
+    [commentsStore save:comment response:^(FINComment *comment) {
+        BackendlessUser *author = backendless.userService.currentUser;
+        [commentsStore setRelation:@"author" parentObjectId:comment.objectId childObjects:@[author.objectId] response:^(NSNumber *setRelations) {
+            comment.author = author;
+            completion(comment, nil);
+        } error:^(Fault *fault) {
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(nil, error);
+        }];
     } error:^(Fault *fault) {
         
         FINError *error = [[FINError alloc] initWithFault:fault];

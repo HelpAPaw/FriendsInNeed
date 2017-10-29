@@ -117,6 +117,10 @@
                                                                   target:self
                                                                   action:@selector(menuButtonTapped:)];
     self.navigationItem.leftBarButtonItem = menuButton;
+    
+#ifdef DEBUG
+    self.navigationItem.title = @"Help A Paw (DEBUG)";
+#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated

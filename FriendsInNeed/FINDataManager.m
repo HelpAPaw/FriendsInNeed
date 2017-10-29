@@ -93,10 +93,12 @@
     query.includeMeta = @YES;
     NSDate *threeDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * 3)];
     [NSString stringWithFormat:@"updated > %f", [threeDaysAgo timeIntervalSince1970]];
-    
+
+#ifdef DEBUG
     NSMutableArray *cats = [NSMutableArray new];
     [cats addObject:@"Debug"];
     query.categories = cats;
+#endif
     
     [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
         NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
@@ -224,7 +226,9 @@
     submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     NSMutableArray *cats = [NSMutableArray new];
+#ifdef DEBUG
     [cats addObject:@"Debug"];
+#endif
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:cats metadata:geoPointMeta];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
@@ -277,7 +281,9 @@
 - (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
     NSMutableArray *cats = [NSMutableArray new];
+#ifdef DEBUG
     [cats addObject:@"Debug"];
+#endif
     
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:cats];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];

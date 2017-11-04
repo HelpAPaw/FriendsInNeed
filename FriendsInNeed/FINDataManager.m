@@ -375,10 +375,11 @@
 {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID]];
-    //TODO: check if comments are correctly sorted
-    [queryBuilder addSortBy:@"created"];
+    [queryBuilder setSortBy:@[@"created"]];
+    [queryBuilder addRelated:@"author"];
     
-    [backendless.persistenceService findByClassId:[FINComment class] objectId:nil queryBuilder:queryBuilder response:^(NSArray<FINComment *> *comments) {
+    id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
+    [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
         completion(comments, nil);
     } error:^(Fault *fault) {
         FINError *error = [[FINError alloc] initWithFault:fault];

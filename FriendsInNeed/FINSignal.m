@@ -49,14 +49,40 @@
 {
     BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
     
-    return user.name;
+    //TODO: temporary hack until Backendless provide a solution
+    if ([user isKindOfClass:[BackendlessUser class]])
+    {
+        return user.name;
+    }
+    else if ([user isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *userDict = (NSDictionary *)user;
+        return [userDict objectForKey:@"name"];
+    }
+    else
+    {
+        return @"";
+    }
 }
 
 - (NSString *)authorPhone
 {    
     BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
     
-    return [user getProperty:@"phoneNumber"];;
+    //TODO: temporary hack until Backendless provide a solution
+    if ([user isKindOfClass:[BackendlessUser class]])
+    {
+        return [user getProperty:@"phoneNumber"];
+    }
+    else if ([user isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *userDict = (NSDictionary *)user;
+        return [userDict objectForKey:@"phoneNumber"];
+    }
+    else
+    {
+        return @"";
+    }    
 }
 
 

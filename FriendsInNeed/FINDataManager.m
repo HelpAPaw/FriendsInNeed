@@ -92,8 +92,8 @@
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
     query.includeMeta = @YES;
     NSDate *threeDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * 3)];
-    [NSString stringWithFormat:@"updated > %f", [threeDaysAgo timeIntervalSince1970]];
-
+    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([threeDaysAgo timeIntervalSince1970]*1000)];
+    
 #ifdef DEBUG
     NSMutableArray *cats = [NSMutableArray new];
     [cats addObject:@"Debug"];

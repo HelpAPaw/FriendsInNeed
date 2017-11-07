@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINLoginVC">
             <connections>
@@ -52,7 +57,7 @@
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="N2i-dk-GJ2"/>
                         <barButtonItem width="170" style="plain" id="fCR-rk-0l1">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="Pzg-IJ-Iml">
-                                <rect key="frame" x="122" y="7" width="170" height="30"/>
+                                <rect key="frame" x="142.66666666666666" y="7.6666666666666679" width="128.99999999999997" height="29.000000000000004"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="Login"/>
@@ -237,12 +242,12 @@
                             </constraints>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1" userLabel="Facebook button">
-                            <rect key="frame" x="42" y="325" width="330" height="110"/>
+                            <rect key="frame" x="107" y="325" width="200" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="330" id="Ao1-gx-IxU"/>
-                                <constraint firstAttribute="height" constant="110" id="svh-HA-TXj"/>
+                                <constraint firstAttribute="width" constant="200" id="Ao1-gx-IxU"/>
+                                <constraint firstAttribute="height" constant="40" id="svh-HA-TXj"/>
                             </constraints>
-                            <state key="normal" image="facebook-sign-in-button-png"/>
+                            <state key="normal" image="continue_with_facebook"/>
                             <connections>
                                 <action selector="onLoginButton:" destination="-1" eventType="touchUpInside" id="3bQ-9R-Vki"/>
                             </connections>
@@ -317,6 +322,6 @@
         </view>
     </objects>
     <resources>
-        <image name="facebook-sign-in-button-png" width="800" height="300"/>
+        <image name="continue_with_facebook" width="203" height="39"/>
     </resources>
 </document>

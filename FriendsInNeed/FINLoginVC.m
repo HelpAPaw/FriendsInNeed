@@ -175,7 +175,7 @@
                  NSLog(@"USER: %@", user);
              }
              @catch (Fault *fault) {
-                 NSLog(@"openURL: %@", fault);
+                 NSLog(@"fault: %@", fault);
              }
              
              NSLog(@"Logged in");

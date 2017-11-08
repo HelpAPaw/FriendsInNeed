@@ -8,6 +8,7 @@
 
 #import "FINAboutVC.h"
 #import "FINMailComposer.h"
+#import "FINGlobalConstants.pch"
 
 @interface FINAboutVC ()
 @property (weak, nonatomic) IBOutlet UIView *toolbar;
@@ -25,6 +26,10 @@
     _toolbar.layer.shadowColor = [UIColor lightGrayColor].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;
     _toolbar.layer.shadowOffset = (CGSize){0.0f, 2.0f};
+    
+    _appNameLabel.layer.shadowColor = kCustomOrange.CGColor;
+    _appNameLabel.layer.shadowOpacity = 1.0f;
+    _appNameLabel.layer.shadowOffset = (CGSize){0.0f, 0.0f};
     
     // Set the version label text
     NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];

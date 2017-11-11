@@ -453,6 +453,18 @@ enum {
                     }];
     
 }
+/**
+ ...
+ */
+- (void)prepareCellFor:(UITableView *)tableView AtIndexPath:(NSIndexPath *)indexPath;
+{
+    UITableViewCell *oldStatusCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_status inSection:indexPath.section]];
+    oldStatusCell.accessoryType = UITableViewCellAccessoryNone;
+    
+    UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
+    newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
@@ -501,15 +513,16 @@ enum {
         {
             if (_status != indexPath.row)
             {
-                UITableViewCell *oldStatusCell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_status inSection:indexPath.section]];
-                oldStatusCell.accessoryType = UITableViewCellAccessoryNone;
-                
+                NSUInteger currentStatus = _status;
                 _status = indexPath.row;
-                UITableViewCell *newStatusCell = [tableView cellForRowAtIndexPath:indexPath];
-                newStatusCell.accessoryType = UITableViewCellAccessoryCheckmark;
+
+                [self prepareCellFor:tableView AtIndexPath:indexPath];
                 
                 [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error != nil) {
+                        _status = currentStatus;
+                        [self prepareCellFor:tableView AtIndexPath:indexPath];
+                        [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
                         [self showAlertForError:error];
                     }
                     else {

@@ -514,14 +514,14 @@ enum {
             if (_status != indexPath.row)
             {
                 NSUInteger currentStatus = _status;
+                [self prepareCellFor:tableView AtIndexPath:indexPath];
                 _status = indexPath.row;
 
-                [self prepareCellFor:tableView AtIndexPath:indexPath];
                 
                 [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error != nil) {
-                        _status = currentStatus;
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
+                        _status = currentStatus;
                         [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
                         [self showAlertForError:error];
                     }

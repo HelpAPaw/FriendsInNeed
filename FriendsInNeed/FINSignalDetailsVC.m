@@ -348,8 +348,15 @@ enum {
                 }
                 statusCell.accessoryView = nil;
             }
-            
             [statusCell.imageView setImage:statusImage];
+            if (_status == 3) {
+                UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                [indicator startAnimating];
+                [statusCell.imageView addSubview:indicator];
+                indicator.frame = CGRectMake(0, 0, 35, 35);
+               // [indicator setCenter:statusCell.imageView .center];
+            }
+
             statusCell.textLabel.text = statusString;
             
             cell = statusCell;
@@ -515,16 +522,14 @@ enum {
             {
                 NSUInteger currentStatus = _status;
                 [self prepareCellFor:tableView AtIndexPath:indexPath];
-                _status = indexPath.row;
-
+                _status = 3;
                 
-                [[FINDataManager sharedManager] setStatus:_status forSignal:_annotation.signal completion:^(FINError *error) {
+                [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error != nil) {
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
                         _status = currentStatus;
                         _annotation.signal.status = currentStatus;
                         [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
-                      //  [self showAlertForError:error];
                         UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                                 style:UIAlertActionStyleDefault
                                                                               handler:^(UIAlertAction * action) {}];
@@ -533,6 +538,8 @@ enum {
                         [self.delegate refreshAnnotation:_annotation];
                     }
                     else {
+                        _status = indexPath.row;
+                        [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
                         [self getComments];
                     }
                 }];
@@ -696,6 +703,9 @@ enum {
                                                           handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
+}
+- (void)dealloc {
+    NSLog(@"Signal detail deinit");
 }
 
 - (void)showLoginScreen

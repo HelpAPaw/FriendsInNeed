@@ -154,7 +154,7 @@
         case FINSignalStatus0:
             statusImage = [UIImage imageNamed:@"pin_red.png"];
             break;
-            
+    
         default:
             break;
     }

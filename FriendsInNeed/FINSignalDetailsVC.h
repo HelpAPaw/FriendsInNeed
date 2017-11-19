@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FINAnnotation.h"
+#import "Help_A_Paw-Swift.h"
 
 @protocol FINSignalDetailsVCDelegate <NSObject>
 

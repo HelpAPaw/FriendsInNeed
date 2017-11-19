@@ -15,7 +15,7 @@
 {
     self.title = signal.title;
     self.coordinate = signal.coordinate;
-    self.signal = signal;    
+    self.signal = signal;
     return self;
 }
 

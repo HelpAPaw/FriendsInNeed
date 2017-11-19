@@ -89,7 +89,11 @@
     FINSignalStatus status;
     
     NSString *statusString = [_geoPoint.metadata objectForKey:kSignalStatusKey];
-    if ([statusString isEqualToString:@"2"])
+    if ([statusString isEqualToString:@"3"])
+    {
+        status = FINSignalStatus3;
+    }
+    else if ([statusString isEqualToString:@"2"])
     {
         status = FINSignalStatus2;
     }
@@ -110,6 +114,10 @@
     NSString *statusString;
     
     switch (newStatus) {
+        case FINSignalStatus3:
+            statusString = @"3";
+            break;
+            
         case FINSignalStatus2:
             statusString = @"2";
             break;
@@ -143,6 +151,10 @@
     FINSignalStatus status = [self status];
     
     switch (status) {
+        case FINSignalStatus3:
+            statusImage = [UIImage imageNamed:@"blank.png"];
+            break;
+            
         case FINSignalStatus2:
             statusImage = [UIImage imageNamed:@"pin_green.png"];
             break;

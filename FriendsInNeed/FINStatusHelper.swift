@@ -11,6 +11,8 @@ import Foundation
 class FINStatusHelper: NSObject {
     @objc static func getStatusNameForCode(_ code: Int) -> String {
         switch code {
+        case 3:
+            return NSLocalizedString("Saving...", comment: "")
         case 2:
             return NSLocalizedString("Solved", comment: "")
         case 1:
@@ -22,6 +24,8 @@ class FINStatusHelper: NSObject {
     
     @objc static func getStatusImageForCode(_ code: Int) -> UIImage {
         switch code {
+        case 3:
+            return #imageLiteral(resourceName: "blank.png")
         case 2:
             return #imageLiteral(resourceName: "pin_green.png")
         case 1:

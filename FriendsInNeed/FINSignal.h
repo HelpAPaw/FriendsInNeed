@@ -18,7 +18,8 @@
 typedef NS_ENUM(NSUInteger, FINSignalStatus) {
     FINSignalStatus0,
     FINSignalStatus1,
-    FINSignalStatus2
+    FINSignalStatus2,
+    FINSignalStatus3
 };
 
 @interface FINSignal : NSObject

@@ -12,6 +12,7 @@
 		1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA771E730663006F0B0E /* FINFaqVC.xib */; };
 		1420BA7A1E7306A4006F0B0E /* FINAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */; };
 		1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */; };
+		1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1470C8D11FC164BD0072568E /* AlertPresenter.swift */; };
 		147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */; };
 		147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D011E72D47E007B1017 /* FINLoginVC.xib */; };
 		147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D0B1E72E6D2007B1017 /* Localizable.strings */; };
@@ -95,6 +96,7 @@
 		1420BA7E1E7306A7006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINAboutVC.strings"; sourceTree = "<group>"; };
 		1420BA801E730854006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsCell.xib; sourceTree = "<group>"; };
 		1420BA841E7308B9006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.xib"; sourceTree = "<group>"; };
+		1470C8D11FC164BD0072568E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Help A Paw-Bridging-Header.h"; sourceTree = "<group>"; };
 		147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		147F2CF81E72D2EC007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			children = (
 				F301FE011EDEB99100880ECE /* Helpers */,
 				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
+				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
 				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 				F38B73021C00E04F00FBE20C /* Info.plist */,
 				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
@@ -608,6 +611,7 @@
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
+				1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

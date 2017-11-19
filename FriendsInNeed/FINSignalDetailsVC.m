@@ -522,8 +522,15 @@ enum {
                     if (error != nil) {
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
                         _status = currentStatus;
+                        _annotation.signal.status = currentStatus;
                         [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
-                        [self showAlertForError:error];
+                      //  [self showAlertForError:error];
+                        UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                                style:UIAlertActionStyleDefault
+                                                                              handler:^(UIAlertAction * action) {}];
+        
+                        [self showAlertViewControllerWithTitle:NSLocalizedString(@"Ooops!",nil) message:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil) actions: [NSArray arrayWithObjects:defaultAction, nil]];
+                        [self.delegate refreshAnnotation:_annotation];
                     }
                     else {
                         [self getComments];
@@ -690,7 +697,6 @@ enum {
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
 }
-
 
 - (void)showLoginScreen
 {

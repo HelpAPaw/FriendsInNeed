@@ -35,12 +35,6 @@
 		F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */ = {isa = PBXBuildFile; fileRef = F32711DE1CCCCA3D00E51AEA /* FINComment.m */; };
 		F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */; };
 		F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */; };
-		F33800121C9785A10080FACD /* pin_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800111C9785A10080FACD /* pin_red.png */; };
-		F33800141C97872F0080FACD /* pin_red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800131C97872F0080FACD /* pin_red@2x.png */; };
-		F33800191C978BA50080FACD /* pin_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800151C978BA50080FACD /* pin_green.png */; };
-		F338001A1C978BA50080FACD /* pin_green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800161C978BA50080FACD /* pin_green@2x.png */; };
-		F338001B1C978BA50080FACD /* pin_orange.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800171C978BA50080FACD /* pin_orange.png */; };
-		F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800181C978BA50080FACD /* pin_orange@2x.png */; };
 		F338001F1C98C59D0080FACD /* ic_add.png in Resources */ = {isa = PBXBuildFile; fileRef = F338001E1C98C59D0080FACD /* ic_add.png */; };
 		F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800201C98C7DF0080FACD /* ic_add@2x.png */; };
 		F33800231C98CA350080FACD /* ic_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800221C98CA350080FACD /* ic_menu.png */; };
@@ -132,12 +126,6 @@
 		F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsVC.m; sourceTree = "<group>"; };
 		F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsCell.h; sourceTree = "<group>"; };
 		F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsCell.m; sourceTree = "<group>"; };
-		F33800111C9785A10080FACD /* pin_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin_red.png; sourceTree = "<group>"; };
-		F33800131C97872F0080FACD /* pin_red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pin_red@2x.png"; sourceTree = "<group>"; };
-		F33800151C978BA50080FACD /* pin_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin_green.png; sourceTree = "<group>"; };
-		F33800161C978BA50080FACD /* pin_green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pin_green@2x.png"; sourceTree = "<group>"; };
-		F33800171C978BA50080FACD /* pin_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pin_orange.png; sourceTree = "<group>"; };
-		F33800181C978BA50080FACD /* pin_orange@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pin_orange@2x.png"; sourceTree = "<group>"; };
 		F338001D1C9888280080FACD /* FINGlobalConstants.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINGlobalConstants.pch; sourceTree = "<group>"; };
 		F338001E1C98C59D0080FACD /* ic_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_add.png; sourceTree = "<group>"; };
 		F33800201C98C7DF0080FACD /* ic_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_add@2x.png"; sourceTree = "<group>"; };
@@ -385,12 +373,6 @@
 				F33800241C98CAE70080FACD /* ic_menu@2x.png */,
 				F338001E1C98C59D0080FACD /* ic_add.png */,
 				F33800201C98C7DF0080FACD /* ic_add@2x.png */,
-				F33800151C978BA50080FACD /* pin_green.png */,
-				F33800161C978BA50080FACD /* pin_green@2x.png */,
-				F33800171C978BA50080FACD /* pin_orange.png */,
-				F33800181C978BA50080FACD /* pin_orange@2x.png */,
-				F33800131C97872F0080FACD /* pin_red@2x.png */,
-				F33800111C9785A10080FACD /* pin_red.png */,
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
 				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
 			);
@@ -486,25 +468,20 @@
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
 				1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */,
 				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
-				F338001C1C978BA50080FACD /* pin_orange@2x.png in Resources */,
-				F33800141C97872F0080FACD /* pin_red@2x.png in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
 				1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */,
 				147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */,
 				F39C39441C9D8C1C007A2D8E /* ic_dropdown.png in Resources */,
 				F32711DB1CCB8CFF00E51AEA /* ic_camera@2x.png in Resources */,
-				F338001B1C978BA50080FACD /* pin_orange.png in Resources */,
 				F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */,
 				F39C39481C9D8C1C007A2D8E /* ic_dropdown@3x.png in Resources */,
 				F338001F1C98C59D0080FACD /* ic_add.png in Resources */,
 				F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */,
-				F33800191C978BA50080FACD /* pin_green.png in Resources */,
 				F32711D21CCAFBAD00E51AEA /* ic_call@3x.png in Resources */,
 				F39C39471C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png in Resources */,
 				F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */,
 				F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */,
-				F338001A1C978BA50080FACD /* pin_green@2x.png in Resources */,
 				1420BA7A1E7306A4006F0B0E /* FINAboutVC.xib in Resources */,
 				F39C39451C9D8C1C007A2D8E /* ic_dropdown@2x.png in Resources */,
 				F39C393B1C9A99F3007A2D8E /* logo.png in Resources */,
@@ -513,7 +490,6 @@
 				F33800231C98CA350080FACD /* ic_menu.png in Resources */,
 				F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */,
 				F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */,
-				F33800121C9785A10080FACD /* pin_red.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,7 +25,7 @@ class FINStatusHelper: NSObject {
     @objc static func getStatusImageForCode(_ code: Int) -> UIImage {
         switch code {
         case 3:
-            return #imageLiteral(resourceName: "blank.png")
+            return #imageLiteral(resourceName: "pin_white")
         case 2:
             return #imageLiteral(resourceName: "pin_green.png")
         case 1:

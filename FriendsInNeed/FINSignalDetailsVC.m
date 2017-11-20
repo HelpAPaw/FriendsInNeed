@@ -704,9 +704,6 @@ enum {
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
 }
-- (void)dealloc {
-    NSLog(@"Signal detail deinit");
-}
 
 - (void)showLoginScreen
 {

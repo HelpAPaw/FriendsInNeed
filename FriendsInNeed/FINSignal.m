@@ -152,7 +152,7 @@
     
     switch (status) {
         case FINSignalStatus3:
-            statusImage = [UIImage imageNamed:@"blank.png"];
+            statusImage = [UIImage imageNamed:@"pin_white.png"];
             break;
             
         case FINSignalStatus2:

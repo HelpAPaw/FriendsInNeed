@@ -56,7 +56,7 @@ enum {
 #define kCellIdentifierAuthor   @"AuthorCell"
 #define kCellIdentifierDate     @"DateCell"
 
-@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate>
+@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate,imageTappableDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
@@ -170,6 +170,7 @@ enum {
     [UIView animateWithDuration:0.3 animations:^{
         _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
         _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+
     }];
     
     // Temporarily commented because it interferes with the blur view
@@ -287,7 +288,7 @@ enum {
             [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.date]];
             if (_annotation.signal.photoUrl)
             {
-                
+                detailsCell.delegate = self;
                 [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
             
@@ -507,7 +508,7 @@ enum {
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{   
+{
     if (indexPath.section == kSectionIndexStatus)
     {
         if ([[FINDataManager sharedManager] userIsLogged] == NO)
@@ -710,6 +711,13 @@ enum {
     FINLoginVC *loginVC = [[FINLoginVC alloc] init];
     loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [self presentViewController:loginVC animated:YES completion:^{}];
+}
+
+- (void)imageTapped:(UIImage *)image {
+    FINSignalPhotoVC *signalPhotoVC = [[FINSignalPhotoVC alloc] init];
+    [signalPhotoVC injectWithImg:image];
+    signalPhotoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    [self.navigationController presentViewController:signalPhotoVC animated:YES completion:nil];
 }
 
 @end

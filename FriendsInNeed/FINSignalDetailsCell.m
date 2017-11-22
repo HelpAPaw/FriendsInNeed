@@ -25,6 +25,13 @@
     [super awakeFromNib];
     // Initialization code
 }
+@synthesize delegate;
+
+- (void)setDelegate:(id <imageTappableDelegate>)aDelegate {
+    if (delegate != aDelegate) {
+        delegate = aDelegate;
+    }
+}
 
 - (id)initWithCoder:(NSCoder*)aDecoder
 {
@@ -89,6 +96,16 @@
 - (void)setPhoto:(UIImage *)photo
 {
     _imgPhotoView.image = photo;
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    _imgPhotoView.userInteractionEnabled = true ;
+    [_imgPhotoView addGestureRecognizer:singleFingerTap];
+}
+
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
+{
+    [delegate imageTapped:_imgPhotoView.image];
 }
 
 - (void)setPhoneNumber:(NSString *)phoneNumber

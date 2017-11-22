@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol imageTappableDelegate
+- (void)imageTapped:(UIImage*)image;
+@end
+
 @interface FINSignalDetailsCell : UITableViewCell
+@property (nonatomic, weak) id <imageTappableDelegate> delegate;
 
 @property (strong, nonatomic) NSString *phoneNumber;
 

@@ -535,7 +535,7 @@ enum {
                                                                                 style:UIAlertActionStyleDefault
                                                                               handler:^(UIAlertAction * action) {}];
         
-                        [self showAlertViewControllerWithTitle:NSLocalizedString(@"Ooops!",nil) message:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil) actions: [NSArray arrayWithObjects:defaultAction, nil]];
+                        [self showAlertViewControllerWithTitle:NSLocalizedString(@"Ooops!",nil) message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Possible problem:\n%@",nil), error.message] actions: [NSArray arrayWithObjects:defaultAction, nil]];
                         [self.delegate refreshAnnotation:_annotation];
                     }
                     else {
@@ -697,7 +697,7 @@ enum {
 - (void)showAlertForError:(FINError *)error
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
-                                                                   message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message]
+                                                                   message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Possible problem:\n%@",nil), error.message]
                                                             preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                             style:UIAlertActionStyleDefault

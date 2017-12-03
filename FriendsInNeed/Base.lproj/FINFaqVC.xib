@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINFaqVC">
             <connections>
                 <outlet property="tableView" destination="u3e-6X-aC9" id="XDx-Nf-RIW"/>
-                <outlet property="toolbar" destination="pRQ-ty-MPH" id="rNQ-Ty-rdI"/>
+                <outlet property="toolbar" destination="S5n-pd-hpC" id="JQj-5y-ZiE"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -35,6 +36,10 @@
                         <outlet property="delegate" destination="-1" id="CRC-Wl-3TN"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S5n-pd-hpC" userLabel="System bar background">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                    <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pRQ-ty-MPH" userLabel="Toolbar">
                     <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                     <subviews>
@@ -45,9 +50,8 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z0i-0c-Hjs">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z0i-0c-Hjs">
                             <rect key="frame" x="14" y="10" width="24" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="ic_close_x_white.png"/>
                             <connections>
                                 <action selector="onCloseButtonTapped:" destination="-1" eventType="touchUpInside" id="pS0-Ky-pap"/>
@@ -56,14 +60,9 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="z0i-0c-Hjs" firstAttribute="leading" secondItem="pRQ-ty-MPH" secondAttribute="leadingMargin" constant="6" id="HIS-TP-vP6"/>
                         <constraint firstAttribute="height" constant="44" id="iIC-Vc-JUm"/>
-                    </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S5n-pd-hpC" userLabel="System bar background">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
-                    <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="20" id="L3T-Z5-b8D"/>
+                        <constraint firstItem="z0i-0c-Hjs" firstAttribute="centerY" secondItem="pRQ-ty-MPH" secondAttribute="centerY" id="kym-9W-R6N"/>
                     </constraints>
                 </view>
             </subviews>
@@ -74,11 +73,12 @@
                 <constraint firstAttribute="bottom" secondItem="u3e-6X-aC9" secondAttribute="bottom" id="FzU-Wl-aCa"/>
                 <constraint firstItem="S5n-pd-hpC" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="HX8-M2-hra"/>
                 <constraint firstAttribute="trailing" secondItem="u3e-6X-aC9" secondAttribute="trailing" id="Y9o-qG-MFi"/>
+                <constraint firstItem="pRQ-ty-MPH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" id="ZQq-dk-MQ9"/>
                 <constraint firstItem="u3e-6X-aC9" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fpb-vu-yJI"/>
                 <constraint firstItem="pRQ-ty-MPH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ltH-tW-Iz5"/>
                 <constraint firstAttribute="trailing" secondItem="S5n-pd-hpC" secondAttribute="trailing" id="qRs-eT-ohD"/>
-                <constraint firstItem="pRQ-ty-MPH" firstAttribute="top" secondItem="S5n-pd-hpC" secondAttribute="bottom" id="ua8-9Y-TxM"/>
                 <constraint firstItem="u3e-6X-aC9" firstAttribute="top" secondItem="pRQ-ty-MPH" secondAttribute="bottom" id="x4M-Fw-nt2"/>
+                <constraint firstItem="S5n-pd-hpC" firstAttribute="bottom" secondItem="pRQ-ty-MPH" secondAttribute="bottom" id="yjN-3p-wiX"/>
             </constraints>
             <point key="canvasLocation" x="33.5" y="54.5"/>
         </view>

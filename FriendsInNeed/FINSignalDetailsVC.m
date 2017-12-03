@@ -649,6 +649,13 @@ enum {
     UIEdgeInsets insets = _tableView.contentInset;
     insets.bottom += _keyboardHeight;
     _tableView.contentInset = insets;
+    //Check if current device is iphone X, then compestate bottom constrant so the view is just on top
+    NSInteger addOn = 0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
+        CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+        if (screenSize.height == 812.0f)
+            addOn = 40;
+    }
     
     [UIView animateWithDuration:0.3f animations:^{
         
@@ -658,7 +665,7 @@ enum {
         _addCommentView.frame = frame;
         
         // Modify its bottom constraint, too
-        _addCommentLC.constant = _keyboardHeight;
+        _addCommentLC.constant = _keyboardHeight-addOn;
         [_addCommentView setNeedsLayout];
     }];
     

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -45,7 +46,7 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="KpZ-8l-rlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="14" id="8Lf-48-EXd"/>
+                <constraint firstItem="KpZ-8l-rlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="-6" id="8Lf-48-EXd"/>
                 <constraint firstItem="KpZ-8l-rlj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="J9i-ZC-2RX"/>
                 <constraint firstItem="qGN-52-SGt" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="bottom" id="JVr-Ud-bya"/>
                 <constraint firstItem="tJm-sg-3Ej" firstAttribute="top" secondItem="qGN-52-SGt" secondAttribute="bottom" constant="16" id="KgQ-is-dal"/>

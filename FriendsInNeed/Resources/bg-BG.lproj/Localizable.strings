@@ -38,7 +38,7 @@
 "About" = "За приложението";
 
 //MailComposser.m
-"Your mail client is not set up.\nYou can reach us at help.a.paw.app@gmail.com" = "Вашият емейл клиент не е конфигуриран.\nВие може да се свържете с нас на help.a.paw@gmail.com";
+"Your mail client is not set up.\nYou can reach us at %@" = "Вашият имейл клиент не е конфигуриран.\nВие може да се свържете с нас на %@";
 
 //AboutUs
 "Q1" = "Как работи това приложение?";

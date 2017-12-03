@@ -27,7 +27,7 @@
 
 - (NSString *)message
 {
-    return _fault.message;
+    return _fault.detail;
 }
 
 @end

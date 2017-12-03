@@ -8,6 +8,8 @@
 
 #import "FINMailComposer.h"
 
+#define kContactEmail @"help.a.paw@outlook.com"
+
 @implementation FINMailComposer
 
 + (id)sharedComposer
@@ -27,14 +29,14 @@
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
         [composeViewController setMailComposeDelegate:self];
-        [composeViewController setToRecipients:@[@"help.a.paw.app@gmail.com"]];
+        [composeViewController setToRecipients:@[kContactEmail]];
         
         [viewController presentViewController:composeViewController animated:YES completion:nil];
     }
     else
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
-                                                                       message:NSLocalizedString(@"Your mail client is not set up.\nYou can reach us at help.a.paw.app@gmail.com", nil)
+                                                                       message:[NSString stringWithFormat:NSLocalizedString(@"Your mail client is not set up.\nYou can reach us at %@", nil), kContactEmail]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
                                                            style:UIAlertActionStyleDefault

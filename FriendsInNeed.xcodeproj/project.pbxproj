@@ -840,7 +840,7 @@
 				);
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HelpAPaw.HelpAPaw;
+				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -863,7 +863,7 @@
 				);
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HelpAPaw.HelpAPaw;
+				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;

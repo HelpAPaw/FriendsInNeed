@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2</string>
+	<string>1.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>12</string>
+	<string>13</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -72,6 +72,8 @@
 	<string>In order to alert you about animals in need around you the application needs to know your current location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>In order to alert you about animals in need around you the application needs to know your current location.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This permission is needed so that photos taken with the app can be saved to your photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This permission is needed so that you can attach photos from your photo library to signals</string>
 	<key>UIBackgroundModes</key>

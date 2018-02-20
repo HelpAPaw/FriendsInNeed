@@ -91,7 +91,6 @@
 		1420BA841E7308B9006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.xib"; sourceTree = "<group>"; };
 		1470C8D11FC164BD0072568E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSignalPhotoVC.swift; sourceTree = "<group>"; };
-		1470C8E21FC373220072568E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalPhotoVC.xib"; sourceTree = "<group>"; };
 		1470C8E41FC3732A0072568E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalPhotoVC.xib; sourceTree = "<group>"; };
 		147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Help A Paw-Bridging-Header.h"; sourceTree = "<group>"; };
 		147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
@@ -679,7 +678,6 @@
 		1470C8E31FC373220072568E /* FINSignalPhotoVC.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1470C8E21FC373220072568E /* bg-BG */,
 				1470C8E41FC3732A0072568E /* Base */,
 			);
 			name = FINSignalPhotoVC.xib;

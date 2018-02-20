@@ -100,18 +100,19 @@ enum {
 {
     [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, FINError *error) {
         
-        _commentsAreLoaded = YES;
         if (!error)
         {
             _comments = [NSMutableArray new];
             [_comments addObjectsFromArray:comments];
-            [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationFade];
-            //            [self determineIfAddCommentShadowShouldBeVisible];
+//            [self determineIfAddCommentShadowShouldBeVisible];
         }
         else
         {
             [self showAlertForError:error];
         }
+        
+        _commentsAreLoaded = YES;
+        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationFade];
     }];
 }
 

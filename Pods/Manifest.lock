@@ -1,11 +1,11 @@
 PODS:
-  - Backendless (4.0.20)
-  - Crashlytics (3.10.0):
-    - Fabric (~> 1.7.3)
-  - Fabric (1.7.3)
-  - SDWebImage (4.3.0):
-    - SDWebImage/Core (= 4.3.0)
-  - SDWebImage/Core (4.3.0)
+  - Backendless (4.0.21)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.5)
+  - SDWebImage (4.3.2):
+    - SDWebImage/Core (= 4.3.2)
+  - SDWebImage/Core (4.3.2)
   - ViewDeck (3.1.0)
 
 DEPENDENCIES:
@@ -16,10 +16,10 @@ DEPENDENCIES:
   - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: 7fd838f57e0ff59d211b068d9648c1404e633bc7
-  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
-  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
-  SDWebImage: 6da6c8bca115addc4de8613362e1b15f66333825
+  Backendless: f91ee75f8aa9ab2156543d9bc8b8dfc1c143410a
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
+  SDWebImage: 29bd3c0bc1f01e5eb59720847c64ad4c4ca1af5d
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
 PODFILE CHECKSUM: 4e1957dbc1c7296ef1cc8dd7a5c9d8afe718f618

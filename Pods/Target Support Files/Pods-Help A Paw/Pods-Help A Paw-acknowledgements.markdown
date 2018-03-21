@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## Backendless
 
-Copyright (c) 2012-2018 by Backendless.com
+Copyright (c) 2012-2017 by Backendless.com
 
 ## Crashlytics
 

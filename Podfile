@@ -5,7 +5,7 @@ target "Help A Paw" do
     # Don't show warnings from pods
     inhibit_all_warnings!
     
-	pod 'Backendless', '~> 4.0'
+	pod 'Backendless', '<= 4.0.20'
 	pod "ViewDeck"
 	pod 'Fabric'
 	pod 'Crashlytics'

@@ -13,9 +13,7 @@
 	NSString			*objectName;
 	id <IAdaptingType>	typedObject;
     Class               mappedType;
+
 }
-
 +(id)objectType:(NSString *)name withObject:(id <IAdaptingType>)object;
--(Class)getMappedType;
-
 @end

@@ -46,14 +46,14 @@
     NSNumber *isValidUserToken = @NO;
     @try {
         isValidUserToken = [backendless.userService isValidUserToken];
+        if ([isValidUserToken boolValue] == NO)
+        {
+            [backendless.userService logout];
+        }
     } @catch (NSException *exception) {
         NSLog(@"Crashed with exception %@", exception);
     } @catch (Fault *fault) {
         NSLog(@"Fault: %@", fault);
-    }
-    if ([isValidUserToken boolValue] == NO)
-    {
-        [backendless.userService logout];
     }
     
     return self;

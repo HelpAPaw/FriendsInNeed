@@ -179,15 +179,18 @@ enum
         {
             FINFaqVC *facVC = [[FINFaqVC alloc] initWithNibName:nil bundle:nil];
             [self presentViewController:facVC animated:YES completion:nil];
+            break;
         }
         case kFeedback:
         {
             [[FINMailComposer sharedComposer] presentMailComposerFrom:self];
+            break;
         }
         case kAbout:
         {
             FINAboutVC *aboutVC = [[FINAboutVC alloc] initWithNibName:nil bundle:nil];
             [self presentViewController:aboutVC animated:YES completion:nil];
+            break;
         }
           
         default:

@@ -79,7 +79,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1420BA6D1E72FF40006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.xib"; sourceTree = "<group>"; };
 		1420BA6F1E72FF4A006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsVC.xib; sourceTree = "<group>"; };
 		1420BA711E73011B006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMenuVC.xib; sourceTree = "<group>"; };
 		1420BA741E73011D006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMenuVC.strings"; sourceTree = "<group>"; };
@@ -88,7 +87,6 @@
 		1420BA7B1E7306A4006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINAboutVC.xib; sourceTree = "<group>"; };
 		1420BA7E1E7306A7006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINAboutVC.strings"; sourceTree = "<group>"; };
 		1420BA801E730854006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsCell.xib; sourceTree = "<group>"; };
-		1420BA841E7308B9006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.xib"; sourceTree = "<group>"; };
 		1470C8D11FC164BD0072568E /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSignalPhotoVC.swift; sourceTree = "<group>"; };
 		1470C8E41FC3732A0072568E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalPhotoVC.xib; sourceTree = "<group>"; };
@@ -100,7 +98,6 @@
 		147F2D0A1E72E6D2007B1017 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
-		148912D11E72FC2F00655DD0 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "bg-BG"; path = "bg-BG.lproj/FINMapVC.xib"; sourceTree = "<group>"; };
 		14F14F831E9A097400977C8E /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -176,6 +173,9 @@
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
+		F3D4046820680D3600A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.strings"; sourceTree = "<group>"; };
+		F3D4046C20680DAE00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMapVC.strings"; sourceTree = "<group>"; };
+		F3D4047020680DCB00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.strings"; sourceTree = "<group>"; };
 		F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINSignalDetailsStatusChangeCommentCell.swift; sourceTree = "<group>"; };
 		F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsStatusChangeCommentCell.xib; sourceTree = "<group>"; };
 		F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINStatusHelper.swift; sourceTree = "<group>"; };
@@ -633,8 +633,8 @@
 		1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1420BA6D1E72FF40006F0B0E /* bg-BG */,
 				1420BA6F1E72FF4A006F0B0E /* Base */,
+				F3D4046820680D3600A3BCE2 /* bg-BG */,
 			);
 			name = FINSignalDetailsVC.xib;
 			sourceTree = "<group>";
@@ -670,7 +670,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1420BA801E730854006F0B0E /* Base */,
-				1420BA841E7308B9006F0B0E /* bg-BG */,
+				F3D4047020680DCB00A3BCE2 /* bg-BG */,
 			);
 			name = FINSignalDetailsCell.xib;
 			sourceTree = "<group>";
@@ -705,7 +705,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				148912CD1E72F94A00655DD0 /* Base */,
-				148912D11E72FC2F00655DD0 /* bg-BG */,
+				F3D4046C20680DAE00A3BCE2 /* bg-BG */,
 			);
 			name = FINMapVC.xib;
 			sourceTree = "<group>";

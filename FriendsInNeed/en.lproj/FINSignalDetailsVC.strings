@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Enter a comment"; ObjectID = "MFc-mG-mRb"; */
+"MFc-mG-mRb.placeholder" = "Enter a comment";
+
+/* Class = "UIBarButtonItem"; title = "Signal Details"; ObjectID = "P1R-1f-zoc"; */
+"P1R-1f-zoc.title" = "Signal Details";
+
+/* Class = "UIBarButtonItem"; title = "Close"; ObjectID = "POe-oe-99d"; */
+"POe-oe-99d.title" = "Close";
+
+/* Class = "UIButton"; normalTitle = "Send"; ObjectID = "oh9-5j-fyg"; */
+"oh9-5j-fyg.normalTitle" = "Send";

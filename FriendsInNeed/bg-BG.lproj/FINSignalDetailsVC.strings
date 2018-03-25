@@ -1,0 +1,12 @@
+
+/* Class = "UITextField"; placeholder = "Въведете коментар"; ObjectID = "MFc-mG-mRb"; */
+"MFc-mG-mRb.placeholder" = "Въведете коментар";
+
+/* Class = "UIBarButtonItem"; title = "Детайли"; ObjectID = "P1R-1f-zoc"; */
+"P1R-1f-zoc.title" = "Детайли";
+
+/* Class = "UIBarButtonItem"; title = "Отмени"; ObjectID = "POe-oe-99d"; */
+"POe-oe-99d.title" = "Отмени";
+
+/* Class = "UIButton"; normalTitle = "Изпрати"; ObjectID = "oh9-5j-fyg"; */
+"oh9-5j-fyg.normalTitle" = "Изпрати";

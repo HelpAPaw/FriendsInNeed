@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,14 +23,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="KpZ-8l-rlj">
-                    <rect key="frame" x="0.0" y="14" width="375" height="128"/>
+                    <rect key="frame" x="0.0" y="20" width="375" height="128"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="128" id="Vdj-e6-9sG"/>
                     </constraints>
                 </imageView>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tJm-sg-3Ej">
-                    <rect key="frame" x="0.0" y="178.5" width="375" height="488.5"/>
+                    <rect key="frame" x="0.0" y="184.5" width="375" height="482.5"/>
                     <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="ruB-jx-jkL"/>
@@ -38,7 +38,7 @@
                     </connections>
                 </tableView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Milen Marinov (username@server.com)" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="qGN-52-SGt" userLabel="Username Label">
-                    <rect key="frame" x="16" y="142" width="343" height="20.5"/>
+                    <rect key="frame" x="16" y="148" width="343" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -46,17 +46,18 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="KpZ-8l-rlj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="-6" id="8Lf-48-EXd"/>
+                <constraint firstItem="Iu9-YZ-zT0" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="top" id="8Lf-48-EXd"/>
                 <constraint firstItem="KpZ-8l-rlj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="J9i-ZC-2RX"/>
                 <constraint firstItem="qGN-52-SGt" firstAttribute="top" secondItem="KpZ-8l-rlj" secondAttribute="bottom" id="JVr-Ud-bya"/>
                 <constraint firstItem="tJm-sg-3Ej" firstAttribute="top" secondItem="qGN-52-SGt" secondAttribute="bottom" constant="16" id="KgQ-is-dal"/>
                 <constraint firstItem="tJm-sg-3Ej" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Ri6-jE-aeS"/>
                 <constraint firstAttribute="trailing" secondItem="KpZ-8l-rlj" secondAttribute="trailing" id="aZX-8a-Pzc"/>
                 <constraint firstAttribute="trailing" secondItem="tJm-sg-3Ej" secondAttribute="trailing" id="cU4-YL-SbF"/>
-                <constraint firstItem="qGN-52-SGt" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="jmC-DS-SQy"/>
+                <constraint firstItem="qGN-52-SGt" firstAttribute="leading" secondItem="Iu9-YZ-zT0" secondAttribute="leading" constant="16" id="jmC-DS-SQy"/>
                 <constraint firstAttribute="bottom" secondItem="tJm-sg-3Ej" secondAttribute="bottom" id="sed-DQ-ZQi"/>
-                <constraint firstAttribute="trailing" secondItem="qGN-52-SGt" secondAttribute="trailing" constant="16" id="uz4-Le-eYc"/>
+                <constraint firstItem="Iu9-YZ-zT0" firstAttribute="trailing" secondItem="qGN-52-SGt" secondAttribute="trailing" constant="16" id="uz4-Le-eYc"/>
             </constraints>
+            <viewLayoutGuide key="safeArea" id="Iu9-YZ-zT0"/>
             <point key="canvasLocation" x="-158.5" y="54.5"/>
         </view>
     </objects>

@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
+@property (weak, nonatomic) IBOutlet UIStackView *containerStackView;
 @property (weak, nonatomic) IBOutlet UIScrollView *containerScrollView;
 @property (weak, nonatomic) IBOutlet UILabel *hintLabel;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
@@ -31,10 +32,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *whyButton;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
+@property (weak, nonatomic) IBOutlet UIView *facebookSeparatorView;
 @property (weak, nonatomic) IBOutlet UIButton *facebookLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintRegister;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *loadingIndicatorTopConstraintLogin;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topToolbarTopConstraint;
 
 @end
 
@@ -47,6 +48,18 @@
     [_topToolbar setBarTintColor:kCustomOrange];
     [_toolbarBackground setBackgroundColor:kCustomOrange];
     [_registerLoginButton setTintColor:kCustomOrange];
+    
+    _containerScrollView.contentInset = UIEdgeInsetsMake(10.0f, 0.0f, 25.0f, 0.0f);
+    
+    if (@available(iOS 11, *))
+    {
+        [_containerStackView setCustomSpacing:20.0f afterView:_registerLoginButton];
+        [_containerStackView setCustomSpacing:25.0f afterView:_facebookSeparatorView];
+    }
+    else
+    {        
+        _topToolbarTopConstraint.constant = 20.0f;
+    }
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];
@@ -92,9 +105,6 @@
         _phoneTextField.hidden = NO;
         _whyButton.hidden = NO;
         
-        _loadingIndicatorTopConstraintLogin.active = NO;
-        _loadingIndicatorTopConstraintRegister.active = YES;
-        
         [UIView performWithoutAnimation:^{
             //For immediate change
             _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Register", nil)];
@@ -121,9 +131,6 @@
         _phoneLabel.hidden = YES;
         _phoneTextField.hidden = YES;
         _whyButton.hidden = YES;
-        
-        _loadingIndicatorTopConstraintLogin.active = YES;
-        _loadingIndicatorTopConstraintRegister.active = NO;
         
         //For immediate change
         _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Login", nil)];

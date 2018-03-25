@@ -103,7 +103,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="293"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You need to register before you can submit signals" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5kY-zC-Bse">
-                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="50"/>
+                                    <rect key="frame" x="10" y="0.0" width="355" height="50"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="50" id="rFM-4u-7Hd">
                                             <variation key="heightClass=compact" constant="35"/>
@@ -236,6 +236,8 @@
                                 <constraint firstItem="2pV-KB-Drb" firstAttribute="leading" secondItem="0Y9-BS-n7e" secondAttribute="leading" id="3u8-yD-7ij"/>
                                 <constraint firstAttribute="trailing" secondItem="2pV-KB-Drb" secondAttribute="trailing" id="Hc2-0B-dVk"/>
                                 <constraint firstItem="ChW-NI-d1N" firstAttribute="leading" secondItem="atK-Ne-sKb" secondAttribute="leading" id="VVy-MP-M5p"/>
+                                <constraint firstItem="5kY-zC-Bse" firstAttribute="leading" secondItem="0Y9-BS-n7e" secondAttribute="leading" constant="10" id="Y7R-b3-arZ"/>
+                                <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="10" id="jHz-oT-Aiz"/>
                             </constraints>
                         </stackView>
                     </subviews>

@@ -646,10 +646,6 @@ enum {
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
     _keyboardHeight = keyboardFrame.size.height;
     
-    // Extend the table view so it can be scrolled all the way
-    UIEdgeInsets insets = _tableView.contentInset;
-    insets.bottom += _keyboardHeight;
-    _tableView.contentInset = insets;
     //Check if current device is iphone X, then compestate bottom constrant so the view is just on top
     NSInteger addOn = 0;
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
@@ -680,11 +676,6 @@ enum {
     CGRect keyboardFrame;
     [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardFrame];
     _keyboardHeight = keyboardFrame.size.height;
-    
-    // Restore original table view insets
-    UIEdgeInsets insets = _tableView.contentInset;
-    insets.bottom -= _keyboardHeight;
-    _tableView.contentInset = insets;
     
     [UIView animateWithDuration:0.3f animations:^{
         

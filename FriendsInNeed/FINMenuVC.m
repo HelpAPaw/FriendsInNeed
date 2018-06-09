@@ -43,6 +43,11 @@ enum
     // Do any additional setup after loading the view from its nib.
     
     [_tableView registerNib:[UINib nibWithNibName:@"FINMenuCell" bundle:nil] forCellReuseIdentifier:kMenuCell];
+    
+    UITapGestureRecognizer *adminVCtapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAdminVC)];
+    adminVCtapGR.numberOfTapsRequired = 7;
+    _usernameLabel.userInteractionEnabled = YES;
+    [_usernameLabel addGestureRecognizer:adminVCtapGR];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -196,6 +201,12 @@ enum
         default:
             break;
     }
+}
+
+- (void)showAdminVC
+{
+    FINAdminVC *adminVC = [[FINAdminVC alloc] init];
+    [self presentViewController:adminVC animated:true completion:nil];
 }
 
 @end

@@ -430,4 +430,44 @@
     return 0;
 }
 
+- (void)getAllSignalsFromPage:(NSInteger)page withCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
+{
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Default"]];
+    query.includeMeta = @YES;
+    query.pageSize = @100;
+    query.offset = [NSNumber numberWithInteger:page*100];
+    
+    NSMutableArray *totalSignals = [NSMutableArray new];
+    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
+        
+        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
+        {
+            // Convert received GeoPoint to FINSignal
+            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
+            [totalSignals addObject:receivedSignal];
+        }
+        if (receivedGeoPoints.count == 0)
+        {
+            completionHandler(totalSignals, nil);
+        }
+        else {
+            [self getAllSignalsFromPage:page+1 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
+                [totalSignals addObjectsFromArray:signals];
+                completionHandler(totalSignals, nil);
+            }];
+        }
+        
+    } error:^(Fault *fault) {
+        FINError *error = [[FINError alloc] initWithFault:fault];
+        completionHandler(nil, error);
+    }];
+}
+
+- (void)getAllSignalsWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
+{
+    [self getAllSignalsFromPage:0 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
+        completionHandler(signals, error);
+    }];
+}
+
 @end

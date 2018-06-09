@@ -3,3 +3,4 @@
 //
 
 #import "FINSignalDetailsCommentCell.h"
+#import "FINDataManager.h"

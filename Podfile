@@ -6,7 +6,7 @@ target "Help A Paw" do
     inhibit_all_warnings!
     
 	pod 'Backendless', '<= 4.0.20'
-	pod "ViewDeck"
+	pod 'ViewDeck'
 	pod 'Fabric'
 	pod 'Crashlytics'
     pod 'SDWebImage'

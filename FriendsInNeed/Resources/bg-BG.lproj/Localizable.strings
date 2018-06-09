@@ -55,7 +55,7 @@
 "Status" = "Статус";
 "Help needed" = "Нужна е помощ";
 "Somebody on the way" = "Някой е на път";
-"Solved" = "Решен";
+"Solved" = "Приключен";
 "Comments" = "Коментари";
 "Please enter a comment" = "Моля въведете коментар";
 "%@ changed the status to\n\'%@\'" = "%@ смени статуса на\n\'%@\'";

@@ -71,6 +71,8 @@
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
+		F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */; };
+		F3D06A0E20C4428A00A8939E /* FINAdminVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */; };
 		F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */; };
 		F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */; };
 		F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */; };
@@ -173,6 +175,8 @@
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
+		F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINAdminVC.swift; sourceTree = "<group>"; };
+		F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINAdminVC.xib; sourceTree = "<group>"; };
 		F3D4046820680D3600A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.strings"; sourceTree = "<group>"; };
 		F3D4046C20680DAE00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMapVC.strings"; sourceTree = "<group>"; };
 		F3D4047020680DCB00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.strings"; sourceTree = "<group>"; };
@@ -358,6 +362,8 @@
 				F35906031E05823800A61060 /* FINMailComposer.h */,
 				F35906011E05821C00A61060 /* FINMailComposer.m */,
 				1449F61A1FC631390078317E /* FAQ */,
+				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
+				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
 			);
 			path = FriendsInNeed;
@@ -447,7 +453,7 @@
 		F38B72E31C00E04F00FBE20C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Milen;
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
@@ -504,6 +510,7 @@
 				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
+				F3D06A0E20C4428A00A8939E /* FINAdminVC.xib in Resources */,
 				1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */,
 				147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */,
 				F39C39441C9D8C1C007A2D8E /* ic_dropdown.png in Resources */,
@@ -603,6 +610,7 @@
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
+				F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */,
@@ -735,12 +743,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -788,12 +798,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

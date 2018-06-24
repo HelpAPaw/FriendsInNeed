@@ -1,10 +1,23 @@
 //
 //  UICKeyChainStore.h
-//  UICKeyChainStore
-//
-//  Created by Kishikawa Katsumi on 11/11/20.
-//  Copyright (c) 2011 Kishikawa Katsumi. All rights reserved.
-//
+//  backendlessAPI
+/*
+ * *********************************************************************************************************************
+ *
+ *  BACKENDLESS.COM CONFIDENTIAL
+ *
+ *  ********************************************************************************************************************
+ *
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
+ *
+ *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
+ *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
+ *  suppliers and may be covered by U.S. and Foreign Patents, patents in process, and are protected by trade secret
+ *  or copyright law. Dissemination of this information or reproduction of this material is strictly forbidden
+ *  unless prior written permission is obtained from Backendless.com.
+ *
+ *  ********************************************************************************************************************
+ */
 
 #import <Foundation/Foundation.h>
 
@@ -189,14 +202,14 @@ __OSX_AVAILABLE_STARTING(__MAC_NA, __IPHONE_8_0);
 __OSX_AVAILABLE_STARTING(__MAC_10_10, __IPHONE_8_0);
 
 #if TARGET_OS_IOS
--(void)sharedPasswordWithCompletion:(nullable void (^)(NSString * __nullable account, NSString * __nullable password, NSError * __nullable error))completion;
--(void)sharedPasswordForAccount:(NSString *)account completion:(nullable void (^)(NSString * __nullable password, NSError * __nullable error))completion;
+-(void)sharedPasswordWithCompletion:(nullable void(^)(NSString * __nullable account, NSString * __nullable password, NSError * __nullable error))completion;
+-(void)sharedPasswordForAccount:(NSString *)account completion:(nullable void(^)(NSString * __nullable password, NSError * __nullable error))completion;
 
--(void)setSharedPassword:(nullable NSString *)password forAccount:(NSString *)account completion:(nullable void (^)(NSError * __nullable error))completion;
--(void)removeSharedPasswordForAccount:(NSString *)account completion:(nullable void (^)(NSError * __nullable error))completion;
+-(void)setSharedPassword:(nullable NSString *)password forAccount:(NSString *)account completion:(nullable void(^)(NSError * __nullable error))completion;
+-(void)removeSharedPasswordForAccount:(NSString *)account completion:(nullable void(^)(NSError * __nullable error))completion;
 
-+ (void)requestSharedWebCredentialWithCompletion:(nullable void (^)(NSArray UIC_CREDENTIAL_TYPE *credentials, NSError * __nullable error))completion;
-+ (void)requestSharedWebCredentialForDomain:(nullable NSString *)domain account:(nullable NSString *)account completion:(nullable void (^)(NSArray UIC_CREDENTIAL_TYPE *credentials, NSError * __nullable error))completion;
++ (void)requestSharedWebCredentialWithCompletion:(nullable void(^)(NSArray UIC_CREDENTIAL_TYPE *credentials, NSError * __nullable error))completion;
++ (void)requestSharedWebCredentialForDomain:(nullable NSString *)domain account:(nullable NSString *)account completion:(nullable void(^)(NSArray UIC_CREDENTIAL_TYPE *credentials, NSError * __nullable error))completion;
 
 + (NSString *)generatePassword;
 #endif

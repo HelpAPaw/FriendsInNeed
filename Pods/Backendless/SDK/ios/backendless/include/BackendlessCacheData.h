@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2014 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -24,10 +24,11 @@
 typedef void(^BackendlessCacheDataSaveCompletion)(BOOL done);
 
 @interface BackendlessCacheData : NSObject
-@property (nonatomic, strong) id data;
-@property (nonatomic, strong) NSNumber *timeToLive;
-@property (nonatomic, strong) NSNumber *priority;
-@property (nonatomic, strong, readonly) NSString *file;
+
+@property (strong, nonatomic) id data;
+@property (strong, nonatomic) NSNumber *timeToLive;
+@property (strong, nonatomic) NSNumber *priority;
+@property (strong, nonatomic, readonly) NSString *file;
 
 -(void)increasePriority;
 -(void)decreasePriority;
@@ -37,4 +38,5 @@ typedef void(^BackendlessCacheDataSaveCompletion)(BOOL done);
 -(id)initWithCache:(BackendlessCacheData *)cache;
 -(void)remove;
 -(void)removeFromDisc;
+
 @end

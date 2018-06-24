@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2015 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -21,12 +21,14 @@
 
 #import <Foundation/Foundation.h>
 #import "GeoPoint.h"
-
 @class BackendlessGeoQuery;
 
 @interface GeoCluster : GeoPoint
-@property (nonatomic, strong) NSNumber *totalPoints;
-@property (nonatomic, strong) BackendlessGeoQuery *geoQuery;
+
+@property (strong, nonatomic) NSNumber *totalPoints;
+@property (strong, nonatomic) BackendlessGeoQuery *geoQuery;
+
 -(int)valTotalPoints;
 -(void)totalPoints:(int)totalPoints;
+
 @end

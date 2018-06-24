@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2012 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -37,15 +37,18 @@ typedef enum {
 } ObjectDataType;
 
 @interface AbstractProperty : NSObject
+
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSNumber *required;
 @property (strong, nonatomic) NSString *type;
 @property (strong, nonatomic) NSNumber *selected;
 @property (strong, nonatomic) id defaultValue;
+
 -(BOOL)isRequired;
 -(void)isRequired:(BOOL)required;
 -(BOOL)isSelected;
 -(void)isSelected:(BOOL)selected;
 -(ObjectDataType)objectDataType;
 -(void)objectDataType:(ObjectDataType)dataType;
+
 @end

@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2015 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -23,13 +23,11 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define BEACON_SERVICE_NAME @"beacons"
-
 #define BEACON_DISCOVERY @"beacon-discovery"
 #define BEACON_FREQUENCY @"beacon-frequency"
 #define BEACON_DEFAULT_FREQUENCY 0
 #define BEACON_DEFAULT_DISCOVERY NO
 #define BEACON_DEFAUTL_DISTANCE_CHANGE 1
-
 #define IBEACON_UUID_STR @"uuid"
 #define IBEACON_MAJOR_STR @"majorVersion"
 #define IBEACON_MINOR_STR @"minorVersion"
@@ -48,6 +46,7 @@ typedef enum {
 } BeaconTypeEnum;
 
 @interface BackendlessBeacon : NSObject <NSCopying>
+
 @property (strong, nonatomic, readonly) NSString *objectId;
 @property (strong, nonatomic, readonly) NSDictionary<NSString*,NSString*> *iBeaconProps;
 @property (strong, nonatomic, readonly) NSDictionary<NSString*,NSString*> *eddystoneProps;

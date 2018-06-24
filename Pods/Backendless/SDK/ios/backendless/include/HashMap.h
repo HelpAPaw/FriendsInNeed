@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2012 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -21,12 +21,11 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface HashMap : NSObject
-@property (nonatomic, strong, readonly) NSMutableDictionary	*node;
+
+@property (strong, nonatomic, readonly) NSMutableDictionary	*node;
 
 -(id)initWithNode:(NSDictionary *)dict;
-
 -(BOOL)push:(NSString *)key withObject:(id)it;
 -(BOOL)add:(NSString *)key withObject:(id)it;
 -(id)get:(NSString *)key;
@@ -37,4 +36,5 @@
 -(NSArray *)values;
 -(void)clear;
 -(Class)hashClass;
+
 @end

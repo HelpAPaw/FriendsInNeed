@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2015 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -22,14 +22,12 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "LocationTracker.h"
-
-@protocol ICallback;
 @class Fault, GeoFence;
+@protocol ICallback;
 
 @interface GeoFenceMonitoring : NSObject <ILocationTrackerListener>
-// Singleton accessor:  this is how you should ALWAYS get a reference to the class instance.  Never init your own.
-+(GeoFenceMonitoring *)sharedInstance;
 
++(instancetype)sharedInstance;
 -(NSString *)listenerName;
 -(Fault *)addGeoFences:(NSArray *)geoFences callback:(id <ICallback>)callback;
 -(Fault *)addGeoFence:(GeoFence *)geoFence callback:(id <ICallback>)callback;

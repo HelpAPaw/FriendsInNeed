@@ -257,53 +257,53 @@
     
     [UIView animateWithDuration:0.3f animations:^{
         
-        _cancelButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
+       self.cancelButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
         
-        CGRect frame = _addSignalView.frame;
-        if (_isInSubmitMode)
+        CGRect frame =self.addSignalView.frame;
+        if (self.isInSubmitMode)
         {
             frame.origin.y += kAddSignalViewYbounce;
             
             // Fade pin before removal
-            _submitSignalAnnotationView.alpha = 0.0f;
+            self.submitSignalAnnotationView.alpha = 0.0f;
             
-            _cancelButton.alpha = 0.0f;
+           self.cancelButton.alpha = 0.0f;
         }
         else
         {
             frame.origin.y = kAddSignalViewYposition + kAddSignalViewYbounce;
             
-            _cancelButton.alpha = 1.0f;
+           self.cancelButton.alpha = 1.0f;
         }
-        _addSignalView.frame = frame;
+       self.addSignalView.frame = frame;
         
     } completion:^(BOOL finished) {
         if (finished)
         {
             [UIView animateWithDuration:0.3f animations:^{
-                CGRect frame = _addSignalView.frame;
-                if (_isInSubmitMode)
+                CGRect frame =self.addSignalView.frame;
+                if (self.isInSubmitMode)
                 {
                     frame.origin.y = - frame.size.height;
                     
                     // Remove pin and annotation
-                    [_mapView removeAnnotation:_submitSignalAnnotation];
-                    _submitSignalAnnotation = nil;
+                    [self.mapView removeAnnotation:self.submitSignalAnnotation];
+                    self.submitSignalAnnotation = nil;
                     
                     // Reset photo button
-                    [_btnPhoto setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
-                    _signalPhoto = nil;
+                    [self.btnPhoto setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
+                    self.signalPhoto = nil;
                     
-                    [_signalTitleField resignFirstResponder];
+                    [self.signalTitleField resignFirstResponder];
                 }
                 else
                 {
                     frame.origin.y -= kAddSignalViewYbounce;
                 }
-                _addSignalView.frame = frame;
+               self.addSignalView.frame = frame;
             }];
             
-            _isInSubmitMode = !_isInSubmitMode;
+           self.isInSubmitMode = !self.isInSubmitMode;
         }
     }];
 }
@@ -349,7 +349,7 @@
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           // Add new annotation to map and focus it when OK button is pressed
-                                                                          _focusSignalID = savedSignal.signalID;
+                                                                          self.focusSignalID = savedSignal.signalID;
                                                                           [self addAnnotationToMapFromSignal:savedSignal];
                                                                       }];
                 [alert addAction:defaultAction];
@@ -358,7 +358,7 @@
             else
             {
                 // Add new annotation to map and focus it when OK button is pressed
-                _focusSignalID = savedSignal.signalID;
+                self.focusSignalID = savedSignal.signalID;
                 [self addAnnotationToMapFromSignal:savedSignal];
             }
         }

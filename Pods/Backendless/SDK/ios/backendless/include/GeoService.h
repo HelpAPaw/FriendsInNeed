@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2012 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -24,15 +24,15 @@
 #import "GeoCluster.h"
 #import "Presence.h"
 
+@class GeoPoint, BackendlessGeoQuery, GeoCategory, Fault;
+@protocol IGeofenceCallback;
+
 #define DEFAULT_CATEGORY_NAME @"Default"
 
 typedef struct {
     GEO_POINT nordWest;
     GEO_POINT southEast;
 } GEO_RECT;
-
-@class GeoPoint, BackendlessGeoQuery, GeoCategory, Fault;
-@protocol IGeofenceCallback;
 
 @interface GeoService : NSObject
 
@@ -48,7 +48,7 @@ typedef struct {
 -(NSArray<GeoPoint *> *)getFencePoints:(NSString *)geoFenceName;
 -(NSArray<GeoPoint *> *)getFencePoints:(NSString *)geoFenceName query:(BackendlessGeoQuery *)query;
 -(NSArray *)relativeFind:(BackendlessGeoQuery *)query;
--(id)removePoint:(GeoPoint *)geoPoint;
+-(void)removePoint:(GeoPoint *)geoPoint;
 -(GeoPoint *)loadMetadata:(GeoPoint *)geoPoint;
 -(NSNumber *)runOnEnterAction:(NSString *)geoFenceName;
 -(NSNumber *)runOnEnterAction:(NSString *)geoFenceName geoPoint:(GeoPoint *)geoPoint;
@@ -69,8 +69,8 @@ typedef struct {
 -(void)getFencePoints:(NSString *)geoFenceName response:(void(^)(NSArray<GeoPoint *> *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)getFencePoints:(NSString *)geoFenceName query:(BackendlessGeoQuery *)query response:(void(^)(NSArray<GeoPoint *> *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)relativeFind:(BackendlessGeoQuery *)query response:(void(^)(NSArray *))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)removePoint:(GeoPoint *)geoPoint response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)loadMetadata:(GeoPoint *)geoPoint response:(void (^)(id))responseBlock error:(void (^)(Fault *))errorBlock;
+-(void)removePoint:(GeoPoint *)geoPoint response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)loadMetadata:(GeoPoint *)geoPoint response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)runOnEnterAction:(NSString *)geoFenceName response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)runOnEnterAction:(NSString *)geoFenceName geoPoint:(GeoPoint *)geoPoint response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)runOnStayAction:(NSString *)geoFenceName response:(void(^)(NSNumber *))responseBlock error:(void(^)(Fault *))errorBlock;
@@ -84,10 +84,10 @@ typedef struct {
 -(GEO_RECT)geoRectangle:(GEO_POINT)center length:(double)length width:(double)width;
 
 // geo fence monitoring
--(void)startGeofenceMonitoringGeoPoint:(GeoPoint *)geoPoint response:(void (^)(id))responseBlock error:(void (^)(Fault *))errorBlock;
--(void)startGeofenceMonitoring:(id <IGeofenceCallback>)callback response:(void (^)(id))responseBlock error:(void (^)(Fault *))errorBlock;
--(void)startGeofenceMonitoringGeoPoint:(NSString *)geofenceName geoPoint:(GeoPoint *)geoPoint response:(void (^)(id))responseBlock error:(void (^)(Fault *))errorBlock;
--(void)startGeofenceMonitoring:(NSString *)geofenceName callback:(id <IGeofenceCallback>)callback response:(void (^)(id))responseBlock error:(void (^)(Fault *))errorBlock;
+-(void)startGeofenceMonitoringGeoPoint:(GeoPoint *)geoPoint response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)startGeofenceMonitoring:(id <IGeofenceCallback>)callback response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)startGeofenceMonitoringGeoPoint:(NSString *)geofenceName geoPoint:(GeoPoint *)geoPoint response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)startGeofenceMonitoring:(NSString *)geofenceName callback:(id <IGeofenceCallback>)callback response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
 -(void)stopGeofenceMonitoring;
 -(void)stopGeofenceMonitoring:(NSString *)geofenceName;
 

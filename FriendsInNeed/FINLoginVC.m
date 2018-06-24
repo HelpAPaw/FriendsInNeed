@@ -98,22 +98,22 @@
 - (void)setupRegistrationView
 {
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromLeft animations:^{
-        _hintLabel.text = NSLocalizedString(@"Become a member", nil);
-        _nameLabel.hidden = NO;
-        _nameTextField.hidden = NO;
-        _phoneLabel.hidden = NO;
-        _phoneTextField.hidden = NO;
-        _whyButton.hidden = NO;
+        self.hintLabel.text = NSLocalizedString(@"Become a member", nil);
+        self.nameLabel.hidden = NO;
+        self.nameTextField.hidden = NO;
+        self.phoneLabel.hidden = NO;
+        self.phoneTextField.hidden = NO;
+        self.whyButton.hidden = NO;
         
         [UIView performWithoutAnimation:^{
             //For immediate change
-            _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Register", nil)];
+            self.registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Register", nil)];
             //To keep the title after state changes (e.g. user taps)
-            [_registerLoginButton setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal];
-            [_registerLoginButton layoutIfNeeded];
+            [self.registerLoginButton setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal];
+            [self.registerLoginButton layoutIfNeeded];
         }];
         
-        _passwordTextField.returnKeyType = UIReturnKeyNext;
+        self.passwordTextField.returnKeyType = UIReturnKeyNext;
     } completion:^(BOOL finished){
         if (finished)
         {
@@ -125,27 +125,27 @@
 - (void)setupLoginView
 {
     [UIView transitionWithView:_containerScrollView duration:0.6f options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
-        _hintLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Please enter your credentials", nil)];
-        _nameLabel.hidden = YES;
-        _nameTextField.hidden = YES;
-        _phoneLabel.hidden = YES;
-        _phoneTextField.hidden = YES;
-        _whyButton.hidden = YES;
+        self.hintLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Please enter your credentials", nil)];
+        self.nameLabel.hidden = YES;
+        self.nameTextField.hidden = YES;
+        self.phoneLabel.hidden = YES;
+        self.phoneTextField.hidden = YES;
+        self.whyButton.hidden = YES;
         
         //For immediate change
-        _registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Login", nil)];
+        self.registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Login", nil)];
         //To keep the title after state changes (e.g. user taps)
-        [_registerLoginButton setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
+        [self.registerLoginButton setTitle:NSLocalizedString(@"Login", nil) forState:UIControlStateNormal];
         
-        _passwordTextField.returnKeyType = UIReturnKeyGo;
+        self.passwordTextField.returnKeyType = UIReturnKeyGo;
         
-        if ([_nameTextField isFirstResponder])
+        if ([self.nameTextField isFirstResponder])
         {
-            [_nameTextField resignFirstResponder];
+            [self.nameTextField resignFirstResponder];
         }
-        else if ([_phoneTextField isFirstResponder])
+        else if ([self.phoneTextField isFirstResponder])
         {
-            [_phoneTextField resignFirstResponder];
+            [self.phoneTextField resignFirstResponder];
         }
     } completion:^(BOOL finished){
         if (finished)
@@ -214,8 +214,8 @@
         
         [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
             
-            [_activityIndicator stopAnimating];
-            _registerLoginButton.enabled = YES;
+            [self.activityIndicator stopAnimating];
+            self.registerLoginButton.enabled = YES;
             
             if (!error)
             {
@@ -226,7 +226,7 @@
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           [self setupLoginView];
-                                                                          [_segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
+                                                                          [self.segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
                                                                       }];
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:^{}];
@@ -262,8 +262,8 @@
         
         [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
             
-            [_activityIndicator stopAnimating];
-            _registerLoginButton.enabled = YES;
+            [self.activityIndicator stopAnimating];
+            self.registerLoginButton.enabled = YES;
             
             if (!error)
             {

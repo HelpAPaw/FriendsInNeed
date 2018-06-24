@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2014 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -20,6 +20,7 @@
  */
 
 #import <Foundation/Foundation.h>
+@class Fault;
 
 typedef enum {
     DATA_UPDATE,
@@ -27,28 +28,26 @@ typedef enum {
     DATA_REMOVE,
 } DataPermissionOperation;
 
-@class Fault;
-
 @interface DataPermission : NSObject
 
 // sync methods with fault return (as exception)
--(id)grantForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation;
--(id)denyForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation;
--(id)grantForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation;
--(id)denyForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation;
--(id)grantForAllUsers:(id)entity operation:(DataPermissionOperation)operation;
--(id)denyForAllUsers:(id)entity operation:(DataPermissionOperation)operation;
--(id)grantForAllRoles:(id)entity operation:(DataPermissionOperation)operation;
--(id)denyForAllRoles:(id)entity operation:(DataPermissionOperation)operation;
+-(void)grantForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation;
+-(void)denyForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation;
+-(void)grantForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation;
+-(void)denyForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation;
+-(void)grantForAllUsers:(id)entity operation:(DataPermissionOperation)operation;
+-(void)denyForAllUsers:(id)entity operation:(DataPermissionOperation)operation;
+-(void)grantForAllRoles:(id)entity operation:(DataPermissionOperation)operation;
+-(void)denyForAllRoles:(id)entity operation:(DataPermissionOperation)operation;
 
 // async methods with block-based callbacks
--(void)grantForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForAllUsers:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForAllUsers:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForAllRoles:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForAllRoles:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForUser:(NSString *)userId entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForRole:(NSString *)roleName entity:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForAllUsers:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForAllUsers:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForAllRoles:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForAllRoles:(id)entity operation:(DataPermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
 
 @end

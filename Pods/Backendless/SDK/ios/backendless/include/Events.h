@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2012 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -20,15 +20,16 @@
  */
 
 #import <Foundation/Foundation.h>
-
 @protocol IResponder;
 @class Fault;
 
 @interface Events : NSObject
+
 // sync methods with fault return (as exception)
 -(NSDictionary *)dispatch:(NSString *)name args:(NSDictionary *)eventArgs;
 // async methods with responder
 -(void)dispatch:(NSString *)name args:(NSDictionary *)eventArgs responder:(id <IResponder>)responder;
 // async methods with block-based callbacks
 -(void)dispatch:(NSString *)name args:(NSDictionary *)eventArgs response:(void(^)(NSDictionary *data))responseBlock error:(void(^)(Fault *fault))errorBlock;
+
 @end

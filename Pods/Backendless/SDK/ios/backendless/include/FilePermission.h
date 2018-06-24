@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2014 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -20,6 +20,7 @@
  */
 
 #import <Foundation/Foundation.h>
+@class Fault;
 
 typedef enum {
     FILE_READ,
@@ -27,28 +28,26 @@ typedef enum {
     FILE_REMOVE,
 } FilePermissionOperation;
 
-@class Fault;
-
 @interface FilePermission : NSObject
 
 // sync methods with fault return (as exception)
--(id)grantForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)denyForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)grantForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)denyForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)grantForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)denyForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)grantForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation;
--(id)denyForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)grantForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)denyForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)grantForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)denyForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)grantForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)denyForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)grantForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation;
+-(void)denyForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation;
 
 // async methods with block-based callbacks
--(void)grantForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)grantForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
--(void)denyForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(id))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForUser:(NSString *)userId url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForRole:(NSString *)roleName url:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForAllUsers:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)grantForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
+-(void)denyForAllRoles:(NSString *)url operation:(FilePermissionOperation)operation response:(void(^)(void))responseBlock error:(void(^)(Fault *))errorBlock;
 
 @end

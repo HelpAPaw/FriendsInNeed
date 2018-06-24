@@ -102,8 +102,8 @@ enum {
         
         if (!error)
         {
-            _comments = [NSMutableArray new];
-            [_comments addObjectsFromArray:comments];
+            self.comments = [NSMutableArray new];
+            [self.comments addObjectsFromArray:comments];
 //            [self determineIfAddCommentShadowShouldBeVisible];
         }
         else
@@ -111,8 +111,8 @@ enum {
             [self showAlertForError:error];
         }
         
-        _commentsAreLoaded = YES;
-        [_tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationFade];
+        self.commentsAreLoaded = YES;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSectionIndexComments] withRowAnimation:UITableViewRowAnimationFade];
     }];
 }
 
@@ -169,8 +169,8 @@ enum {
     // Fix a problem with UIVisualEffectView in iOS 10
     // http://stackoverflow.com/questions/39671408/uivisualeffectview-in-ios-10
     [UIView animateWithDuration:0.3 animations:^{
-        _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
-        _addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        self.addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        self.addCommentBlurBackground1.effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
 
     }];
     
@@ -529,18 +529,18 @@ enum {
                 [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:_annotation.signal completion:^(FINError *error) {
                     if (error != nil) {
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
-                        _status = currentStatus;
-                        _annotation.signal.status = currentStatus;
+                        self.status = currentStatus;
+                        self.annotation.signal.status = currentStatus;
                         [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
                         UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                                 style:UIAlertActionStyleDefault
                                                                               handler:^(UIAlertAction * action) {}];
         
                         [self showAlertViewControllerWithTitle:NSLocalizedString(@"Ooops!",nil) message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Possible problem:\n%@",nil), error.message] actions: [NSArray arrayWithObjects:defaultAction, nil]];
-                        [self.delegate refreshAnnotation:_annotation];
+                        [self.delegate refreshAnnotation:self.annotation];
                     }
                     else {
-                        _status = indexPath.row;
+                        self.status = indexPath.row;
                         [self performSelector:@selector(reloadStatusSection) withObject:nil afterDelay:0.1];
                         [self getComments];
                     }
@@ -593,13 +593,13 @@ enum {
         
         if (!error)
         {
-            [_comments addObject:comment];
+            [self.comments addObject:comment];
             
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_comments indexOfObject:comment] inSection:kSectionIndexComments];
-            [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.comments indexOfObject:comment] inSection:kSectionIndexComments];
+            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
             
-            _addCommentTextField.text = @"";
+            self.addCommentTextField.text = @"";
         }
         else
         {
@@ -657,13 +657,13 @@ enum {
     [UIView animateWithDuration:0.3f animations:^{
         
         // Move the comment view above the keyboard
-        CGRect frame = _addCommentView.frame;
-        frame.origin.y -= _keyboardHeight;
-        _addCommentView.frame = frame;
+        CGRect frame = self.addCommentView.frame;
+        frame.origin.y -= self.keyboardHeight;
+        self.addCommentView.frame = frame;
         
         // Modify its bottom constraint, too
-        _addCommentLC.constant = _keyboardHeight-addOn;
-        [_addCommentView setNeedsLayout];
+        self.addCommentLC.constant = self.keyboardHeight-addOn;
+        [self.addCommentView setNeedsLayout];
     }];
     
     _keyboardIsShown = YES;
@@ -680,12 +680,12 @@ enum {
     [UIView animateWithDuration:0.3f animations:^{
         
         // Return comment and table views to their original state
-        CGRect frame = _addCommentView.frame;
-        frame.origin.y += _keyboardHeight;
-        _addCommentView.frame = frame;
+        CGRect frame = self.addCommentView.frame;
+        frame.origin.y += self.keyboardHeight;
+        self.addCommentView.frame = frame;
         
-        _addCommentLC.constant = 0.0f;
-        [_addCommentView setNeedsLayout];
+        self.addCommentLC.constant = 0.0f;
+        [self.addCommentView setNeedsLayout];
     }];
     
     _keyboardIsShown = NO;

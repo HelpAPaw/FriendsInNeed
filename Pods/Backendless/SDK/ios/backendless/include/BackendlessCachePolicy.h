@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2014 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -21,8 +21,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum
-{
+typedef enum {
     BackendlessCachePolicyIgnoreCache,
     BackendlessCachePolicyCacheOnly,
     BackendlessCachePolicyRemoteDataOnly,
@@ -31,20 +30,19 @@ typedef enum
     BackendlessCachePolicyFromCacheAndRemote
 } BackendlessCachePolicyEnum;
 
-typedef enum
-{
+typedef enum {
     BackendlessCacheStoredMemory,
     BackendlessCacheStoredDisc
 } BackendlessCacheStoredEnum;
 
-
 @interface BackendlessCachePolicy : NSObject <NSCopying>
 
-@property (nonatomic, strong) NSNumber *timeToLive;
-@property (nonatomic, strong) NSNumber *cachePolicy;
+@property (strong, nonatomic) NSNumber *timeToLive;
+@property (strong, nonatomic) NSNumber *cachePolicy;
 
 -(void)cachePolicy:(BackendlessCachePolicyEnum)cachePolicy;
 -(BackendlessCachePolicyEnum)valCachePolicy;
 -(void)timeToLive:(int)timeToLive;
 -(int)valTimeToLive;
+
 @end

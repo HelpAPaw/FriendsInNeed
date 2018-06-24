@@ -28,12 +28,12 @@
         if (highlighted)
         {
             self.backgroundColor = [UIColor whiteColor];
-            _label.textColor = kCustomOrange;//[UIColor lightGrayColor];
+            self.label.textColor = kCustomOrange;//[UIColor lightGrayColor];
         }
         else
         {
             self.backgroundColor = kCustomOrange;
-            _label.textColor = [UIColor whiteColor];
+            self.label.textColor = [UIColor whiteColor];
         }
     }];
 }

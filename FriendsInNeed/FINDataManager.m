@@ -43,10 +43,10 @@
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     
-    NSNumber *isValidUserToken = @NO;
+    BOOL isValidUserToken = NO;
     @try {
         isValidUserToken = [backendless.userService isValidUserToken];
-        if ([isValidUserToken boolValue] == NO)
+        if (isValidUserToken == NO)
         {
             [backendless.userService logout];
         }
@@ -117,7 +117,7 @@
             
             // Check if the signal is already present
             BOOL alreadyPresent = NO;
-            for (FINSignal *signal in _nearbySignals)
+            for (FINSignal *signal in self.nearbySignals)
             {
                 if ([signal.signalID isEqualToString:receivedSignal.signalID])
                 {
@@ -138,12 +138,12 @@
             [tempNearbySignals addObject:receivedSignal];
         }
         
-        _nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
+        self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
         
         // If application is currently active show received signals on map
         if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
         {
-            [_mapDelegate updateMapWithNearbySignals:_nearbySignals];
+            [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
             if (completionHandler)
             {                
                 completionHandler(UIBackgroundFetchResultNewData);
@@ -153,7 +153,7 @@
         {
             if (newSignals.count > 0)
             {
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:_nearbySignals.count];
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.nearbySignals.count];
                 
                 for (FINSignal *signal in newSignals)
                 {
@@ -181,7 +181,7 @@
     } error:^(Fault *fault) {
         NSLog(@"%@", fault.description);
         
-        _lastSignalCheckLocation = nil;
+        self.lastSignalCheckLocation = nil;
         
         if (completionHandler != nil)
         {
@@ -234,7 +234,7 @@
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
         
         FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
-        [_nearbySignals addObject:savedSignal];
+        [self.nearbySignals addObject:savedSignal];
         
         if (photo)
         {
@@ -358,7 +358,7 @@
 
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion
 {
-    [backendless.userService logout:^void (id idOfSomething) {
+    [backendless.userService logout:^void () {
         completion(nil);
     } error:^void (Fault *fault) {
         FINError *error = [[FINError alloc] initWithFault:fault];

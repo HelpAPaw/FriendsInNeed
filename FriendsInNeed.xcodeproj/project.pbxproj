@@ -23,8 +23,7 @@
 		14F14F861E9A098600977C8E /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */; };
 		14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */; };
 		14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */; };
-		17E21D2BEDD7A88D2D239F1C /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */; };
-		ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 850A53F660CB027165B53E3D /* libPods-Help A Paw.a */; };
+		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
@@ -81,6 +80,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Help_A_Paw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1420BA6F1E72FF4A006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsVC.xib; sourceTree = "<group>"; };
 		1420BA711E73011B006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMenuVC.xib; sourceTree = "<group>"; };
 		1420BA741E73011D006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMenuVC.strings"; sourceTree = "<group>"; };
@@ -198,9 +198,8 @@
 				14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */,
 				14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */,
 				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
-				ED3AC99355F5FD348F0DB9A2 /* libPods-Help A Paw.a in Frameworks */,
 				14F14F841E9A097400977C8E /* Bolts.framework in Frameworks */,
-				17E21D2BEDD7A88D2D239F1C /* libPods-Help A Paw.a in Frameworks */,
+				61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,7 +269,7 @@
 				14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */,
 				14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */,
 				14F14F831E9A097400977C8E /* Bolts.framework */,
-				4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */,
+				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
 			);
 			name = Frameworks;
 			path = FriendsInNeed/Resources;
@@ -302,6 +301,14 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		F334287520E000FF0062236E /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
@@ -314,6 +321,7 @@
 				F38B72EC1C00E04F00FBE20C /* Products */,
 				8E90546007900DD9E3332797 /* Pods */,
 				CE84D0F938D153CA1EAC0401 /* Frameworks */,
+				F334287520E000FF0062236E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -435,7 +443,6 @@
 				F38B72E81C00E04F00FBE20C /* Frameworks */,
 				F38B72E91C00E04F00FBE20C /* Resources */,
 				FCDABA93DD9378850C7334DA /* [CP] Embed Pods Frameworks */,
-				AFB23CDC957966B2E62B51AC /* [CP] Copy Pods Resources */,
 				F3086C931E369C710070A91C /* ShellScript */,
 			);
 			buildRules = (
@@ -556,21 +563,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AFB23CDC957966B2E62B51AC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		F3086C931E369C710070A91C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -590,9 +582,18 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/ViewDeck/ViewDeck.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ViewDeck.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

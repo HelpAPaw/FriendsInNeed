@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2015 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2018 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -20,16 +20,15 @@
  */
 
 #import <Foundation/Foundation.h>
-
 @class Responder;
 
 @interface LogBuffer : NSObject
-// Singleton accessor:  this is how you should ALWAYS get a reference to the class instance.  Never init your own.
-+(LogBuffer *)sharedInstance;
 
 @property (strong, nonatomic) Responder *responder;
 
++(instancetype)sharedInstance;
 -(id)setLogReportingPolicy:(int)messagesNum time:(int)timeFrequencySec;
 -(void)enqueue:(NSString *)logger level:(NSString *)level message:(NSString *)message exception:(NSString *)exception;
 -(void)forceFlush;
+
 @end

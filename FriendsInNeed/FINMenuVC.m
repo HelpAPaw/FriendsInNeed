@@ -165,8 +165,10 @@ enum
                 // TODO: add loading indicator
                 [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
                     // TODO: handle error
-                    
-                    [self refreshLoginStatus];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [self refreshLoginStatus];
+                    });
                 }];
             }
             else

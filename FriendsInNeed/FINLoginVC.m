@@ -261,28 +261,29 @@
         _registerLoginButton.enabled = NO;
         
         [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
-            
-            [self.activityIndicator stopAnimating];
-            self.registerLoginButton.enabled = YES;
-            
-            if (!error)
-            {
-                [self dismissViewControllerAnimated:YES completion:^{}];
-            }
-            else 
-            {
-                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.activityIndicator stopAnimating];
+                self.registerLoginButton.enabled = YES;
                 
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
-                                                                               message:errorMessage
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                      }];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:^{}];
-            }
+                if (!error)
+                {
+                    [self dismissViewControllerAnimated:YES completion:^{}];
+                }
+                else
+                {
+                    NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
+                    
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
+                                                                                   message:errorMessage
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                            style:UIAlertActionStyleDefault
+                                                                          handler:^(UIAlertAction * action) {
+                                                                          }];
+                    [alert addAction:defaultAction];
+                    [self presentViewController:alert animated:YES completion:^{}];
+                }
+            });            
         }];
     }
 }

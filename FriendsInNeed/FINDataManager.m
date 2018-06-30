@@ -141,28 +141,10 @@
         self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
         
         // If application is currently active show received signals on map
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-        {
-            [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
-            if (completionHandler)
-            {                
-                completionHandler(UIBackgroundFetchResultNewData);
-            }
-        }
-        else
-        {
-            if (newSignals.count > 0)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
             {
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.nearbySignals.count];
-                
-                for (FINSignal *signal in newSignals)
-                {
-                    UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                    localNotification.alertBody  = signal.title;
-                    localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
-                    [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-                }
-                
+                [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
                 if (completionHandler)
                 {
                     completionHandler(UIBackgroundFetchResultNewData);
@@ -170,14 +152,35 @@
             }
             else
             {
-                if (completionHandler)
+                if (newSignals.count > 0)
                 {
-                    completionHandler(UIBackgroundFetchResultNoData);
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.nearbySignals.count];
+                    
+                    for (FINSignal *signal in newSignals)
+                    {
+                        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                        localNotification.alertBody  = signal.title;
+                        localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
+                        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                    }
+                    
+                    if (completionHandler)
+                    {
+                        completionHandler(UIBackgroundFetchResultNewData);
+                    }
+                }
+                else
+                {
+                    if (completionHandler)
+                    {
+                        completionHandler(UIBackgroundFetchResultNoData);
+                    }
                 }
             }
-        }
+            
+            [self saveLastSignalCheckLocation:location];
+        });
         
-        [self saveLastSignalCheckLocation:location];
     } error:^(Fault *fault) {
         NSLog(@"%@", fault.description);
         
@@ -239,13 +242,12 @@
         if (photo)
         {
             NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
-            [backendless.fileService saveFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) response:^(BackendlessFile *savedFile) {
+            [backendless.fileService uploadFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) overwriteIfExist:YES response:^(BackendlessFile *savedFile) {
                 savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
                 [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
                     completion(savedSignal, nil);
                 }];
             } error:^(Fault *fault) {
-                
                 FINError *error = [[FINError alloc] initWithFault:fault];
                 completion(savedSignal, error);
             }];

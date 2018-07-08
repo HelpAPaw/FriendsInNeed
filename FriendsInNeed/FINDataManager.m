@@ -188,7 +188,9 @@
         
         if (completionHandler != nil)
         {
-            completionHandler(UIBackgroundFetchResultFailed);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(UIBackgroundFetchResultFailed);
+            });
         }
     }];
     
@@ -245,22 +247,29 @@
             [backendless.fileService uploadFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) overwriteIfExist:YES response:^(BackendlessFile *savedFile) {
                 savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
                 [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
-                    completion(savedSignal, nil);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(savedSignal, nil);
+                    });
                 }];
             } error:^(Fault *fault) {
-                FINError *error = [[FINError alloc] initWithFault:fault];
-                completion(savedSignal, error);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    FINError *error = [[FINError alloc] initWithFault:fault];
+                    completion(savedSignal, error);
+                });
             }];
         }
         else
         {
-            completion(savedSignal, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(savedSignal, nil);
+            });
         }
         
     } error:^(Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(nil, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(nil, error);
+        });
     }];
 }
 
@@ -270,13 +279,15 @@
     [point.metadata setObject:[NSString stringWithFormat:@"%lu", (unsigned long)status] forKey:kSignalStatusKey];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
-        
-        signal.geoPoint = returnedGeoPoint;
-        completion(nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            signal.geoPoint = returnedGeoPoint;
+            completion(nil);
+        });
     } error:^(Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(error);
+        dispatch_async(dispatch_get_main_queue(), ^{            
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(error);
+        });
     }];
 }
 
@@ -298,12 +309,15 @@
             FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
             signal.photoUrl = [self getPhotoUrlForSignal:signal];
             
-            completion(signal, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(signal, nil);
+            });
         }
     } error:^(Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(nil, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(nil, error);
+        });
     }];
 }
 
@@ -335,36 +349,43 @@
     user.email = email;
     user.password = password;
     
-    //TODO: check if registration works
     [backendless.userService registerUser:user response:^void (BackendlessUser *registeredUser) {
-        
-        completion(nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(nil);
+        });
     } error:^void (Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(error);
+        });
     }];
 }
 
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
     [backendless.userService login:email password:password response:^void (BackendlessUser *loggeduser) {
-        
-        completion(nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(nil);
+        });
     } error:^void (Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(error);
+        });
     }];
 }
 
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion
 {
     [backendless.userService logout:^void () {
-        completion(nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(nil);
+        });
     } error:^void (Fault *fault) {
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(error);
+        });
     }];
 }
 
@@ -382,10 +403,14 @@
     
     id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
     [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
-        completion(comments, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(comments, nil);
+        });
     } error:^(Fault *fault) {
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(nil, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(nil, error);
+        });
     }];
 }
 
@@ -400,16 +425,21 @@
     [commentsStore save:comment response:^(FINComment *comment) {
         BackendlessUser *author = backendless.userService.currentUser;
         [commentsStore setRelation:@"author" parentObjectId:comment.objectId childObjects:@[author.objectId] response:^(NSNumber *setRelations) {
-            comment.author = author;
-            completion(comment, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                comment.author = author;
+                completion(comment, nil);
+            });
         } error:^(Fault *fault) {
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(nil, error);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                FINError *error = [[FINError alloc] initWithFault:fault];
+                completion(nil, error);
+            });
         }];
     } error:^(Fault *fault) {
-        
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completion(nil, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(nil, error);
+        });
     }];
 }
 
@@ -450,18 +480,24 @@
         }
         if (receivedGeoPoints.count == 0)
         {
-            completionHandler(totalSignals, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionHandler(totalSignals, nil);
+            });
         }
         else {
             [self getAllSignalsFromPage:page+1 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
-                [totalSignals addObjectsFromArray:signals];
-                completionHandler(totalSignals, nil);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [totalSignals addObjectsFromArray:signals];
+                    completionHandler(totalSignals, nil);
+                });
             }];
         }
         
     } error:^(Fault *fault) {
-        FINError *error = [[FINError alloc] initWithFault:fault];
-        completionHandler(nil, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            FINError *error = [[FINError alloc] initWithFault:fault];
+            completionHandler(nil, error);
+        });
     }];
 }
 

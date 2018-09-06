@@ -58,8 +58,6 @@
     
     _locationManager = [FINLocationManager sharedManager];
     _locationManager.mapDelegate = self;
-    _dataManager = [FINDataManager sharedManager];
-    _dataManager.mapDelegate = self;
     
     [_locationManager startMonitoringSignificantLocationChanges];
     
@@ -131,6 +129,8 @@
     {
         if (_viewDidAppearOnce == NO)
         {
+            _dataManager = [FINDataManager sharedManager];
+            _dataManager.mapDelegate = self;
             [self initMapVC];
             _viewDidAppearOnce = YES;
         }

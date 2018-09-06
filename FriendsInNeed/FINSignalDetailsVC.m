@@ -123,6 +123,8 @@ enum {
     [self getComments];
     
     _tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, _addCommentView.frame.size.height, 0.0f);
+    _tableView.rowHeight = UITableViewAutomaticDimension;
+    _tableView.estimatedRowHeight = 44.0;
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierDetails];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsStatusChangeCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierCommentStatus];
@@ -480,7 +482,7 @@ enum {
     float height;
     switch (indexPath.section) {
         case kSectionIndexDetails:
-            height = 150.0f;
+            height = UITableViewAutomaticDimension;
             break;
         case kSectionIndexStatus:
             height = 55.0f;
@@ -494,13 +496,13 @@ enum {
                 CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 200} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
                 height = ceilf(rect.size.height) + 55;
             }
-            else 
+            else
             {
                 height = 44.0f;
             }
             break;
         }
-            
+
         default:
             height = 44.0f;
             break;

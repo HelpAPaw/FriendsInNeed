@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnCall;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnCallHeightConstraint;
+@property (strong, nonatomic) NSDictionary *italicAttributes;
 
 @end
 
@@ -40,6 +42,9 @@
     if (self)
     {
         //Changes here after init'ing self
+        
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Italic" size:12.0];
+        _italicAttributes = @{NSFontAttributeName: font};
     }
     
     return self;
@@ -62,13 +67,17 @@
     
     _lbTitle.adjustsFontSizeToFitWidth = YES;
     
+    // Set image on right side to left-align phone and author
+    _btnCall.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
     if (_phoneNumber)
     {
         _btnCall.hidden = NO;
+        _btnCallHeightConstraint.constant = 44.0;
     }
     else
     {
         _btnCall.hidden = YES;
+        _btnCallHeightConstraint.constant = 0.0;
     }
 }
 
@@ -85,12 +94,12 @@
 
 - (void)setAuthor:(NSString *)author
 {
-    _lbAuthor.text = [NSString stringWithFormat:@"%@", author];
+    _lbAuthor.attributedText = [[NSMutableAttributedString alloc] initWithString:author attributes:_italicAttributes];
 }
 
 - (void)setDate:(NSString *)date
 {
-    _lbDate.text = [NSString stringWithFormat:@"%@", date];
+    _lbDate.attributedText = [[NSMutableAttributedString alloc] initWithString:date attributes:_italicAttributes];
 }
 
 - (void)setPhoto:(UIImage *)photo
@@ -114,6 +123,8 @@
     {
         _phoneNumber = phoneNumber;
         _btnCall.hidden = NO;
+        // Put some space between phone number and icon
+        [_btnCall setTitle:[NSString stringWithFormat:@"%@   ", phoneNumber] forState:UIControlStateNormal];
     }
     else
     {

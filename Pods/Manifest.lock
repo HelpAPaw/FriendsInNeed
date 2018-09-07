@@ -1,13 +1,13 @@
 PODS:
-  - Backendless (5.0.4):
+  - Backendless (5.1.2):
     - Socket.IO-Client-Swift
-  - Crashlytics (3.10.2):
-    - Fabric (~> 1.7.7)
-  - Fabric (1.7.7)
-  - SDWebImage (4.4.1):
-    - SDWebImage/Core (= 4.4.1)
-  - SDWebImage/Core (4.4.1)
-  - Socket.IO-Client-Swift (13.2.1):
+  - Crashlytics (3.10.7):
+    - Fabric (~> 1.7.11)
+  - Fabric (1.7.11)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
+  - Socket.IO-Client-Swift (13.3.0):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.5)
   - ViewDeck (3.1.0)
@@ -30,11 +30,11 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: c31869434085f6756f83347d1c6efcb15f1d7326
-  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
-  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
-  SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
-  Socket.IO-Client-Swift: b94943e2fb916fe2f95244b9ed21828634002280
+  Backendless: 933e1e0241ac02c57f578614fbfc9b5b09767aee
+  Crashlytics: ccaac42660eb9351b9960c0d66106b0bcf99f4fa
+  Fabric: f233c9492b3bbc1f04e3882986740f7988a58edb
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  Socket.IO-Client-Swift: 0afb192a562db90d50e3f7f7421c06925a3f0179
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 

@@ -175,7 +175,7 @@
 		020A82EC374B1E99817EF63BDC30F982 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+WebCacheOperation.m"; path = "SDWebImage/UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		029B9A5593CFB41F440E2A0113939440 /* UIButton+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+WebCache.h"; path = "SDWebImage/UIButton+WebCache.h"; sourceTree = "<group>"; };
 		034B45A37F73D39518903652CC9C5E98 /* ISharedObjectMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ISharedObjectMessage.h; path = SDK/ios/backendless/include/ISharedObjectMessage.h; sourceTree = "<group>"; };
-		0355ADED3AEB6DF59E9C45FD645C39A4 /* IIViewDeckTransition.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = IIViewDeckTransition.mm; path = ViewDeck/Private/IIViewDeckTransition.mm; sourceTree = "<group>"; };
+		0355ADED3AEB6DF59E9C45FD645C39A4 /* IIViewDeckTransition.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = IIViewDeckTransition.mm; path = ViewDeck/Private/IIViewDeckTransition.mm; sourceTree = "<group>"; };
 		037EB1ECF32B45FB8A88ECA7D94F27C4 /* SDWebImageDownloader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloader.h; path = SDWebImage/SDWebImageDownloader.h; sourceTree = "<group>"; };
 		03AB7806C50BC065E3DA251E4EF4DE5A /* StringWriter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = StringWriter.h; path = SDK/ios/backendless/include/StringWriter.h; sourceTree = "<group>"; };
 		03FEFFE14D4185094C46A64C0AFE96E7 /* V3Reader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = V3Reader.h; path = SDK/ios/backendless/include/V3Reader.h; sourceTree = "<group>"; };
@@ -222,7 +222,7 @@
 		1B7D240B35524FC0BBDB42D7AED0D167 /* IIViewDeckLayoutSupport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IIViewDeckLayoutSupport.h; path = ViewDeck/Private/IIViewDeckLayoutSupport.h; sourceTree = "<group>"; };
 		1BFE0D291B27A5982F6BFA1F855F80EB /* NSButton+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSButton+WebCache.m"; path = "SDWebImage/NSButton+WebCache.m"; sourceTree = "<group>"; };
 		1C4A0E2CCB3D77548DC76DF080A47158 /* Crashlytics.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Crashlytics.h; path = iOS/Crashlytics.framework/Headers/Crashlytics.h; sourceTree = "<group>"; };
-		1C9EEFA2B0DC453940D0E2AF082291AA /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C9EEFA2B0DC453940D0E2AF082291AA /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SDWebImage.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D09A02BE7A5DB0515BC72562728C520 /* SDAnimatedImageRep.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAnimatedImageRep.m; path = SDWebImage/SDAnimatedImageRep.m; sourceTree = "<group>"; };
 		1D7B5390EDB8491A4D389D0FE03FFCC0 /* ISharedObjectHandlerProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ISharedObjectHandlerProvider.h; path = SDK/ios/backendless/include/ISharedObjectHandlerProvider.h; sourceTree = "<group>"; };
 		1DE9941A60B65ADECEBFA98A011185C6 /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -265,7 +265,7 @@
 		3A0A8E8A759F198C4EF93125C5668B15 /* ReqMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ReqMessage.h; path = SDK/ios/backendless/include/ReqMessage.h; sourceTree = "<group>"; };
 		3A52BBF822F537D272B8E11DBD950869 /* CustomService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CustomService.h; path = SDK/ios/backendless/include/CustomService.h; sourceTree = "<group>"; };
 		3A81364E6B5BE41A6A3B82DEB7F521A2 /* ISharedObjectBase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ISharedObjectBase.h; path = SDK/ios/backendless/include/ISharedObjectBase.h; sourceTree = "<group>"; };
-		3AF99993EE14FE282C2BBB94289B87E0 /* SocketIO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AF99993EE14FE282C2BBB94289B87E0 /* SocketIO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SocketIO.framework; path = "Socket.IO-Client-Swift.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BEC58B6CF9AEB5E9857F647C62053B9 /* MetaData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MetaData.h; path = SDK/ios/backendless/include/MetaData.h; sourceTree = "<group>"; };
 		3DFF11ADBBACD65CA41DE66B9A6C332F /* BackendlessCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BackendlessCache.h; path = SDK/ios/backendless/include/BackendlessCache.h; sourceTree = "<group>"; };
 		3E2E2C232CBE860DA45323BB9D724895 /* SDWebImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageManager.m; path = SDWebImage/SDWebImageManager.m; sourceTree = "<group>"; };
@@ -372,7 +372,7 @@
 		7FAC7F944FF4107DB12239752991A449 /* DeliveryOptions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DeliveryOptions.h; path = SDK/ios/backendless/include/DeliveryOptions.h; sourceTree = "<group>"; };
 		80E8534F7906B3E40B4462AC8DC9A025 /* IServiceCall.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IServiceCall.h; path = SDK/ios/backendless/include/IServiceCall.h; sourceTree = "<group>"; };
 		82664BCBB1698DE2A7C0BEC58FDF916F /* SocketLogger.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketLogger.swift; path = Source/SocketIO/Util/SocketLogger.swift; sourceTree = "<group>"; };
-		82E3E51460809DDA2A19501571F4F3C8 /* Pods_Help_A_Paw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Help_A_Paw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		82E3E51460809DDA2A19501571F4F3C8 /* Pods_Help_A_Paw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Help_A_Paw.framework; path = "Pods-Help A Paw.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83845AB5BFDB3CB67AEE7C49982632D9 /* Engine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Engine.h; path = SDK/ios/backendless/include/Engine.h; sourceTree = "<group>"; };
 		83853726CA23691EC22C9AAB014A9D3E /* CLSStackFrame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CLSStackFrame.h; path = iOS/Crashlytics.framework/Headers/CLSStackFrame.h; sourceTree = "<group>"; };
 		838C1151CEE3CB602075890CCF77AD78 /* CLSReport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CLSReport.h; path = iOS/Crashlytics.framework/Headers/CLSReport.h; sourceTree = "<group>"; };
@@ -392,7 +392,7 @@
 		8B1A37DBF55DECA66EFFDECDE43AAEB7 /* IClientSharedObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IClientSharedObject.h; path = SDK/ios/backendless/include/IClientSharedObject.h; sourceTree = "<group>"; };
 		8B1CE0AEA32BD892CAC728F155D745F2 /* ViewDeck.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = ViewDeck.modulemap; sourceTree = "<group>"; };
 		8C486D1ED5602DA39A02F4C63C45590A /* SDWebImageCodersManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCodersManager.m; path = SDWebImage/SDWebImageCodersManager.m; sourceTree = "<group>"; };
-		8CE073E9B0EEA6E526F2B604792EE155 /* IIViewDeckDefaultTransitionAnimator.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = IIViewDeckDefaultTransitionAnimator.mm; path = ViewDeck/Private/IIViewDeckDefaultTransitionAnimator.mm; sourceTree = "<group>"; };
+		8CE073E9B0EEA6E526F2B604792EE155 /* IIViewDeckDefaultTransitionAnimator.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = IIViewDeckDefaultTransitionAnimator.mm; path = ViewDeck/Private/IIViewDeckDefaultTransitionAnimator.mm; sourceTree = "<group>"; };
 		8CE6A63FED8EB405FFE5818B742600A4 /* AbstractReferenceableTypeWriter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AbstractReferenceableTypeWriter.h; path = SDK/ios/backendless/include/AbstractReferenceableTypeWriter.h; sourceTree = "<group>"; };
 		8D1A398583470ED050DCC4046A1DE2F2 /* IPersistenceStore.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IPersistenceStore.h; path = SDK/ios/backendless/include/IPersistenceStore.h; sourceTree = "<group>"; };
 		8D57B9194659D8C4C7D65B9110162E6D /* Header.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Header.h; path = SDK/ios/backendless/include/Header.h; sourceTree = "<group>"; };
@@ -404,14 +404,14 @@
 		92826A84B5F244AF56E5DA1BFC57CAC7 /* CacheService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CacheService.h; path = SDK/ios/backendless/include/CacheService.h; sourceTree = "<group>"; };
 		92BDB5164090F9E9B88F222B25826E80 /* WeborbClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WeborbClient.h; path = SDK/ios/backendless/include/WeborbClient.h; sourceTree = "<group>"; };
 		936D7262C9FAF311C08319CBC488D471 /* SDImageCacheConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageCacheConfig.h; path = SDWebImage/SDImageCacheConfig.h; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93B5C3E4213B0EA693ECD1B114156349 /* NullHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NullHelper.h; path = SDK/ios/backendless/include/NullHelper.h; sourceTree = "<group>"; };
 		963B5251933238214B916E522E2A0E43 /* SocketManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketManager.swift; path = Source/SocketIO/Manager/SocketManager.swift; sourceTree = "<group>"; };
 		9678A6F31B44D9601B7099FD90CC49EA /* ParseContext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ParseContext.h; path = SDK/ios/backendless/include/ParseContext.h; sourceTree = "<group>"; };
 		981AA7CC2F6EEC90E36B9039F753105B /* ClassDefinition.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ClassDefinition.h; path = SDK/ios/backendless/include/ClassDefinition.h; sourceTree = "<group>"; };
 		985CB134D17604D28F07676CE4F4ED1C /* UserStatusObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = UserStatusObject.h; path = SDK/ios/backendless/include/UserStatusObject.h; sourceTree = "<group>"; };
 		98E1F2976F77268F51C6C7564924EF91 /* UIImage+ForceDecode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+ForceDecode.h"; path = "SDWebImage/UIImage+ForceDecode.h"; sourceTree = "<group>"; };
-		9959BE6FC364155A55D6004EE414A646 /* ViewDeck.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ViewDeck.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9959BE6FC364155A55D6004EE414A646 /* ViewDeck.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ViewDeck.framework; path = ViewDeck.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		99B31EBA6C04C993E3A9CFF9F1DAA6F5 /* CLSLogging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CLSLogging.h; path = iOS/Crashlytics.framework/Headers/CLSLogging.h; sourceTree = "<group>"; };
 		9A2E7BEE09714985B48FD536771E0BA8 /* BackendlessEntity.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BackendlessEntity.h; path = SDK/ios/backendless/include/BackendlessEntity.h; sourceTree = "<group>"; };
 		9A9417BC52FF0D839E3A4CA377BCDCEA /* SocketEngineSpec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketEngineSpec.swift; path = Source/SocketIO/Engine/SocketEngineSpec.swift; sourceTree = "<group>"; };
@@ -468,7 +468,7 @@
 		B49276D59C7492E9AE362C9BA4F11308 /* ClassCastException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ClassCastException.h; path = SDK/ios/backendless/include/ClassCastException.h; sourceTree = "<group>"; };
 		B4FA9319A797FFF7D2F587F6B9872A39 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5D8111B2EF1FC01C0DB8FC645EBB8DC /* CrowdNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CrowdNode.h; path = SDK/ios/backendless/include/CrowdNode.h; sourceTree = "<group>"; };
-		B648B8E81EF8B6C997D42A4883398B1E /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B648B8E81EF8B6C997D42A4883398B1E /* Starscream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Starscream.framework; path = Starscream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B65A8F50EDCD325D8A0B8A9F587E932C /* FlashorbBinaryReader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlashorbBinaryReader.h; path = SDK/ios/backendless/include/FlashorbBinaryReader.h; sourceTree = "<group>"; };
 		B6E47112F5B8A3FAC721EFBEA64EC15A /* VideoData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = VideoData.h; path = SDK/ios/backendless/include/VideoData.h; sourceTree = "<group>"; };
 		B779896AB2C7B3D742D0FAD6A2BF1D39 /* AtomicCounters.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AtomicCounters.h; path = SDK/ios/backendless/include/AtomicCounters.h; sourceTree = "<group>"; };
@@ -513,7 +513,7 @@
 		D508E7A8B0735B2F3F41581383796F72 /* ICallback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ICallback.h; path = SDK/ios/backendless/include/ICallback.h; sourceTree = "<group>"; };
 		D51340D61B82B2008AB5E00C7A932719 /* ObjectWriter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ObjectWriter.h; path = SDK/ios/backendless/include/ObjectWriter.h; sourceTree = "<group>"; };
 		D5B7D3947DDC160C694F161A664C5DF9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		D614A422B1C2126A9C3737D46F76DA77 /* IIViewDeckController.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = IIViewDeckController.mm; path = ViewDeck/IIViewDeckController.mm; sourceTree = "<group>"; };
+		D614A422B1C2126A9C3737D46F76DA77 /* IIViewDeckController.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = IIViewDeckController.mm; path = ViewDeck/IIViewDeckController.mm; sourceTree = "<group>"; };
 		D658A92AAB2F9FB049F7E45CAB102797 /* UIImageView+HighlightedWebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+HighlightedWebCache.h"; path = "SDWebImage/UIImageView+HighlightedWebCache.h"; sourceTree = "<group>"; };
 		D6C2B0F1F12BC6F8DA719275502204F2 /* BackendlessSimpleQuery.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BackendlessSimpleQuery.h; path = SDK/ios/backendless/include/BackendlessSimpleQuery.h; sourceTree = "<group>"; };
 		D8306AD400D6F1FEAAABB80084739EBD /* Socket.IO-Client-Swift-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Socket.IO-Client-Swift-prefix.pch"; sourceTree = "<group>"; };
@@ -674,6 +674,7 @@
 				D94C1F20E6E40DF7CDB7DA50B5F57D71 /* Core */,
 				13CAFBDB9AF0FB53AAD74AF7657B5907 /* Support Files */,
 			);
+			name = SDWebImage;
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
@@ -720,6 +721,7 @@
 				B3FE74DC5A9C24CBCF8E0B077F01B818 /* Fabric.h */,
 				064F6ED686E00BCC180A59E32E52A7AF /* Frameworks */,
 			);
+			name = Fabric;
 			path = Fabric;
 			sourceTree = "<group>";
 		};
@@ -731,6 +733,7 @@
 				7933CF3250B0C47701CAB4D741DE8518 /* WebSocket.swift */,
 				48220CBF45FDE546BA5347E13DD0B025 /* Support Files */,
 			);
+			name = Starscream;
 			path = Starscream;
 			sourceTree = "<group>";
 		};
@@ -764,6 +767,7 @@
 				1C4A0E2CCB3D77548DC76DF080A47158 /* Crashlytics.h */,
 				9AE7727266978952476519DE8E182D84 /* Frameworks */,
 			);
+			name = Crashlytics;
 			path = Crashlytics;
 			sourceTree = "<group>";
 		};
@@ -1062,6 +1066,7 @@
 				58E0CDF2CDAE62F430D239F79B206DD2 /* WebORBSerializer.h */,
 				CB0452E2851538E0C3E59A03204E50A3 /* WeborbSharedObject.h */,
 			);
+			name = Backendless;
 			path = Backendless;
 			sourceTree = "<group>";
 		};
@@ -1103,6 +1108,7 @@
 				55B57A207064C4B20AC6641F01847AAE /* SSLSecurity.swift */,
 				B282FC2AD22C90D7BC8D6971A6381F92 /* Support Files */,
 			);
+			name = "Socket.IO-Client-Swift";
 			path = "Socket.IO-Client-Swift";
 			sourceTree = "<group>";
 		};
@@ -1215,6 +1221,7 @@
 				242E3777445282FD033975419C5B4C1A /* ViewDeck.h */,
 				1F61F61DEE5B88935CDFEDAE38B9D297 /* Support Files */,
 			);
+			name = ViewDeck;
 			path = ViewDeck;
 			sourceTree = "<group>";
 		};
@@ -1400,7 +1407,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 0930;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1844,7 +1851,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;

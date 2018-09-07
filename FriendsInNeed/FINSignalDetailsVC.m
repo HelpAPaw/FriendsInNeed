@@ -287,6 +287,8 @@ enum {
             
             [detailsCell setTitle:_annotation.signal.title];
             [detailsCell setAuthor:_annotation.signal.authorName];
+            BackendlessUser *cur = backendless.userService.currentUser;
+            backendless.userService.
             [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
             [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.date]];
             if (_annotation.signal.photoUrl)

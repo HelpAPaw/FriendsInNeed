@@ -67,8 +67,6 @@
     
     _lbTitle.adjustsFontSizeToFitWidth = YES;
     
-    // Set image on right side to left-align phone and author
-    _btnCall.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
     if (_phoneNumber)
     {
         _btnCall.hidden = NO;
@@ -124,7 +122,7 @@
         _phoneNumber = phoneNumber;
         _btnCall.hidden = NO;
         // Put some space between phone number and icon
-        [_btnCall setTitle:[NSString stringWithFormat:@"%@   ", phoneNumber] forState:UIControlStateNormal];
+        [_btnCall setTitle:[NSString stringWithFormat:@" %@", phoneNumber] forState:UIControlStateNormal];
     }
     else
     {

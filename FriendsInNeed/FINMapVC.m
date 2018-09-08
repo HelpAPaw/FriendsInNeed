@@ -13,6 +13,7 @@
 #import <ViewDeck/ViewDeck.h>
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "FINGlobalConstants.pch"
 
 
 #define kAddSignalViewYposition 15.0f
@@ -119,6 +120,8 @@
 #ifdef DEBUG
     self.navigationItem.title = @"Help A Paw (DEBUG)";
 #endif
+    
+    [self registerForLoginNotifications];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -135,6 +138,8 @@
             _viewDidAppearOnce = YES;
         }
     }
+    
+    [self showPrivacyPolicyIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -200,6 +205,11 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self initMapVC];
+}
+
+- (void)dealloc
+{
+    [self unregisterFromAllNotifications];
 }
 
 #pragma mark
@@ -317,6 +327,7 @@
 {
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
+        [_signalTitleField resignFirstResponder];
         [self showLoginScreen];
         return;
     }
@@ -726,12 +737,59 @@
 }
 
 #pragma mark - Menu
-
 - (void)menuButtonTapped:(id)sender
 {
     [_signalTitleField resignFirstResponder];
     
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
+}
+
+#pragma mark - Privacy policy
+- (void)showPrivacyPolicyIfNeeded
+{
+    if (_dataManager.userIsLogged)
+    {
+        if (!_dataManager.getUserHasAcceptedPrivacyPolicy)
+        {
+            NSError *error;
+            NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"https://develop.backendless.com/BDCD56B9-351A-E067-FFA4-9EA9CF2F4000/console/fcfdrgddsebccdkjfamuhppaasnowqluooks/files/view/web/privacypolicy.htm"]
+                                                        encoding:NSUTF8StringEncoding
+                                                           error:&error];
+            NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                      options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                                NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                           documentAttributes:nil
+                                                                                        error:&error];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                           message:nil
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert setValue:privacyPolicyAttributedString forKey:@"attributedMessage"];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                [self.dataManager logoutWithCompletion:^(FINError *error) {
+                    //TODO: show an alert explaining that the user has been logged out and can continue using the app passively
+                }];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"Accept" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.dataManager setUserHasAcceptedPrivacyPolicy:YES];
+            }]];
+            
+            [self presentViewController:alert animated:YES completion:^{}];
+        }
+    }
+}
+
+- (void)registerForLoginNotifications
+{
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+        selector:@selector(showPrivacyPolicyIfNeeded)
+            name:kNotificationUserLoggedIn
+          object:nil];
+}
+
+- (void)unregisterFromAllNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

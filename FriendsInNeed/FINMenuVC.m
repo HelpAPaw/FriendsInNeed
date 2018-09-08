@@ -178,7 +178,6 @@ enum
                 FINLoginVC *loginVC = [[FINLoginVC alloc] init];
                 loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [self presentViewController:loginVC animated:YES completion:^{}];
-
             }
             break;
         }

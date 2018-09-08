@@ -7,6 +7,7 @@
 //
 
 #import "FINSignal.h"
+#import "FINDataManager.h"
 
 @implementation FINSignal
 
@@ -56,7 +57,7 @@
 {    
     BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
     
-    return [user getProperty:@"phoneNumber"];
+    return [user getProperty:kUserPropertyPhoneNumber];
 }
 
 

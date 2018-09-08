@@ -7,6 +7,7 @@
 //
 
 #import "FINDataManager.h"
+#import "FINGlobalConstants.pch"
 
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
@@ -328,6 +329,32 @@
     return (currentUser != nil);
 }
 
+- (BOOL)getUserHasAcceptedPrivacyPolicy
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    if (currentUser != nil)
+    {
+        NSNumber *acceptedPrivacyPolicy = [currentUser getProperty:kUserPropertyAcceptedPrivacyPolicy];
+        return [acceptedPrivacyPolicy boolValue];
+    }
+    
+    return NO;
+}
+
+- (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    if (currentUser != nil)
+    {
+        [currentUser setProperty:kUserPropertyAcceptedPrivacyPolicy object:[NSNumber numberWithBool:value]];
+        [backendless.userService update:currentUser response:^(BackendlessUser *updatedUser) {
+            //Do nothing, be happy
+        } error:^(Fault *fault) {
+            //Do nothing, be sad
+        }];
+    }
+}
+
 - (NSString *)getUserName
 {
     BackendlessUser *currentUser = backendless.userService.currentUser;
@@ -365,6 +392,8 @@
 {
     [backendless.userService login:email password:password response:^void (BackendlessUser *loggeduser) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
+                                                                object:nil];
             completion(nil);
         });
     } error:^void (Fault *fault) {

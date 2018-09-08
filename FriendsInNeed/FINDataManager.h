@@ -19,6 +19,9 @@
 #define kNotificationSignalID   @"NotificationSignalID"
 #define kDefaultMapRegion       4000
 
+#define kUserPropertyPhoneNumber                @"phoneNumber"
+#define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"
+
 @protocol FINSignalsMapDelegate <NSObject>
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
@@ -37,6 +40,8 @@
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(FINError *error))completion;
 - (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion;
 - (BOOL)userIsLogged;
+- (BOOL)getUserHasAcceptedPrivacyPolicy;
+- (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value;
 - (NSString *)getUserName;
 - (NSString *)getUserEmail;
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion;

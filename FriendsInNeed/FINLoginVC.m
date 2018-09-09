@@ -177,8 +177,8 @@
                  NSDate *expirationDate = token.expirationDate;
                  NSDictionary *fieldsMapping = @{@"email":@"email"};
                  BackendlessUser *user = [backendless.userService loginWithFacebookSDK:userId tokenString:tokenString expirationDate:expirationDate fieldsMapping:fieldsMapping];
+                 [self askForPrivacyPolicyAcceptanceAfterLogin];
                  
-                 [self dismiss];
                  NSLog(@"USER: %@", user);
              }
              @catch (Fault *fault) {
@@ -306,16 +306,7 @@
             
             if (!error)
             {
-                [self showPrivacyPolicyWithAcceptHandler:^(UIAlertAction *action) {
-                    
-                    [[FINDataManager sharedManager] setUserHasAcceptedPrivacyPolicy:YES];
-                    [self dismissViewControllerAnimated:YES completion:^{}];
-                }
-                                       andDeclineHandler:^(UIAlertAction *action) {
-                                           [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
-                                               //Do nothing
-                                           }];
-                }];
+                [self askForPrivacyPolicyAcceptanceAfterLogin];
             }
             else
             {
@@ -333,6 +324,26 @@
             }
         });
     }];
+}
+
+- (void)askForPrivacyPolicyAcceptanceAfterLogin {
+    // Show PP only if it hasn't been accepted
+    if ([[FINDataManager sharedManager] getUserHasAcceptedPrivacyPolicy])
+    {
+        [self dismissViewControllerAnimated:YES completion:^{}];
+        return;
+    }
+    
+    [self showPrivacyPolicyWithAcceptHandler:^(UIAlertAction *action) {
+        
+        [[FINDataManager sharedManager] setUserHasAcceptedPrivacyPolicy:YES];
+        [self dismissViewControllerAnimated:YES completion:^{}];
+    }
+                           andDeclineHandler:^(UIAlertAction *action) {
+                               [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
+                                   //Do nothing
+                               }];
+                           }];
 }
 
 #pragma mark - UITextField Delegate

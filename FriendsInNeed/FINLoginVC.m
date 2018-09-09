@@ -160,14 +160,19 @@
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
-- (IBAction)onLoginButton:(id)sender {
+- (IBAction)onLoginButton:(id)sender
+{
+    [_activityIndicator startAnimating];
+    
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
     [login logInWithReadPermissions: @[@"public_profile"]
                  fromViewController:self
                             handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
          if (error) {
+             [self.activityIndicator stopAnimating];
              NSLog(@"Process error");
          } else if (result.isCancelled) {
+             [self.activityIndicator stopAnimating];
              NSLog(@"Cancelled");
          } else {
              @try {
@@ -177,11 +182,14 @@
                  NSDate *expirationDate = token.expirationDate;
                  NSDictionary *fieldsMapping = @{@"email":@"email"};
                  BackendlessUser *user = [backendless.userService loginWithFacebookSDK:userId tokenString:tokenString expirationDate:expirationDate fieldsMapping:fieldsMapping];
+                 [self.activityIndicator stopAnimating];
+                 
                  [self askForPrivacyPolicyAcceptanceAfterLogin];
                  
                  NSLog(@"USER: %@", user);
              }
              @catch (Fault *fault) {
+                 [self.activityIndicator stopAnimating];
                  NSLog(@"fault: %@", fault);
              }
              

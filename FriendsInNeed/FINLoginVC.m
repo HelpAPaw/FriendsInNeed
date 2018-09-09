@@ -209,43 +209,10 @@
             return;
         }
         
-        [_activityIndicator startAnimating];
-        _registerLoginButton.enabled = NO;
-        
-        [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
-            
-            [self.activityIndicator stopAnimating];
-            self.registerLoginButton.enabled = YES;
-            
-            if (!error)
-            {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success!", nil)
-                                                                               message:NSLocalizedString(@"A confirmation link has been sent on your email. Please click it to complete your registration.",nil)
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                          [self setupLoginView];
-                                                                          [self.segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
-                                                                      }];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:^{}];
-            }
-            else
-            {
-                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
-                
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
-                                                                               message:errorMessage
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                      }];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:^{}];
-            }
-        }];
+        [self showPrivacyPolicyWithAcceptHandler:^(UIAlertAction *action) {
+            [self register];
+        }
+                               andDeclineHandler:nil];
     }
     else
     {
@@ -257,36 +224,117 @@
             return;
         }
         
-        [_activityIndicator startAnimating];
-        _registerLoginButton.enabled = NO;
-        
-        [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.activityIndicator stopAnimating];
-                self.registerLoginButton.enabled = YES;
-                
-                if (!error)
-                {
-                    [self dismissViewControllerAnimated:YES completion:^{}];
-                }
-                else
-                {
-                    NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
-                    
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
-                                                                                   message:errorMessage
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                            style:UIAlertActionStyleDefault
-                                                                          handler:^(UIAlertAction * action) {
-                                                                          }];
-                    [alert addAction:defaultAction];
-                    [self presentViewController:alert animated:YES completion:^{}];
-                }
-            });            
-        }];
+        [self login];
     }
 }
+
+- (void)showPrivacyPolicyWithAcceptHandler:(void (^)(UIAlertAction *action))acceptHandler andDeclineHandler:(void (^)(UIAlertAction *action))declineHandler
+{
+    [_activityIndicator startAnimating];
+    
+    NSError *error;
+    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"https://develop.backendless.com/***REMOVED***/console/fcfdrgddsebccdkjfamuhppaasnowqluooks/files/view/web/privacypolicy.htm"]
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:&error];
+    NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                         options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                                   NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                              documentAttributes:nil
+                                                                                           error:&error];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert setValue:privacyPolicyAttributedString forKey:@"attributedMessage"];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDestructive handler:declineHandler]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Accept" style:UIAlertActionStyleDefault handler:acceptHandler]];
+    
+    [self presentViewController:alert animated:YES completion:^{}];
+    
+    [_activityIndicator stopAnimating];
+}
+
+- (void)register
+{
+    [_activityIndicator startAnimating];
+    _registerLoginButton.enabled = NO;
+    
+    [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
+        
+        [self.activityIndicator stopAnimating];
+        self.registerLoginButton.enabled = YES;
+        
+        if (!error)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Success!", nil)
+                                                                           message:NSLocalizedString(@"A confirmation link has been sent on your email. Please click it to complete your registration.",nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self setupLoginView];
+                                                                      [self.segmentControl setSelectedSegmentIndex:LOGIN_SEGMENT];
+                                                                  }];
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+        }
+        else
+        {
+            NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
+            
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
+                                                                           message:errorMessage
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                  }];
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+        }
+    }];
+}
+
+- (void)login
+{
+    [_activityIndicator startAnimating];
+    _registerLoginButton.enabled = NO;
+    
+    [[FINDataManager sharedManager] loginWithEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.activityIndicator stopAnimating];
+            self.registerLoginButton.enabled = YES;
+            
+            if (!error)
+            {
+                [self showPrivacyPolicyWithAcceptHandler:^(UIAlertAction *action) {
+                    
+                    [[FINDataManager sharedManager] setUserHasAcceptedPrivacyPolicy:YES];
+                    [self dismissViewControllerAnimated:YES completion:^{}];
+                }
+                                       andDeclineHandler:^(UIAlertAction *action) {
+                                           [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
+                                               //Do nothing
+                                           }];
+                }];
+            }
+            else
+            {
+                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
+                                                                               message:errorMessage
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                        style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {
+                                                                      }];
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:^{}];
+            }
+        });
+    }];
+}
+
 #pragma mark - UITextField Delegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

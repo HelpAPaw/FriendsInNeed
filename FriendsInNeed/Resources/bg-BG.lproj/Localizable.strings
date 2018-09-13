@@ -35,6 +35,7 @@
 "Logout" = "Излез";
 "FAQ" = "ЧЗВ";
 "Feedback" = "Обратна връзка";
+"Privacy Policy" = "Политика за поверителност";
 "About" = "За приложението";
 
 //MailComposser.m

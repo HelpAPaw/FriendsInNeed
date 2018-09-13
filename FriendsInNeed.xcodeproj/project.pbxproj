@@ -40,6 +40,8 @@
 		F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800201C98C7DF0080FACD /* ic_add@2x.png */; };
 		F33800231C98CA350080FACD /* ic_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800221C98CA350080FACD /* ic_menu.png */; };
 		F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800241C98CAE70080FACD /* ic_menu@2x.png */; };
+		F33F7499214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */; };
+		F33F749B214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */; };
 		F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35905F71E054EE800A61060 /* FINAboutVC.m */; };
 		F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FB1E0555D200A61060 /* ic_close_x.png */; };
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
@@ -131,6 +133,9 @@
 		F33800201C98C7DF0080FACD /* ic_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_add@2x.png"; sourceTree = "<group>"; };
 		F33800221C98CA350080FACD /* ic_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_menu.png; sourceTree = "<group>"; };
 		F33800241C98CAE70080FACD /* ic_menu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_menu@2x.png"; sourceTree = "<group>"; };
+		F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPrivacyPolicyVC.swift; sourceTree = "<group>"; };
+		F33F749C214B0D6D00CCAD54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINPrivacyPolicyVC.xib; sourceTree = "<group>"; };
+		F33F749F214B0D7700CCAD54 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINPrivacyPolicyVC.strings"; sourceTree = "<group>"; };
 		F35905F61E054EE800A61060 /* FINAboutVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAboutVC.h; sourceTree = "<group>"; };
 		F35905F71E054EE800A61060 /* FINAboutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAboutVC.m; sourceTree = "<group>"; };
 		F35905FB1E0555D200A61060 /* ic_close_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_x.png; sourceTree = "<group>"; };
@@ -370,6 +375,8 @@
 				F35906031E05823800A61060 /* FINMailComposer.h */,
 				F35906011E05821C00A61060 /* FINMailComposer.m */,
 				1449F61A1FC631390078317E /* FAQ */,
+				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
+				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
 				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
 				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
@@ -537,6 +544,7 @@
 				F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */,
 				148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */,
 				F33800231C98CA350080FACD /* ic_menu.png in Resources */,
+				F33F749B214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib in Resources */,
 				F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */,
 				F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */,
 			);
@@ -627,6 +635,7 @@
 				147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
+				F33F7499214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
 				F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */,
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
@@ -717,6 +726,15 @@
 				F3D4046C20680DAE00A3BCE2 /* bg-BG */,
 			);
 			name = FINMapVC.xib;
+			sourceTree = "<group>";
+		};
+		F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F33F749C214B0D6D00CCAD54 /* Base */,
+				F33F749F214B0D7700CCAD54 /* bg-BG */,
+			);
+			name = FINPrivacyPolicyVC.xib;
 			sourceTree = "<group>";
 		};
 		F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */ = {

@@ -241,7 +241,7 @@
     [_activityIndicator startAnimating];
     
     NSError *error;
-    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"https://develop.backendless.com/BDCD56B9-351A-E067-FFA4-9EA9CF2F4000/console/fcfdrgddsebccdkjfamuhppaasnowqluooks/files/view/web/privacypolicy.htm"]
+    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:kPrivacyPolicyUrlString]
                                                            encoding:NSUTF8StringEncoding
                                                               error:&error];
     NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]

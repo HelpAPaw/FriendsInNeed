@@ -26,6 +26,7 @@ enum
 //    kSettings,
     kFAQ,
     kFeedback,
+    kPrivacyPolicy,
     kAbout,
     kMenuItemsCount
 };
@@ -136,6 +137,9 @@ enum
         case kFeedback:
             title = NSLocalizedString(@"Feedback",nil);
             break;
+        case kPrivacyPolicy:
+            title = NSLocalizedString(@"Privacy Policy",nil);
+            break;
         case kAbout:
             title = NSLocalizedString(@"About",nil);
             break;
@@ -190,6 +194,12 @@ enum
         case kFeedback:
         {
             [[FINMailComposer sharedComposer] presentMailComposerFrom:self];
+            break;
+        }
+        case kPrivacyPolicy:
+        {
+            FINPrivacyPolicyVC *ppVC = [[FINPrivacyPolicyVC alloc] initWithNibName:nil bundle:nil];
+            [self presentViewController:ppVC animated:YES completion:nil];
             break;
         }
         case kAbout:

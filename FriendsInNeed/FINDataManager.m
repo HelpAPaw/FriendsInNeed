@@ -369,12 +369,13 @@
     return currentUser.email;
 }
 
-- (void)registerUser:(NSString *)name withEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
+- (void)registerUser:(NSString *)name withEmail:(NSString *)email password:(NSString *)password phoneNumber:(NSString *)phoneNumber completion:(void (^)(FINError *error))completion
 {
     BackendlessUser *user = [BackendlessUser new];
     user.name = name;
     user.email = email;
     user.password = password;
+    [user setProperty:kUserPropertyPhoneNumber object:phoneNumber];
     
     [backendless.userService registerUser:user response:^void (BackendlessUser *registeredUser) {
         dispatch_async(dispatch_get_main_queue(), ^{

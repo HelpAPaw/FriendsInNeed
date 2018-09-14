@@ -376,6 +376,7 @@
     user.email = email;
     user.password = password;
     [user setProperty:kUserPropertyPhoneNumber object:phoneNumber];
+    [user setProperty:kUserPropertyAcceptedPrivacyPolicy object:[NSNumber numberWithBool:YES]];    
     
     [backendless.userService registerUser:user response:^void (BackendlessUser *registeredUser) {
         dispatch_async(dispatch_get_main_queue(), ^{

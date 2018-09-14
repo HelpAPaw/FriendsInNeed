@@ -266,7 +266,10 @@
     [_activityIndicator startAnimating];
     _registerLoginButton.enabled = NO;
     
-    [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text andPassword:_passwordTextField.text completion:^(FINError *error) {
+    [[FINDataManager sharedManager] registerUser:_nameTextField.text withEmail:_emailTextField.text
+                                        password:_passwordTextField.text
+                                     phoneNumber:_phoneTextField.text
+                                      completion:^(FINError *error) {
         
         [self.activityIndicator stopAnimating];
         self.registerLoginButton.enabled = YES;

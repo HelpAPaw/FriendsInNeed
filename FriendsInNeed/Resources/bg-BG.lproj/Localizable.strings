@@ -12,7 +12,7 @@
 "Please enter your credentials" = "Моля въведете вашите данни";
 "Login" = "Вход";
 "Success!" = "Успех!";
-"A confirmation link has been sent on your email. Please click it to complete your registration." = "Линк за потвърждение е изпратен на имейла ви. Моля кликнете на него за да завършите регистрацията си.";
+"A confirmation link has been sent on your email. Please click it to complete your registration." = "Линк за потвърждение е изпратен на имейла Ви. Моля кликнете на него за да завършите регистрацията си.";
 "ОК" = "Добре";
 "Something went wrong! Server said:\n%@" = "Нещо се обърка! Сървърът каза:\n%@";
 "Ooops!" = "Ооопс!";

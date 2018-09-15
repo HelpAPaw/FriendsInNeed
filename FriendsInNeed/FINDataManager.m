@@ -141,8 +141,8 @@
         
         self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
         
-        // If application is currently active show received signals on map
         dispatch_async(dispatch_get_main_queue(), ^{
+            // If application is currently active show received signals on map
             if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
             {
                 [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
@@ -151,6 +151,7 @@
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }
+            // If not - show notification(s)
             else
             {
                 if (newSignals.count > 0)
@@ -159,10 +160,14 @@
                     
                     for (FINSignal *signal in newSignals)
                     {
-                        UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                        localNotification.alertBody  = signal.title;
-                        localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
-                        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                        // Only show notifications about signals that haven't been solved yet
+                        if (signal.status < FINSignalStatus2)
+                        {
+                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                            localNotification.alertBody  = signal.title;
+                            localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
+                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                        }
                     }
                     
                     if (completionHandler)

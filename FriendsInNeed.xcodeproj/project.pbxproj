@@ -19,10 +19,6 @@
 		147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D011E72D47E007B1017 /* FINLoginVC.xib */; };
 		147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D0B1E72E6D2007B1017 /* Localizable.strings */; };
 		148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148912CE1E72F94A00655DD0 /* FINMapVC.xib */; };
-		14F14F841E9A097400977C8E /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F831E9A097400977C8E /* Bolts.framework */; };
-		14F14F861E9A098600977C8E /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */; };
-		14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */; };
-		14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */; };
 		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
@@ -102,10 +98,6 @@
 		147F2D0A1E72E6D2007B1017 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
-		14F14F831E9A097400977C8E /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Help A Paw.entitlements"; sourceTree = "<group>"; };
 		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
@@ -198,12 +190,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14F14F861E9A098600977C8E /* FBSDKCoreKit.framework in Frameworks */,
 				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
-				14F14F881E9A099300977C8E /* FBSDKLoginKit.framework in Frameworks */,
-				14F14F8A1E9A09A800977C8E /* FBSDKShareKit.framework in Frameworks */,
 				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
-				14F14F841E9A097400977C8E /* Bolts.framework in Frameworks */,
 				61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,10 +258,6 @@
 		14F14F821E9A095600977C8E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				14F14F891E9A09A800977C8E /* FBSDKShareKit.framework */,
-				14F14F871E9A099300977C8E /* FBSDKLoginKit.framework */,
-				14F14F851E9A098600977C8E /* FBSDKCoreKit.framework */,
-				14F14F831E9A097400977C8E /* Bolts.framework */,
 				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
 			);
 			name = Frameworks;
@@ -591,6 +575,9 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -598,6 +585,9 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",

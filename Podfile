@@ -12,4 +12,5 @@ target "Help A Paw" do
 	pod 'Fabric'
 	pod 'Crashlytics'
     pod 'SDWebImage'
+    pod 'FBSDKLoginKit'
 end

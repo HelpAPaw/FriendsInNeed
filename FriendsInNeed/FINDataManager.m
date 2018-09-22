@@ -156,18 +156,19 @@
             {
                 if (newSignals.count > 0)
                 {
-                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.nearbySignals.count];
-                    
                     for (FINSignal *signal in newSignals)
-                    {
+                    {                        
+                        NSInteger badgeNumber = 0;
                         // Only show notifications about signals that haven't been solved yet
                         if (signal.status < FINSignalStatus2)
                         {
+                            badgeNumber++;
                             UILocalNotification *localNotification = [[UILocalNotification alloc] init];
                             localNotification.alertBody  = signal.title;
                             localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
                             [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
                         }
+                        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
                     }
                     
                     if (completionHandler)

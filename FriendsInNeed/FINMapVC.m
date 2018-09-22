@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendSignalButtonWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *liSendSignal;
 
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
@@ -82,6 +83,9 @@
     _btnPhoto.clipsToBounds = YES;
     [[_btnPhoto imageView] setContentMode: UIViewContentModeScaleAspectFill];
     
+    [_btnSendSignal sizeToFit];
+    _sendSignalButtonWidthConstraint.constant = _btnSendSignal.frame.size.width + 10;
+    
     _isInSubmitMode = NO;
     
     UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
@@ -120,7 +124,6 @@
 #ifdef DEBUG
     self.navigationItem.title = @"Help A Paw (DEBUG)";
 #endif
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated

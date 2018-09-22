@@ -47,6 +47,7 @@
 @property (assign, nonatomic) UIImagePickerControllerSourceType photoSource;
 @property (strong, nonatomic) UIImage *signalPhoto;
 @property (assign, nonatomic) BOOL viewDidAppearOnce;
+@property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 
 @end
 
@@ -120,10 +121,6 @@
                                                                   target:self
                                                                   action:@selector(menuButtonTapped:)];
     self.navigationItem.leftBarButtonItem = menuButton;
-    
-#ifdef DEBUG
-    self.navigationItem.title = @"Help A Paw (DEBUG)";
-#endif
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -141,6 +138,8 @@
         }
     }
     
+    [self setupEnvironmentSwitching];
+    [self updateTitle];
     [self checkForPrivacyPolicyAcceptance];
 }
 
@@ -166,6 +165,7 @@
     [super viewWillDisappear:animated];
     
     _focusSignalID = nil;
+    [self removeEnvironmentSwitching];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
@@ -210,6 +210,7 @@
 }
 
 #pragma mark
+
 - (void)initMapVC
 {
     [self updateMapToLastKnownUserLocation];
@@ -754,6 +755,40 @@
             }];
         }
     }
+}
+
+#pragma mark - Environment switching
+
+- (void)updateTitle
+{
+    NSMutableString *title = [NSMutableString stringWithString:@"Help a Paw"];
+    if ([_dataManager getIsInTestMode])
+    {
+        [title appendString:@" (TEST)"];
+    }
+    
+    self.navigationItem.title = title;
+}
+
+- (void)setupEnvironmentSwitching
+{
+    _envSwitchGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switchEnvironment:)];
+    _envSwitchGesture.numberOfTapsRequired = 7;
+    // This allows controlls in the navigation bar to continue receiving touches
+    _envSwitchGesture.cancelsTouchesInView = NO;
+    [self.navigationController.navigationBar addGestureRecognizer:_envSwitchGesture];
+}
+
+- (void)removeEnvironmentSwitching
+{
+    [self.navigationController.navigationBar removeGestureRecognizer:_envSwitchGesture];
+}
+
+- (void)switchEnvironment:(UITapGestureRecognizer *)gr
+{
+    [_dataManager setIsInTestMode:![_dataManager getIsInTestMode]];
+    [self updateTitle];
+    [self refresh];
 }
 
 @end

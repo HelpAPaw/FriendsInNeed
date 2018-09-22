@@ -12,6 +12,7 @@
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
+#define kIsInTestModeKey            @"kIsInTestModeKey"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -19,6 +20,7 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
+@property (assign, nonatomic) BOOL        isInTestMode;
 
 @end
 
@@ -43,6 +45,7 @@
     _nearbySignals = [NSMutableArray new];
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
+    _isInTestMode = [self loadIsInTestMode];
     
     BOOL isValidUserToken = NO;
     @try {
@@ -95,11 +98,12 @@
     NSDate *threeDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * 3)];
     query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([threeDaysAgo timeIntervalSince1970]*1000)];
     
-#ifdef DEBUG
-    NSMutableArray *cats = [NSMutableArray new];
-    [cats addObject:@"Debug"];
-    query.categories = cats;
-#endif
+    if (_isInTestMode)
+    {
+        NSMutableArray *cats = [NSMutableArray new];
+        [cats addObject:@"Debug"];
+        query.categories = cats;
+    }
     
     [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
         NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
@@ -238,9 +242,10 @@
     submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
     NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
     NSMutableArray *cats = [NSMutableArray new];
-#ifdef DEBUG
-    [cats addObject:@"Debug"];
-#endif
+    if (_isInTestMode)
+    {
+        [cats addObject:@"Debug"];
+    }
     GeoPoint *point = [GeoPoint geoPoint:coordinate categories:cats metadata:geoPointMeta];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
@@ -301,9 +306,10 @@
 - (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
     NSMutableArray *cats = [NSMutableArray new];
-#ifdef DEBUG
-    [cats addObject:@"Debug"];
-#endif
+    if (_isInTestMode)
+    {
+        [cats addObject:@"Debug"];
+    }
     
     BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:cats];
     query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
@@ -543,6 +549,30 @@
     [self getAllSignalsFromPage:0 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
         completionHandler(signals, error);
     }];
+}
+
+#pragma MARK - TEST Mode
+
+- (BOOL)getIsInTestMode
+{
+    return _isInTestMode;
+}
+
+- (void)setIsInTestMode:(BOOL)isInTestMode
+{
+    _isInTestMode = isInTestMode;
+    [self saveIsInTestMode:isInTestMode];
+}
+
+- (BOOL)loadIsInTestMode
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:kIsInTestModeKey];
+}
+
+- (void)saveIsInTestMode:(BOOL)isInTestMode
+{
+    [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

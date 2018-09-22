@@ -49,6 +49,8 @@
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion;
 - (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion;
+- (BOOL)getIsInTestMode;
+- (void)setIsInTestMode:(BOOL)isInTestMode;
 
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
 

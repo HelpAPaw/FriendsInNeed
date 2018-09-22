@@ -64,6 +64,7 @@ enum {
 @property (weak, nonatomic) IBOutlet UIVisualEffectView *addCommentBlurBackground2;
 @property (weak, nonatomic) IBOutlet UITextField *addCommentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendCommentButtonWidthLC;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *sendCommentLoadingIndicator;
 
@@ -137,6 +138,9 @@ enum {
        
     _addCommentView.layer.shadowOffset = CGSizeMake(0, -2);
     _addCommentView.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    
+    [_sendCommentButton sizeToFit];
+    _sendCommentButtonWidthLC.constant = _sendCommentButton.frame.size.width + 5;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_close_x_white"] style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
     

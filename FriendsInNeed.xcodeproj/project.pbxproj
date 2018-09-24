@@ -70,6 +70,7 @@
 		F3B2504021582DF900ED1D1D /* FINSettingsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */; };
 		F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */; };
 		F3B25044215833FF00ED1D1D /* FINSettingsSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */; };
+		F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = F3B25049215984F300ED1D1D /* Localizable.stringsdict */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
 		F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */; };
@@ -176,6 +177,8 @@
 		F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsVC.xib; sourceTree = "<group>"; };
 		F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSettingsSliderCell.swift; sourceTree = "<group>"; };
 		F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsSliderCell.xib; sourceTree = "<group>"; };
+		F3B25048215984F300ED1D1D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		F3B2504A2159850700ED1D1D /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "bg-BG"; path = "bg-BG.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		F3C484701C6C111D0067A169 /* FINLoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLoginVC.h; sourceTree = "<group>"; };
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
@@ -429,6 +432,7 @@
 				F33800201C98C7DF0080FACD /* ic_add@2x.png */,
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
 				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
+				F3B25049215984F300ED1D1D /* Localizable.stringsdict */,
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
@@ -514,6 +518,7 @@
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
 				147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */,
+				F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */,
 				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
 				1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
@@ -753,6 +758,15 @@
 				147F2CF81E72D2EC007B1017 /* bg-BG */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F3B25049215984F300ED1D1D /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3B25048215984F300ED1D1D /* en */,
+				F3B2504A2159850700ED1D1D /* bg-BG */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

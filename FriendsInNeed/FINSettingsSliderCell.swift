@@ -9,7 +9,7 @@
 import UIKit
 
 class FINSettingsSliderCell: UITableViewCell {
-    var units: [String] = []
+    var unit = ""
     var min = 0
     var max = 100
     var lastStep: Float = 0.0
@@ -28,8 +28,8 @@ class FINSettingsSliderCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setup(with units: [String], min: Int, max: Int, currentValue: Int) {
-        self.units = units
+    func setup(with unit: String, min: Int, max: Int, currentValue: Int) {
+        self.unit = unit
         self.min = min
         self.max = max
         
@@ -41,14 +41,8 @@ class FINSettingsSliderCell: UITableViewCell {
     }
     
     func updateLabel() {
-        var unit = self.units[0]
-        
-        // If value is plural - add "s" to the unit
-        if slider.value > 1 {
-            unit = self.units[1]
-        }
-        
-        label.text = String.init(format: "%.0f %@", slider.value, unit)
+        let format = NSLocalizedString(unit, comment: "")
+        label.text = String.localizedStringWithFormat(format, Int(slider.value))
     }
     
     @IBAction func sliderDidMove(_ sender: Any) {

@@ -23,7 +23,7 @@
 enum
 {
     kLogin,
-//    kSettings,
+    kSettings,
     kFAQ,
     kFeedback,
     kPrivacyPolicy,
@@ -128,9 +128,9 @@ enum
             }
             break;
         }
-//        case kSettings:
-//            title = @"Settings";
-//            break;
+        case kSettings:
+            title = NSLocalizedString(@"Settings",nil);
+            break;
         case kFAQ:
             title = NSLocalizedString(@"FAQ",nil);
             break;
@@ -183,6 +183,12 @@ enum
                 loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [self presentViewController:loginVC animated:YES completion:^{}];
             }
+            break;
+        }
+        case kSettings:
+        {
+            FINSettingsVC *settingsVC = [[FINSettingsVC alloc] initWithNibName:nil bundle:nil];
+            [self presentViewController:settingsVC animated:YES completion:nil];
             break;
         }
         case kFAQ:

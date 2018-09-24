@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="KGk-i7-Jjw" customClass="FINSettingsSliderCell" customModule="Help_A_Paw" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="74.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="GAn-aP-u70">
+                        <rect key="frame" x="14" y="35" width="292" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="ChL-sB-zdG"/>
+                        </constraints>
+                        <connections>
+                            <action selector="sliderDidMove:" destination="KGk-i7-Jjw" eventType="valueChanged" id="gqY-Nz-Id9"/>
+                        </connections>
+                    </slider>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 days" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g1r-Q6-95h">
+                        <rect key="frame" x="16" y="8" width="288" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="HUx-s8-jAI"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="GAn-aP-u70" firstAttribute="top" secondItem="g1r-Q6-95h" secondAttribute="bottom" constant="6" id="017-Qy-bRd"/>
+                    <constraint firstItem="g1r-Q6-95h" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="1mv-RN-j9t"/>
+                    <constraint firstItem="g1r-Q6-95h" firstAttribute="trailing" secondItem="GAn-aP-u70" secondAttribute="trailing" id="gQn-If-wn4"/>
+                    <constraint firstItem="g1r-Q6-95h" firstAttribute="leading" secondItem="GAn-aP-u70" secondAttribute="leading" id="xy2-uJ-P9i"/>
+                </constraints>
+            </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="GAn-aP-u70" firstAttribute="leading" secondItem="njF-e1-oar" secondAttribute="leading" constant="16" id="NSJ-Dg-zyF"/>
+                <constraint firstItem="GAn-aP-u70" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottom" constant="-8" id="Rf6-ei-NRd"/>
+                <constraint firstItem="GAn-aP-u70" firstAttribute="trailing" secondItem="njF-e1-oar" secondAttribute="trailing" constant="-16" id="nRX-5Y-6RC"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="label" destination="g1r-Q6-95h" id="40b-B6-GBS"/>
+                <outlet property="slider" destination="GAn-aP-u70" id="nLS-3C-KFi"/>
+            </connections>
+            <point key="canvasLocation" x="272" y="154.72263868065968"/>
+        </tableViewCell>
+    </objects>
+</document>

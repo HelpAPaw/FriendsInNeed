@@ -13,6 +13,10 @@
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
 #define kIsInTestModeKey            @"kIsInTestModeKey"
+#define kSettingRadiusKey           @"kSettingRadiusKey"
+#define kSettingRadiusDefault       10
+#define kSettingTimeoutKey          @"kSettingTimeoutKey"
+#define kSettingTimeoutDefault      7
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -21,6 +25,8 @@
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
 @property (assign, nonatomic) BOOL        isInTestMode;
+@property (assign, nonatomic) NSInteger   radius;
+@property (assign, nonatomic) NSInteger   timeout;
 
 @end
 
@@ -46,6 +52,8 @@
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     _isInTestMode = [self loadIsInTestMode];
+    
+    [self loadSettings];
     
     BOOL isValidUserToken = NO;
     @try {
@@ -573,6 +581,45 @@
 {
     [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma MARK - Settings
+
+- (void)loadSettings
+{
+    NSInteger savedRadius = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingRadiusKey];
+    _radius = savedRadius != 0 ? savedRadius : kSettingRadiusDefault;
+    
+    NSInteger savedTimeout = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTimeoutKey];
+    _timeout = savedTimeout != 0 ? savedTimeout : kSettingTimeoutDefault;
+}
+
+- (NSInteger)getRadiusSetting
+{
+    return _radius;
+}
+
+- (NSInteger)getTimeoutSetting
+{
+    return _timeout;
+}
+
+- (void)setRadiusSetting:(NSInteger)newRadius
+{
+    if (newRadius != _radius)
+    {
+        _radius = newRadius;
+        [[NSUserDefaults standardUserDefaults] setInteger:newRadius forKey:kSettingRadiusKey];
+    }
+}
+
+- (void)setTimeoutSetting:(NSInteger)newTimeout
+{
+    if (newTimeout != _timeout)
+    {
+        _timeout = newTimeout;
+        [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
+    }
 }
 
 @end

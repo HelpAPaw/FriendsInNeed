@@ -52,6 +52,11 @@
 - (BOOL)getIsInTestMode;
 - (void)setIsInTestMode:(BOOL)isInTestMode;
 
+- (NSInteger)getRadiusSetting;
+- (NSInteger)getTimeoutSetting;
+- (void)setRadiusSetting:(NSInteger)newRadius;
+- (void)setTimeoutSetting:(NSInteger)newTimeout;
+
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;

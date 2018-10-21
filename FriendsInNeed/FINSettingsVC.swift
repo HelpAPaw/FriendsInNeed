@@ -15,11 +15,7 @@ enum Settings: Int, CaseIterable {
 
 class FINSettingsVC: UIViewController {
     var radiusValue: Int = 0
-    let radiusValueDefault = 10
-    let kRadiusValueKey = "kRadiusValueKey"
     var timeoutValue: Int = 0
-    let timeoutValueDefault = 5
-    let kTimeoutValueKey = "kTimeoutValueKey"
     let kSliderCellHeight: CGFloat = 75.0
     
     @IBOutlet weak var titleLabel: UILabel!
@@ -41,17 +37,15 @@ class FINSettingsVC: UIViewController {
     }
     
     func loadSettingsValues() {
-        let radiusValueSaved = UserDefaults.standard.integer(forKey: kRadiusValueKey)
-        radiusValue = radiusValueSaved != 0 ? radiusValueSaved : radiusValueDefault
         
-        let timeoutValueSaved = UserDefaults.standard.integer(forKey: kTimeoutValueKey)
-        timeoutValue = timeoutValueSaved != 0 ? timeoutValueSaved : timeoutValueDefault
+        radiusValue = (FINDataManager.shared()?.getRadiusSetting())!
+        timeoutValue = (FINDataManager.shared()?.getTimeoutSetting())!
     }
     
     func saveSettingsValues() {
-        UserDefaults.standard.set(radiusValue, forKey: kRadiusValueKey)
-        UserDefaults.standard.set(timeoutValue, forKey: kTimeoutValueKey)
-        UserDefaults.standard.synchronize()
+        
+        FINDataManager.shared()?.setRadiusSetting(radiusValue)
+        FINDataManager.shared()?.setTimeoutSetting(timeoutValue)
     }
 
     @IBAction func closeButtonTapped(_ sender: Any) {

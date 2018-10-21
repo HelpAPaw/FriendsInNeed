@@ -309,6 +309,17 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		F35258B1215ECF17001A0DE1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */,
+				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
+				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
+				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
@@ -372,10 +383,7 @@
 				1449F61A1FC631390078317E /* FAQ */,
 				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
 				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
-				F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */,
-				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
-				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
-				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
+				F35258B1215ECF17001A0DE1 /* Settings */,
 				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
 				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,

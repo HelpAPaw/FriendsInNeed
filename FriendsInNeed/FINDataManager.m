@@ -101,10 +101,10 @@
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:(self.radius * 1000) units:METERS categories:nil];
     query.includeMeta = @YES;
-    NSDate *threeDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * 3)];
-    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([threeDaysAgo timeIntervalSince1970]*1000)];
+    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
+    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([timeoutDate timeIntervalSince1970] * 1000)];
     
     if (_isInTestMode)
     {

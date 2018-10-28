@@ -17,7 +17,6 @@
 #define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
 
 #define kNotificationSignalID   @"NotificationSignalID"
-#define kDefaultMapRegion       4000
 
 #define kUserPropertyPhoneNumber                @"phoneNumber"
 #define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"

@@ -89,7 +89,7 @@
     
     _isInSubmitMode = NO;
     
-    UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
+    UIPanGestureRecognizer *panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
     [panGR setDelegate:self];
     [_mapView addGestureRecognizer:panGR];
     
@@ -234,7 +234,8 @@
 #pragma mark - FINLocationManagerMapDelegate
 - (void)updateMapToLocation:(CLLocation *)location
 {
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, kDefaultMapRegion, kDefaultMapRegion);
+    CLLocationDistance radiusInMeters = [_dataManager getRadiusSetting] * 1000;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, radiusInMeters, radiusInMeters);
     [_mapView setRegion:region animated:YES];
 }
 

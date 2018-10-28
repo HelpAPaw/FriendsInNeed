@@ -83,7 +83,7 @@ import UIKit
     }
     
     fileprivate func prepareAndShowImage(){
-        signalImage.contentMode = UIViewContentMode.center
+        signalImage.contentMode = UIView.ContentMode.center
         scrollView.contentSize = signalImage.image!.size
         scrollView.addSubview(signalImage)
         prepareScollView(withSize: self.view.frame.size)

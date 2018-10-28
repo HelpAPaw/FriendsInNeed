@@ -61,18 +61,6 @@ import UIKit
         prepareAndShowImage()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        UIView.animate(withDuration: 0.3) {
-            UIApplication.shared.isStatusBarHidden = true
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        UIApplication.shared.isStatusBarHidden = false
-    }
-    
     // MARK: - Injectable
     func inject(img image: UIImage) {
         signalImage = UIImageView(image: image)

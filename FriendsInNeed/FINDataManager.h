@@ -17,7 +17,6 @@
 #define BCKNDLSS_REST_API_KEY   @"473D7C4A-3FBC-69F4-FFFF-1635F07E4300"
 
 #define kNotificationSignalID   @"NotificationSignalID"
-#define kDefaultMapRegion       4000
 
 #define kUserPropertyPhoneNumber                @"phoneNumber"
 #define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"

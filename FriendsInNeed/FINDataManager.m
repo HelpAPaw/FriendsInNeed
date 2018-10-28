@@ -610,6 +610,7 @@
     {
         _radius = newRadius;
         [[NSUserDefaults standardUserDefaults] setInteger:newRadius forKey:kSettingRadiusKey];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingRadiusChanged object:self];
     }
 }
 
@@ -619,6 +620,7 @@
     {
         _timeout = newTimeout;
         [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
     }
 }
 

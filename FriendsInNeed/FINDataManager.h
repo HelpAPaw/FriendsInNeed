@@ -17,6 +17,8 @@
 #define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
 
 #define kNotificationSignalID   @"NotificationSignalID"
+#define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
+#define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"
 
 #define kUserPropertyPhoneNumber                @"phoneNumber"
 #define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"

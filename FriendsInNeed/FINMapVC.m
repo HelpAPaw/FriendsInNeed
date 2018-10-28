@@ -69,6 +69,16 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingRadiusChanged
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingTimeoutChanged
+                                               object:nil];
+    
     _cancelButton.tintColor = [UIColor redColor];
     _cancelButton.layer.shadowOpacity = 1.0f;
     _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
@@ -207,6 +217,16 @@
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
     [self initMapVC];
+}
+
+- (void)settingsChanged:(NSNotification *) notification
+{
+    [self initMapVC];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark

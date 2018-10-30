@@ -228,6 +228,13 @@
     {
         [self getSignalsForLocation:_lastSignalCheckLocation withCompletionHandler:completionHandler];
     }
+    else
+    {
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultFailed);
+        }
+    }
 }
 
 - (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion

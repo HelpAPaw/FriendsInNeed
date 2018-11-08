@@ -1,5 +1,5 @@
 PODS:
-  - Backendless (5.1.8):
+  - Backendless (5.2.3):
     - Socket.IO-Client-Swift
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
@@ -7,12 +7,12 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Crashlytics (3.11.0):
-    - Fabric (~> 1.8.0)
-  - Fabric (1.8.0)
-  - FBSDKCoreKit (4.38.0):
+  - Crashlytics (3.11.1):
+    - Fabric (~> 1.8.1)
+  - Fabric (1.8.2)
+  - FBSDKCoreKit (4.38.1):
     - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.38.0):
+  - FBSDKLoginKit (4.38.1):
     - FBSDKCoreKit
   - SDWebImage (4.4.2):
     - SDWebImage/Core (= 4.4.2)
@@ -44,12 +44,12 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: 394f705e142e27e012adfd5d6c1ce0db1dc63c46
+  Backendless: b94e695159fdfca721c6b49d6c67225394f17e2a
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Crashlytics: 1448070c1d2731ab71ea7c3faf84ac0f69657287
-  Fabric: 4ac1cdfef3004ccd83ce0959b91eda8a6e37df72
-  FBSDKCoreKit: 2ab7fdbf600dc6b628ba7a49aa29d357a7b4c74e
-  FBSDKLoginKit: 634fa27e72e33620eb6389253337342c03d4a407
+  Crashlytics: ca7ab4bc304aa216bdc2e4c1a96389ee77252203
+  Fabric: d2b22f443ba195d8a7cc204da230977c72733b40
+  FBSDKCoreKit: 8d47857400e2f5bdea697a80daff882e91c84ef6
+  FBSDKLoginKit: 4621c690d9dd8628031a4791497062183ea34b0d
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5

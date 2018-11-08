@@ -182,6 +182,7 @@
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    CLS_LOG(@"Starting background fetch");
     [[FINDataManager sharedManager] getNewSignalsForLastLocationWithCompletionHandler:completionHandler];
 }
     

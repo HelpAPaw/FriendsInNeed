@@ -8,6 +8,7 @@
 
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
+#import <Crashlytics/Crashlytics.h>
 
 #define kMinimumDistanceTravelled   300
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
@@ -152,6 +153,7 @@
                 [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
                 if (completionHandler)
                 {
+                    CLS_LOG(@"Calling background fetch completion handler");
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }
@@ -177,6 +179,7 @@
                     
                     if (completionHandler)
                     {
+                        CLS_LOG(@"Calling background fetch completion handler");
                         completionHandler(UIBackgroundFetchResultNewData);
                     }
                 }
@@ -184,6 +187,7 @@
                 {
                     if (completionHandler)
                     {
+                        CLS_LOG(@"Calling background fetch completion handler");
                         completionHandler(UIBackgroundFetchResultNoData);
                     }
                 }
@@ -200,6 +204,7 @@
         if (completionHandler != nil)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
+                CLS_LOG(@"Calling background fetch completion handler");
                 completionHandler(UIBackgroundFetchResultFailed);
             });
         }
@@ -232,6 +237,7 @@
     {
         if (completionHandler != nil)
         {
+            CLS_LOG(@"Calling background fetch completion handler");
             completionHandler(UIBackgroundFetchResultFailed);
         }
     }

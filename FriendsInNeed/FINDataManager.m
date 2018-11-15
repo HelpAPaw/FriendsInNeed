@@ -153,7 +153,7 @@
                 [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
                 if (completionHandler)
                 {
-                    CLS_LOG(@"Calling background fetch completion handler");
+                    CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }
@@ -163,7 +163,7 @@
                 if (newSignals.count > 0)
                 {
                     for (FINSignal *signal in newSignals)
-                    {                        
+                    {
                         NSInteger badgeNumber = 0;
                         // Only show notifications about signals that haven't been solved yet
                         if (signal.status < FINSignalStatus2)
@@ -179,7 +179,7 @@
                     
                     if (completionHandler)
                     {
-                        CLS_LOG(@"Calling background fetch completion handler");
+                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                         completionHandler(UIBackgroundFetchResultNewData);
                     }
                 }
@@ -187,7 +187,7 @@
                 {
                     if (completionHandler)
                     {
-                        CLS_LOG(@"Calling background fetch completion handler");
+                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                         completionHandler(UIBackgroundFetchResultNoData);
                     }
                 }
@@ -197,14 +197,14 @@
         });
         
     } error:^(Fault *fault) {
-        NSLog(@"%@", fault.description);
+        CLS_LOG(@"[FIN] Getting signals failed with error: %@", fault.description);
         
         self.lastSignalCheckLocation = nil;
         
         if (completionHandler != nil)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                CLS_LOG(@"Calling background fetch completion handler");
+                CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                 completionHandler(UIBackgroundFetchResultFailed);
             });
         }
@@ -237,7 +237,7 @@
     {
         if (completionHandler != nil)
         {
-            CLS_LOG(@"Calling background fetch completion handler");
+            CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
             completionHandler(UIBackgroundFetchResultFailed);
         }
     }

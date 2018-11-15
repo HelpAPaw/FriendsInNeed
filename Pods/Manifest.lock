@@ -1,5 +1,5 @@
 PODS:
-  - Backendless (5.2.3):
+  - Backendless (5.2.4):
     - Socket.IO-Client-Swift
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
@@ -44,7 +44,7 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: b94e695159fdfca721c6b49d6c67225394f17e2a
+  Backendless: c40971cf6c090803bc3ab2d95cfc563c7c1fb64f
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Crashlytics: ca7ab4bc304aa216bdc2e4c1a96389ee77252203
   Fabric: d2b22f443ba195d8a7cc204da230977c72733b40

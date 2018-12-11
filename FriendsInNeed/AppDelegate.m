@@ -16,6 +16,7 @@
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "IQKeyboardManager.h"
 
 
 @interface AppDelegate ()
@@ -30,7 +31,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     BOOL r = [[FBSDKApplicationDelegate sharedInstance] application:application
                                     didFinishLaunchingWithOptions:launchOptions];
-    
+    IQKeyboardManager.sharedManager.enable = YES;
     [backendless initApp:BCKNDLSS_APP_ID APIKey:BCKNDLSS_IOS_API_KEY];
     [backendless.userService setStayLoggedIn:YES];
     [backendless.data mapTableToClass:@"Users" type:[BackendlessUser class]];

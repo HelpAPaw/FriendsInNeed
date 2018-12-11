@@ -13,4 +13,5 @@ target "Help A Paw" do
 	pod 'Crashlytics'
     pod 'SDWebImage'
     pod 'FBSDKLoginKit'
+    pod 'IQKeyboardManager'
 end

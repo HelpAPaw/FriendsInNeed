@@ -96,12 +96,12 @@
     return lastLocation;
 }
 
-- (void)getSignalsForLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:(self.radius * 1000) units:METERS categories:nil];
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:(radius * 1000) units:METERS categories:nil];
     query.includeMeta = @YES;
     NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
     query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([timeoutDate timeIntervalSince1970] * 1000)];
@@ -222,11 +222,15 @@
     if (   (_lastSignalCheckLocation != nil)
         && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
     {
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultNoData);
+        }
         return;
     }
     else
     {
-        [self getSignalsForLocation:location withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:location inRadius:self.radius withCompletionHandler:completionHandler];
     }
 }
 
@@ -234,7 +238,7 @@
 {
     if (_lastSignalCheckLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius withCompletionHandler:completionHandler];
     }
 }
 

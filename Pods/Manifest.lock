@@ -14,6 +14,7 @@ PODS:
     - Bolts (~> 1.9)
   - FBSDKLoginKit (4.40.0):
     - FBSDKCoreKit
+  - IQKeyboardManager (6.2.0)
   - SDWebImage (4.4.5):
     - SDWebImage/Core (= 4.4.5)
   - SDWebImage/Core (4.4.5)
@@ -27,6 +28,7 @@ DEPENDENCIES:
   - Crashlytics
   - Fabric
   - FBSDKLoginKit
+  - IQKeyboardManager
   - SDWebImage
   - ViewDeck
 
@@ -38,6 +40,7 @@ SPEC REPOS:
     - Fabric
     - FBSDKCoreKit
     - FBSDKLoginKit
+    - IQKeyboardManager
     - SDWebImage
     - Socket.IO-Client-Swift
     - Starscream
@@ -50,11 +53,12 @@ SPEC CHECKSUMS:
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   FBSDKCoreKit: ae214474b25033399c131dc81d258e412582a2ba
   FBSDKLoginKit: 7a1e411d46acc8834588eca437daf34de42e1d52
+  IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
   SDWebImage: ecc03494e973b93b80213649d32175f8d2d17d4d
   Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
-PODFILE CHECKSUM: a67ff526f0fa9bb416e507c8feed7cd52edf0dac
+PODFILE CHECKSUM: 45cb4612bd204c5d494f3dbbcdc75231f73c343e
 
 COCOAPODS: 1.5.3

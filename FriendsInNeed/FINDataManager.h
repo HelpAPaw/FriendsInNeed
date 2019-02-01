@@ -17,7 +17,8 @@
 #define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
 
 #define kNotificationSignalID   @"NotificationSignalID"
-#define kDefaultMapRegion       4000
+#define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
+#define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"
 
 #define kUserPropertyPhoneNumber                @"phoneNumber"
 #define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"
@@ -33,7 +34,7 @@
 + (instancetype)sharedManager;
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)getSignalsForLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getAllSignalsWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler;
 - (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion;
@@ -51,6 +52,11 @@
 - (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion;
 - (BOOL)getIsInTestMode;
 - (void)setIsInTestMode:(BOOL)isInTestMode;
+
+- (NSInteger)getRadiusSetting;
+- (NSInteger)getTimeoutSetting;
+- (void)setRadiusSetting:(NSInteger)newRadius;
+- (void)setTimeoutSetting:(NSInteger)newTimeout;
 
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
 

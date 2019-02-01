@@ -27,7 +27,7 @@ import Foundation
 @objc extension UIViewController {
     
  @objc   func showAlertViewControllerWithTitle(_ title:String, message:String, actions:[UIAlertAction]) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
     
             for action in actions {
                 alert.addAction(action)

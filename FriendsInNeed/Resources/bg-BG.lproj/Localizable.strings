@@ -33,6 +33,7 @@
 //FinMenuVC.m
 "Login" = "Влез";
 "Logout" = "Излез";
+"Settings" = "Настройки";
 "FAQ" = "ЧЗВ";
 "Feedback" = "Обратна връзка";
 "Privacy Policy" = "Политика за поверителност";
@@ -64,3 +65,13 @@
 //Signal
 "(empty description)" = "(празно описание)";
 "Status: %@" = "Статус: %@";
+
+//FINSettingsVC
+"Radius" = "Радиус";
+"Signal timeout" = "Времетраене на сигналите";
+"The area around your current location at any moment that you want to be notified if new signals appear" = "Областта около текущото ви местоположение във всеки един момент, за която искате да бъдете известявани в случай на нови сигнали";
+"How old signals you want to be notified about" = "Колко да са стари сигналите, за които бивате известявани";
+"day" = "ден";
+"days" = "дни";
+"kilometer" = "километър";
+"kilometers" = "километра";

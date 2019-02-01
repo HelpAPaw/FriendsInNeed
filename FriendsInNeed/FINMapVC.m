@@ -23,7 +23,7 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <UIGestureRecognizerDelegate, MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -48,6 +48,8 @@
 @property (strong, nonatomic) UIImage *signalPhoto;
 @property (assign, nonatomic) BOOL viewDidAppearOnce;
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
+@property (strong, nonatomic) CLLocation *lastRefreshCenter;
+@property (assign, nonatomic) NSInteger   lastRefreshRadius;
 
 @end
 
@@ -69,6 +71,16 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingRadiusChanged
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingTimeoutChanged
+                                               object:nil];
+    
     _cancelButton.tintColor = [UIColor redColor];
     _cancelButton.layer.shadowOpacity = 1.0f;
     _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
@@ -88,10 +100,6 @@
     _sendSignalButtonWidthConstraint.constant = _btnSendSignal.frame.size.width + 10;
     
     _isInSubmitMode = NO;
-    
-    UIPanGestureRecognizer* panGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didDragMap:)];
-    [panGR setDelegate:self];
-    [_mapView addGestureRecognizer:panGR];
     
     self.navigationItem.title = @"Help a Paw";
     
@@ -209,6 +217,16 @@
     [self initMapVC];
 }
 
+- (void)settingsChanged:(NSNotification *) notification
+{
+    [self initMapVC];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark
 
 - (void)initMapVC
@@ -234,7 +252,8 @@
 #pragma mark - FINLocationManagerMapDelegate
 - (void)updateMapToLocation:(CLLocation *)location
 {
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, kDefaultMapRegion, kDefaultMapRegion);
+    CLLocationDistance radiusInMeters = [_dataManager getRadiusSetting] * 1000;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(location.coordinate, radiusInMeters, radiusInMeters);
     [_mapView setRegion:region animated:YES];
 }
 
@@ -245,8 +264,6 @@
     CGFloat rotationAngle;
     if (_isInSubmitMode == NO)
     {
-        [self updateMapToLastKnownUserLocation];
-        
         rotationAngle = -3.25f;
         
         // Add a pin to the map to select location of the signal
@@ -541,31 +558,18 @@
     [_mapView removeAnnotations:signalAnnotations];
 }
 
-#pragma mark - Pan Gesture Recognizer Delegate
-// This is needed so that the Pan GR works along with the map's gesture recognizers
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-- (void)didDragMap:(UIGestureRecognizer*)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
-    {
-        [_signalTitleField resignFirstResponder];
-        
-        if (_isInSubmitMode == NO)
-        {
-            _focusSignalID = nil;
-            [self refresh];
-
-        }
-    }
-}
-
 #pragma mark - Map Delegate
-- (void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated
+
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+    [_signalTitleField resignFirstResponder];
+    
+    if (_isInSubmitMode == NO)
+    {
+        _focusSignalID = nil;
+        [self refresh];
+        
+    }
 }
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation
@@ -716,12 +720,40 @@
 
 - (void)refresh
 {
-    [self setupRefreshingMode];
-    
     CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
-    [_dataManager getSignalsForLocation:newCenter withCompletionHandler:^(UIBackgroundFetchResult result) {
-        [self setupReadyMode];
-    }];
+    MKCoordinateRegion region = _mapView.region;
+    //https://stackoverflow.com/questions/21273269/trying-to-get-the-span-size-in-meters-for-an-ios-mkcoordinatespan
+    //get latitude in meters
+    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:(region.center.latitude - region.span.latitudeDelta * 0.5) longitude:region.center.longitude];
+    NSInteger latitudeDeltaMeters = [loc1 distanceFromLocation:newCenter];
+    //get longitude in meters
+    CLLocation *loc3 = [[CLLocation alloc] initWithLatitude:region.center.latitude longitude:(region.center.longitude - region.span.longitudeDelta * 0.5)];
+    NSInteger longitudeDeltaMeters = [loc3 distanceFromLocation:newCenter];
+    NSInteger maxRadius = MAX(latitudeDeltaMeters, longitudeDeltaMeters);
+    NSLog(@"Shown radius is: %ld", (long)maxRadius);
+    
+    BOOL shouldRefresh = YES;
+    if (self.lastRefreshCenter != nil)
+    {
+        NSInteger centerDistance = [newCenter distanceFromLocation:self.lastRefreshCenter];
+        if ((centerDistance < 500) && (maxRadius <= self.lastRefreshRadius))
+        {
+            shouldRefresh = NO;
+        }
+    }
+    
+    if (shouldRefresh)
+    {
+        [self setupRefreshingMode];
+        [_dataManager getSignalsForLocation:newCenter inRadius:maxRadius withCompletionHandler:^(UIBackgroundFetchResult result) {
+            [self setupReadyMode];
+            if (result != UIBackgroundFetchResultFailed)
+            {
+                self.lastRefreshCenter = newCenter;
+                self.lastRefreshRadius = maxRadius;
+            }
+        }];
+    }
 }
 
 - (void)setupRefreshingMode
@@ -788,6 +820,8 @@
 {
     [_dataManager setIsInTestMode:![_dataManager getIsInTestMode]];
     [self updateTitle];
+    self.lastRefreshCenter = nil;
+    self.lastRefreshRadius = 0;
     [self refresh];
 }
 

@@ -66,6 +66,11 @@
 		F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C394B1C9EA305007A2D8E /* FINSignal.m */; };
 		F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3A6DC661C8488250050F9F3 /* FINDataManager.m */; };
 		F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */ = {isa = PBXBuildFile; fileRef = F3A6DC691C84C0480050F9F3 /* ic_paw.png */; };
+		F3B2503F21582DF900ED1D1D /* FINSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */; };
+		F3B2504021582DF900ED1D1D /* FINSettingsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */; };
+		F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */; };
+		F3B25044215833FF00ED1D1D /* FINSettingsSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */; };
+		F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = F3B25049215984F300ED1D1D /* Localizable.stringsdict */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
 		F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */; };
@@ -168,6 +173,12 @@
 		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
 		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
+		F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSettingsVC.swift; sourceTree = "<group>"; };
+		F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsVC.xib; sourceTree = "<group>"; };
+		F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSettingsSliderCell.swift; sourceTree = "<group>"; };
+		F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsSliderCell.xib; sourceTree = "<group>"; };
+		F3B25048215984F300ED1D1D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		F3B2504A2159850700ED1D1D /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "bg-BG"; path = "bg-BG.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		F3C484701C6C111D0067A169 /* FINLoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLoginVC.h; sourceTree = "<group>"; };
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
@@ -298,6 +309,17 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		F35258B1215ECF17001A0DE1 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */,
+				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
+				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
+				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
@@ -361,6 +383,7 @@
 				1449F61A1FC631390078317E /* FAQ */,
 				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
 				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
+				F35258B1215ECF17001A0DE1 /* Settings */,
 				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
 				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
@@ -417,6 +440,7 @@
 				F33800201C98C7DF0080FACD /* ic_add@2x.png */,
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
 				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
+				F3B25049215984F300ED1D1D /* Localizable.stringsdict */,
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
@@ -457,7 +481,7 @@
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = NJRZ88GCVL;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -502,6 +526,7 @@
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
 				147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */,
+				F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */,
 				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
 				1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
@@ -509,6 +534,7 @@
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
 				1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */,
 				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
+				F3B2504021582DF900ED1D1D /* FINSettingsVC.xib in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
 				F3D06A0E20C4428A00A8939E /* FINAdminVC.xib in Resources */,
@@ -522,6 +548,7 @@
 				F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */,
 				F32711D21CCAFBAD00E51AEA /* ic_call@3x.png in Resources */,
 				F39C39471C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png in Resources */,
+				F3B25044215833FF00ED1D1D /* FINSettingsSliderCell.xib in Resources */,
 				1470C8E11FC373220072568E /* FINSignalPhotoVC.xib in Resources */,
 				F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */,
 				F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */,
@@ -622,9 +649,11 @@
 				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,
 				F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */,
 				1470C8E01FC372880072568E /* FINSignalPhotoVC.swift in Sources */,
+				F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
+				F3B2503F21582DF900ED1D1D /* FINSettingsVC.swift in Sources */,
 				147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
@@ -737,6 +766,15 @@
 				147F2CF81E72D2EC007B1017 /* bg-BG */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F3B25049215984F300ED1D1D /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3B25048215984F300ED1D1D /* en */,
+				F3B2504A2159850700ED1D1D /* bg-BG */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -866,8 +904,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -888,8 +925,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

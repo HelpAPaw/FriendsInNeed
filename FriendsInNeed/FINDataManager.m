@@ -14,6 +14,10 @@
 #define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
 #define kIsInTestModeKey            @"kIsInTestModeKey"
+#define kSettingRadiusKey           @"kSettingRadiusKey"
+#define kSettingRadiusDefault       10
+#define kSettingTimeoutKey          @"kSettingTimeoutKey"
+#define kSettingTimeoutDefault      7
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -22,6 +26,8 @@
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
 @property (assign, nonatomic) BOOL        isInTestMode;
+@property (assign, nonatomic) NSInteger   radius;
+@property (assign, nonatomic) NSInteger   timeout;
 
 @end
 
@@ -47,6 +53,8 @@
     
     _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     _isInTestMode = [self loadIsInTestMode];
+    
+    [self loadSettings];
     
     BOOL isValidUserToken = NO;
     @try {
@@ -89,15 +97,15 @@
     return lastLocation;
 }
 
-- (void)getSignalsForLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:kDefaultMapRegion units:METERS categories:nil];
+    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:(radius * 1000) units:METERS categories:nil];
     query.includeMeta = @YES;
-    NSDate *threeDaysAgo = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * 3)];
-    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([threeDaysAgo timeIntervalSince1970]*1000)];
+    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
+    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([timeoutDate timeIntervalSince1970] * 1000)];
     
     if (_isInTestMode)
     {
@@ -219,11 +227,15 @@
     if (   (_lastSignalCheckLocation != nil)
         && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
     {
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultNoData);
+        }
         return;
     }
     else
     {
-        [self getSignalsForLocation:location withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:location inRadius:self.radius withCompletionHandler:completionHandler];
     }
 }
 
@@ -231,7 +243,7 @@
 {
     if (_lastSignalCheckLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius withCompletionHandler:completionHandler];
     }
     else
     {
@@ -586,6 +598,47 @@
 {
     [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma MARK - Settings
+
+- (void)loadSettings
+{
+    NSInteger savedRadius = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingRadiusKey];
+    _radius = savedRadius != 0 ? savedRadius : kSettingRadiusDefault;
+    
+    NSInteger savedTimeout = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTimeoutKey];
+    _timeout = savedTimeout != 0 ? savedTimeout : kSettingTimeoutDefault;
+}
+
+- (NSInteger)getRadiusSetting
+{
+    return _radius;
+}
+
+- (NSInteger)getTimeoutSetting
+{
+    return _timeout;
+}
+
+- (void)setRadiusSetting:(NSInteger)newRadius
+{
+    if (newRadius != _radius)
+    {
+        _radius = newRadius;
+        [[NSUserDefaults standardUserDefaults] setInteger:newRadius forKey:kSettingRadiusKey];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingRadiusChanged object:self];
+    }
+}
+
+- (void)setTimeoutSetting:(NSInteger)newTimeout
+{
+    if (newTimeout != _timeout)
+    {
+        _timeout = newTimeout;
+        [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
+    }
 }
 
 @end

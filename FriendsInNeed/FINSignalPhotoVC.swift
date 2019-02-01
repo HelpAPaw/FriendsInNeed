@@ -61,18 +61,6 @@ import UIKit
         prepareAndShowImage()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        UIView.animate(withDuration: 0.3) {
-            UIApplication.shared.isStatusBarHidden = true
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        UIApplication.shared.isStatusBarHidden = false
-    }
-    
     // MARK: - Injectable
     func inject(img image: UIImage) {
         signalImage = UIImageView(image: image)
@@ -83,7 +71,7 @@ import UIKit
     }
     
     fileprivate func prepareAndShowImage(){
-        signalImage.contentMode = UIViewContentMode.center
+        signalImage.contentMode = UIView.ContentMode.center
         scrollView.contentSize = signalImage.image!.size
         scrollView.addSubview(signalImage)
         prepareScollView(withSize: self.view.frame.size)

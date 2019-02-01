@@ -30,7 +30,7 @@ class FINAdminVC: UIViewController {
                         ontheway += 1
                     case .status2:
                         solved += 1
-                        print("\(signal.title())")
+                        print("\(String(describing: signal.title()))")
                     case .status3:
                         print("WTF!?")
                     }

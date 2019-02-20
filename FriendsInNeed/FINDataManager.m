@@ -18,6 +18,7 @@
 #define kSettingRadiusDefault       10
 #define kSettingTimeoutKey          @"kSettingTimeoutKey"
 #define kSettingTimeoutDefault      7
+#define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -43,6 +44,17 @@
                   });
     
     return _sharedManager;
+}
+
++ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId
+{
+    [[NSUserDefaults standardUserDefaults] setObject:deviceRegistrationId forKey:kDeviceRegistrationIdKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getDeviceRegistrationId
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceRegistrationIdKey];
 }
 
 - (id)init
@@ -95,6 +107,29 @@
     }
     
     return lastLocation;
+}
+
+- (void)saveNewDeviceLocation:(CLLocationCoordinate2D)locationCoordinate
+{
+    //TODO: apply dampening
+    
+    NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
+    if (deviceRegistrationId != nil)
+    {
+        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+        [dataStore findById:deviceRegistrationId
+                   response:^(DeviceRegistration *deviceRegistration) {
+                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:@"signalRadius"];
+                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:@"signalTimeout"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:locationCoordinate.latitude] forKey:@"lastLatitude"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:locationCoordinate.longitude] forKey:@"lastLongitude"];
+                       [dataStore save:deviceRegistration];
+                   }
+                      error:^(Fault *fault) {
+                          NSLog(@"Server reported an error: %@", fault);
+                      }
+         ];
+    }
 }
 
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -236,6 +271,8 @@
     else
     {
         [self getSignalsForLocation:location inRadius:self.radius withCompletionHandler:completionHandler];
+        
+        [self saveNewDeviceLocation:location.coordinate];
     }
 }
 

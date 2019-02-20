@@ -18,7 +18,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UNUserNotificationCenterDelegate>
 
 @property (weak, nonatomic) FINMapVC *mapVC;
 
@@ -65,7 +65,7 @@
     _mapVC = mapVC;
     
     
-    [self registerForLocalNotifications];
+    [self registerForNotifications];
     
     
     UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
@@ -164,8 +164,9 @@
 }
 
 #pragma mark - Custom methods
-- (void)registerForLocalNotifications
+- (void)registerForNotifications
 {
+    //TODO refactor this!?
     UIMutableUserNotificationCategory *reminderCategory = [UIMutableUserNotificationCategory new];
     reminderCategory.identifier = @"ReminderCategory";
     [reminderCategory setActions:nil forContext:UIUserNotificationActionContextDefault];
@@ -174,11 +175,30 @@
     UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
     UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
     [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+    
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert + UNAuthorizationOptionBadge + UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+    }];
+    
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
 {
     
+}
+
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [backendless.messaging registerDevice:deviceToken response:^(NSString *registeredDeviceId) {
+        //Get only the objectId part
+        NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
+        [FINDataManager saveDeviceRegistrationId:components[0]];
+        
+    }   error:^(Fault *fault) {
+        //Do nothing
+    }];
 }
 
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler

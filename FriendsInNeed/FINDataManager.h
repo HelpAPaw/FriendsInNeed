@@ -32,6 +32,7 @@
 @interface FINDataManager : NSObject
 
 + (instancetype)sharedManager;
++ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId;
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;

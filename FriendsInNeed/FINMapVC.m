@@ -233,7 +233,7 @@
 {
     [self updateMapToLastKnownUserLocation];
     
-    [self refresh];
+    [self refreshOverridingDampening:NO];
     
     [_locationManager updateUserLocation];
     
@@ -567,7 +567,7 @@
     if (_isInSubmitMode == NO)
     {
         _focusSignalID = nil;
-        [self refresh];
+        [self refreshOverridingDampening:NO];
         
     }
 }
@@ -715,10 +715,10 @@
 - (void)refreshButtonTapped:(id)sender
 {
     _focusSignalID = nil;
-    [self refresh];
+    [self refreshOverridingDampening:YES];
 }
 
-- (void)refresh
+- (void)refreshOverridingDampening:(BOOL)overrideDampening
 {
     CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
     MKCoordinateRegion region = _mapView.region;
@@ -733,7 +733,7 @@
     NSLog(@"Shown radius is: %ld", (long)maxRadius);
     
     BOOL shouldRefresh = YES;
-    if (self.lastRefreshCenter != nil)
+    if ((overrideDampening == NO) && (self.lastRefreshCenter != nil))
     {
         NSInteger centerDistance = [newCenter distanceFromLocation:self.lastRefreshCenter];
         if ((centerDistance < 500) && (maxRadius <= self.lastRefreshRadius))
@@ -745,7 +745,7 @@
     if (shouldRefresh)
     {
         [self setupRefreshingMode];
-        [_dataManager getSignalsForLocation:newCenter inRadius:maxRadius withCompletionHandler:^(UIBackgroundFetchResult result) {
+        [_dataManager getSignalsForLocation:newCenter inRadius:maxRadius overridingDampening:overrideDampening withCompletionHandler:^(UIBackgroundFetchResult result) {
             [self setupReadyMode];
             if (result != UIBackgroundFetchResultFailed)
             {
@@ -822,7 +822,7 @@
     [self updateTitle];
     self.lastRefreshCenter = nil;
     self.lastRefreshRadius = 0;
-    [self refresh];
+    [self refreshOverridingDampening:YES];
 }
 
 @end

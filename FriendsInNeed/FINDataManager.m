@@ -26,6 +26,7 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
+@property (assign, nonatomic) CLLocation *lastSavedDeviceLocation;
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
@@ -86,11 +87,11 @@
 
 - (void)saveLastSignalCheckLocation:(CLLocation *)location
 {
+    _lastSignalCheckLocation = location;
+    
     NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
     [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastSignalCheckLocation];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    _lastSignalCheckLocation = location;
 }
 
 - (CLLocation *)loadLastSignalCheckLocation
@@ -109,9 +110,17 @@
     return lastLocation;
 }
 
-- (void)saveNewDeviceLocation:(CLLocationCoordinate2D)locationCoordinate
+- (void)saveNewDeviceLocation:(CLLocation *)location
 {
-    //TODO: apply dampening
+    //Apply dampening
+    if (   (self.lastSavedDeviceLocation != nil)
+        && ([self.lastSavedDeviceLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
+    {
+        //Previously saved device location is too close
+        return;
+    }
+    
+    self.lastSavedDeviceLocation = location;
     
     NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
     if (deviceRegistrationId != nil)
@@ -121,8 +130,8 @@
                    response:^(DeviceRegistration *deviceRegistration) {
                        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:@"signalRadius"];
                        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:@"signalTimeout"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:locationCoordinate.latitude] forKey:@"lastLatitude"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:locationCoordinate.longitude] forKey:@"lastLongitude"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"lastLatitude"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"lastLongitude"];
                        [dataStore save:deviceRegistration];
                    }
                       error:^(Fault *fault) {
@@ -132,8 +141,24 @@
     }
 }
 
-- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    // If new location is too close to last one - do not check
+    if (   (overrideDampening == NO)
+        && (_lastSignalCheckLocation != nil)
+        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)
+        && (ABS([_lastSignalCheckLocation.timestamp timeIntervalSinceNow]) < 60)   )
+    {
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultNoData);
+        }
+        NSLog(@"Dampen request for location: %@", location);
+        return;
+    }
+    // If new location is above minimum threshold - save it
+    [self saveLastSignalCheckLocation:location];
+    
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
@@ -149,6 +174,7 @@
         query.categories = cats;
     }
     
+    NSLog(@"Get signals for location: %@", location);
     [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
         NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
         
@@ -235,8 +261,6 @@
                     }
                 }
             }
-            
-            [self saveLastSignalCheckLocation:location];
         });
         
     } error:^(Fault *fault) {
@@ -258,29 +282,16 @@
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    // Do not check if delta distance is below threshold
-    if (   (_lastSignalCheckLocation != nil)
-        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
-    {
-        if (completionHandler != nil)
-        {
-            completionHandler(UIBackgroundFetchResultNoData);
-        }
-        return;
-    }
-    else
-    {
-        [self getSignalsForLocation:location inRadius:self.radius withCompletionHandler:completionHandler];
-        
-        [self saveNewDeviceLocation:location.coordinate];
-    }
+    [self getSignalsForLocation:location inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
+    
+    [self saveNewDeviceLocation:location];
 }
 
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     if (_lastSignalCheckLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
     }
     else
     {

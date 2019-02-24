@@ -350,6 +350,44 @@
             });
         }
         
+        //Send push notifications to all interested devices in the area
+        DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+        [queryBuilder setRelationsDepth:1];
+        //Get all devices within 100km of the signal
+        [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < km(100)", savedGeoPoint.latitude, savedGeoPoint.longitude]];
+        
+        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+        [dataStore find:queryBuilder response:^(NSArray *devices) {
+            NSLog(@"Devices: %@", devices);
+            NSMutableArray *deviceIds = [NSMutableArray new];
+            for (NSDictionary *device in devices)
+            {
+                [deviceIds addObject:[device objectForKey:@"deviceId"]];
+            }
+            
+            PublishOptions *publishOptions = [PublishOptions new];
+            [publishOptions assignHeaders:@{@"ios-alert":@"Alert message",
+                                            @"ios-badge":@1,
+                                            @"ios-sound":@"default"}];
+            
+            DeliveryOptions *deliveryOptions = [DeliveryOptions new];
+            deliveryOptions.pushSinglecast = deviceIds;
+            
+            [backendless.messaging publish:@"default"
+                                   message:@"Push notification message"
+                            publishOptions:publishOptions
+                           deliveryOptions:deliveryOptions
+                                  response:^(MessageStatus *status) {
+                                      NSLog(@"Status: %@", status);
+                                  }
+                                     error:^(Fault *fault) {
+                                         NSLog(@"Server reported an error: %@", fault);
+                                     }];
+            
+        } error:^(Fault *fault) {
+            NSLog(@"Error executing query: %@", fault.message);
+        }];
+        
     } error:^(Fault *fault) {
         dispatch_async(dispatch_get_main_queue(), ^{
             FINError *error = [[FINError alloc] initWithFault:fault];

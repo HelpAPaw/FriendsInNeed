@@ -354,7 +354,7 @@
         DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
         [queryBuilder setRelationsDepth:1];
         //Get all devices within 100km of the signal
-        [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < km(100)", savedGeoPoint.latitude, savedGeoPoint.longitude]];
+        [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", savedGeoPoint.latitude, savedGeoPoint.longitude]];
         
         id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
         [dataStore find:queryBuilder response:^(NSArray *devices) {
@@ -365,24 +365,27 @@
                 [deviceIds addObject:[device objectForKey:@"deviceId"]];
             }
             
-            PublishOptions *publishOptions = [PublishOptions new];
-            [publishOptions assignHeaders:@{@"ios-alert":@"Alert message",
-                                            @"ios-badge":@1,
-                                            @"ios-sound":@"default"}];
-            
-            DeliveryOptions *deliveryOptions = [DeliveryOptions new];
-            deliveryOptions.pushSinglecast = deviceIds;
-            
-            [backendless.messaging publish:@"default"
-                                   message:@"Push notification message"
-                            publishOptions:publishOptions
-                           deliveryOptions:deliveryOptions
-                                  response:^(MessageStatus *status) {
-                                      NSLog(@"Status: %@", status);
-                                  }
-                                     error:^(Fault *fault) {
-                                         NSLog(@"Server reported an error: %@", fault);
-                                     }];
+            if (deviceIds.count > 0)
+            {
+                PublishOptions *publishOptions = [PublishOptions new];
+                [publishOptions assignHeaders:@{@"ios-alert":title,
+                                                @"ios-badge":@1,
+                                                @"ios-sound":@"default"}];
+                
+                DeliveryOptions *deliveryOptions = [DeliveryOptions new];
+                deliveryOptions.pushSinglecast = deviceIds;
+                
+                [backendless.messaging publish:@"default"
+                                       message:@"Push notification message"
+                                publishOptions:publishOptions
+                               deliveryOptions:deliveryOptions
+                                      response:^(MessageStatus *status) {
+                                          NSLog(@"Status: %@", status);
+                                      }
+                                         error:^(Fault *fault) {
+                                             NSLog(@"Server reported an error: %@", fault);
+                                         }];
+            }
             
         } error:^(Fault *fault) {
             NSLog(@"Error executing query: %@", fault.message);

@@ -362,7 +362,12 @@
             NSMutableArray *deviceIds = [NSMutableArray new];
             for (NSDictionary *device in devices)
             {
-                [deviceIds addObject:[device objectForKey:@"deviceId"]];
+                NSString *deviceId = [device objectForKey:@"deviceId"];
+                //Skip current device
+                if (![backendless.messaging.currentDevice.deviceId isEqualToString:deviceId])
+                {
+                    [deviceIds addObject:deviceId];
+                }
             }
             
             if (deviceIds.count > 0)
@@ -370,13 +375,15 @@
                 PublishOptions *publishOptions = [PublishOptions new];
                 [publishOptions assignHeaders:@{@"ios-alert":title,
                                                 @"ios-badge":@1,
-                                                @"ios-sound":@"default"}];
+                                                @"ios-sound":@"default",
+                                                @"signalId":savedGeoPoint.objectId,
+                                                @"ios-category":kNotificationCategoryNewSignal}];
                 
                 DeliveryOptions *deliveryOptions = [DeliveryOptions new];
                 deliveryOptions.pushSinglecast = deviceIds;
                 
                 [backendless.messaging publish:@"default"
-                                       message:@"Push notification message"
+                                       message:title
                                 publishOptions:publishOptions
                                deliveryOptions:deliveryOptions
                                       response:^(MessageStatus *status) {

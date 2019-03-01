@@ -37,6 +37,7 @@
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshingBarButton;
+@property (assign, nonatomic) BOOL pauseRefreshing;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
@@ -267,9 +268,8 @@
         rotationAngle = -3.25f;
         
         // Add a pin to the map to select location of the signal
-        CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
         _submitSignalAnnotation = [MKPointAnnotation new];
-        _submitSignalAnnotation.coordinate = userLocation.coordinate;
+        _submitSignalAnnotation.coordinate = _mapView.centerCoordinate;
         [_mapView addAnnotation:_submitSignalAnnotation];
         
         _signalTitleField.text = @"";
@@ -507,8 +507,10 @@
 
 - (void)focusAnnotation:(FINAnnotation *)annotation
 {
+    self.pauseRefreshing = YES;
     [_mapView selectAnnotation:annotation animated:YES];
     [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    self.pauseRefreshing = NO;
 }
 
 - (void)setFocusSignalID:(NSString *)focusSignalID

@@ -198,6 +198,25 @@
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+{
+    UNNotificationRequest *request = response.notification.request;
+    NSString *category = request.content.categoryIdentifier;
+    if ([category isEqualToString:kNotificationCategoryNewSignal])
+    {
+        if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier])
+        {            
+            NSDictionary *userInfo = request.content.userInfo;
+            NSString *signalId = [userInfo objectForKey:@"signalId"];
+            [_mapVC setFocusSignalID:signalId];
+        }
+    }
+    else
+    {
+        //Handle other notification categories in the future
+    }
+}
+
 #pragma mark - Background Fetch
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {

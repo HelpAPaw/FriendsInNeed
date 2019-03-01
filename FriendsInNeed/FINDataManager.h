@@ -17,6 +17,7 @@
 #define BCKNDLSS_REST_API_KEY   @"473D7C4A-3FBC-69F4-FFFF-1635F07E4300"
 
 #define kNotificationSignalID   @"NotificationSignalID"
+#define kNotificationCategoryNewSignal  @"kNotificationCategoryNewSignal"
 #define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
 #define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"
 

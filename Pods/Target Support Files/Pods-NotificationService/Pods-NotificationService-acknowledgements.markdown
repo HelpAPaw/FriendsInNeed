@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## Backendless
 
-Copyright (c) 2013-2018 by Backendless.com
+Copyright (c) 2013-2019 by Backendless.com
 
 ## Socket.IO-Client-Swift
 

@@ -26,7 +26,7 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
-@property (assign, nonatomic) CLLocation *lastSavedDeviceLocation;
+@property (strong, nonatomic) CLLocation *lastSavedDeviceLocation;
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;

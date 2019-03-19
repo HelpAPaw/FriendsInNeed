@@ -132,8 +132,8 @@
 
 - (IBAction)onCallButton:(id)sender
 {
-    NSString *phoneNumber = [@"telprompt://" stringByAppendingString:_phoneNumber];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber]];
+    NSString *phoneNumber = [@"tel://" stringByAppendingString:[_phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber] options:@{} completionHandler:nil];
 }
 
 @end

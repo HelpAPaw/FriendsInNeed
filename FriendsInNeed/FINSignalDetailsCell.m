@@ -92,12 +92,14 @@
 
 - (void)setAuthor:(NSString *)author
 {
-    _lbAuthor.attributedText = [[NSMutableAttributedString alloc] initWithString:author attributes:_italicAttributes];
+    NSString *authorString = author != nil ? author : @"";
+    _lbAuthor.attributedText = [[NSMutableAttributedString alloc] initWithString:authorString attributes:_italicAttributes];
 }
 
 - (void)setDate:(NSString *)date
 {
-    _lbDate.attributedText = [[NSMutableAttributedString alloc] initWithString:date attributes:_italicAttributes];
+    NSString *dateString = date != nil ? date : @"";
+    _lbDate.attributedText = [[NSMutableAttributedString alloc] initWithString:dateString attributes:_italicAttributes];
 }
 
 - (void)setPhoto:(UIImage *)photo

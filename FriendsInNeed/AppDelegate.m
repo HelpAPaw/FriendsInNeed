@@ -67,14 +67,6 @@
     
     [self registerForNotifications];
     
-    
-    UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
-    if (focusSignalID)
-    {        
-        [_mapVC setFocusSignalID:focusSignalID];
-    }
-    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     @try {
@@ -158,12 +150,6 @@
 }
 
 #pragma mark - Notifications
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
-    [_mapVC setFocusSignalID:focusSignalID];
-}
-
 - (void)registerForNotifications
 {
     UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
@@ -175,10 +161,6 @@
             });
         }
     }];
-}
-
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
-{
 }
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -207,7 +189,7 @@
         if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier])
         {            
             NSDictionary *userInfo = request.content.userInfo;
-            NSString *signalId = [userInfo objectForKey:@"signalId"];
+            NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
             [_mapVC setFocusSignalID:signalId];
         }
     }

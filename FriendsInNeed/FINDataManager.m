@@ -140,7 +140,7 @@
          ];
     }
 }
-
+//TODO: too much refreshes even with current dampening
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // If new location is too close to last one - do not check
@@ -238,10 +238,19 @@
                         if (signal.status < FINSignalStatus2)
                         {
                             badgeNumber++;
-                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                            localNotification.alertBody  = signal.title;
-                            localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
-                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                            
+                            // Create local notification and show it
+                            UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
+                            notifContent.body = signal.title;
+                            notifContent.sound = [UNNotificationSound defaultSound];
+                            notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
+                            
+                            NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                            [userInfo setObject:signal.signalID forKey:kNotificationSignalId];
+                            notifContent.userInfo = userInfo;
+                            
+                            UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
+                            [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
                         }
                         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
                     }

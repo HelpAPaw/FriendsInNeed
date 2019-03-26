@@ -16,7 +16,7 @@
 #define BCKNDLSS_IOS_API_KEY    @"***REMOVED***"
 #define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
 
-#define kNotificationSignalID   @"NotificationSignalID"
+#define kNotificationSignalId   @"signalId"
 #define kNotificationCategoryNewSignal  @"kNotificationCategoryNewSignal"
 #define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
 #define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"

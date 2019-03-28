@@ -173,7 +173,6 @@
 {
     [super viewWillDisappear:animated];
     
-    _focusSignalID = nil;
     [self removeEnvironmentSwitching];
 }
 
@@ -229,7 +228,6 @@
 }
 
 #pragma mark
-
 - (void)initMapVC
 {
     [self updateMapToLastKnownUserLocation];
@@ -478,6 +476,7 @@
 
 - (void)addAnnotationToMapFromSignal:(FINSignal *)signal
 {
+    // Unfortunately to refresh annotations we need to remove and add them again
     // Remove old annotation if present
     for (FINAnnotation *ann in _mapView.annotations)
     {
@@ -487,7 +486,9 @@
         }
         else
         {
-            if ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
+            // Only remove not focused annotations
+            if (   ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
+                && ([_mapView.selectedAnnotations indexOfObject:ann] == NSNotFound)   )
             {
                 [_mapView removeAnnotation:ann];
                 break;
@@ -508,9 +509,10 @@
 - (void)focusAnnotation:(FINAnnotation *)annotation
 {
     self.pauseRefreshing = YES;
-    [_mapView selectAnnotation:annotation animated:YES];
     [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    [_mapView selectAnnotation:annotation animated:YES];
     self.pauseRefreshing = NO;
+    _focusSignalID = nil;
 }
 
 - (void)setFocusSignalID:(NSString *)focusSignalID
@@ -525,7 +527,6 @@
         else
         {
             NSLog(@"Failed to get signal for ID %@", focusSignalID);
-
             [self showAlertForError:error];
         }
     }];
@@ -533,8 +534,6 @@
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals
 {
-    [self removeAllSignalAnnotationsFromMap];
-    
     for (FINSignal *signal in nearbySignals)
     {
         [UIView animateWithDuration:0.3 animations:^{
@@ -658,13 +657,13 @@
     signalDetailsVC.delegate = self;
     signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     
-    
-    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
     navController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:navController animated:YES completion:^{}];
 }
+
 //Code dublication with FiNSignalDetailVC
--(void) imageGetterFrom:(NSURL *)url forAnnotationView:(MKAnnotationView *)annotationView{
+- (void)imageGetterFrom:(NSURL *)url forAnnotationView:(MKAnnotationView *)annotationView{
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:url
@@ -716,7 +715,6 @@
 #pragma mark - Refresh
 - (void)refreshButtonTapped:(id)sender
 {
-    _focusSignalID = nil;
     [self refreshOverridingDampening:YES];
 }
 

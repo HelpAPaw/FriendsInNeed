@@ -7,11 +7,11 @@
 //
 
 #import "FINDataManager.h"
+#import "FINLocationManager.h"
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
 
 #define kMinimumDistanceTravelled   300
-#define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
 #define kIsInTestModeKey            @"kIsInTestModeKey"
 #define kSettingRadiusKey           @"kSettingRadiusKey"
@@ -63,8 +63,6 @@
     self = [super init];
     
     _nearbySignals = [NSMutableArray new];
-    
-    _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     _isInTestMode = [self loadIsInTestMode];
     
     [self loadSettings];
@@ -85,32 +83,7 @@
     return self;
 }
 
-- (void)saveLastSignalCheckLocation:(CLLocation *)location
-{
-    _lastSignalCheckLocation = location;
-    
-    NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
-    [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastSignalCheckLocation];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (CLLocation *)loadLastSignalCheckLocation
-{
-    CLLocation *lastLocation = nil;
-    @try
-    {
-        NSData *locationData = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSignalCheckLocation];
-        lastLocation = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:locationData];
-    }
-    @catch (NSException *exception)
-    {
-        NSLog(@"Couldn't read last location. Exception: %@", exception.description);
-    }
-    
-    return lastLocation;
-}
-
-- (void)saveNewDeviceLocation:(CLLocation *)location
+- (void)saveInCloudNewDeviceLocation:(CLLocation *)location
 {
     //Apply dampening
     if (   (self.lastSavedDeviceLocation != nil)
@@ -140,7 +113,7 @@
          ];
     }
 }
-//TODO: too much refreshes even with current dampening
+
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     // If new location is too close to last one - do not check
@@ -157,7 +130,7 @@
         return;
     }
     // If new location is above minimum threshold - save it
-    [self saveLastSignalCheckLocation:location];
+    _lastSignalCheckLocation = location;
     
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
@@ -285,22 +258,21 @@
             });
         }
     }];
-    
-    _lastSignalCheckLocation = location;
 }
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self getSignalsForLocation:location inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
     
-    [self saveNewDeviceLocation:location];
+    [self saveInCloudNewDeviceLocation:location];
 }
 
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    if (_lastSignalCheckLocation != nil)
+    CLLocation *lastKnownUserLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
+    if (lastKnownUserLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:lastKnownUserLocation inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
     }
     else
     {

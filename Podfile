@@ -15,6 +15,7 @@ target "Help A Paw" do
     pod 'SDWebImage'
     pod 'FBSDKLoginKit'
     pod 'IQKeyboardManager'
+    pod 'Alamofire'
     
 end
 

@@ -17,6 +17,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
+#import "Help_A_Paw-Swift.h" 
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 

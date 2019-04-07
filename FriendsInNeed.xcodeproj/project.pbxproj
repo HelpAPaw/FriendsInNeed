@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */; };
 		1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA721E73011B006F0B0E /* FINMenuVC.xib */; };
-		1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA771E730663006F0B0E /* FINFaqVC.xib */; };
 		1420BA7A1E7306A4006F0B0E /* FINAboutVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */; };
 		1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */; };
 		1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1470C8D11FC164BD0072568E /* AlertPresenter.swift */; };
@@ -19,7 +18,22 @@
 		147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D011E72D47E007B1017 /* FINLoginVC.xib */; };
 		147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D0B1E72E6D2007B1017 /* Localizable.strings */; };
 		148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148912CE1E72F94A00655DD0 /* FINMapVC.xib */; };
+		5AB26DD9B456FCEF5B6FA36C /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */; };
 		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
+		7739AA0D223D6BDB004D3183 /* PlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */; };
+		7739AA10223D6D4E004D3183 /* GooglePlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */; };
+		7739AA13223EDDBE004D3183 /* RepositoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA12223EDDBE004D3183 /* RepositoryResult.swift */; };
+		775F91CA224570E100978679 /* HTTPProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91C9224570E100978679 /* HTTPProvider.swift */; };
+		775F91CD2245732700978679 /* AlamofireProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CC2245732700978679 /* AlamofireProvider.swift */; };
+		775F91D02245829C00978679 /* AlamofireBaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */; };
+		775F91D2224582DB00978679 /* GooglePlacesRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91D1224582DB00978679 /* GooglePlacesRouter.swift */; };
+		77A7F41222353BD00034646D /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F40922353BD00034646D /* FINFaqCell.m */; };
+		77A7F41322353BD00034646D /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77A7F40B22353BD00034646D /* FINFaqCell.xib */; };
+		77A7F41422353BD00034646D /* FINFaqVC.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77A7F40D22353BD00034646D /* FINFaqVC.strings */; };
+		77A7F41522353BD00034646D /* FINFaqVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77A7F40F22353BD00034646D /* FINFaqVC.xib */; };
+		77A7F41622353BD00034646D /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F41122353BD00034646D /* FINFaqVC.m */; };
+		77A7F4262235A06F0034646D /* FINPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F4252235A06F0034646D /* FINPlace.swift */; };
+		77A7F4282235A0890034646D /* FINPlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F4272235A0890034646D /* FINPlaceType.swift */; };
 		AE9F8FC8EEA76ECCD286CAFE /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 383B0647A5D4387844651626 /* Pods_NotificationService.framework */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
@@ -44,9 +58,6 @@
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
 		F35906001E0555D200A61060 /* ic_close_x@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FD1E0555D200A61060 /* ic_close_x@3x.png */; };
 		F35906021E05821C00A61060 /* FINMailComposer.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906011E05821C00A61060 /* FINMailComposer.m */; };
-		F35906071E058D4200A61060 /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906051E058D4200A61060 /* FINFaqVC.m */; };
-		F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F359060A1E059CC700A61060 /* FINFaqCell.m */; };
-		F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F359060B1E059CC700A61060 /* FINFaqCell.xib */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -117,8 +128,6 @@
 		1420BA6F1E72FF4A006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsVC.xib; sourceTree = "<group>"; };
 		1420BA711E73011B006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMenuVC.xib; sourceTree = "<group>"; };
 		1420BA741E73011D006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMenuVC.strings"; sourceTree = "<group>"; };
-		1420BA761E730663006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINFaqVC.xib; sourceTree = "<group>"; };
-		1420BA791E730666006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINFaqVC.strings"; sourceTree = "<group>"; };
 		1420BA7B1E7306A4006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINAboutVC.xib; sourceTree = "<group>"; };
 		1420BA7E1E7306A7006F0B0E /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINAboutVC.strings"; sourceTree = "<group>"; };
 		1420BA801E730854006F0B0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINSignalDetailsCell.xib; sourceTree = "<group>"; };
@@ -138,8 +147,25 @@
 		43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
+		7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesRepository.swift; sourceTree = "<group>"; };
+		7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesRepository.swift; sourceTree = "<group>"; };
+		7739AA12223EDDBE004D3183 /* RepositoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryResult.swift; sourceTree = "<group>"; };
+		775F91C9224570E100978679 /* HTTPProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPProvider.swift; sourceTree = "<group>"; };
+		775F91CC2245732700978679 /* AlamofireProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireProvider.swift; sourceTree = "<group>"; };
+		775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireBaseRouter.swift; sourceTree = "<group>"; };
+		775F91D1224582DB00978679 /* GooglePlacesRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesRouter.swift; sourceTree = "<group>"; };
+		77A7F40922353BD00034646D /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
+		77A7F40A22353BD00034646D /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
+		77A7F40B22353BD00034646D /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
+		77A7F40C22353BD00034646D /* FINFaqVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqVC.h; sourceTree = "<group>"; };
+		77A7F40E22353BD00034646D /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINFaqVC.strings"; sourceTree = "<group>"; };
+		77A7F41022353BD00034646D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINFaqVC.xib; sourceTree = "<group>"; };
+		77A7F41122353BD00034646D /* FINFaqVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqVC.m; sourceTree = "<group>"; };
+		77A7F4252235A06F0034646D /* FINPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlace.swift; sourceTree = "<group>"; };
+		77A7F4272235A0890034646D /* FINPlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlaceType.swift; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
+		D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F301FE021EDEBA1000880ECE /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
@@ -173,11 +199,6 @@
 		F35905FD1E0555D200A61060 /* ic_close_x@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_close_x@3x.png"; sourceTree = "<group>"; };
 		F35906011E05821C00A61060 /* FINMailComposer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMailComposer.m; sourceTree = "<group>"; };
 		F35906031E05823800A61060 /* FINMailComposer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINMailComposer.h; sourceTree = "<group>"; };
-		F35906041E058D4200A61060 /* FINFaqVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqVC.h; sourceTree = "<group>"; };
-		F35906051E058D4200A61060 /* FINFaqVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqVC.m; sourceTree = "<group>"; };
-		F35906091E059CC700A61060 /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
-		F359060A1E059CC700A61060 /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
-		F359060B1E059CC700A61060 /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -251,77 +272,390 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE9F8FC8EEA76ECCD286CAFE /* Pods_NotificationService.framework in Frameworks */,
+				5AB26DD9B456FCEF5B6FA36C /* Pods_NotificationService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1449F6161FC630DD0078317E /* Login */ = {
+		14F14F821E9A095600977C8E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
+				D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */,
+			);
+			name = Frameworks;
+			path = FriendsInNeed/Resources;
+			sourceTree = "<group>";
+		};
+		7739AA09223D6BB1004D3183 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				7739AA11223EDD38004D3183 /* Result */,
+				7739AA0B223D6BC8004D3183 /* Places */,
+				775F91C8224570A000978679 /* Providers */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		7739AA0B223D6BC8004D3183 /* Places */ = {
+			isa = PBXGroup;
+			children = (
+				7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */,
+				7739AA0E223D6D30004D3183 /* Google Places Repository */,
+			);
+			path = Places;
+			sourceTree = "<group>";
+		};
+		7739AA0E223D6D30004D3183 /* Google Places Repository */ = {
+			isa = PBXGroup;
+			children = (
+				7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */,
+				775F91CE22457DD500978679 /* Router */,
+			);
+			path = "Google Places Repository";
+			sourceTree = "<group>";
+		};
+		7739AA11223EDD38004D3183 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				7739AA12223EDDBE004D3183 /* RepositoryResult.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		775F91C8224570A000978679 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				775F91CB2245719300978679 /* HTTP */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		775F91CB2245719300978679 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				775F91C9224570E100978679 /* HTTPProvider.swift */,
+				775F91CC2245732700978679 /* AlamofireProvider.swift */,
+				775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
+		775F91CE22457DD500978679 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				775F91D1224582DB00978679 /* GooglePlacesRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		77A7F3F52235391F0034646D /* Location Manager */ = {
+			isa = PBXGroup;
+			children = (
+				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
+				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
+			);
+			path = "Location Manager";
+			sourceTree = "<group>";
+		};
+		77A7F3F6223539270034646D /* Data Manager */ = {
+			isa = PBXGroup;
+			children = (
+				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
+				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
+			);
+			path = "Data Manager";
+			sourceTree = "<group>";
+		};
+		77A7F3F7223539460034646D /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F41F22353DC60034646D /* Helpers */,
+				77A7F3F82235397F0034646D /* Login */,
+				77A7F3F9223539A70034646D /* Map */,
+				77A7F3FA22353A060034646D /* Signal Details */,
+				77A7F40022353B470034646D /* Signal Photo */,
+				77A7F3FD22353ABF0034646D /* Menu */,
+				77A7F3FC22353A730034646D /* About */,
+				77A7F40722353BD00034646D /* FAQ */,
+				77A7F40622353BA30034646D /* Privacy Policy */,
+				77A7F40522353B9A0034646D /* Admin */,
+				77A7F40322353B770034646D /* Settings */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		77A7F3F82235397F0034646D /* Login */ = {
 			isa = PBXGroup;
 			children = (
 				F3C484701C6C111D0067A169 /* FINLoginVC.h */,
 				F3C484711C6C111D0067A169 /* FINLoginVC.m */,
 				147F2D011E72D47E007B1017 /* FINLoginVC.xib */,
 			);
-			name = Login;
+			path = Login;
 			sourceTree = "<group>";
 		};
-		1449F6171FC630ED0078317E /* Map */ = {
+		77A7F3F9223539A70034646D /* Map */ = {
 			isa = PBXGroup;
 			children = (
 				F3C484751C75514D0067A169 /* FINMapVC.h */,
 				F3C484761C75514D0067A169 /* FINMapVC.m */,
 				148912CE1E72F94A00655DD0 /* FINMapVC.xib */,
 			);
-			name = Map;
+			path = Map;
 			sourceTree = "<group>";
 		};
-		1449F6181FC6311D0078317E /* Menu */ = {
+		77A7F3FA22353A060034646D /* Signal Details */ = {
 			isa = PBXGroup;
 			children = (
-				F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */,
-				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
-				1420BA721E73011B006F0B0E /* FINMenuVC.xib */,
-				F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */,
-				F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */,
-				F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */,
+				77A7F3FB22353A230034646D /* Cells */,
+				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
+				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
+				1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */,
 			);
-			name = Menu;
+			path = "Signal Details";
 			sourceTree = "<group>";
 		};
-		1449F6191FC631280078317E /* About */ = {
+		77A7F3FB22353A230034646D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
+				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
+				1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */,
+				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
+				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
+				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
+				F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */,
+				F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		77A7F3FC22353A730034646D /* About */ = {
 			isa = PBXGroup;
 			children = (
 				F35905F61E054EE800A61060 /* FINAboutVC.h */,
 				F35905F71E054EE800A61060 /* FINAboutVC.m */,
 				1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */,
 			);
-			name = About;
+			path = About;
 			sourceTree = "<group>";
 		};
-		1449F61A1FC631390078317E /* FAQ */ = {
+		77A7F3FD22353ABF0034646D /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				F35906041E058D4200A61060 /* FINFaqVC.h */,
-				F35906051E058D4200A61060 /* FINFaqVC.m */,
-				1420BA771E730663006F0B0E /* FINFaqVC.xib */,
-				F35906091E059CC700A61060 /* FINFaqCell.h */,
-				F359060A1E059CC700A61060 /* FINFaqCell.m */,
-				F359060B1E059CC700A61060 /* FINFaqCell.xib */,
+				77A7F3FE22353AD20034646D /* Cells */,
+				F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */,
+				F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */,
+				1420BA721E73011B006F0B0E /* FINMenuVC.xib */,
 			);
-			name = FAQ;
+			path = Menu;
 			sourceTree = "<group>";
 		};
-		14F14F821E9A095600977C8E /* Frameworks */ = {
+		77A7F3FE22353AD20034646D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */,
+				F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */,
+				F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		77A7F3FF22353AEE0034646D /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F3F6223539270034646D /* Data Manager */,
+				77A7F3F52235391F0034646D /* Location Manager */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		77A7F40022353B470034646D /* Signal Photo */ = {
+			isa = PBXGroup;
+			children = (
+				1470C8E31FC373220072568E /* FINSignalPhotoVC.xib */,
+				1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */,
+			);
+			path = "Signal Photo";
+			sourceTree = "<group>";
+		};
+		77A7F40322353B770034646D /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				F3BA753922232BD3003FAC5F /* UserNotifications.framework */,
 				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
 				383B0647A5D4387844651626 /* Pods_NotificationService.framework */,
+				77A7F40422353B820034646D /* Cells */,
+				F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */,
+				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
 			);
-			name = Frameworks;
-			path = FriendsInNeed/Resources;
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		77A7F40422353B820034646D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */,
+				E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */,
+				43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */,
+				CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */,
+				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
+				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		77A7F40522353B9A0034646D /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
+				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		77A7F40622353BA30034646D /* Privacy Policy */ = {
+			isa = PBXGroup;
+			children = (
+				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
+				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
+			);
+			path = "Privacy Policy";
+			sourceTree = "<group>";
+		};
+		77A7F40722353BD00034646D /* FAQ */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F40822353BD00034646D /* Cells */,
+				77A7F40C22353BD00034646D /* FINFaqVC.h */,
+				77A7F40D22353BD00034646D /* FINFaqVC.strings */,
+				77A7F40F22353BD00034646D /* FINFaqVC.xib */,
+				77A7F41122353BD00034646D /* FINFaqVC.m */,
+			);
+			path = FAQ;
+			sourceTree = "<group>";
+		};
+		77A7F40822353BD00034646D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F40922353BD00034646D /* FINFaqCell.m */,
+				77A7F40A22353BD00034646D /* FINFaqCell.h */,
+				77A7F40B22353BD00034646D /* FINFaqCell.xib */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		77A7F41822353CDF0034646D /* Custom Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
+			);
+			path = "Custom Toolbar";
+			sourceTree = "<group>";
+		};
+		77A7F41922353CED0034646D /* Alert Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
+			);
+			path = "Alert Presenter";
+			sourceTree = "<group>";
+		};
+		77A7F41A22353CF70034646D /* Input Validator */ = {
+			isa = PBXGroup;
+			children = (
+				F301FE021EDEBA1000880ECE /* InputValidator.swift */,
+			);
+			path = "Input Validator";
+			sourceTree = "<group>";
+		};
+		77A7F41B22353CFE0034646D /* Status Helper */ = {
+			isa = PBXGroup;
+			children = (
+				F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */,
+			);
+			path = "Status Helper";
+			sourceTree = "<group>";
+		};
+		77A7F41D22353D4C0034646D /* Mail Composer */ = {
+			isa = PBXGroup;
+			children = (
+				F35906031E05823800A61060 /* FINMailComposer.h */,
+				F35906011E05821C00A61060 /* FINMailComposer.m */,
+			);
+			path = "Mail Composer";
+			sourceTree = "<group>";
+		};
+		77A7F41E22353D720034646D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F42422359FEE0034646D /* Place */,
+				77A7F42022353EEA0034646D /* Signal */,
+				77A7F42122353EEC0034646D /* Annotation */,
+				77A7F42222353EEE0034646D /* Comment */,
+				77A7F42322353EF10034646D /* Error */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		77A7F41F22353DC60034646D /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F41D22353D4C0034646D /* Mail Composer */,
+				77A7F41822353CDF0034646D /* Custom Toolbar */,
+				77A7F41922353CED0034646D /* Alert Presenter */,
+				77A7F41A22353CF70034646D /* Input Validator */,
+				77A7F41B22353CFE0034646D /* Status Helper */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		77A7F42022353EEA0034646D /* Signal */ = {
+			isa = PBXGroup;
+			children = (
+				F39C394A1C9EA305007A2D8E /* FINSignal.h */,
+				F39C394B1C9EA305007A2D8E /* FINSignal.m */,
+			);
+			path = Signal;
+			sourceTree = "<group>";
+		};
+		77A7F42122353EEC0034646D /* Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
+				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
+			);
+			path = Annotation;
+			sourceTree = "<group>";
+		};
+		77A7F42222353EEE0034646D /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				F32711DD1CCCCA3D00E51AEA /* FINComment.h */,
+				F32711DE1CCCCA3D00E51AEA /* FINComment.m */,
+			);
+			path = Comment;
+			sourceTree = "<group>";
+		};
+		77A7F42322353EF10034646D /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				F381ACCC1CE07E0B0050B238 /* FINError.h */,
+				F381ACCD1CE07E0B0050B238 /* FINError.m */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		77A7F42422359FEE0034646D /* Place */ = {
+			isa = PBXGroup;
+			children = (
+				77A7F4252235A06F0034646D /* FINPlace.swift */,
+				77A7F4272235A0890034646D /* FINPlaceType.swift */,
+			);
+			path = Place;
 			sourceTree = "<group>";
 		};
 		8E90546007900DD9E3332797 /* Pods */ = {
@@ -329,8 +663,6 @@
 			children = (
 				5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */,
 				E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */,
-				43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */,
-				CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -343,15 +675,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F301FE011EDEB99100880ECE /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				F301FE021EDEBA1000880ECE /* InputValidator.swift */,
-				F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */,
-			);
-			name = Helpers;
-			sourceTree = "<group>";
-		};
 		F334287520E000FF0062236E /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,27 +683,15 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		F35258B1215ECF17001A0DE1 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */,
-				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
-				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
-				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
-			);
-			name = Settings;
-			sourceTree = "<group>";
-		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
 				14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */,
 				F3BA754022232CFD003FAC5F /* NotificationService */,
+				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				14F14F821E9A095600977C8E /* Frameworks */,
-				F3A6DC681C84C0480050F9F3 /* Resources */,
 				F38B730A1C00F31200FBE20C /* CoreLocation.framework */,
 				F38B73081C00E39D00FBE20C /* MapKit.framework */,
-				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				F38B72EC1C00E04F00FBE20C /* Products */,
 				8E90546007900DD9E3332797 /* Pods */,
 				CE84D0F938D153CA1EAC0401 /* Frameworks */,
@@ -400,45 +711,16 @@
 		F38B72ED1C00E04F00FBE20C /* FriendsInNeed */ = {
 			isa = PBXGroup;
 			children = (
-				F301FE011EDEB99100880ECE /* Helpers */,
-				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
-				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
-				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
-				F38B73021C00E04F00FBE20C /* Info.plist */,
-				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
-				F39C394D1C9EA428007A2D8E /* Models */,
-				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				F38B72F11C00E04F00FBE20C /* AppDelegate.h */,
 				F38B72F21C00E04F00FBE20C /* AppDelegate.m */,
-				1449F6161FC630DD0078317E /* Login */,
-				1449F6171FC630ED0078317E /* Map */,
-				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
-				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
-				1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */,
-				1470C8E31FC373220072568E /* FINSignalPhotoVC.xib */,
-				1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */,
-				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
-				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
-				1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */,
-				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
-				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
-				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
-				F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */,
-				F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */,
-				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
-				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
-				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
-				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
-				1449F6181FC6311D0078317E /* Menu */,
-				1449F6191FC631280078317E /* About */,
-				F35906031E05823800A61060 /* FINMailComposer.h */,
-				F35906011E05821C00A61060 /* FINMailComposer.m */,
-				1449F61A1FC631390078317E /* FAQ */,
-				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
-				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
-				F35258B1215ECF17001A0DE1 /* Settings */,
-				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
-				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
+				7739AA09223D6BB1004D3183 /* Repositories */,
+				77A7F3FF22353AEE0034646D /* Managers */,
+				77A7F41E22353D720034646D /* Models */,
+				77A7F3F7223539460034646D /* Presentation */,
+				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
+				F3A6DC681C84C0480050F9F3 /* Resources */,
+				F38B73021C00E04F00FBE20C /* Info.plist */,
+				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
 			);
 			path = FriendsInNeed;
@@ -453,24 +735,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		F39C394D1C9EA428007A2D8E /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				F39C394A1C9EA305007A2D8E /* FINSignal.h */,
-				F39C394B1C9EA305007A2D8E /* FINSignal.m */,
-				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
-				F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */,
-				F32711DD1CCCCA3D00E51AEA /* FINComment.h */,
-				F32711DE1CCCCA3D00E51AEA /* FINComment.m */,
-				F381ACCC1CE07E0B0050B238 /* FINError.h */,
-				F381ACCD1CE07E0B0050B238 /* FINError.m */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
 				F35905FB1E0555D200A61060 /* ic_close_x.png */,
 				F35905FC1E0555D200A61060 /* ic_close_x@2x.png */,
 				F35905FD1E0555D200A61060 /* ic_close_x@3x.png */,
@@ -495,8 +763,7 @@
 				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
 				F3B25049215984F300ED1D1D /* Localizable.stringsdict */,
 			);
-			name = Resources;
-			path = FriendsInNeed/Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		F3BA754022232CFD003FAC5F /* NotificationService */ = {
@@ -564,8 +831,8 @@
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
-						DevelopmentTeam = NJRZ88GCVL;
-						LastSwiftMigration = 1020;
+						DevelopmentTeam = XTWBLE4ASY;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -623,17 +890,18 @@
 				F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */,
 				F39C39491C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png in Resources */,
 				F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */,
+				77A7F41422353BD00034646D /* FINFaqVC.strings in Resources */,
 				F32711D61CCAFE7100E51AEA /* ic_camera.png in Resources */,
 				F3A6DC6A1C84C0480050F9F3 /* ic_paw.png in Resources */,
 				147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */,
 				F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */,
-				F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */,
 				1420BA6C1E72FF40006F0B0E /* FINSignalDetailsVC.xib in Resources */,
 				F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */,
+				77A7F41522353BD00034646D /* FINFaqVC.xib in Resources */,
 				F33800211C98C7DF0080FACD /* ic_add@2x.png in Resources */,
 				F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */,
-				1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */,
 				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
+				77A7F41322353BD00034646D /* FINFaqCell.xib in Resources */,
 				F3B2504021582DF900ED1D1D /* FINSettingsVC.xib in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
@@ -735,7 +1003,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
@@ -746,7 +1014,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
@@ -768,32 +1036,41 @@
 			buildActionMask = 2147483647;
 			files = (
 				F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */,
+				775F91CD2245732700978679 /* AlamofireProvider.swift in Sources */,
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
 				F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
+				7739AA13223EDDBE004D3183 /* RepositoryResult.swift in Sources */,
+				775F91D02245829C00978679 /* AlamofireBaseRouter.swift in Sources */,
+				775F91CA224570E100978679 /* HTTPProvider.swift in Sources */,
+				775F91D2224582DB00978679 /* GooglePlacesRouter.swift in Sources */,
+				77A7F4282235A0890034646D /* FINPlaceType.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */,
+				7739AA0D223D6BDB004D3183 /* PlacesRepository.swift in Sources */,
 				F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */,
 				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,
+				77A7F4262235A06F0034646D /* FINPlace.swift in Sources */,
 				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,
 				F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */,
 				1470C8E01FC372880072568E /* FINSignalPhotoVC.swift in Sources */,
 				F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
-				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
+				77A7F41222353BD00034646D /* FINFaqCell.m in Sources */,
 				F3B2503F21582DF900ED1D1D /* FINSettingsVC.swift in Sources */,
 				147F2CD71E72BEC1007B1017 /* CustomToolbar.swift in Sources */,
+				77A7F41622353BD00034646D /* FINFaqVC.m in Sources */,
 				F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */,
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F33F7499214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
-				F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */,
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
+				7739AA10223D6D4E004D3183 /* GooglePlacesRepository.swift in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
 				1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */,
 			);
@@ -834,15 +1111,6 @@
 				1420BA741E73011D006F0B0E /* bg-BG */,
 			);
 			name = FINMenuVC.xib;
-			sourceTree = "<group>";
-		};
-		1420BA771E730663006F0B0E /* FINFaqVC.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1420BA761E730663006F0B0E /* Base */,
-				1420BA791E730666006F0B0E /* bg-BG */,
-			);
-			name = FINFaqVC.xib;
 			sourceTree = "<group>";
 		};
 		1420BA7C1E7306A4006F0B0E /* FINAboutVC.xib */ = {
@@ -896,6 +1164,22 @@
 				F3D4046C20680DAE00A3BCE2 /* bg-BG */,
 			);
 			name = FINMapVC.xib;
+			sourceTree = "<group>";
+		};
+		77A7F40D22353BD00034646D /* FINFaqVC.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				77A7F40E22353BD00034646D /* bg-BG */,
+			);
+			name = FINFaqVC.strings;
+			sourceTree = "<group>";
+		};
+		77A7F40F22353BD00034646D /* FINFaqVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				77A7F41022353BD00034646D /* Base */,
+			);
+			name = FINFaqVC.xib;
 			sourceTree = "<group>";
 		};
 		F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */ = {
@@ -1042,7 +1326,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = NJRZ88GCVL;
+				DEVELOPMENT_TEAM = XTWBLE4ASY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FriendsInNeed/Resources",
@@ -1065,7 +1349,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = NJRZ88GCVL;
+				DEVELOPMENT_TEAM = XTWBLE4ASY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FriendsInNeed/Resources",

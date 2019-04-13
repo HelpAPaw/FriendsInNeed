@@ -10,6 +10,7 @@
 #import "FINLocationManager.h"
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
+#import <SDWebImage/SDImageCache.h>
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"

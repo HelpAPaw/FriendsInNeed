@@ -1,6 +1,6 @@
 PODS:
-  - Backendless (5.2.10):
-    - Socket.IO-Client-Swift (~> 13.3.0)
+  - Backendless (5.2.12):
+    - Socket.IO-Client-Swift (~> 14.0.0)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
     - Bolts/Tasks (= 1.9.0)
@@ -10,16 +10,16 @@ PODS:
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
   - Fabric (1.9.0)
-  - FBSDKCoreKit (4.40.0):
+  - FBSDKCoreKit (4.44.1):
     - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.40.0):
+  - FBSDKLoginKit (4.44.1):
     - FBSDKCoreKit
-  - IQKeyboardManager (6.2.0)
-  - SDWebImage (4.4.6):
-    - SDWebImage/Core (= 4.4.6)
-  - SDWebImage/Core (4.4.6)
-  - Socket.IO-Client-Swift (13.3.1):
-    - Starscream (~> 3.0.2)
+  - IQKeyboardManager (6.2.1)
+  - SDWebImage (5.0.1):
+    - SDWebImage/Core (= 5.0.1)
+  - SDWebImage/Core (5.0.1)
+  - Socket.IO-Client-Swift (14.0.0):
+    - Starscream (~> 3.0.6)
   - Starscream (3.0.6)
   - ViewDeck (3.1.0)
 
@@ -47,18 +47,18 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: 6408938224ef606001103fea083c03d7fa63d730
+  Backendless: f2c7ff292e0dd225d63104f2218d4a987923d140
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
-  FBSDKCoreKit: ae214474b25033399c131dc81d258e412582a2ba
-  FBSDKLoginKit: 7a1e411d46acc8834588eca437daf34de42e1d52
-  IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
-  SDWebImage: 3f3f0c02f09798048c47a5ed0a13f17b063572d8
-  Socket.IO-Client-Swift: 79f8f85fa44881838175a20f9bd2c32bef2c9d37
+  FBSDKCoreKit: a823ae35bdb60ebb8d7a7e51abe7c5d87d2bfced
+  FBSDKLoginKit: 54ae59987f2a8703021557c90a9aebb9e5c2bef6
+  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
+  SDWebImage: 27dd2c9ea07a2252f94557c9fbb6105ee94b74c9
+  Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
-PODFILE CHECKSUM: f87fc7111d0e445d7feaaa8a80f803f574016eda
+PODFILE CHECKSUM: 9e9aec5b15443d9b1e1ba2e92e984aaf1e02c95d
 
 COCOAPODS: 1.5.3

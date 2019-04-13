@@ -1036,7 +1036,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
@@ -1061,7 +1060,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";

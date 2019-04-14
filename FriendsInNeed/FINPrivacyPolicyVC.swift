@@ -21,7 +21,7 @@ class FINPrivacyPolicyVC: UIViewController {
         toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
         
         webView.delegate = self
-        let url = URL(string: "https://develop.backendless.com/***REMOVED***/console/fcfdrgddsebccdkjfamuhppaasnowqluooks/files/view/web/privacypolicy.htm");
+        let url = URL(string: "https://backendlessappcontent.com/***REMOVED***/***REMOVED***/files/web/privacypolicy.html");
         let request = URLRequest(url: url!)
         webView.loadRequest(request);
     }

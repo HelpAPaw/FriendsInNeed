@@ -7,17 +7,19 @@
 //
 
 #import "FINDataManager.h"
+#import "FINLocationManager.h"
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
+#import <SDWebImage/SDImageCache.h>
 
 #define kMinimumDistanceTravelled   300
-#define kLastSignalCheckLocation    @"LastSignalCheckLocation"
 #define kSignalPhotosDirectory      @"signal_photos"
 #define kIsInTestModeKey            @"kIsInTestModeKey"
 #define kSettingRadiusKey           @"kSettingRadiusKey"
 #define kSettingRadiusDefault       10
 #define kSettingTimeoutKey          @"kSettingTimeoutKey"
 #define kSettingTimeoutDefault      7
+#define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -25,6 +27,7 @@
 @interface FINDataManager ()
 
 @property (strong, nonatomic) CLLocation *lastSignalCheckLocation;
+@property (strong, nonatomic) CLLocation *lastSavedDeviceLocation;
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
@@ -45,13 +48,22 @@
     return _sharedManager;
 }
 
++ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId
+{
+    [[NSUserDefaults standardUserDefaults] setObject:deviceRegistrationId forKey:kDeviceRegistrationIdKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getDeviceRegistrationId
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceRegistrationIdKey];
+}
+
 - (id)init
 {
     self = [super init];
     
     _nearbySignals = [NSMutableArray new];
-    
-    _lastSignalCheckLocation = [self loadLastSignalCheckLocation];
     _isInTestMode = [self loadIsInTestMode];
     
     [self loadSettings];
@@ -72,33 +84,55 @@
     return self;
 }
 
-- (void)saveLastSignalCheckLocation:(CLLocation *)location
+- (void)saveInCloudNewDeviceLocation:(CLLocation *)location
 {
-    NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
-    [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastSignalCheckLocation];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    //Apply dampening
+    if (   (self.lastSavedDeviceLocation != nil)
+        && ([self.lastSavedDeviceLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
+    {
+        //Previously saved device location is too close
+        return;
+    }
     
+    self.lastSavedDeviceLocation = location;
+    
+    NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
+    if (deviceRegistrationId != nil)
+    {
+        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+        [dataStore findById:deviceRegistrationId
+                   response:^(DeviceRegistration *deviceRegistration) {
+                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:@"signalRadius"];
+                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:@"signalTimeout"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"lastLatitude"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"lastLongitude"];
+                       [dataStore save:deviceRegistration];
+                   }
+                      error:^(Fault *fault) {
+                          NSLog(@"Server reported an error: %@", fault);
+                      }
+         ];
+    }
+}
+
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    // If new location is too close to last one - do not check
+    if (   (overrideDampening == NO)
+        && (_lastSignalCheckLocation != nil)
+        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)
+        && (ABS([_lastSignalCheckLocation.timestamp timeIntervalSinceNow]) < 60)   )
+    {
+        if (completionHandler != nil)
+        {
+            completionHandler(UIBackgroundFetchResultNoData);
+        }
+        NSLog(@"Dampen request for location: %@", location);
+        return;
+    }
+    // If new location is above minimum threshold - save it
     _lastSignalCheckLocation = location;
-}
-
-- (CLLocation *)loadLastSignalCheckLocation
-{
-    CLLocation *lastLocation = nil;
-    @try
-    {
-        NSData *locationData = [[NSUserDefaults standardUserDefaults] objectForKey:kLastSignalCheckLocation];
-        lastLocation = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:locationData];
-    }
-    @catch (NSException *exception)
-    {
-        NSLog(@"Couldn't read last location. Exception: %@", exception.description);
-    }
     
-    return lastLocation;
-}
-
-- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
     GEO_POINT center;
     center.latitude = location.coordinate.latitude;
     center.longitude = location.coordinate.longitude;
@@ -114,6 +148,7 @@
         query.categories = cats;
     }
     
+    NSLog(@"Get signals for location: %@", location);
     [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
         NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
         
@@ -177,10 +212,19 @@
                         if (signal.status < FINSignalStatus2)
                         {
                             badgeNumber++;
-                            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                            localNotification.alertBody  = signal.title;
-                            localNotification.userInfo = [NSDictionary dictionaryWithObject:signal.signalID forKey:kNotificationSignalID];
-                            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+                            
+                            // Create local notification and show it
+                            UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
+                            notifContent.body = signal.title;
+                            notifContent.sound = [UNNotificationSound defaultSound];
+                            notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
+                            
+                            NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                            [userInfo setObject:signal.signalID forKey:kNotificationSignalId];
+                            notifContent.userInfo = userInfo;
+                            
+                            UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
+                            [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
                         }
                         [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
                     }
@@ -200,8 +244,6 @@
                     }
                 }
             }
-            
-            [self saveLastSignalCheckLocation:location];
         });
         
     } error:^(Fault *fault) {
@@ -217,33 +259,21 @@
             });
         }
     }];
-    
-    _lastSignalCheckLocation = location;
 }
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    // Do not check if delta distance is below threshold
-    if (   (_lastSignalCheckLocation != nil)
-        && ([_lastSignalCheckLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
-    {
-        if (completionHandler != nil)
-        {
-            completionHandler(UIBackgroundFetchResultNoData);
-        }
-        return;
-    }
-    else
-    {
-        [self getSignalsForLocation:location inRadius:self.radius withCompletionHandler:completionHandler];
-    }
+    [self getSignalsForLocation:location inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
+    
+    [self saveInCloudNewDeviceLocation:location];
 }
 
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    if (_lastSignalCheckLocation != nil)
+    CLLocation *lastKnownUserLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
+    if (lastKnownUserLocation != nil)
     {
-        [self getSignalsForLocation:_lastSignalCheckLocation inRadius:self.radius withCompletionHandler:completionHandler];
+        [self getSignalsForLocation:lastKnownUserLocation inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
     }
     else
     {
@@ -301,6 +331,54 @@
                 completion(savedSignal, nil);
             });
         }
+        
+        //Send push notifications to all interested devices in the area
+        DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+        [queryBuilder setRelationsDepth:1];
+        //Get all devices within 100km of the signal
+        [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", savedGeoPoint.latitude, savedGeoPoint.longitude]];
+        
+        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+        [dataStore find:queryBuilder response:^(NSArray *devices) {
+            NSLog(@"Devices: %@", devices);
+            NSMutableArray *deviceIds = [NSMutableArray new];
+            for (NSDictionary *device in devices)
+            {
+                NSString *deviceId = [device objectForKey:@"deviceId"];
+                //Skip current device
+                if (![backendless.messaging.currentDevice.deviceId isEqualToString:deviceId])
+                {
+                    [deviceIds addObject:deviceId];
+                }
+            }
+            
+            if (deviceIds.count > 0)
+            {
+                PublishOptions *publishOptions = [PublishOptions new];
+                [publishOptions assignHeaders:@{@"ios-alert":title,
+                                                @"ios-badge":@1,
+                                                @"ios-sound":@"default",
+                                                @"signalId":savedGeoPoint.objectId,
+                                                @"ios-category":kNotificationCategoryNewSignal}];
+                
+                DeliveryOptions *deliveryOptions = [DeliveryOptions new];
+                deliveryOptions.pushSinglecast = deviceIds;
+                
+                [backendless.messaging publish:@"default"
+                                       message:title
+                                publishOptions:publishOptions
+                               deliveryOptions:deliveryOptions
+                                      response:^(MessageStatus *status) {
+                                          NSLog(@"Status: %@", status);
+                                      }
+                                         error:^(Fault *fault) {
+                                             NSLog(@"Server reported an error: %@", fault);
+                                         }];
+            }
+            
+        } error:^(Fault *fault) {
+            NSLog(@"Error executing query: %@", fault.message);
+        }];
         
     } error:^(Fault *fault) {
         dispatch_async(dispatch_get_main_queue(), ^{

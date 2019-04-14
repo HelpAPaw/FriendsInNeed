@@ -13,6 +13,7 @@
 @protocol FINSignalDetailsVCDelegate <NSObject>
 
 - (void)refreshAnnotation:(FINAnnotation *)annotation;
+- (void)focusAnnotation:(FINAnnotation *)annotation;
 
 @end
 

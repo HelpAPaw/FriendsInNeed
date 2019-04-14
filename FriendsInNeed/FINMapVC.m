@@ -23,7 +23,7 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -37,6 +37,7 @@
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshingBarButton;
+@property (assign, nonatomic) BOOL pauseRefreshing;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
 @property (strong, nonatomic) FINDataManager     *dataManager;
@@ -80,6 +81,10 @@
                                              selector:@selector(settingsChanged:)
                                                  name:kNotificationSettingTimeoutChanged
                                                object:nil];
+    
+    UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidDragMap:)];
+    [dragGR setDelegate:self];
+    [self.mapView addGestureRecognizer:dragGR];
     
     _cancelButton.tintColor = [UIColor redColor];
     _cancelButton.layer.shadowOpacity = 1.0f;
@@ -135,15 +140,11 @@
 {
     [super viewWillAppear:animated];
     
-//    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+    if (_viewDidAppearOnce == NO)
     {
-        if (_viewDidAppearOnce == NO)
-        {
-            _dataManager = [FINDataManager sharedManager];
-            _dataManager.mapDelegate = self;
-            [self initMapVC];
-            _viewDidAppearOnce = YES;
-        }
+        _dataManager = [FINDataManager sharedManager];
+        _dataManager.mapDelegate = self;
+        _viewDidAppearOnce = YES;
     }
     
     [self setupEnvironmentSwitching];
@@ -172,7 +173,6 @@
 {
     [super viewWillDisappear:animated];
     
-    _focusSignalID = nil;
     [self removeEnvironmentSwitching];
 }
 
@@ -228,13 +228,8 @@
 }
 
 #pragma mark
-
 - (void)initMapVC
 {
-    [self updateMapToLastKnownUserLocation];
-    
-    [self refresh];
-    
     [_locationManager updateUserLocation];
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
@@ -267,9 +262,8 @@
         rotationAngle = -3.25f;
         
         // Add a pin to the map to select location of the signal
-        CLLocation *userLocation = [[FINLocationManager sharedManager] getLastKnownUserLocation];
         _submitSignalAnnotation = [MKPointAnnotation new];
-        _submitSignalAnnotation.coordinate = userLocation.coordinate;
+        _submitSignalAnnotation.coordinate = _mapView.centerCoordinate;
         [_mapView addAnnotation:_submitSignalAnnotation];
         
         _signalTitleField.text = @"";
@@ -478,6 +472,7 @@
 
 - (void)addAnnotationToMapFromSignal:(FINSignal *)signal
 {
+    // Unfortunately to refresh annotations we need to remove and add them again
     // Remove old annotation if present
     for (FINAnnotation *ann in _mapView.annotations)
     {
@@ -487,7 +482,9 @@
         }
         else
         {
-            if ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
+            // Only remove not focused annotations
+            if (   ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
+                && ([_mapView.selectedAnnotations indexOfObject:ann] == NSNotFound)   )
             {
                 [_mapView removeAnnotation:ann];
                 break;
@@ -507,8 +504,12 @@
 
 - (void)focusAnnotation:(FINAnnotation *)annotation
 {
+    self.pauseRefreshing = YES;
     [_mapView selectAnnotation:annotation animated:YES];
-    [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    [self updateMapToLocation:[[CLLocation alloc] initWithLatitude:annotation.coordinate.latitude longitude:annotation.coordinate.longitude]];
+    
+    self.pauseRefreshing = NO;
+    _focusSignalID = nil;
 }
 
 - (void)setFocusSignalID:(NSString *)focusSignalID
@@ -523,7 +524,6 @@
         else
         {
             NSLog(@"Failed to get signal for ID %@", focusSignalID);
-
             [self showAlertForError:error];
         }
     }];
@@ -531,8 +531,6 @@
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals
 {
-    [self removeAllSignalAnnotationsFromMap];
-    
     for (FINSignal *signal in nearbySignals)
     {
         [UIView animateWithDuration:0.3 animations:^{
@@ -558,20 +556,26 @@
     [_mapView removeAnnotations:signalAnnotations];
 }
 
-#pragma mark - Map Delegate
+#pragma mark - Drag Gesture Recognizer
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 
-- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+- (void)userDidDragMap:(UIGestureRecognizer*)gestureRecognizer
 {
     [_signalTitleField resignFirstResponder];
     
-    if (_isInSubmitMode == NO)
+    if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
-        _focusSignalID = nil;
-        [self refresh];
-        
+        if (_isInSubmitMode == NO)
+        {
+            [self refreshOverridingDampening:NO];
+        }
     }
 }
 
+#pragma mark - Map Delegate
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation
 {
     // If the annotation is the user location, just return nil so the default annotation view is used
@@ -656,13 +660,13 @@
     signalDetailsVC.delegate = self;
     signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     
-    
-    UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:signalDetailsVC];
     navController.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self presentViewController:navController animated:YES completion:^{}];
 }
+
 //Code dublication with FiNSignalDetailVC
--(void) imageGetterFrom:(NSURL *)url forAnnotationView:(MKAnnotationView *)annotationView{
+- (void)imageGetterFrom:(NSURL *)url forAnnotationView:(MKAnnotationView *)annotationView{
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:url
@@ -714,11 +718,10 @@
 #pragma mark - Refresh
 - (void)refreshButtonTapped:(id)sender
 {
-    _focusSignalID = nil;
-    [self refresh];
+    [self refreshOverridingDampening:YES];
 }
 
-- (void)refresh
+- (void)refreshOverridingDampening:(BOOL)overrideDampening
 {
     CLLocation *newCenter = [[CLLocation alloc] initWithLatitude:_mapView.centerCoordinate.latitude longitude:_mapView.centerCoordinate.longitude];
     MKCoordinateRegion region = _mapView.region;
@@ -733,7 +736,7 @@
     NSLog(@"Shown radius is: %ld", (long)maxRadius);
     
     BOOL shouldRefresh = YES;
-    if (self.lastRefreshCenter != nil)
+    if ((overrideDampening == NO) && (self.lastRefreshCenter != nil))
     {
         NSInteger centerDistance = [newCenter distanceFromLocation:self.lastRefreshCenter];
         if ((centerDistance < 500) && (maxRadius <= self.lastRefreshRadius))
@@ -745,13 +748,10 @@
     if (shouldRefresh)
     {
         [self setupRefreshingMode];
-        [_dataManager getSignalsForLocation:newCenter inRadius:maxRadius withCompletionHandler:^(UIBackgroundFetchResult result) {
+        self.lastRefreshCenter = newCenter;
+        self.lastRefreshRadius = maxRadius;
+        [_dataManager getSignalsForLocation:newCenter inRadius:maxRadius overridingDampening:overrideDampening withCompletionHandler:^(UIBackgroundFetchResult result) {
             [self setupReadyMode];
-            if (result != UIBackgroundFetchResultFailed)
-            {
-                self.lastRefreshCenter = newCenter;
-                self.lastRefreshRadius = maxRadius;
-            }
         }];
     }
 }
@@ -822,7 +822,8 @@
     [self updateTitle];
     self.lastRefreshCenter = nil;
     self.lastRefreshRadius = 0;
-    [self refresh];
+    [self removeAllSignalAnnotationsFromMap];
+    [self refreshOverridingDampening:YES];
 }
 
 @end

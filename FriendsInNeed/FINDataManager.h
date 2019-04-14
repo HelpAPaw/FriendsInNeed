@@ -16,7 +16,8 @@
 #define BCKNDLSS_IOS_API_KEY    @"9F8B017B-2890-A887-FFD5-63D6A5302100"
 #define BCKNDLSS_REST_API_KEY   @"473D7C4A-3FBC-69F4-FFFF-1635F07E4300"
 
-#define kNotificationSignalID   @"NotificationSignalID"
+#define kNotificationSignalId   @"signalId"
+#define kNotificationCategoryNewSignal  @"kNotificationCategoryNewSignal"
 #define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
 #define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"
 
@@ -32,9 +33,10 @@
 @interface FINDataManager : NSObject
 
 + (instancetype)sharedManager;
++ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId;
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getAllSignalsWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler;
 - (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion;

@@ -33,6 +33,8 @@ class FINAdminVC: UIViewController {
                         print("\(String(describing: signal.title()))")
                     case .status3:
                         print("WTF!?")
+                    @unknown default:
+                        print("WTF!?!?")
                     }
                 }
                 self.lbHelpNeeded.text = "\(unsolved) Help needed"

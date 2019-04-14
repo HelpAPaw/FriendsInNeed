@@ -20,6 +20,7 @@
 		147F2D091E72E6D2007B1017 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 147F2D0B1E72E6D2007B1017 /* Localizable.strings */; };
 		148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148912CE1E72F94A00655DD0 /* FINMapVC.xib */; };
 		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
+		AE9F8FC8EEA76ECCD286CAFE /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 383B0647A5D4387844651626 /* Pods_NotificationService.framework */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
@@ -54,6 +55,8 @@
 		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
 		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
+		F39BB3A22223315400967BC9 /* Help A Paw.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */; };
+		F39BB3A32223316300967BC9 /* NotificationService.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */; };
 		F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */; };
 		F39C39331C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */; };
 		F39C393B1C9A99F3007A2D8E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = F39C393A1C9A99F3007A2D8E /* logo.png */; };
@@ -71,6 +74,9 @@
 		F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */; };
 		F3B25044215833FF00ED1D1D /* FINSettingsSliderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */; };
 		F3B25047215984F300ED1D1D /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = F3B25049215984F300ED1D1D /* Localizable.stringsdict */; };
+		F3BA753A22232BD3003FAC5F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3BA753922232BD3003FAC5F /* UserNotifications.framework */; };
+		F3BA754222232CFD003FAC5F /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA754122232CFD003FAC5F /* NotificationService.swift */; };
+		F3BA754622232CFD003FAC5F /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F3BA753F22232CFC003FAC5F /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
 		F3C484781C75514D0067A169 /* FINMapVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484761C75514D0067A169 /* FINMapVC.m */; };
 		F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */; };
@@ -81,6 +87,30 @@
 		F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */; };
 		F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F3BA754422232CFD003FAC5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F38B72E31C00E04F00FBE20C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3BA753E22232CFC003FAC5F;
+			remoteInfo = NotificationService;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F3BA754A22232CFD003FAC5F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F3BA754622232CFD003FAC5F /* NotificationService.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Help_A_Paw.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,9 +134,12 @@
 		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
 		14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Help A Paw.entitlements"; sourceTree = "<group>"; };
+		383B0647A5D4387844651626 /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F301FE021EDEBA1000880ECE /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
@@ -158,6 +191,7 @@
 		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
+		F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsCommentCell.h; sourceTree = "<group>"; };
 		F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINSignalDetailsCommentCell.m; sourceTree = "<group>"; };
 		F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsCommentCell.xib; sourceTree = "<group>"; };
@@ -179,6 +213,10 @@
 		F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsSliderCell.xib; sourceTree = "<group>"; };
 		F3B25048215984F300ED1D1D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		F3B2504A2159850700ED1D1D /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "bg-BG"; path = "bg-BG.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		F3BA753922232BD3003FAC5F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		F3BA753F22232CFC003FAC5F /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3BA754122232CFD003FAC5F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		F3BA754322232CFD003FAC5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F3C484701C6C111D0067A169 /* FINLoginVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLoginVC.h; sourceTree = "<group>"; };
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
@@ -201,9 +239,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3BA753A22232BD3003FAC5F /* UserNotifications.framework in Frameworks */,
 				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
 				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
 				61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F3BA753C22232CFC003FAC5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE9F8FC8EEA76ECCD286CAFE /* Pods_NotificationService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,7 +316,9 @@
 		14F14F821E9A095600977C8E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F3BA753922232BD3003FAC5F /* UserNotifications.framework */,
 				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
+				383B0647A5D4387844651626 /* Pods_NotificationService.framework */,
 			);
 			name = Frameworks;
 			path = FriendsInNeed/Resources;
@@ -280,6 +329,8 @@
 			children = (
 				5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */,
 				E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */,
+				43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */,
+				CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -324,6 +375,7 @@
 			isa = PBXGroup;
 			children = (
 				14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */,
+				F3BA754022232CFD003FAC5F /* NotificationService */,
 				14F14F821E9A095600977C8E /* Frameworks */,
 				F3A6DC681C84C0480050F9F3 /* Resources */,
 				F38B730A1C00F31200FBE20C /* CoreLocation.framework */,
@@ -340,6 +392,7 @@
 			isa = PBXGroup;
 			children = (
 				F38B72EB1C00E04F00FBE20C /* Help A Paw.app */,
+				F3BA753F22232CFC003FAC5F /* NotificationService.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -446,6 +499,16 @@
 			path = FriendsInNeed/Resources;
 			sourceTree = "<group>";
 		};
+		F3BA754022232CFD003FAC5F /* NotificationService */ = {
+			isa = PBXGroup;
+			children = (
+				F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */,
+				F3BA754122232CFD003FAC5F /* NotificationService.swift */,
+				F3BA754322232CFD003FAC5F /* Info.plist */,
+			);
+			path = NotificationService;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -459,15 +522,35 @@
 				F38B72E91C00E04F00FBE20C /* Resources */,
 				FCDABA93DD9378850C7334DA /* [CP] Embed Pods Frameworks */,
 				F3086C931E369C710070A91C /* ShellScript */,
+				F3BA754A22232CFD003FAC5F /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F3BA754522232CFD003FAC5F /* PBXTargetDependency */,
 			);
 			name = "Help A Paw";
 			productName = FriendsInNeed;
 			productReference = F38B72EB1C00E04F00FBE20C /* Help A Paw.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F3BA753E22232CFC003FAC5F /* NotificationService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3BA754722232CFD003FAC5F /* Build configuration list for PBXNativeTarget "NotificationService" */;
+			buildPhases = (
+				047163B7B56D7BFD382F78FE /* [CP] Check Pods Manifest.lock */,
+				F3BA753B22232CFC003FAC5F /* Sources */,
+				F3BA753C22232CFC003FAC5F /* Frameworks */,
+				F3BA753D22232CFC003FAC5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NotificationService;
+			productName = NotificationService;
+			productReference = F3BA753F22232CFC003FAC5F /* NotificationService.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -475,14 +558,18 @@
 		F38B72E31C00E04F00FBE20C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Milen;
 				TargetAttributes = {
 					F38B72EA1C00E04F00FBE20C = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = NJRZ88GCVL;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -494,11 +581,22 @@
 							};
 						};
 					};
+					F3BA753E22232CFC003FAC5F = {
+						CreatedOnToolsVersion = 10.1;
+						DevelopmentTeam = NJRZ88GCVL;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = F38B72E61C00E04F00FBE20C /* Build configuration list for PBXProject "FriendsInNeed" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -511,6 +609,7 @@
 			projectRoot = "";
 			targets = (
 				F38B72EA1C00E04F00FBE20C /* Help A Paw */,
+				F3BA753E22232CFC003FAC5F /* NotificationService */,
 			);
 		};
 /* End PBXProject section */
@@ -520,6 +619,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F39BB3A22223315400967BC9 /* Help A Paw.entitlements in Resources */,
 				F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */,
 				F39C39491C9D8C1C007A2D8E /* ic_dropdown_reversed@3x.png in Resources */,
 				F32711DC1CCB8CFF00E51AEA /* ic_camera@3x.png in Resources */,
@@ -564,9 +664,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3BA753D22232CFC003FAC5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F39BB3A32223316300967BC9 /* NotificationService.entitlements in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		047163B7B56D7BFD382F78FE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NotificationService-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		06338AEF86EDAAC628D667F9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -604,7 +734,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
@@ -627,7 +757,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -669,7 +799,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F3BA753B22232CFC003FAC5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F3BA754222232CFD003FAC5F /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F3BA754522232CFD003FAC5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3BA753E22232CFC003FAC5F /* NotificationService */;
+			targetProxy = F3BA754422232CFD003FAC5F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */ = {
@@ -829,7 +975,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -878,7 +1024,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -894,6 +1040,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -906,7 +1053,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -917,6 +1064,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -927,7 +1075,66 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F3BA754822232CFD003FAC5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NJRZ88GCVL;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = NotificationService/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw.NotificationService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pods/Backendless/SDK/ios/backendless/include/Backendless-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F3BA754922232CFD003FAC5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = NJRZ88GCVL;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = NotificationService/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw.NotificationService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Pods/Backendless/SDK/ios/backendless/include/Backendless-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -948,6 +1155,15 @@
 			buildConfigurations = (
 				F38B73061C00E04F00FBE20C /* Debug */,
 				F38B73071C00E04F00FBE20C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3BA754722232CFD003FAC5F /* Build configuration list for PBXNativeTarget "NotificationService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3BA754822232CFD003FAC5F /* Debug */,
+				F3BA754922232CFD003FAC5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

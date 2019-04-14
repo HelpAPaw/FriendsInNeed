@@ -18,7 +18,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UNUserNotificationCenterDelegate>
 
 @property (weak, nonatomic) FINMapVC *mapVC;
 
@@ -65,15 +65,7 @@
     _mapVC = mapVC;
     
     
-    [self registerForLocalNotifications];
-    
-    
-    UILocalNotification *notification = [launchOptions objectForKey:@"UIApplicationLaunchOptionsLocalNotificationKey"];
-    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
-    if (focusSignalID)
-    {        
-        [_mapVC setFocusSignalID:focusSignalID];
-    }
+    [self registerForNotifications];
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
@@ -157,30 +149,57 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+#pragma mark - Notifications
+- (void)registerForNotifications
 {
-    NSString *focusSignalID = [notification.userInfo objectForKey:kNotificationSignalID];
-    [_mapVC setFocusSignalID:focusSignalID];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionSound | UNAuthorizationOptionAlert | UNAuthorizationOptionBadge) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        if (!error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            });
+        }
+    }];
 }
 
-#pragma mark - Custom methods
-- (void)registerForLocalNotifications
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    UIMutableUserNotificationCategory *reminderCategory = [UIMutableUserNotificationCategory new];
-    reminderCategory.identifier = @"ReminderCategory";
-    [reminderCategory setActions:nil forContext:UIUserNotificationActionContextDefault];
-    
-    NSSet *categories = [NSSet setWithObjects:reminderCategory, nil];
-    UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-    UIUserNotificationSettings *userNotificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:categories];
-    [[UIApplication sharedApplication] registerUserNotificationSettings:userNotificationSettings];
+    [backendless.messaging registerDevice:deviceToken response:^(NSString *registeredDeviceId) {
+        //Get only the objectId part
+        NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
+        [FINDataManager saveDeviceRegistrationId:components[0]];
+        
+    }   error:^(Fault *fault) {
+        //Do nothing
+    }];
 }
 
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
-    
+    completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+{
+    UNNotificationRequest *request = response.notification.request;
+    NSString *category = request.content.categoryIdentifier;
+    if ([category isEqualToString:kNotificationCategoryNewSignal])
+    {
+        if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier])
+        {            
+            NSDictionary *userInfo = request.content.userInfo;
+            NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
+            [_mapVC setFocusSignalID:signalId];
+        }
+    }
+    else
+    {
+        //Handle other notification categories in the future
+    }
+}
+
+#pragma mark - Background Fetch
 - (void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     CLS_LOG(@"[FIN] Starting background fetch with completion handler: %@", completionHandler);

@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## Backendless
 
-Copyright (c) 2013-2018 by Backendless.com
+Copyright (c) 2013-2019 by Backendless.com
 
 ## Bolts
 
@@ -115,7 +115,7 @@ SOFTWARE.
 
 ## SDWebImage
 
-Copyright (c) 2009-2017 Olivier Poitrey rs@dailymotion.com
+Copyright (c) 2009-2018 Olivier Poitrey rs@dailymotion.com
  
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

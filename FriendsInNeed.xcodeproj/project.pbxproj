@@ -22,6 +22,7 @@
 		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
 		AE9F8FC8EEA76ECCD286CAFE /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 383B0647A5D4387844651626 /* Pods_NotificationService.framework */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
+		F30D08682266669F0038C7FF /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D08672266669F0038C7FF /* SharedConstants.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
@@ -142,6 +143,7 @@
 		CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F301FE021EDEBA1000880ECE /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
+		F30D08672266669F0038C7FF /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
 		F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuVC.h; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 			children = (
 				F338001D1C9888280080FACD /* FINGlobalConstants.pch */,
 				F38B72EF1C00E04F00FBE20C /* main.m */,
+				F30D08672266669F0038C7FF /* SharedConstants.swift */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -783,6 +786,7 @@
 				1470C8E01FC372880072568E /* FINSignalPhotoVC.swift in Sources */,
 				F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
+				F30D08682266669F0038C7FF /* SharedConstants.swift in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F35906071E058D4200A61060 /* FINFaqVC.m in Sources */,
 				F3B2503F21582DF900ED1D1D /* FINSettingsVC.swift in Sources */,

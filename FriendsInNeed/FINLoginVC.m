@@ -241,7 +241,7 @@
     [_activityIndicator startAnimating];
     
     NSError *error;
-    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:kPrivacyPolicyUrlString]
+    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:[SharedConstants kPrivacyPolicyUrl]]
                                                            encoding:NSUTF8StringEncoding
                                                               error:&error];
     NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]

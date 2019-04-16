@@ -13,8 +13,6 @@
 
 #define kNotificationUserLoggedIn   @"kNotificationUserLoggedIn"
 
-#define kPrivacyPolicyUrlString     @"https://develop.backendless.com/BDCD56B9-351A-E067-FFA4-9EA9CF2F4000/console/fcfdrgddsebccdkjfamuhppaasnowqluooks/files/view/web/privacypolicy.htm"
-
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 

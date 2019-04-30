@@ -144,16 +144,13 @@ static NSMutableArray<FBSDKDeviceLoginManager *> *g_loginManagerInstances;
       } else {
         NSMutableSet<NSString *> *permissions = [NSMutableSet set];
         NSMutableSet<NSString *> *declinedPermissions = [NSMutableSet set];
-        NSMutableSet<NSString *> *expiredPermissions = [NSMutableSet set];
 
         [FBSDKInternalUtility extractPermissionsFromResponse:permissionResult
                                           grantedPermissions:permissions
-                                         declinedPermissions:declinedPermissions
-                                         expiredPermissions:expiredPermissions];
+                                         declinedPermissions:declinedPermissions];
         FBSDKAccessToken *accessToken = [[FBSDKAccessToken alloc] initWithTokenString:tokenString
                                                                           permissions:permissions.allObjects
                                                                   declinedPermissions:declinedPermissions.allObjects
-                                                                   expiredPermissions:expiredPermissions.allObjects
                                                                                 appID:[FBSDKSettings appID]
                                                                                userID:userID
                                                                        expirationDate:nil

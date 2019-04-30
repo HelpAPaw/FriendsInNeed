@@ -18,17 +18,10 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+typedef void(^FBSDKCodelessSettingLoadBlock)(BOOL isCodelessSetupEnabled, NSError *error);
 
-typedef void(^FBSDKCodelessSettingLoadBlock)(BOOL isCodelessSetupEnabled, NSError *_Nullable error);
-
-NS_SWIFT_NAME(CodelessIndexer)
 @interface FBSDKCodelessIndexer : NSObject
 
-@property (class, nonatomic, copy, readonly) NSString *extInfo;
-
-+ (void)enable;
++ (NSString *)extInfo;
 
 @end
-
-NS_ASSUME_NONNULL_END

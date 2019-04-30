@@ -20,10 +20,34 @@
 
 #import "FBSDKConstants.h"
 #import "FBSDKInternalUtility.h"
+#import "FBSDKTypeUtility.h"
 
 @implementation NSError (FBSDKError)
 
 #pragma mark - Class Methods
+
+- (BOOL)isNetworkError
+{
+  NSError *innerError = self.userInfo[NSUnderlyingErrorKey];
+  if (innerError && innerError.isNetworkError) {
+    return YES;
+  }
+
+  switch (self.code) {
+    case NSURLErrorTimedOut:
+    case NSURLErrorCannotFindHost:
+    case NSURLErrorCannotConnectToHost:
+    case NSURLErrorNetworkConnectionLost:
+    case NSURLErrorDNSLookupFailed:
+    case NSURLErrorNotConnectedToInternet:
+    case NSURLErrorInternationalRoamingOff:
+    case NSURLErrorCallIsActive:
+    case NSURLErrorDataNotAllowed:
+      return YES;
+    default:
+      return NO;
+  }
+}
 
 + (NSError *)fbErrorWithCode:(NSInteger)code message:(NSString *)message
 {
@@ -39,7 +63,7 @@
 
 + (NSError *)fbErrorWithCode:(NSInteger)code message:(NSString *)message underlyingError:(NSError *)underlyingError
 {
-  return [self fbErrorWithCode:code userInfo:@{} message:message underlyingError:underlyingError];
+  return [self fbErrorWithCode:code userInfo:nil message:message underlyingError:underlyingError];
 }
 
 + (NSError *)fbErrorWithDomain:(NSErrorDomain)domain
@@ -65,8 +89,8 @@
                underlyingError:(NSError *)underlyingError
 {
   NSMutableDictionary *fullUserInfo = [[NSMutableDictionary alloc] initWithDictionary:userInfo];
-  [FBSDKBasicUtility dictionary:fullUserInfo setObject:message forKey:FBSDKErrorDeveloperMessageKey];
-  [FBSDKBasicUtility dictionary:fullUserInfo setObject:underlyingError forKey:NSUnderlyingErrorKey];
+  [FBSDKInternalUtility dictionary:fullUserInfo setObject:message forKey:FBSDKErrorDeveloperMessageKey];
+  [FBSDKInternalUtility dictionary:fullUserInfo setObject:underlyingError forKey:NSUnderlyingErrorKey];
   userInfo = fullUserInfo.count ? [fullUserInfo copy] : nil;
   return [[NSError alloc] initWithDomain:domain code:code userInfo:userInfo];
 }
@@ -109,8 +133,8 @@
     message = [[NSString alloc] initWithFormat:@"Invalid value for %@: %@", name, value];
   }
   NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-  [FBSDKBasicUtility dictionary:userInfo setObject:name forKey:FBSDKErrorArgumentNameKey];
-  [FBSDKBasicUtility dictionary:userInfo setObject:value forKey:FBSDKErrorArgumentValueKey];
+  [FBSDKInternalUtility dictionary:userInfo setObject:name forKey:FBSDKErrorArgumentNameKey];
+  [FBSDKInternalUtility dictionary:userInfo setObject:value forKey:FBSDKErrorArgumentValueKey];
   return [self fbErrorWithDomain:domain
                             code:FBSDKErrorInvalidArgument
                         userInfo:userInfo
@@ -136,9 +160,9 @@
     message = [[NSString alloc] initWithFormat:@"Invalid item (%@) found in collection for %@: %@", item, name, collection];
   }
   NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
-  [FBSDKBasicUtility dictionary:userInfo setObject:name forKey:FBSDKErrorArgumentNameKey];
-  [FBSDKBasicUtility dictionary:userInfo setObject:item forKey:FBSDKErrorArgumentValueKey];
-  [FBSDKBasicUtility dictionary:userInfo setObject:collection forKey:FBSDKErrorArgumentCollectionKey];
+  [FBSDKInternalUtility dictionary:userInfo setObject:name forKey:FBSDKErrorArgumentNameKey];
+  [FBSDKInternalUtility dictionary:userInfo setObject:item forKey:FBSDKErrorArgumentValueKey];
+  [FBSDKInternalUtility dictionary:userInfo setObject:collection forKey:FBSDKErrorArgumentCollectionKey];
   return [self fbErrorWithCode:FBSDKErrorInvalidArgument
                       userInfo:userInfo
                        message:message
@@ -173,34 +197,9 @@
 + (NSError *)fbUnknownErrorWithMessage:(NSString *)message
 {
   return [self fbErrorWithCode:FBSDKErrorUnknown
-                      userInfo:@{}
+                      userInfo:nil
                        message:message
                underlyingError:nil];
-}
-
-#pragma mark - Instance Properties
-
-- (BOOL)isNetworkError
-{
-  NSError *innerError = self.userInfo[NSUnderlyingErrorKey];
-  if (innerError && innerError.isNetworkError) {
-    return YES;
-  }
-
-  switch (self.code) {
-    case NSURLErrorTimedOut:
-    case NSURLErrorCannotFindHost:
-    case NSURLErrorCannotConnectToHost:
-    case NSURLErrorNetworkConnectionLost:
-    case NSURLErrorDNSLookupFailed:
-    case NSURLErrorNotConnectedToInternet:
-    case NSURLErrorInternationalRoamingOff:
-    case NSURLErrorCallIsActive:
-    case NSURLErrorDataNotAllowed:
-      return YES;
-    default:
-      return NO;
-  }
 }
 
 @end

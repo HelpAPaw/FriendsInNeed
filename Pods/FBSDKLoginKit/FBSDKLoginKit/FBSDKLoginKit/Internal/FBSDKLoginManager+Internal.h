@@ -35,13 +35,10 @@ NS_SWIFT_NAME(BrowserLoginSuccessBlock);
 @property (nonatomic, weak) UIViewController *fromViewController;
 @property (nonatomic, readonly) NSSet *requestedPermissions;
 
-// for testing only
-@property (nonatomic, readonly, copy) NSString *loadExpectedChallenge;
-
 - (void)completeAuthentication:(FBSDKLoginCompletionParameters *)parameters expectChallenge:(BOOL)expectChallenge;
 
 // available to internal types to trigger login without checking read/publish mixtures.
-- (void)logInWithPermissions:(NSSet *)permissions handler:(FBSDKLoginManagerLoginResultBlock)handler;
+- (void)logInWithPermissions:(NSSet *)permissions handler:(FBSDKLoginManagerRequestTokenHandler)handler;
 - (void)logInWithBehavior:(FBSDKLoginBehavior)loginBehavior;
 
 // made available for testing only
@@ -50,7 +47,7 @@ NS_SWIFT_NAME(BrowserLoginSuccessBlock);
 - (void)validateReauthentication:(FBSDKAccessToken *)currentToken withResult:(FBSDKLoginManagerLoginResult *)loginResult;
 
 // for testing only
-- (void)setHandler:(FBSDKLoginManagerLoginResultBlock)handler;
+- (void)setHandler:(FBSDKLoginManagerRequestTokenHandler)handler;
 // for testing only
 - (void)setRequestedPermissions:(NSSet *)requestedPermissions;
 // for testing only

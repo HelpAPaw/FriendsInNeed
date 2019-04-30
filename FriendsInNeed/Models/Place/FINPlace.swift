@@ -8,63 +8,37 @@
 
 import Foundation
 
-final class FINPlace {
+@objc final class FINPlace: NSObject {
     
-    let placeId: String
+    @objc let placeId: String
     
-    let name: String
+    @objc let name: String
     
-    let location: CLLocationCoordinate2D
+    @objc let location: CLLocationCoordinate2D
     
-    let iconUrl: URL?
+    @objc let iconUrl: URL?
     
-    let vicinity: String
+    @objc let vicinity: String
     
-    let opened: Bool
+    @objc let isOpenNow: Bool
     
-    let rating: Double
+    @objc let rating: Double
     
-    let totalUsersRating: Int
+    @objc let totalUsersRating: Int
     
-    let type: FINPlaceType
+    @objc let type: FINPlaceType
     
-    init(placeId: String, name: String, location: CLLocationCoordinate2D, iconUrl: URL?, vicinity: String,
-         opened: Bool, rating: Double, totalUsersRating: Int, type: FINPlaceType) {
+    @objc init(placeId: String, name: String, location: CLLocationCoordinate2D, iconUrl: URL?, vicinity: String,
+         isOpenNow: Bool, rating: Double, totalUsersRating: Int, type: FINPlaceType) {
         self.placeId = placeId
         self.name = name
         self.location = location
         self.iconUrl = iconUrl
         self.vicinity = vicinity
-        self.opened = opened
+        self.isOpenNow = isOpenNow
         self.rating = rating
         self.totalUsersRating = totalUsersRating
         self.type = type
     }
     
-}
-
-extension FINPlace: Decodable {
-
-    private enum CodingKeys: String, CodingKey {
-        case placeId = "place_id"
-        case name
-        case geometry
-        case iconUrl = "icon"
-        
-        
-        enum Geometry: String, CodingKey {
-            case location
-            
-            enum Location {
-                case lat
-                case lng
-            }
-        }
-        
-    }
-    
-    convenience init(from decoder: Decoder) throws {
-        fatalError()
-    }
-
 }

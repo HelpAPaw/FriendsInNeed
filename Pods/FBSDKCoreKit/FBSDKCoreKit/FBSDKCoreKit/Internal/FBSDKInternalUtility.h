@@ -19,10 +19,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "../Basics/Internal/FBSDKBasicUtility+Internal.h"
-
-NS_ASSUME_NONNULL_BEGIN
-
 #define FBSDK_CANOPENURL_FACEBOOK @"fbauth2"
 #define FBSDK_CANOPENURL_FBAPI @"fbapi"
 #define FBSDK_CANOPENURL_MESSENGER @"fb-messenger-share-api"
@@ -36,20 +32,8 @@ typedef NS_ENUM(int32_t, FBSDKUIKitVersion)
   FBSDKUIKitVersion_7_0 = 0x0B57,
   FBSDKUIKitVersion_7_1 = 0x0B77,
   FBSDKUIKitVersion_8_0 = 0x0CF6,
-} NS_SWIFT_NAME(FBUIKit.Version);
+};
 
-/**
- Describes the callback for appLinkFromURLInBackground.
- @param object the FBSDKAppLink representing the deferred App Link
- @param stop the error during the request, if any
-
- */
-typedef id _Nullable (^FBSDKInvalidObjectHandler)(id object, BOOL *stop)
-NS_SWIFT_NAME(InvalidObjectHandler);
-
-
-
-NS_SWIFT_NAME(InternalUtility)
 @interface FBSDKInternalUtility : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -58,46 +42,7 @@ NS_SWIFT_NAME(InternalUtility)
 /**
   Constructs the scheme for apps that come to the current app through the bridge.
  */
-@property (class, nonatomic, copy, readonly) NSString *appURLScheme;
-
-/**
- Returns bundle for returning localized strings
-
- We assume a convention of a bundle named FBSDKStrings.bundle, otherwise we
- return the main bundle.
- */
-@property (class, nonatomic, strong, readonly) NSBundle *bundleForStrings;
-
-/**
- Gets the milliseconds since the Unix Epoch.
-
- Changes in the system clock will affect this value.
- @return The number of milliseconds since the Unix Epoch.
- */
-@property (class, nonatomic, assign, readonly) uint64_t currentTimeInMilliseconds;
-
-/**
- The version of the operating system on which the process is executing.
- */
-@property (class, nonatomic, assign, readonly) NSOperatingSystemVersion operatingSystemVersion;
-
-/**
- Tests whether the orientation should be manually adjusted for views outside of the root view controller.
-
- With the legacy layout the developer must worry about device orientation when working with views outside of
- the window's root view controller and apply the correct rotation transform and/or swap a view's width and height
- values.  If the application was linked with UIKit on iOS 7 or earlier or the application is running on iOS 7 or earlier
- then we need to use the legacy layout code.  Otherwise if the application was linked with UIKit on iOS 8 or later and
- the application is running on iOS 8 or later, UIKit handles all of the rotation complexity and the origin is always in
- the top-left and no rotation transform is necessary.
- @return YES if if the orientation must be manually adjusted, otherwise NO.
- */
-@property (class, nonatomic, assign, readonly) BOOL shouldManuallyAdjustOrientation;
-
-/*
- Checks if the app is Unity.
- */
-@property (class, nonatomic, assign, readonly) BOOL isUnity;
++ (NSString *)appURLScheme;
 
 /**
   Constructs an URL for the current app.
@@ -109,15 +54,8 @@ NS_SWIFT_NAME(InternalUtility)
  */
 + (NSURL *)appURLWithHost:(NSString *)host
                      path:(NSString *)path
-          queryParameters:(NSDictionary<NSString *, NSString *> *)queryParameters
+          queryParameters:(NSDictionary *)queryParameters
                     error:(NSError *__autoreleasing *)errorRef;
-
-/**
- Gzip data with default compression level if possible.
- @param data The raw data.
- @return nil if unable to gzip the data, otherwise gzipped data.
- */
-+ (NSData *)gzip:(NSData *)data;
 
 /**
   Parses an FB url's query params (and potentially fragment) into a dictionary.
@@ -127,11 +65,55 @@ NS_SWIFT_NAME(InternalUtility)
 + (NSDictionary *)dictionaryFromFBURL:(NSURL *)url;
 
 /**
+  Adds an object to an array if it is not nil.
+ @param array The array to add the object to.
+ @param object The object to add to the array.
+ */
++ (void)array:(NSMutableArray *)array addObject:(id)object;
+
+/**
+  Returns bundle for returning localized strings
+
+ We assume a convention of a bundle named FBSDKStrings.bundle, otherwise we
+  return the main bundle.
+*/
++ (NSBundle *)bundleForStrings;
+
+/**
   Converts simple value types to the string equivalent for serializing to a request query or body.
  @param value The value to be converted.
  @return The value that may have been converted if able (otherwise the input param).
  */
 + (id)convertRequestValue:(id)value;
+
+/**
+  Gets the milliseconds since the Unix Epoch.
+
+ Changes in the system clock will affect this value.
+ @return The number of milliseconds since the Unix Epoch.
+ */
++ (uint64_t)currentTimeInMilliseconds;
+
+/**
+  Sets an object for a key in a dictionary if it is not nil.
+ @param dictionary The dictionary to set the value for.
+ @param object The value to set after serializing to JSON.
+ @param key The key to set the value for.
+ @param errorRef If an error occurs, upon return contains an NSError object that describes the problem.
+ @return NO if an error occurred while serializing the object, otherwise YES.
+ */
++ (BOOL)dictionary:(NSMutableDictionary *)dictionary
+setJSONStringForObject:(id)object
+            forKey:(id<NSCopying>)key
+             error:(NSError *__autoreleasing *)errorRef;
+
+/**
+  Sets an object for a key in a dictionary if it is not nil.
+ @param dictionary The dictionary to set the value for.
+ @param object The value to set.
+ @param key The key to set the value for.
+ */
++ (void)dictionary:(NSMutableDictionary *)dictionary setObject:(id)object forKey:(id<NSCopying>)key;
 
 /**
   Constructs a Facebook URL.
@@ -143,7 +125,7 @@ NS_SWIFT_NAME(InternalUtility)
  */
 + (NSURL *)facebookURLWithHostPrefix:(NSString *)hostPrefix
                                 path:(NSString *)path
-                     queryParameters:(NSDictionary<NSString *, NSString *> *)queryParameters
+                     queryParameters:(NSDictionary *)queryParameters
                                error:(NSError *__autoreleasing *)errorRef;
 
 /**
@@ -157,7 +139,7 @@ NS_SWIFT_NAME(InternalUtility)
  */
 + (NSURL *)facebookURLWithHostPrefix:(NSString *)hostPrefix
                                 path:(NSString *)path
-                     queryParameters:(NSDictionary<NSString *, NSString *> *)queryParameters
+                     queryParameters:(NSDictionary *)queryParameters
                       defaultVersion:(NSString *)defaultVersion
                                error:(NSError *__autoreleasing *)errorRef;
 
@@ -204,6 +186,17 @@ NS_SWIFT_NAME(InternalUtility)
 + (BOOL)isUIKitRunTimeVersionAtLeast:(FBSDKUIKitVersion)version;
 
 /**
+  Converts an object into a JSON string.
+ @param object The object to convert to JSON.
+ @param errorRef If an error occurs, upon return contains an NSError object that describes the problem.
+ @param invalidObjectHandler Handles objects that are invalid, returning a replacement value or nil to ignore.
+ @return A JSON string or nil if the object cannot be converted to JSON.
+ */
++ (NSString *)JSONStringForObject:(id)object
+                            error:(NSError *__autoreleasing *)errorRef
+             invalidObjectHandler:(id(^)(id object, BOOL *stop))invalidObjectHandler;
+
+/**
   Checks equality between 2 objects.
 
  Checks for pointer equality, nils, isEqual:.
@@ -212,13 +205,6 @@ NS_SWIFT_NAME(InternalUtility)
  @return YES if the objects are equal, otherwise NO.
  */
 + (BOOL)object:(id)object isEqualToObject:(id)other;
-
-/**
- Parses a query string into a dictionary.
- @param queryString The query string value.
- @return A dictionary with the key/value pairs.
- */
-+ (NSDictionary<NSString *, NSString *> *)dictionaryWithQueryString:(NSString *)queryString;
 
 /**
   Converts a JSON string into an object
@@ -230,29 +216,33 @@ NS_SWIFT_NAME(InternalUtility)
 + (id)objectForJSONString:(NSString *)string error:(NSError *__autoreleasing *)errorRef;
 
 /**
+  The version of the operating system on which the process is executing.
+ */
++ (NSOperatingSystemVersion)operatingSystemVersion;
+
+/**
   Constructs a query string from a dictionary.
  @param dictionary The dictionary with key/value pairs for the query string.
  @param errorRef If an error occurs, upon return contains an NSError object that describes the problem.
  @param invalidObjectHandler Handles objects that are invalid, returning a replacement value or nil to ignore.
  @return Query string representation of the parameters.
  */
-+ (NSString *)queryStringWithDictionary:(NSDictionary<NSString *, id> *)dictionary
++ (NSString *)queryStringWithDictionary:(NSDictionary *)dictionary
                                   error:(NSError *__autoreleasing *)errorRef
-                   invalidObjectHandler:(nullable FBSDKInvalidObjectHandler)invalidObjectHandler;
+                   invalidObjectHandler:(id(^)(id object, BOOL *stop))invalidObjectHandler;
 
 /**
- Decodes a value from an URL.
- @param value The value to decode.
- @return The decoded value.
- */
-+ (NSString *)URLDecode:(NSString *)value;
+  Tests whether the orientation should be manually adjusted for views outside of the root view controller.
 
-/**
- Encodes a value for an URL.
- @param value The value to encode.
- @return The encoded value.
+ With the legacy layout the developer must worry about device orientation when working with views outside of
+ the window's root view controller and apply the correct rotation transform and/or swap a view's width and height
+ values.  If the application was linked with UIKit on iOS 7 or earlier or the application is running on iOS 7 or earlier
+ then we need to use the legacy layout code.  Otherwise if the application was linked with UIKit on iOS 8 or later and
+ the application is running on iOS 8 or later, UIKit handles all of the rotation complexity and the origin is always in
+ the top-left and no rotation transform is necessary.
+ @return YES if if the orientation must be manually adjusted, otherwise NO.
  */
-+ (NSString *)URLEncode:(NSString *)value;
++ (BOOL)shouldManuallyAdjustOrientation;
 
 /**
   Constructs an NSURL.
@@ -282,8 +272,7 @@ NS_SWIFT_NAME(InternalUtility)
  */
 + (void)extractPermissionsFromResponse:(NSDictionary *)responseObject
                     grantedPermissions:(NSMutableSet *)grantedPermissions
-                   declinedPermissions:(NSMutableSet *)declinedPermissions
-                    expiredPermissions:(NSMutableSet *)expiredPermissions;
+                   declinedPermissions:(NSMutableSet *)declinedPermissions;
 
 /**
   Registers a transient object so that it will not be deallocated until unregistered
@@ -358,12 +347,16 @@ NS_SWIFT_NAME(InternalUtility)
  */
 + (BOOL)areAllPermissionsPublishPermissions:(NSSet *)permissions;
 
+/*
+ Checks if the app is Unity.
+ */
++ (BOOL)isUnity;
+
 #pragma mark - FB Apps Installed
 
-@property (class, nonatomic, assign, readonly) BOOL isFacebookAppInstalled;
-@property (class, nonatomic, assign, readonly) BOOL isMessengerAppInstalled;
-@property (class, nonatomic, assign, readonly) BOOL isMSQRDPlayerAppInstalled;
-
++ (BOOL)isFacebookAppInstalled;
++ (BOOL)isMessengerAppInstalled;
++ (BOOL)isMSQRDPlayerAppInstalled;
 + (void)checkRegisteredCanOpenURLScheme:(NSString *)urlScheme;
 + (BOOL)isRegisteredCanOpenURLScheme:(NSString *)urlScheme;
 
@@ -377,6 +370,5 @@ NS_SWIFT_NAME(InternalUtility)
 
 #define FB_BASE_URL @"facebook.com"
 
++ (Class)resolveBoltsClassWithName:(NSString *)className;
 @end
-
-NS_ASSUME_NONNULL_END

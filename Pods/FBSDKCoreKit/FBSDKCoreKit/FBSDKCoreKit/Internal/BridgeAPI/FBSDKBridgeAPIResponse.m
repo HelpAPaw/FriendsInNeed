@@ -24,6 +24,7 @@
 #import "FBSDKBridgeAPIRequest+Private.h"
 #import "FBSDKInternalUtility.h"
 #import "FBSDKTypeUtility.h"
+#import "FBSDKUtility.h"
 
 @interface FBSDKBridgeAPIResponse ()
 - (instancetype)initWithRequest:(FBSDKBridgeAPIRequest *)request
@@ -67,7 +68,7 @@ NS_DESIGNATED_INITIALIZER;
       break;
     }
   }
-  NSDictionary<NSString *, NSString *> *queryParameters = [FBSDKInternalUtility dictionaryWithQueryString:responseURL.query];
+  NSDictionary *queryParameters = [FBSDKUtility dictionaryWithQueryString:responseURL.query];
   queryParameters = [FBSDKBridgeAPICrypto decryptResponseForRequest:request
                                                     queryParameters:queryParameters
                                                               error:errorRef];

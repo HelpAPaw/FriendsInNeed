@@ -24,8 +24,6 @@
 
 #import "FBSDKTooltipView.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 @protocol FBSDKLoginButtonDelegate;
 
 /**
@@ -42,7 +40,7 @@ typedef NS_ENUM(NSUInteger, FBSDKLoginButtonTooltipBehavior)
   /** Force disable. In this case you can still exert more refined
    control by manually constructing a `FBSDKLoginTooltipView` instance. */
   FBSDKLoginButtonTooltipBehaviorDisable = 2
-} NS_SWIFT_NAME(FBLoginButton.TooltipBehavior);
+};
 
 /**
   A button that initiates a log in or log out flow upon tapping.
@@ -57,7 +55,6 @@ typedef NS_ENUM(NSUInteger, FBSDKLoginButtonTooltipBehavior)
  `FBSDKLoginButton` has a fixed height of @c 30 pixels, but you may change the width. `initWithFrame:CGRectZero`
  will size the button to its minimum frame.
 */
-NS_SWIFT_NAME(FBLoginButton)
 @interface FBSDKLoginButton : FBSDKButton
 
 /**
@@ -72,24 +69,23 @@ NS_SWIFT_NAME(FBLoginButton)
   Gets or sets the login behavior to use
  */
 @property (assign, nonatomic) FBSDKLoginBehavior loginBehavior;
+/**
+  The publish permissions to request.
 
-/*!
- @abstract The permissions to request.
- @discussion To provide the best experience, you should minimize the number of permissions you request, and only ask for them when needed.
- For example, do not ask for "user_location" until you the information is actually used by the app.
 
+ Use `defaultAudience` to specify the default audience to publish to.
  Note this is converted to NSSet and is only
  an NSArray for the convenience of literal syntax.
-
- See [the permissions guide]( https://developers.facebook.com/docs/facebook-login/permissions/ ) for more details.
  */
-@property (copy, nonatomic) NSArray<NSString *> *permissions;
+@property (copy, nonatomic) NSArray *publishPermissions;
+/**
+  The read permissions to request.
 
-@property (copy, nonatomic) NSArray<NSString *> *publishPermissions
-DEPRECATED_MSG_ATTRIBUTE("Use permissions instead.");
 
-@property (copy, nonatomic) NSArray<NSString *> *readPermissions
-DEPRECATED_MSG_ATTRIBUTE("Use permissions instead.");
+ Note, that if read permissions are specified, then publish permissions should not be specified. This is converted to NSSet and is only
+ an NSArray for the convenience of literal syntax.
+ */
+@property (copy, nonatomic) NSArray *readPermissions;
 /**
   Gets or sets the desired tooltip behavior.
  */
@@ -105,7 +101,6 @@ DEPRECATED_MSG_ATTRIBUTE("Use permissions instead.");
  @protocol
   A delegate for `FBSDKLoginButton`
  */
-NS_SWIFT_NAME(LoginButtonDelegate)
 @protocol FBSDKLoginButtonDelegate <NSObject>
 
 @required
@@ -116,8 +111,8 @@ NS_SWIFT_NAME(LoginButtonDelegate)
  @param error The error (if any) from the login
  */
 - (void)loginButton:(FBSDKLoginButton *)loginButton
-didCompleteWithResult:(nullable FBSDKLoginManagerLoginResult *)result
-                error:(nullable NSError *)error;
+didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
+                error:(NSError *)error;
 
 /**
   Sent to the delegate when the button was used to logout.
@@ -134,5 +129,3 @@ didCompleteWithResult:(nullable FBSDKLoginManagerLoginResult *)result
 - (BOOL)loginButtonWillLogin:(FBSDKLoginButton *)loginButton;
 
 @end
-
-NS_ASSUME_NONNULL_END

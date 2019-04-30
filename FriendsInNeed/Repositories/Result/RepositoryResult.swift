@@ -9,8 +9,24 @@
 import Foundation
 
 enum RepositoryResult<ResultType> {
-    
     case success(ResultType)
     case error(Error)
+}
+
+enum RepositoryError: Error, LocalizedError {
+    case network(reason: String)
+    case decoding
     
+    var reason: String {
+        switch self {
+        case .network(let reason):
+            return reason
+        case .decoding:
+            return "The data is corrupted"
+        }
+    }
+    
+    var localizedDescription: String {
+        return reason
+    }
 }

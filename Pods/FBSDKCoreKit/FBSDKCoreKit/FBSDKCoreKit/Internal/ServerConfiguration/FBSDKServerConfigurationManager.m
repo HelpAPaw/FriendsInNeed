@@ -32,7 +32,7 @@
 #import "FBSDKSettings.h"
 #import "FBSDKTypeUtility.h"
 
-// one minute
+// one hour
 #define DEFAULT_SESSION_TIMEOUT_INTERVAL 60
 
 #define FBSDK_SERVER_CONFIGURATION_USER_DEFAULTS_KEY @"com.facebook.sdk:serverConfiguration%@"
@@ -101,16 +101,16 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
   NSString *appID = [FBSDKSettings appID];
   @synchronized(self) {
     // load the server configuration if we don't have it already
-    [self loadServerConfigurationWithCompletionBlock:nil];
+    [self loadServerConfigurationWithCompletionBlock:NULL];
 
     // use whatever configuration we have or the default
     return _serverConfiguration ?: [self _defaultServerConfigurationForAppID:appID];
   }
 }
 
-+ (void)loadServerConfigurationWithCompletionBlock:(FBSDKServerConfigurationBlock)completionBlock
++ (void)loadServerConfigurationWithCompletionBlock:(FBSDKServerConfigurationManagerLoadBlock)completionBlock
 {
-  void (^loadBlock)(void) = nil;
+  void (^loadBlock)(void) = NULL;
   NSString *appID = [FBSDKSettings appID];
   @synchronized(self) {
     // validate the cached configuration has the correct appID
@@ -145,7 +145,7 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
       loadBlock = [self _wrapperBlockForLoadBlock:completionBlock];
     } else {
       // hold onto the completion block
-      [FBSDKBasicUtility array:_completionBlocks addObject:[completionBlock copy]];
+      [FBSDKInternalUtility array:_completionBlocks addObject:[completionBlock copy]];
 
       // check if we are already loading
       if (!_loadingServerConfiguration) {
@@ -165,7 +165,7 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
     }
   }
 
-  if (loadBlock) {
+  if (loadBlock != NULL) {
     loadBlock();
   }
 
@@ -243,10 +243,10 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
       smartLoginBookmarkIconURL) {
       [[FBSDKImageDownloader sharedInstance] downloadImageWithURL:serverConfiguration.smartLoginBookmarkIconURL
                                                               ttl:kSmartLoginIconsTTL
-                                                       completion:nil];
+                                                       completion:NULL];
       [[FBSDKImageDownloader sharedInstance] downloadImageWithURL:serverConfiguration.smartLoginMenuIconURL
                                                               ttl:kSmartLoginIconsTTL
-                                                       completion:nil];
+                                                       completion:NULL];
   }
 #endif
   [self _didProcessConfigurationFromNetwork:serverConfiguration appID:appID error:nil];
@@ -379,10 +379,6 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
         NSLog(@"%@", updateMessage);
       }
 #endif
-
-      if (!_printedUpdateMessage) {
-        _printedUpdateMessage = _printedUpdateMessage;
-      }
     }
 
     // update the cached copy in NSUserDefaults
@@ -394,7 +390,7 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
     }
 
     // wrap the completion blocks
-    for (FBSDKServerConfigurationBlock completionBlock in _completionBlocks) {
+    for (FBSDKServerConfigurationManagerLoadBlock completionBlock in _completionBlocks) {
       [completionBlocks addObject:[self _wrapperBlockForLoadBlock:completionBlock]];
     }
     [_completionBlocks removeAllObjects];
@@ -432,10 +428,10 @@ typedef NS_OPTIONS(NSUInteger, FBSDKServerConfigurationManagerAppEventsFeatures)
   return ([[NSDate date] timeIntervalSinceDate:timestamp] < FBSDK_SERVER_CONFIGURATION_MANAGER_CACHE_TIMEOUT);
 }
 
-+ (FBSDKCodeBlock)_wrapperBlockForLoadBlock:(FBSDKServerConfigurationBlock)loadBlock
++ (void(^)(void))_wrapperBlockForLoadBlock:(FBSDKServerConfigurationManagerLoadBlock)loadBlock
 {
-  if (!loadBlock) {
-    return nil;
+  if (loadBlock == NULL) {
+    return NULL;
   }
 
   // create local vars to capture the current values from the ivars to allow this wrapper to be called outside of a lock

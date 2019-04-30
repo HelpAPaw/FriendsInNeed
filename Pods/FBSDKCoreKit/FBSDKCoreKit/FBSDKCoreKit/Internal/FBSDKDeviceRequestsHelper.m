@@ -53,7 +53,7 @@ static NSMapTable *g_mdnsAdvertisementServices;
 {
   struct utsname systemInfo;
   uname(&systemInfo);
-  NSDictionary<NSString *, NSString *> *deviceInfo = @{
+  NSDictionary *deviceInfo = @{
                                FBSDK_DEVICE_INFO_DEVICE: @(systemInfo.machine),
                                FBSDK_DEVICE_INFO_MODEL: [UIDevice currentDevice].model,
                                };
@@ -95,8 +95,10 @@ static NSMapTable *g_mdnsAdvertisementServices;
                                             port:0];
   mdnsAdvertisementService.delegate = delegate;
   [mdnsAdvertisementService publishWithOptions:NSNetServiceNoAutoRename | NSNetServiceListenForConnections];
-  [FBSDKAppEvents logInternalEvent:FBSDKAppEventNameFBSDKSmartLoginService
-                isImplicitlyLogged:YES];
+  [FBSDKAppEvents logImplicitEvent:FBSDKAppEventNameFBSDKSmartLoginService
+                        valueToSum:nil
+                        parameters:nil
+                       accessToken:nil];
   [g_mdnsAdvertisementServices setObject:mdnsAdvertisementService forKey:delegate];
 
   return YES;

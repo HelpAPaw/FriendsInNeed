@@ -20,7 +20,6 @@
 
 #import <FBSDKLoginKit/FBSDKLoginManager.h>
 
-NS_SWIFT_NAME(LoginUtility)
 @interface FBSDKLoginUtility : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;

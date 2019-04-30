@@ -18,7 +18,7 @@
 
 #import "FBSDKAppEventsState.h"
 
-#import "FBSDKBasicUtility+Internal.h"
+#import "FBSDKInternalUtility.h"
 
 #define FBSDK_APPEVENTSTATE_ISIMPLICIT_KEY @"isImplicit"
 
@@ -175,7 +175,7 @@
     [events addObject:event];
   }
 
-  return [FBSDKBasicUtility JSONStringForObject:events error:NULL invalidObjectHandler:NULL];
+  return [FBSDKInternalUtility JSONStringForObject:events error:NULL invalidObjectHandler:NULL];
 }
 
 @end

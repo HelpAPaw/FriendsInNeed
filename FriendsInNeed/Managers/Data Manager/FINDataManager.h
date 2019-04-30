@@ -12,6 +12,9 @@
 #import "FINComment.h"
 #import "FINError.h"
 
+@class FINPlace;
+@class FINPlaceDetails;
+
 #define BCKNDLSS_APP_ID         @"BDCD56B9-351A-E067-FFA4-9EA9CF2F4000"
 #define BCKNDLSS_IOS_API_KEY    @"9F8B017B-2890-A887-FFD5-63D6A5302100"
 #define BCKNDLSS_REST_API_KEY   @"473D7C4A-3FBC-69F4-FFFF-1635F07E4300"
@@ -60,7 +63,28 @@
 - (void)setRadiusSetting:(NSInteger)newRadius;
 - (void)setTimeoutSetting:(NSInteger)newTimeout;
 
+
+/**
+ Fetch the nearby veterinary clinics
+
+ @param location location of the search
+ @param radius radius around that location in meters
+ @param openedNow is clinic open now
+ @param completion completion handler consisting of optional places and optional error
+ */
+-(void)veterinaryClinicsAround:(CLLocationCoordinate2D)location inRadius:(double)radius openedNow:(BOOL)openedNow completion:(void (^)(NSArray<FINPlace *> *places, NSError *error))completion;
+
+
+/**
+ Fetch a place details
+
+ @param placeId place id
+ @param completion completion handler consisting of optional place details and optional error
+ */
+-(void)placeDetailsFor:(NSString *)placeId completion:(void (^)(FINPlaceDetails *placeDetails, NSError *error))completion;
+
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
+
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;

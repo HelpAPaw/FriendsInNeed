@@ -24,13 +24,13 @@ class GooglePlacesRouter: AlamofireBaseRouter {
     }
     
     var encoding: Alamofire.ParameterEncoding? {
-        return URLEncoding.default
+        return URLEncoding.queryString
     }
     
     var path: String {
         switch endpoint {
-        case .placeDetails: return "/details/json?"
-        case .veterinaryClinics: return "/nearbysearch/json?"
+        case .placeDetails: return "/details/json"
+        case .veterinaryClinics: return "/nearbysearch/json"
         }
     }
     
@@ -39,13 +39,18 @@ class GooglePlacesRouter: AlamofireBaseRouter {
         switch endpoint {
         case .veterinaryClinics(let location, let radius, let placeType, let openedNow):
             let stringLocation = "\(location.latitude),\(location.longitude)"
-            parameters.merge(["location": stringLocation, "radius": radius, "type": placeType, "keyword": "clinic"],
+            var stringPlaceType = ""
+            switch placeType {
+            case .veterinaryClinic:
+                stringPlaceType = "veterinary_care"
+            }
+            parameters.merge(["location": stringLocation, "radius": radius, "type": stringPlaceType, "keyword": "clinic"],
                              uniquingKeysWith: { _, second in return second })
             if openedNow {
                 parameters["opennow"] = true
             }
         case .placeDetails(let placeId):
-            parameters.merge(["placeId": placeId, "fields": "international_phone_number,opening_hours"],
+            parameters.merge(["placeid": placeId, "fields": "international_phone_number,opening_hours"],
                              uniquingKeysWith: { _, second in return second })
         }
         return parameters
@@ -55,7 +60,7 @@ class GooglePlacesRouter: AlamofireBaseRouter {
         return "https://maps.googleapis.com/maps/api/place"
     }
     
-    func asUrlRequest() throws -> URLRequest {
+    func asUrlRequest() -> URLRequest {
         guard var url = URL(string: baseUrl) else {
             fatalError("URL is invalid")
         }
@@ -71,7 +76,7 @@ class GooglePlacesRouter: AlamofireBaseRouter {
     }
     
     enum Endpoint {
-        case veterinaryClinics(location: CLLocationCoordinate2D, radius: Double, placeType: String, openedNow: Bool)
+        case veterinaryClinics(location: CLLocationCoordinate2D, radius: Double, placeType: FINPlaceType, openedNow: Bool)
         case placeDetails(placeId: String)
     }
     

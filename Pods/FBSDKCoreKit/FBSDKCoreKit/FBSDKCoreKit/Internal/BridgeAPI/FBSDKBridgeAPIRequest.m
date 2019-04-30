@@ -25,6 +25,7 @@
 #import "FBSDKBridgeAPIProtocolWebV2.h"
 #import "FBSDKInternalUtility.h"
 #import "FBSDKSettings.h"
+#import "FBSDKUtility.h"
 
 NSString *const FBSDKBridgeAPIAppIDKey = @"app_id";
 NSString *const FBSDKBridgeAPISchemeSuffixKey = @"scheme_suffix";
@@ -113,13 +114,13 @@ NSString *const FBSDKBridgeAPIVersionKey = @"version";
 
   [FBSDKInternalUtility validateURLSchemes];
 
-  NSDictionary<NSString *, NSString *> *requestQueryParameters = [FBSDKInternalUtility dictionaryWithQueryString:requestURL.query];
+  NSDictionary *requestQueryParameters = [FBSDKUtility dictionaryWithQueryString:requestURL.query];
   NSMutableDictionary *queryParameters = [[NSMutableDictionary alloc] initWithDictionary:requestQueryParameters];
   [FBSDKBridgeAPICrypto addCipherKeyToQueryParameters:queryParameters];
-  [FBSDKBasicUtility dictionary:queryParameters setObject:[FBSDKSettings appID] forKey:FBSDKBridgeAPIAppIDKey];
-  [FBSDKBasicUtility dictionary:queryParameters
-                      setObject:[FBSDKSettings appURLSchemeSuffix]
-                         forKey:FBSDKBridgeAPISchemeSuffixKey];
+  [FBSDKInternalUtility dictionary:queryParameters setObject:[FBSDKSettings appID] forKey:FBSDKBridgeAPIAppIDKey];
+  [FBSDKInternalUtility dictionary:queryParameters
+                         setObject:[FBSDKSettings appURLSchemeSuffix]
+                            forKey:FBSDKBridgeAPISchemeSuffixKey];
   requestURL = [FBSDKInternalUtility URLWithScheme:requestURL.scheme
                                               host:requestURL.host
                                               path:requestURL.path

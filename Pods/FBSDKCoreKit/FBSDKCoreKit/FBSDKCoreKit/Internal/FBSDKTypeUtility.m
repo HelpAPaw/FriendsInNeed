@@ -105,7 +105,7 @@
   if ([object isKindOfClass:[NSURL class]]) {
     return (NSURL *)object;
   } else if ([object isKindOfClass:[NSString class]]) {
-    return [NSURL URLWithString:(NSString *)object];
+    return [[NSURL alloc] initWithString:(NSString *)object];
   } else {
     return nil;
   }

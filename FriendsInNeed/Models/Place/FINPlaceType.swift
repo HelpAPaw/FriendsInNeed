@@ -8,12 +8,8 @@
 
 import Foundation
 
-enum FINPlaceType: String {
+@objc enum FINPlaceType: Int {
     
     case veterinaryClinic
     
 }
-
-extension FINPlaceType: Equatable {}
-
-extension FINPlaceType: Decodable {}

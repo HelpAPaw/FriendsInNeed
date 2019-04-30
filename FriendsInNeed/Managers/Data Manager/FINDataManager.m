@@ -11,6 +11,9 @@
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
 #import <SDWebImage/SDImageCache.h>
+#import "Help_A_Paw-Swift.h"
+
+@protocol PlacesRepository;
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
@@ -31,6 +34,8 @@
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
+@property (strong, nonatomic) id<PlacesRepository> placesRepository;
+
 
 @end
 
@@ -38,6 +43,7 @@
 
 + (id)sharedManager
 {
+
     static FINDataManager *_sharedManager = nil;
     static dispatch_once_t oncePredicate;
     dispatch_once(&oncePredicate,
@@ -80,6 +86,8 @@
     } @catch (Fault *fault) {
         NSLog(@"Fault: %@", fault);
     }
+    
+    [self setPlacesRepository:[[GooglePlacesRepository alloc] init]];
     
     return self;
 }
@@ -717,6 +725,14 @@
         [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
     }
+}
+
+-(void)veterinaryClinicsAround:(CLLocationCoordinate2D)location inRadius:(double)radius openedNow:(BOOL)openedNow completion:(void (^)(NSArray<FINPlace *> *, NSError *))completion {
+    [[self placesRepository] veterinaryClinicsWithAround:location in:radius openedNow:openedNow completionHandler:completion];
+}
+
+-(void)placeDetailsFor:(NSString *)placeId completion:(void (^)(FINPlaceDetails *, NSError *))completion {
+    [[self placesRepository] placeDetailsFor:placeId completionHandler:completion];
 }
 
 @end

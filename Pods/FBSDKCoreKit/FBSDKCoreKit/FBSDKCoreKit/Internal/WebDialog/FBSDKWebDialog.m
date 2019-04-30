@@ -29,8 +29,6 @@
 #define FBSDK_WEB_DIALOG_SHOW_ANIMATION_DURATION 0.2
 #define FBSDK_WEB_DIALOG_DISMISS_ANIMATION_DURATION 0.3
 
-typedef void (^FBSDKBoolBlock)(BOOL finished);
-
 static FBSDKWebDialog *g_currentDialog = nil;
 
 @interface FBSDKWebDialog () <FBSDKWebDialogViewDelegate>
@@ -218,10 +216,10 @@ static FBSDKWebDialog *g_currentDialog = nil;
   parameters[@"display"] = @"touch";
   parameters[@"sdk"] = [NSString stringWithFormat:@"ios-%@", [FBSDKSettings sdkVersion]];
   parameters[@"redirect_uri"] = @"fbconnect://success";
-  [FBSDKBasicUtility dictionary:parameters setObject:[FBSDKSettings appID] forKey:@"app_id"];
-  [FBSDKBasicUtility dictionary:parameters
-                      setObject:[FBSDKAccessToken currentAccessToken].tokenString
-                         forKey:@"access_token"];
+  [FBSDKInternalUtility dictionary:parameters setObject:[FBSDKSettings appID] forKey:@"app_id"];
+  [FBSDKInternalUtility dictionary:parameters
+                         setObject:[FBSDKAccessToken currentAccessToken].tokenString
+                            forKey:@"access_token"];
   [parameters addEntriesFromDictionary:self.parameters];
   return [FBSDKInternalUtility facebookURLWithHostPrefix:@"m"
                                                     path:[@"/dialog/" stringByAppendingString:self.name]
@@ -316,7 +314,7 @@ static FBSDKWebDialog *g_currentDialog = nil;
 - (void)_updateViewsWithScale:(CGFloat)scale
                         alpha:(CGFloat)alpha
             animationDuration:(CFTimeInterval)animationDuration
-                   completion:(FBSDKBoolBlock)completion
+                   completion:(void(^)(BOOL finished))completion
 {
   CGAffineTransform transform;
   CGRect applicationFrame = [self _applicationFrameForOrientation];

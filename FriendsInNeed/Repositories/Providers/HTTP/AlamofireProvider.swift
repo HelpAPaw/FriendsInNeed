@@ -9,16 +9,18 @@
 import Foundation
 import Alamofire
 
-class AlamofireProvider: HTTPProvider {
+class AlamofireProvider {
     
     func request(_ request: URLRequest, completionHandler: @escaping (RepositoryResult<[String : Any]>) -> Void) {
-        Alamofire.request(request).validate().responseJSON(completionHandler: { (dataResponse: DataResponse<Any>) in
+        Alamofire.request(request)
+            .validate()
+            .responseJSON(completionHandler: { (dataResponse: DataResponse<Any>) in
             switch dataResponse.result {
             case .failure(let error):
-                completionHandler(.error(HTTPError.network(reason: error.localizedDescription)))
+                completionHandler(.error(RepositoryError.network(reason: error.localizedDescription)))
             case .success(let value):
                 guard let jsonDictionary = value as? [String: Any] else {
-                    completionHandler(.error(HTTPError.decoding))
+                    completionHandler(.error(RepositoryError.decoding))
                     return
                 }
                 completionHandler(.success(jsonDictionary))

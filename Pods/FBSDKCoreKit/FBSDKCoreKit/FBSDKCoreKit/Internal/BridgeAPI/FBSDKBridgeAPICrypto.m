@@ -24,6 +24,7 @@
 #import "FBSDKError.h"
 #import "FBSDKInternalUtility.h"
 #import "FBSDKSettings.h"
+#import "FBSDKUtility.h"
 
 static NSString *const FBSDKBridgeAPICryptoCipherKey = @"cipher";
 static NSString *const FBSDKBridgeAPICryptoCipherKeyKey = @"cipher_key";
@@ -35,7 +36,7 @@ static NSString *g_cipherKey = nil;
 
 + (void)addCipherKeyToQueryParameters:(NSMutableDictionary *)queryParameters
 {
-  [FBSDKBasicUtility dictionary:queryParameters setObject:[self _cipherKey] forKey:FBSDKBridgeAPICryptoCipherKeyKey];
+  [FBSDKInternalUtility dictionary:queryParameters setObject:[self _cipherKey] forKey:FBSDKBridgeAPICryptoCipherKeyKey];
 }
 
 + (NSDictionary *)decryptResponseForRequest:(FBSDKBridgeAPIRequest *)request
@@ -94,7 +95,7 @@ static NSString *g_cipherKey = nil;
     return nil;
   }
   NSString *decryptedString = [[NSString alloc] initWithData:decryptedData encoding:NSUTF8StringEncoding];
-  NSDictionary<NSString *, NSString *> *decryptedDictionary = [FBSDKInternalUtility dictionaryWithQueryString:decryptedString];
+  NSDictionary *decryptedDictionary = [FBSDKUtility dictionaryWithQueryString:decryptedString];
   NSMutableDictionary *decryptedQueryParameters = [[NSMutableDictionary alloc] initWithDictionary:decryptedDictionary];
   decryptedQueryParameters[FBSDKBridgeAPIVersionKey] = version;
   return [decryptedQueryParameters copy];

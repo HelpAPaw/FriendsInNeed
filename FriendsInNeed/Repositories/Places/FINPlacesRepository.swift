@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc protocol PlacesRepository {
+@objc protocol FINPlacesRepository {
     
     /// Fetch the nearby veterinary clinics
     ///

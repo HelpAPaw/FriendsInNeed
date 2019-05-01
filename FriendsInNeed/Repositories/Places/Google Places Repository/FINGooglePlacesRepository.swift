@@ -9,17 +9,17 @@
 import Foundation
 import Crashlytics
 
-class GooglePlacesRepository: NSObject, PlacesRepository {
+class FINGooglePlacesRepository: NSObject, FINPlacesRepository {
     
-    private let httpProvider: AlamofireProvider
+    private let httpProvider: FINAlamofireProvider
     
-    private let mapper: GooglePlacesRepositoryMapper
+    private let mapper: FINGooglePlacesRepositoryMapper
     
     private let crashlytics = Crashlytics.sharedInstance()
     
     @objc override init() {
-        self.httpProvider = AlamofireProvider()
-        self.mapper = GooglePlacesRepositoryMapper()
+        self.httpProvider = FINAlamofireProvider()
+        self.mapper = FINGooglePlacesRepositoryMapper()
     }
     
     // MARK: - Queries
@@ -31,7 +31,7 @@ class GooglePlacesRepository: NSObject, PlacesRepository {
     ///   - openedNow: is clinic open now
     ///   - completionHandler: completion handler consisting of optional places and optional error
     @objc func veterinaryClinics(around location: CLLocationCoordinate2D, in radius: Double, openedNow: Bool, completionHandler: @escaping PlacesRepoVeterinaryClinicsCompletionHandler) {
-        let router = GooglePlacesRouter(endpoint: .veterinaryClinics(location: location, radius: radius, placeType: .veterinaryClinic, openedNow: openedNow))
+        let router = FINGooglePlacesRouter(endpoint: .veterinaryClinics(location: location, radius: radius, placeType: .veterinaryClinic, openedNow: openedNow))
         let urlRequest = router.asUrlRequest()
         
         httpProvider.request(urlRequest, completionHandler: { [weak self] result in
@@ -66,7 +66,7 @@ class GooglePlacesRepository: NSObject, PlacesRepository {
     ///   - placeId: place id
     ///   - completionHandler: completion handler consisting of optional place details and optional error
     @objc func placeDetails(for placeId: String, completionHandler: @escaping PlacesRepoDetailsCompletionHandler) {
-        let router = GooglePlacesRouter(endpoint: .placeDetails(placeId: placeId))
+        let router = FINGooglePlacesRouter(endpoint: .placeDetails(placeId: placeId))
         let urlRequest = router.asUrlRequest()
         
         httpProvider.request(urlRequest, completionHandler: { result in

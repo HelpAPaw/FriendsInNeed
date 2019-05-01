@@ -19,7 +19,7 @@ target "Help A Paw" do
     
 end
 
-target 'NotificationService' do
+target "NotificationService" do
   
     pod 'Backendless'
   

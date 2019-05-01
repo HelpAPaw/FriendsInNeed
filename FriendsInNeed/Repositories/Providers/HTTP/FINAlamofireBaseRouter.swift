@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-protocol AlamofireBaseRouter {
+protocol FINAlamofireBaseRouter {
     
     var httpMethod: Alamofire.HTTPMethod { get }
     var encoding: Alamofire.ParameterEncoding? { get }

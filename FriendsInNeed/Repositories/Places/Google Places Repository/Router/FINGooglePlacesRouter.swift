@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class GooglePlacesRouter: AlamofireBaseRouter {
+class FINGooglePlacesRouter: FINAlamofireBaseRouter {
     
     private let apiKey = ""
     

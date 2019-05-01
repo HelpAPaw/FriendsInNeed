@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class AlamofireProvider {
+class FINAlamofireProvider {
     
     func request(_ request: URLRequest, completionHandler: @escaping (RepositoryResult<[String : Any]>) -> Void) {
         Alamofire.request(request)

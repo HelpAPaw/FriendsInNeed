@@ -20,12 +20,12 @@
 		148912CC1E72F94A00655DD0 /* FINMapVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148912CE1E72F94A00655DD0 /* FINMapVC.xib */; };
 		5AB26DD9B456FCEF5B6FA36C /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */; };
 		61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */; };
-		7739AA0D223D6BDB004D3183 /* PlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */; };
-		7739AA10223D6D4E004D3183 /* GooglePlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */; };
+		7739AA0D223D6BDB004D3183 /* FINPlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0C223D6BDB004D3183 /* FINPlacesRepository.swift */; };
+		7739AA10223D6D4E004D3183 /* FINGooglePlacesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA0F223D6D4E004D3183 /* FINGooglePlacesRepository.swift */; };
 		7739AA13223EDDBE004D3183 /* RepositoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7739AA12223EDDBE004D3183 /* RepositoryResult.swift */; };
-		775F91CD2245732700978679 /* AlamofireProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CC2245732700978679 /* AlamofireProvider.swift */; };
-		775F91D02245829C00978679 /* AlamofireBaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */; };
-		775F91D2224582DB00978679 /* GooglePlacesRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91D1224582DB00978679 /* GooglePlacesRouter.swift */; };
+		775F91CD2245732700978679 /* FINAlamofireProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CC2245732700978679 /* FINAlamofireProvider.swift */; };
+		775F91D02245829C00978679 /* FINAlamofireBaseRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91CF2245829C00978679 /* FINAlamofireBaseRouter.swift */; };
+		775F91D2224582DB00978679 /* FINGooglePlacesRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775F91D1224582DB00978679 /* FINGooglePlacesRouter.swift */; };
 		77A7F41222353BD00034646D /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F40922353BD00034646D /* FINFaqCell.m */; };
 		77A7F41322353BD00034646D /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77A7F40B22353BD00034646D /* FINFaqCell.xib */; };
 		77A7F41422353BD00034646D /* FINFaqVC.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77A7F40D22353BD00034646D /* FINFaqVC.strings */; };
@@ -35,7 +35,7 @@
 		77A7F4282235A0890034646D /* FINPlaceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A7F4272235A0890034646D /* FINPlaceType.swift */; };
 		77BA0706226361C100B0026E /* FINPlaceDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA0705226361C100B0026E /* FINPlaceDetails.swift */; };
 		77BA0709226381A300B0026E /* FINPlaceOpeningHours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA0708226381A300B0026E /* FINPlaceOpeningHours.swift */; };
-		77BA070C22789CDD00B0026E /* GooglePlacesRepositoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA070B22789CDD00B0026E /* GooglePlacesRepositoryMapper.swift */; };
+		77BA070C22789CDD00B0026E /* FINGooglePlacesRepositoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77BA070B22789CDD00B0026E /* FINGooglePlacesRepositoryMapper.swift */; };
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
@@ -64,8 +64,6 @@
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
 		F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FD1C00E04F00FBE20C /* Assets.xcassets */; };
 		F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */; };
-		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
-		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
 		F39BB3A22223315400967BC9 /* Help A Paw.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */; };
 		F39BB3A32223316300967BC9 /* NotificationService.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */; };
@@ -143,16 +141,19 @@
 		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
 		14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Help A Paw.entitlements"; sourceTree = "<group>"; };
-		43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "FriendsInNeed/Presentation/Settings/Cells/Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+		32194AC7E58D6131B3A98A1E /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
+		65F5C6F981DF5857152FB39A /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		772F68C62279D4F20021ADE9 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
-		7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesRepository.swift; sourceTree = "<group>"; };
-		7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesRepository.swift; sourceTree = "<group>"; };
+		772F68C72279D8420021ADE9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		772F68C82279D8420021ADE9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7739AA0C223D6BDB004D3183 /* FINPlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlacesRepository.swift; sourceTree = "<group>"; };
+		7739AA0F223D6D4E004D3183 /* FINGooglePlacesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINGooglePlacesRepository.swift; sourceTree = "<group>"; };
 		7739AA12223EDDBE004D3183 /* RepositoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryResult.swift; sourceTree = "<group>"; };
-		775F91CC2245732700978679 /* AlamofireProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireProvider.swift; sourceTree = "<group>"; };
-		775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireBaseRouter.swift; sourceTree = "<group>"; };
-		775F91D1224582DB00978679 /* GooglePlacesRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesRouter.swift; sourceTree = "<group>"; };
+		775F91CC2245732700978679 /* FINAlamofireProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINAlamofireProvider.swift; sourceTree = "<group>"; };
+		775F91CF2245829C00978679 /* FINAlamofireBaseRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINAlamofireBaseRouter.swift; sourceTree = "<group>"; };
+		775F91D1224582DB00978679 /* FINGooglePlacesRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINGooglePlacesRouter.swift; sourceTree = "<group>"; };
 		77A7F40922353BD00034646D /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
 		77A7F40A22353BD00034646D /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
 		77A7F40B22353BD00034646D /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
@@ -164,9 +165,8 @@
 		77A7F4272235A0890034646D /* FINPlaceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlaceType.swift; sourceTree = "<group>"; };
 		77BA0705226361C100B0026E /* FINPlaceDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlaceDetails.swift; sourceTree = "<group>"; };
 		77BA0708226381A300B0026E /* FINPlaceOpeningHours.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPlaceOpeningHours.swift; sourceTree = "<group>"; };
-		77BA070B22789CDD00B0026E /* GooglePlacesRepositoryMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesRepositoryMapper.swift; sourceTree = "<group>"; };
+		77BA070B22789CDD00B0026E /* FINGooglePlacesRepositoryMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINGooglePlacesRepositoryMapper.swift; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "FriendsInNeed/Presentation/Settings/Cells/Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.release.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.release.xcconfig"; sourceTree = "<group>"; };
 		F301FE021EDEBA1000880ECE /* InputValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputValidator.swift; sourceTree = "<group>"; };
@@ -210,8 +210,6 @@
 		F38B72FD1C00E04F00FBE20C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F38B73001C00E04F00FBE20C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F38B73021C00E04F00FBE20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F38B73081C00E39D00FBE20C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
 		F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
@@ -261,8 +259,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
-				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
 				61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,6 +277,8 @@
 		14F14F821E9A095600977C8E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				772F68C82279D8420021ADE9 /* CoreLocation.framework */,
+				772F68C72279D8420021ADE9 /* MapKit.framework */,
 				772F68C62279D4F20021ADE9 /* UserNotifications.framework */,
 				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
 				D4B342BD6AABD945A0775EBD /* Pods_NotificationService.framework */,
@@ -302,7 +300,7 @@
 		7739AA0B223D6BC8004D3183 /* Places */ = {
 			isa = PBXGroup;
 			children = (
-				7739AA0C223D6BDB004D3183 /* PlacesRepository.swift */,
+				7739AA0C223D6BDB004D3183 /* FINPlacesRepository.swift */,
 				7739AA0E223D6D30004D3183 /* Google Places Repository */,
 			);
 			path = Places;
@@ -311,7 +309,7 @@
 		7739AA0E223D6D30004D3183 /* Google Places Repository */ = {
 			isa = PBXGroup;
 			children = (
-				7739AA0F223D6D4E004D3183 /* GooglePlacesRepository.swift */,
+				7739AA0F223D6D4E004D3183 /* FINGooglePlacesRepository.swift */,
 				77BA070A22789C9000B0026E /* Mapper */,
 				775F91CE22457DD500978679 /* Router */,
 			);
@@ -337,8 +335,8 @@
 		775F91CB2245719300978679 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				775F91CC2245732700978679 /* AlamofireProvider.swift */,
-				775F91CF2245829C00978679 /* AlamofireBaseRouter.swift */,
+				775F91CC2245732700978679 /* FINAlamofireProvider.swift */,
+				775F91CF2245829C00978679 /* FINAlamofireBaseRouter.swift */,
 			);
 			path = HTTP;
 			sourceTree = "<group>";
@@ -346,7 +344,7 @@
 		775F91CE22457DD500978679 /* Router */ = {
 			isa = PBXGroup;
 			children = (
-				775F91D1224582DB00978679 /* GooglePlacesRouter.swift */,
+				775F91D1224582DB00978679 /* FINGooglePlacesRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -664,7 +662,7 @@
 		77BA070A22789C9000B0026E /* Mapper */ = {
 			isa = PBXGroup;
 			children = (
-				77BA070B22789CDD00B0026E /* GooglePlacesRepositoryMapper.swift */,
+				77BA070B22789CDD00B0026E /* FINGooglePlacesRepositoryMapper.swift */,
 			);
 			path = Mapper;
 			sourceTree = "<group>";
@@ -672,10 +670,10 @@
 		8E90546007900DD9E3332797 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */,
-				CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */,
 				5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */,
 				E4BB6CBB4D18545AF9BA0A90 /* Pods-Help A Paw.release.xcconfig */,
+				65F5C6F981DF5857152FB39A /* Pods-NotificationService.debug.xcconfig */,
+				32194AC7E58D6131B3A98A1E /* Pods-NotificationService.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -703,8 +701,6 @@
 				F3BA754022232CFD003FAC5F /* NotificationService */,
 				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				14F14F821E9A095600977C8E /* Frameworks */,
-				F38B730A1C00F31200FBE20C /* CoreLocation.framework */,
-				F38B73081C00E39D00FBE20C /* MapKit.framework */,
 				F38B72EC1C00E04F00FBE20C /* Products */,
 				8E90546007900DD9E3332797 /* Pods */,
 				CE84D0F938D153CA1EAC0401 /* Frameworks */,
@@ -1051,7 +1047,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */,
-				775F91CD2245732700978679 /* AlamofireProvider.swift in Sources */,
+				775F91CD2245732700978679 /* FINAlamofireProvider.swift in Sources */,
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
@@ -1059,17 +1055,17 @@
 				77BA0706226361C100B0026E /* FINPlaceDetails.swift in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
 				7739AA13223EDDBE004D3183 /* RepositoryResult.swift in Sources */,
-				775F91D02245829C00978679 /* AlamofireBaseRouter.swift in Sources */,
-				775F91D2224582DB00978679 /* GooglePlacesRouter.swift in Sources */,
+				775F91D02245829C00978679 /* FINAlamofireBaseRouter.swift in Sources */,
+				775F91D2224582DB00978679 /* FINGooglePlacesRouter.swift in Sources */,
 				77A7F4282235A0890034646D /* FINPlaceType.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */,
-				7739AA0D223D6BDB004D3183 /* PlacesRepository.swift in Sources */,
+				7739AA0D223D6BDB004D3183 /* FINPlacesRepository.swift in Sources */,
 				F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */,
 				F39C394C1C9EA305007A2D8E /* FINSignal.m in Sources */,
 				F338000D1C96325B0080FACD /* FINSignalDetailsCell.m in Sources */,
 				77A7F4262235A06F0034646D /* FINPlace.swift in Sources */,
-				77BA070C22789CDD00B0026E /* GooglePlacesRepositoryMapper.swift in Sources */,
+				77BA070C22789CDD00B0026E /* FINGooglePlacesRepositoryMapper.swift in Sources */,
 				77BA0709226381A300B0026E /* FINPlaceOpeningHours.swift in Sources */,
 				F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */,
 				F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */,
@@ -1087,7 +1083,7 @@
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
-				7739AA10223D6D4E004D3183 /* GooglePlacesRepository.swift in Sources */,
+				7739AA10223D6D4E004D3183 /* FINGooglePlacesRepository.swift in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
 				1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */,
 			);
@@ -1382,7 +1378,7 @@
 		};
 		F3BA754822232CFD003FAC5F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */;
+			baseConfigurationReference = 65F5C6F981DF5857152FB39A /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1413,7 +1409,7 @@
 		};
 		F3BA754922232CFD003FAC5F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */;
+			baseConfigurationReference = 32194AC7E58D6131B3A98A1E /* Pods-NotificationService.release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

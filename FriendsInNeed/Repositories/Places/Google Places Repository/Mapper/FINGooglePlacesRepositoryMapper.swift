@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct GooglePlacesRepositoryMapper {
+struct FINGooglePlacesRepositoryMapper {
     
     // MARK: - Map list of FINPlace-s
     /// Map json dictionary to list of places

@@ -13,7 +13,7 @@
 #import <SDWebImage/SDImageCache.h>
 #import "Help_A_Paw-Swift.h"
 
-@protocol PlacesRepository;
+@protocol FINPlacesRepository;
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
@@ -34,7 +34,7 @@
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
-@property (strong, nonatomic) id<PlacesRepository> placesRepository;
+@property (strong, nonatomic) id<FINPlacesRepository> placesRepository;
 
 
 @end
@@ -87,7 +87,7 @@
         NSLog(@"Fault: %@", fault);
     }
     
-    [self setPlacesRepository:[[GooglePlacesRepository alloc] init]];
+    [self setPlacesRepository:[[FINGooglePlacesRepository alloc] init]];
     
     return self;
 }

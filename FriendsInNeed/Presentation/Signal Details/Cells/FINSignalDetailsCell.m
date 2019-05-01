@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnCall;
+@property (weak, nonatomic) IBOutlet UIButton *btnVetClinics;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnCallHeightConstraint;
 @property (strong, nonatomic) NSDictionary *italicAttributes;
 
@@ -136,6 +137,11 @@
 {
     NSString *phoneNumber = [@"tel://" stringByAppendingString:[_phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""]];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber] options:@{} completionHandler:nil];
+}
+
+- (IBAction)onVetClinicsButton:(id)sender
+{
+    NSLog(@"vet clinics clicked");
 }
 
 @end

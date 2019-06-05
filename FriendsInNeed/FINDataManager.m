@@ -237,6 +237,7 @@
             {
                 if (newSignals.count > 0)
                 {
+                    NSInteger badgeNumber = 0;
                     for (FINSignal *signal in newSignals)
                     {
                         BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalID];
@@ -245,7 +246,6 @@
                             continue;
                         }
                         
-                        NSInteger badgeNumber = 0;
                         // Only show notifications about signals that haven't been solved yet
                         if (signal.status < FINSignalStatus2)
                         {
@@ -264,8 +264,8 @@
                             UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
                             [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
                         }
-                        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
                     }
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
                     
                     if (completionHandler)
                     {

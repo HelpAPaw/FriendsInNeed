@@ -15,6 +15,9 @@ PODS:
   - FBSDKLoginKit (4.44.1):
     - FBSDKCoreKit
   - IQKeyboardManager (6.2.1)
+  - Realm (3.16.1):
+    - Realm/Headers (= 3.16.1)
+  - Realm/Headers (3.16.1)
   - SDWebImage (5.0.1):
     - SDWebImage/Core (= 5.0.1)
   - SDWebImage/Core (5.0.1)
@@ -29,6 +32,7 @@ DEPENDENCIES:
   - Fabric
   - FBSDKLoginKit
   - IQKeyboardManager
+  - Realm
   - SDWebImage
   - ViewDeck
 
@@ -41,6 +45,7 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKLoginKit
     - IQKeyboardManager
+    - Realm
     - SDWebImage
     - Socket.IO-Client-Swift
     - Starscream
@@ -54,11 +59,12 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: a823ae35bdb60ebb8d7a7e51abe7c5d87d2bfced
   FBSDKLoginKit: 54ae59987f2a8703021557c90a9aebb9e5c2bef6
   IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
+  Realm: 601cacc51d8be3b17a377ef787be0f6ee0e76cf1
   SDWebImage: 27dd2c9ea07a2252f94557c9fbb6105ee94b74c9
   Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
-PODFILE CHECKSUM: 9e9aec5b15443d9b1e1ba2e92e984aaf1e02c95d
+PODFILE CHECKSUM: c754173765c8886999f1704d200cc43ae47cb175
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.7.1

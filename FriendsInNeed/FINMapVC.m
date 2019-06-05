@@ -48,6 +48,7 @@
 @property (assign, nonatomic) UIImagePickerControllerSourceType photoSource;
 @property (strong, nonatomic) UIImage *signalPhoto;
 @property (assign, nonatomic) BOOL viewDidAppearOnce;
+@property (assign, nonatomic) BOOL userDidChangeZoom;
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
@@ -497,14 +498,25 @@
     }
 }
 
-//TODO: test with notifications
 - (void)focusAnnotation:(FINAnnotation *)annotation andCenterOnMap:(BOOL)moveToCenter
 {
     self.pauseRefreshing = YES;
     [_mapView selectAnnotation:annotation animated:YES];
     if (moveToCenter == YES)
     {
-        [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+        // If user changed zoom - don't reset it; otherwise go with the setting
+        MKCoordinateRegion newRegion;
+        if (self.userDidChangeZoom)
+        {
+            newRegion = self.mapView.region;
+            newRegion.center = annotation.coordinate;
+        }
+        else
+        {
+            CLLocationDistance radiusInMeters = [_dataManager getRadiusSetting] * 1000;
+            newRegion = MKCoordinateRegionMakeWithDistance(annotation.coordinate, radiusInMeters, radiusInMeters);
+        }
+        [_mapView setRegion:newRegion animated:YES];
     }
     self.pauseRefreshing = NO;
     
@@ -567,6 +579,11 @@
     
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
+        if ([gestureRecognizer isKindOfClass:[UIPinchGestureRecognizer class]])
+        {
+            self.userDidChangeZoom = YES;
+        }
+        
         if (_isInSubmitMode == NO)
         {
             [self refreshOverridingDampening:NO];

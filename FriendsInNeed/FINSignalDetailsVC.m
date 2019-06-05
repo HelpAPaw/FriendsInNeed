@@ -572,7 +572,7 @@ enum {
 - (IBAction)onCloseButton:(id)sender
 {
     [self.delegate refreshAnnotation:_annotation];
-    [self.delegate focusAnnotation:_annotation];
+    [self.delegate focusAnnotation:_annotation andCenterOnMap:NO];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
 

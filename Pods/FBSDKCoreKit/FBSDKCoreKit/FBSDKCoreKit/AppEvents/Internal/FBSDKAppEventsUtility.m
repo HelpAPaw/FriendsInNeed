@@ -47,12 +47,12 @@
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
   NSString *attributionID = [[self class] attributionID];  // Only present on iOS 6 and below.
-  [FBSDKInternalUtility dictionary:parameters setObject:attributionID forKey:@"attribution"];
+  [FBSDKBasicUtility dictionary:parameters setObject:attributionID forKey:@"attribution"];
 #endif
 
   if (!implicitEventsOnly && shouldAccessAdvertisingID) {
     NSString *advertiserID = [[self class] advertiserID];
-    [FBSDKInternalUtility dictionary:parameters setObject:advertiserID forKey:@"advertiser_id"];
+    [FBSDKBasicUtility dictionary:parameters setObject:advertiserID forKey:@"advertiser_id"];
   }
 
   parameters[FBSDK_APPEVENTSUTILITY_ANONYMOUSID_KEY] = [self anonymousID];
@@ -91,7 +91,7 @@
   });
 
   if (urlSchemes.count > 0) {
-    parameters[@"url_schemes"] = [FBSDKInternalUtility JSONStringForObject:urlSchemes error:NULL invalidObjectHandler:NULL];
+    parameters[@"url_schemes"] = [FBSDKBasicUtility JSONStringForObject:urlSchemes error:NULL invalidObjectHandler:NULL];
   }
 
   return parameters;
@@ -99,7 +99,7 @@
 
 + (NSString *)advertiserID
 {
-  if (![[FBSDKSettings advertiserIDCollectionEnabled] boolValue]) {
+  if (!FBSDKSettings.isAdvertiserIDCollectionEnabled) {
     return nil;
   }
 
@@ -289,7 +289,7 @@ restOfStringCharacterSet:(NSCharacterSet *)restOfStringCharacterSet
 {
   [[self class] ensureOnMainThread:NSStringFromSelector(_cmd) className:NSStringFromClass(self)];
   NSDictionary *data = @{ FBSDK_APPEVENTSUTILITY_ANONYMOUSID_KEY : anonymousID };
-  NSString *content = [FBSDKInternalUtility JSONStringForObject:data error:NULL invalidObjectHandler:NULL];
+  NSString *content = [FBSDKBasicUtility JSONStringForObject:data error:NULL invalidObjectHandler:NULL];
 
   [content writeToFile:[[self class] persistenceFilePath:FBSDK_APPEVENTSUTILITY_ANONYMOUSIDFILENAME]
             atomically:YES
@@ -312,7 +312,7 @@ restOfStringCharacterSet:(NSCharacterSet *)restOfStringCharacterSet
   NSString *content = [[NSString alloc] initWithContentsOfFile:file
                                                       encoding:NSASCIIStringEncoding
                                                          error:nil];
-  NSDictionary *results = [FBSDKInternalUtility objectForJSONString:content error:NULL];
+  NSDictionary<id, id> *results = [FBSDKBasicUtility objectForJSONString:content error:NULL];
   return results[FBSDK_APPEVENTSUTILITY_ANONYMOUSID_KEY];
 }
 

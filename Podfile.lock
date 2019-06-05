@@ -1,29 +1,27 @@
 PODS:
-  - Backendless (5.2.12):
-    - Socket.IO-Client-Swift (~> 14.0.0)
-  - Bolts (1.9.0):
-    - Bolts/AppLinks (= 1.9.0)
-    - Bolts/Tasks (= 1.9.0)
-  - Bolts/AppLinks (1.9.0):
-    - Bolts/Tasks
-  - Bolts/Tasks (1.9.0)
-  - Crashlytics (3.12.0):
-    - Fabric (~> 1.9.0)
-  - Fabric (1.9.0)
-  - FBSDKCoreKit (4.44.1):
-    - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.44.1):
-    - FBSDKCoreKit
-  - IQKeyboardManager (6.2.1)
+  - Backendless (5.2.13):
+    - Socket.IO-Client-Swift
+  - Crashlytics (3.13.1):
+    - Fabric (~> 1.10.1)
+  - Fabric (1.10.1)
+  - FBSDKCoreKit (5.0.1):
+    - FBSDKCoreKit/Basics (= 5.0.1)
+    - FBSDKCoreKit/Core (= 5.0.1)
+  - FBSDKCoreKit/Basics (5.0.1)
+  - FBSDKCoreKit/Core (5.0.1):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.0.1):
+    - FBSDKCoreKit (~> 5.0)
+  - IQKeyboardManager (6.3.0)
   - Realm (3.16.1):
     - Realm/Headers (= 3.16.1)
   - Realm/Headers (3.16.1)
-  - SDWebImage (5.0.1):
-    - SDWebImage/Core (= 5.0.1)
-  - SDWebImage/Core (5.0.1)
-  - Socket.IO-Client-Swift (14.0.0):
-    - Starscream (~> 3.0.6)
-  - Starscream (3.0.6)
+  - SDWebImage (5.0.6):
+    - SDWebImage/Core (= 5.0.6)
+  - SDWebImage/Core (5.0.6)
+  - Socket.IO-Client-Swift (15.1.0):
+    - Starscream (~> 3.1)
+  - Starscream (3.1.0)
   - ViewDeck (3.1.0)
 
 DEPENDENCIES:
@@ -39,7 +37,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Backendless
-    - Bolts
     - Crashlytics
     - Fabric
     - FBSDKCoreKit
@@ -52,17 +49,16 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: f2c7ff292e0dd225d63104f2218d4a987923d140
-  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
-  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
-  FBSDKCoreKit: a823ae35bdb60ebb8d7a7e51abe7c5d87d2bfced
-  FBSDKLoginKit: 54ae59987f2a8703021557c90a9aebb9e5c2bef6
-  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
+  Backendless: 17a9ffbac6d0440d7f8cbb71b7f061149e2afe15
+  Crashlytics: 5aa8e90dcbf2f34898b4f5a0037787531246cca0
+  Fabric: f6f21452846788bb44595d73e9909d79d328e617
+  FBSDKCoreKit: 4a19534474ade7c71bd016d800aa5e7722bcdda1
+  FBSDKLoginKit: 41efa754b909b0ea813fa9a8596dacc8ed196d50
+  IQKeyboardManager: 2ca9d64893247556f53523dcd8d78641f0ba7c23
   Realm: 601cacc51d8be3b17a377ef787be0f6ee0e76cf1
-  SDWebImage: 27dd2c9ea07a2252f94557c9fbb6105ee94b74c9
-  Socket.IO-Client-Swift: 21e6a8a23a7d367d5ddfab6cbbd3c679cf3c25d6
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  SDWebImage: 920f1a2ff1ca8296ad34f6e0510a1ef1d70ac965
+  Socket.IO-Client-Swift: 7cb44c0ffb86e158cee32d0642d30ec5fdcf8f61
+  Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
 PODFILE CHECKSUM: c754173765c8886999f1704d200cc43ae47cb175

@@ -165,9 +165,9 @@
     [_activityIndicator startAnimating];
     
     FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithReadPermissions: @[@"public_profile"]
+    [login logInWithPermissions: @[@"public_profile"]
                  fromViewController:self
-                            handler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
+                            handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
          if (error) {
              [self.activityIndicator stopAnimating];
              NSLog(@"Process error");

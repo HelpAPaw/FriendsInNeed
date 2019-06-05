@@ -18,9 +18,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "FBSDKAccessToken.h"
-#import "FBSDKAccessTokenCaching.h"
-
-@interface FBSDKAccessTokenCacheV4 : NSObject<FBSDKAccessTokenCaching>
+@interface FBSDKBasicUtility : NSObject
 
 @end

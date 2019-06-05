@@ -147,12 +147,12 @@
     {
         _dataManager = [FINDataManager sharedManager];
         _dataManager.mapDelegate = self;
+        [self checkForPrivacyPolicyAcceptance];
+        [self updateTitle];
         _viewDidAppearOnce = YES;
     }
     
     [self setupEnvironmentSwitching];
-    [self updateTitle];
-    [self checkForPrivacyPolicyAcceptance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -238,14 +238,6 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 
-- (void)updateMapToLastKnownUserLocation
-{
-    CLLocation *lastKnownUserLocation = [_locationManager getLastKnownUserLocation];
-    if (lastKnownUserLocation != nil)
-    {
-        [self updateMapToLocation:lastKnownUserLocation];
-    }
-}
 
 #pragma mark - FINLocationManagerMapDelegate
 - (void)updateMapToLocation:(CLLocation *)location
@@ -501,17 +493,21 @@
     
     if ([annotation.signal.signalID isEqualToString:_focusSignalID])
     {
-        [self focusAnnotation:annotation];
+        [self focusAnnotation:annotation andCenterOnMap:YES];
     }
 }
 
-- (void)focusAnnotation:(FINAnnotation *)annotation
+//TODO: test with notifications
+- (void)focusAnnotation:(FINAnnotation *)annotation andCenterOnMap:(BOOL)moveToCenter
 {
     self.pauseRefreshing = YES;
     [_mapView selectAnnotation:annotation animated:YES];
-    [self updateMapToLocation:[[CLLocation alloc] initWithLatitude:annotation.coordinate.latitude longitude:annotation.coordinate.longitude]];
-    
+    if (moveToCenter == YES)
+    {
+        [_mapView setCenterCoordinate:annotation.coordinate animated:YES];
+    }
     self.pauseRefreshing = NO;
+    
     _focusSignalID = nil;
 }
 
@@ -736,7 +732,6 @@
     CLLocation *loc3 = [[CLLocation alloc] initWithLatitude:region.center.latitude longitude:(region.center.longitude - region.span.longitudeDelta * 0.5)];
     NSInteger longitudeDeltaMeters = [loc3 distanceFromLocation:newCenter];
     NSInteger maxRadius = MAX(latitudeDeltaMeters, longitudeDeltaMeters);
-    NSLog(@"Shown radius is: %ld", (long)maxRadius);
     
     BOOL shouldRefresh = YES;
     if ((overrideDampening == NO) && (self.lastRefreshCenter != nil))

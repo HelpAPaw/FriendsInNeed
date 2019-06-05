@@ -82,9 +82,12 @@
                                                  name:kNotificationSettingTimeoutChanged
                                                object:nil];
     
-    UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidDragMap:)];
+    UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
     [dragGR setDelegate:self];
     [self.mapView addGestureRecognizer:dragGR];
+    UIPinchGestureRecognizer *pinchGR = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
+    [pinchGR setDelegate:self];
+    [self.mapView addGestureRecognizer:pinchGR];
     
     _cancelButton.tintColor = [UIColor redColor];
     _cancelButton.layer.shadowOpacity = 1.0f;
@@ -562,7 +565,7 @@
     return YES;
 }
 
-- (void)userDidDragMap:(UIGestureRecognizer*)gestureRecognizer
+- (void)userDidMoveMap:(UIGestureRecognizer*)gestureRecognizer
 {
     [_signalTitleField resignFirstResponder];
     

@@ -154,7 +154,7 @@ static const long INACTIVE_SECONDS_QUANTA[] =
     FBSDKTimeSpentPersistKeySessionID : _sessionID,
     };
 
-  NSString *content = [FBSDKInternalUtility JSONStringForObject:timeSpentData error:NULL invalidObjectHandler:NULL];
+  NSString *content = [FBSDKBasicUtility JSONStringForObject:timeSpentData error:NULL invalidObjectHandler:NULL];
 
   [content writeToFile:[FBSDKAppEventsUtility persistenceFilePath:FBSDKTimeSpentFilename]
             atomically:YES
@@ -203,7 +203,7 @@ static const long INACTIVE_SECONDS_QUANTA[] =
 
     } else {
 
-      NSDictionary *results = [FBSDKInternalUtility objectForJSONString:content error:NULL];
+      NSDictionary<id, id> *results = [FBSDKBasicUtility objectForJSONString:content error:NULL];
 
       _lastSuspendTime = [results[FBSDKTimeSpentPersistKeyLastSuspendTime] longValue];
 

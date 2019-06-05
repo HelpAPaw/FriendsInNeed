@@ -34,6 +34,7 @@
 
 + (instancetype)sharedManager;
 + (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId;
++ (BOOL)setNotificationShownForSignalId:(NSString *)signalId;
 
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;

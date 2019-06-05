@@ -17,6 +17,7 @@
 #import <Crashlytics/Crashlytics.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
+#import <Realm/Realm.h>
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 
@@ -32,10 +33,21 @@
                                     didFinishLaunchingWithOptions:launchOptions];
     
     IQKeyboardManager.sharedManager.enable = YES;
+    
+    // Setup Backendless
     [backendless initApp:BCKNDLSS_APP_ID APIKey:BCKNDLSS_IOS_API_KEY];
     [backendless.userService setStayLoggedIn:YES];
     [backendless.data mapTableToClass:@"Users" type:[BackendlessUser class]];
     
+    // Setup Realm
+    RLMRealm *realm = [RLMRealm defaultRealm];
+    // Get our Realm file's parent directory
+    NSString *folderPath = realm.configuration.fileURL.URLByDeletingLastPathComponent.path;
+    // Disable file protection for this directory
+    [[NSFileManager defaultManager] setAttributes:@{NSFileProtectionKey: NSFileProtectionNone}
+                                     ofItemAtPath:folderPath error:nil];
+    
+    // Setup Crashlytics
     [[Crashlytics sharedInstance] setDebugMode:YES];
     [Fabric with:@[[Crashlytics class]]];
     
@@ -47,7 +59,7 @@
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     [[UINavigationBar appearance] setTranslucent:NO];
-     UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
     
     FINMenuVC *menuVC = [[FINMenuVC alloc] initWithNibName:nil bundle:nil];
     
@@ -58,7 +70,7 @@
     menuVC.preferredContentSize = CGSizeMake(menuWidth, self.window.frame.size.height);
     
     IIViewDeckController *viewDeckController = [[IIViewDeckController alloc] initWithCenterViewController:navController
-                                                                                      leftViewController:menuVC];
+                                                                                       leftViewController:menuVC];
     
     self.window.rootViewController = viewDeckController;
     [self.window makeKeyAndVisible];
@@ -175,6 +187,21 @@
     }];
 }
 
+// Currently unused because this is called only when "content-available" property is set to 1 but in this case there is no notification
+// shown to the user. One possible solution is to send double notifications to iOS devices - one with "content-availabe" and
+// one without. For now we will just set the "notification shown" flag when the user opens it.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSString *category = [userInfo objectForKey:@"ios-category"];
+    if ([category isEqualToString:kNotificationCategoryNewSignal])
+    {
+        NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
+        [FINDataManager setNotificationShownForSignalId:signalId];
+    }
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
@@ -190,6 +217,7 @@
         {            
             NSDictionary *userInfo = request.content.userInfo;
             NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
+            [FINDataManager setNotificationShownForSignalId:signalId];
             [_mapVC setFocusSignalID:signalId];
         }
     }

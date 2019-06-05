@@ -11,6 +11,7 @@
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
 #import <SDWebImage/SDImageCache.h>
+#import "RLMSignal.h"
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
@@ -57,6 +58,37 @@
 + (NSString *)getDeviceRegistrationId
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceRegistrationIdKey];
+}
+
++ (BOOL)setNotificationShownForSignalId:(NSString *)signalId
+{
+    BOOL notificationAlreadyShown = NO;
+    RLMSignal *savedSignal;
+    RLMResults<RLMSignal *> *savedSignals = [RLMSignal objectsWhere:@"signalId == %@", signalId];
+    if (savedSignals.count > 0)
+    {
+        savedSignal = savedSignals.firstObject;
+        if (savedSignal.notificationShown == YES)
+        {
+            notificationAlreadyShown = YES;
+        }
+        else
+        {
+            savedSignal.notificationShown = YES;
+        }
+    }
+    else
+    {
+        savedSignal = [[RLMSignal alloc] init];
+        savedSignal.signalId = signalId;
+        savedSignal.notificationShown = YES;
+        RLMRealm *realm = [RLMRealm defaultRealm];
+        [realm transactionWithBlock:^{
+            [realm addObject:savedSignal];
+        }];
+    }
+    
+    return notificationAlreadyShown;
 }
 
 - (id)init
@@ -207,6 +239,12 @@
                 {
                     for (FINSignal *signal in newSignals)
                     {
+                        BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalID];
+                        if (notificationAlreadyShown)
+                        {
+                            continue;
+                        }
+                        
                         NSInteger badgeNumber = 0;
                         // Only show notifications about signals that haven't been solved yet
                         if (signal.status < FINSignalStatus2)

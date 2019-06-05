@@ -48,6 +48,7 @@
 		F35906071E058D4200A61060 /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906051E058D4200A61060 /* FINFaqVC.m */; };
 		F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F359060A1E059CC700A61060 /* FINFaqCell.m */; };
 		F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F359060B1E059CC700A61060 /* FINFaqCell.xib */; };
+		F369A8C322A6BBF8005183F9 /* RLMSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = F369A8C222A6BBF8005183F9 /* RLMSignal.m */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
@@ -180,6 +181,8 @@
 		F35906091E059CC700A61060 /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
 		F359060A1E059CC700A61060 /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
 		F359060B1E059CC700A61060 /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
+		F369A8C122A6BBF8005183F9 /* RLMSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RLMSignal.h; sourceTree = "<group>"; };
+		F369A8C222A6BBF8005183F9 /* RLMSignal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RLMSignal.m; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
 		F381ACCD1CE07E0B0050B238 /* FINError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINError.m; sourceTree = "<group>"; };
 		F38B72EB1C00E04F00FBE20C /* Help A Paw.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Help A Paw.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -373,6 +376,15 @@
 			name = Settings;
 			sourceTree = "<group>";
 		};
+		F369A8BD22A6BADD005183F9 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				F369A8C122A6BBF8005183F9 /* RLMSignal.h */,
+				F369A8C222A6BBF8005183F9 /* RLMSignal.m */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
 		F38B72E21C00E04F00FBE20C = {
 			isa = PBXGroup;
 			children = (
@@ -459,6 +471,7 @@
 		F39C394D1C9EA428007A2D8E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F369A8BD22A6BADD005183F9 /* Realm */,
 				F39C394A1C9EA305007A2D8E /* FINSignal.h */,
 				F39C394B1C9EA305007A2D8E /* FINSignal.m */,
 				F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */,
@@ -737,11 +750,12 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
@@ -753,6 +767,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
@@ -760,7 +775,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Help A Paw/Pods-Help A Paw-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -771,6 +786,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */,
+				F369A8C322A6BBF8005183F9 /* RLMSignal.m in Sources */,
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,

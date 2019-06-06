@@ -168,41 +168,39 @@
     [login logInWithPermissions: @[@"public_profile"]
                  fromViewController:self
                             handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
-         if (error) {
+         if (error)
+         {
              [self.activityIndicator stopAnimating];
-             NSLog(@"Process error");
-         } else if (result.isCancelled) {
+             [self showError:error.localizedDescription];
+         }
+         else if (result.isCancelled)
+         {
              [self.activityIndicator stopAnimating];
-             NSLog(@"Cancelled");
-         } else {
-             @try {
+         }
+         else
+         {
+             @try
+             {
                  FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
                  NSString *userId = token.userID;
                  NSString *tokenString = token.tokenString;
                  NSDate *expirationDate = token.expirationDate;
                  NSDictionary *fieldsMapping = @{@"email":@"email"};
-                 BackendlessUser *user = [backendless.userService loginWithFacebookSDK:userId tokenString:tokenString expirationDate:expirationDate fieldsMapping:fieldsMapping];
+                 [backendless.userService loginWithFacebookSDK:userId
+                                                   tokenString:tokenString
+                                                expirationDate:expirationDate
+                                                 fieldsMapping:fieldsMapping];
                  [self.activityIndicator stopAnimating];
                  
                  [self askForPrivacyPolicyAcceptanceAfterLogin];
-                 
-                 NSLog(@"USER: %@", user);
              }
-             @catch (Fault *fault) {
+             @catch (Fault *fault)
+             {
                  [self.activityIndicator stopAnimating];
-                 NSLog(@"fault: %@", fault);
+                 [self showError:fault.message];
              }
-             
-             NSLog(@"Logged in");
          }
      }];
-}
-
--(void)dismiss
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"Dismiss completed");
-    }];
 }
 
 - (IBAction)onRegisterButton:(id)sender
@@ -290,17 +288,7 @@
         }
         else
         {
-            NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
-            
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!", nil)
-                                                                           message:errorMessage
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                    style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {
-                                                                  }];
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:^{}];
+            [self showError:error.message];
         }
     }];
 }
@@ -321,17 +309,7 @@
             }
             else
             {
-                NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error.message];
-                
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
-                                                                               message:errorMessage
-                                                                        preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                      }];
-                [alert addAction:defaultAction];
-                [self presentViewController:alert animated:YES completion:^{}];
+                [self showError:error.message];
             }
         });
     }];
@@ -355,6 +333,21 @@
                                    //Do nothing
                                }];
                            }];
+}
+
+- (void)showError:(NSString *)error
+{
+    NSString *errorMessage = [NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Server said:\n%@",nil), error];
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)
+                                                                   message:errorMessage
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {
+                                                          }];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:^{}];
 }
 
 #pragma mark - UITextField Delegate

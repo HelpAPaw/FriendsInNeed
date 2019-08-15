@@ -177,14 +177,7 @@
 
 - (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [backendless.messaging registerDevice:deviceToken response:^(NSString *registeredDeviceId) {
-        //Get only the objectId part
-        NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
-        [FINDataManager saveDeviceRegistrationId:components[0]];
-        
-    }   error:^(Fault *fault) {
-        //Do nothing
-    }];
+    [[FINDataManager sharedManager] registerDeviceToken:deviceToken];
 }
 
 // Currently unused because this is called only when "content-available" property is set to 1 but in this case there is no notification

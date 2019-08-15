@@ -21,6 +21,7 @@
 #define kSettingTimeoutKey          @"kSettingTimeoutKey"
 #define kSettingTimeoutDefault      7
 #define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
+#define kDeviceTokenKey             @"kDeviceTokenKey"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -47,17 +48,6 @@
                   });
     
     return _sharedManager;
-}
-
-+ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId
-{
-    [[NSUserDefaults standardUserDefaults] setObject:deviceRegistrationId forKey:kDeviceRegistrationIdKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-+ (NSString *)getDeviceRegistrationId
-{
-    return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceRegistrationIdKey];
 }
 
 + (BOOL)setNotificationShownForSignalId:(NSString *)signalId
@@ -116,17 +106,21 @@
     return self;
 }
 
-- (void)saveInCloudNewDeviceLocation:(CLLocation *)location
+- (void)updateDeviceRegistrationWithLocation:(CLLocation *)location
 {
     //Apply dampening
-    if (   (self.lastSavedDeviceLocation != nil)
+    if (   (location != nil)
+        && (self.lastSavedDeviceLocation != nil)
         && ([self.lastSavedDeviceLocation distanceFromLocation:location] < kMinimumDistanceTravelled)   )
     {
         //Previously saved device location is too close
         return;
     }
     
-    self.lastSavedDeviceLocation = location;
+    if (location != nil)
+    {
+        self.lastSavedDeviceLocation = location;
+    }
     
     NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
     if (deviceRegistrationId != nil)
@@ -136,9 +130,16 @@
                    response:^(DeviceRegistration *deviceRegistration) {
                        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:@"signalRadius"];
                        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:@"signalTimeout"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.latitude] forKey:@"lastLatitude"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:location.coordinate.longitude] forKey:@"lastLongitude"];
-                       [dataStore save:deviceRegistration];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:self.lastSavedDeviceLocation.coordinate.latitude] forKey:@"lastLatitude"];
+                       [deviceRegistration setValue:[NSNumber numberWithDouble:self.lastSavedDeviceLocation.coordinate.longitude] forKey:@"lastLongitude"];
+                       
+                       @try {
+                           [dataStore save:deviceRegistration];
+                       } @catch (NSException *exception) {
+                           NSLog(@"An exception occurred: %@", exception);
+                       } @catch (Fault *fault) {
+                           NSLog(@"A fault occurred: %@", fault);
+                       }
                    }
                       error:^(Fault *fault) {
                           NSLog(@"Server reported an error: %@", fault);
@@ -303,7 +304,7 @@
 {
     [self getSignalsForLocation:location inRadius:self.radius overridingDampening:NO withCompletionHandler:completionHandler];
     
-    [self saveInCloudNewDeviceLocation:location];
+    [self updateDeviceRegistrationWithLocation:location];
 }
 
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -402,7 +403,7 @@
                 DeliveryOptions *deliveryOptions = [DeliveryOptions new];
                 deliveryOptions.pushSinglecast = deviceIds;
                 
-                [backendless.messaging publish:@"default"
+                [backendless.messaging publish:[self getCurrentNotificationChannel]
                                        message:title
                                 publishOptions:publishOptions
                                deliveryOptions:deliveryOptions
@@ -701,8 +702,12 @@
 
 - (void)setIsInTestMode:(BOOL)isInTestMode
 {
+    [backendless.messaging unregisterDevice];
+    
     _isInTestMode = isInTestMode;
     [self saveIsInTestMode:isInTestMode];
+    
+    [self registerDeviceToken:[FINDataManager getDeviceToken]];
 }
 
 - (BOOL)loadIsInTestMode
@@ -714,6 +719,60 @@
 {
     [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma MARK - Device token registration
+
++ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId
+{
+    [[NSUserDefaults standardUserDefaults] setObject:deviceRegistrationId forKey:kDeviceRegistrationIdKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getDeviceRegistrationId
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceRegistrationIdKey];
+}
+
++ (void)saveDeviceToken:(NSData *)deviceToken
+{
+    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:kDeviceTokenKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSData *)getDeviceToken
+{
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kDeviceTokenKey];
+}
+
+- (void)registerDeviceToken:(NSData *)deviceToken
+{
+    NSString *currentNotificationChannel = [self getCurrentNotificationChannel];
+    [backendless.messaging registerDevice:deviceToken
+                                 channels:@[currentNotificationChannel]
+                                 response:^(NSString *registeredDeviceId) {
+                                     //Get only the objectId part
+                                     NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
+                                     [FINDataManager saveDeviceRegistrationId:components[0]];
+                                     [FINDataManager saveDeviceToken:deviceToken];
+                                     
+                                     [self updateDeviceRegistrationWithLocation:nil];
+                                 }
+                                    error:^(Fault *fault) {
+                                        //Do nothing
+                                    }];
+}
+
+- (NSString *)getCurrentNotificationChannel
+{
+    if (_isInTestMode)
+    {
+        return @"debug";
+    }
+    else
+    {
+        return @"default";
+    }
 }
 
 #pragma MARK - Settings

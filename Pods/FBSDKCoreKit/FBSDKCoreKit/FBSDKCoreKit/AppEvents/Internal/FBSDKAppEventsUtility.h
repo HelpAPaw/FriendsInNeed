@@ -57,7 +57,6 @@ NS_SWIFT_NAME(AppEventsUtility)
 + (NSString *)flushReasonToString:(FBSDKAppEventsFlushReason)flushReason;
 + (void)logAndNotify:(NSString *)msg allowLogAsDeveloperError:(BOOL)allowLogAsDeveloperError;
 + (void)logAndNotify:(NSString *)msg;
-+ (NSString *)persistenceFilePath:(NSString *)filename;
 + (NSString *)tokenStringToUseFor:(FBSDKAccessToken *)token;
 + (BOOL)validateIdentifier:(NSString *)identifier;
 + (id)getVariable:(NSString *)variableName fromInstance:(NSObject *)instance;

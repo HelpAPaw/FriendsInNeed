@@ -33,9 +33,9 @@
 @interface FINDataManager : NSObject
 
 + (instancetype)sharedManager;
-+ (void)saveDeviceRegistrationId:(NSString *)deviceRegistrationId;
 + (BOOL)setNotificationShownForSignalId:(NSString *)signalId;
 
+- (void)updateDeviceRegistrationWithLocation:(CLLocation *)location;
 - (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
@@ -55,6 +55,7 @@
 - (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion;
 - (BOOL)getIsInTestMode;
 - (void)setIsInTestMode:(BOOL)isInTestMode;
+- (void)registerDeviceToken:(NSData *)deviceToken;
 
 - (NSInteger)getRadiusSetting;
 - (NSInteger)getTimeoutSetting;

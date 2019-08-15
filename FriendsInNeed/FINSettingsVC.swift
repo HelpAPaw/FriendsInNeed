@@ -46,6 +46,7 @@ class FINSettingsVC: UIViewController {
         
         FINDataManager.shared()?.setRadiusSetting(radiusValue)
         FINDataManager.shared()?.setTimeoutSetting(timeoutValue)
+        FINDataManager.shared()?.updateDeviceRegistration(with: nil)
     }
 
     @IBAction func closeButtonTapped(_ sender: Any) {

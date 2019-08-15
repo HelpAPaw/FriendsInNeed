@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
 
   NSMutableDictionary *loginParams = [NSMutableDictionary dictionary];
   loginParams[@"client_id"] = [FBSDKSettings appID];
-  loginParams[@"response_type"] = @"token,signed_request";
+  loginParams[@"response_type"] = @"token_or_nonce,signed_request";
   loginParams[@"redirect_uri"] = @"fbconnect://success";
   loginParams[@"display"] = @"touch";
   loginParams[@"sdk"] = @"ios";
@@ -480,7 +480,7 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
       [[FBSDKBridgeAPI sharedInstance] openURL:authURL sender:self handler:handlerWrapper];
     }
   } else {
-    error = error ?: [NSError fbErrorWithCode:FBSDKLoginErrorUnknown message:@"Failed to construct oauth browser url"];
+    error = error ?: [FBSDKError errorWithCode:FBSDKLoginErrorUnknown message:@"Failed to construct oauth browser url"];
     if (handler) {
       handler(NO, nil, error);
     }
@@ -519,12 +519,8 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
         annotation:(id)annotation
 {
   // verify the URL is intended as a callback for the SDK's log in
-  BOOL isFacebookURL = [url.scheme hasPrefix:[NSString stringWithFormat:@"fb%@", [FBSDKSettings appID]]] &&
+  return [url.scheme hasPrefix:[NSString stringWithFormat:@"fb%@", [FBSDKSettings appID]]] &&
   [url.host isEqualToString:@"authorize"];
-
-  BOOL isExpectedSourceApplication = [sourceApplication hasPrefix:@"com.facebook"] || [sourceApplication hasPrefix:@"com.apple"] || [sourceApplication hasPrefix:@"com.burbn"];
-
-  return isFacebookURL && isExpectedSourceApplication;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

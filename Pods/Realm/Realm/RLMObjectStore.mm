@@ -36,6 +36,8 @@
 #import "results.hpp"
 #import "shared_realm.hpp"
 
+#import <realm/group.hpp>
+
 #import <objc/message.h>
 
 using namespace realm;
@@ -116,7 +118,7 @@ void RLMVerifyHasPrimaryKey(Class cls) {
     RLMObjectSchema *schema = [cls sharedSchema];
     if (!schema.primaryKeyProperty) {
         NSString *reason = [NSString stringWithFormat:@"'%@' does not have a primary key and can not be updated", schema.className];
-        @throw [NSException exceptionWithName:@"RLMExecption" reason:reason userInfo:nil];
+        @throw [NSException exceptionWithName:@"RLMException" reason:reason userInfo:nil];
     }
 }
 

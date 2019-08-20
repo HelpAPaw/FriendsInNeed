@@ -164,10 +164,11 @@
 {
     [_activityIndicator startAnimating];
     
-    FBSDKLoginManager *login = [[FBSDKLoginManager alloc] init];
-    [login logInWithPermissions: @[@"public_profile"]
-                 fromViewController:self
-                            handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
+    FBSDKLoginManager *fbLoginManager = [[FBSDKLoginManager alloc] init];
+    [fbLoginManager logOut];
+    [fbLoginManager logInWithPermissions: @[@"public_profile", @"email"]
+                      fromViewController:self
+                                 handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
          if (error)
          {
              [self.activityIndicator stopAnimating];

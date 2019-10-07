@@ -1,24 +1,26 @@
 PODS:
-  - Backendless (5.4.0):
+  - Backendless (5.4.1):
     - Socket.IO-Client-Swift
-  - Crashlytics (3.13.4):
+  - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
-  - FBSDKCoreKit (5.3.0):
-    - FBSDKCoreKit/Basics (= 5.3.0)
-    - FBSDKCoreKit/Core (= 5.3.0)
-  - FBSDKCoreKit/Basics (5.3.0)
-  - FBSDKCoreKit/Core (5.3.0):
+  - FBSDKCoreKit (5.7.0):
+    - FBSDKCoreKit/Basics (= 5.7.0)
+    - FBSDKCoreKit/Core (= 5.7.0)
+  - FBSDKCoreKit/Basics (5.7.0)
+  - FBSDKCoreKit/Core (5.7.0):
     - FBSDKCoreKit/Basics
-  - FBSDKLoginKit (5.3.0):
+  - FBSDKLoginKit (5.7.0):
+    - FBSDKLoginKit/Login (= 5.7.0)
+  - FBSDKLoginKit/Login (5.7.0):
     - FBSDKCoreKit (~> 5.0)
-  - IQKeyboardManager (6.4.0)
-  - Realm (3.17.3):
-    - Realm/Headers (= 3.17.3)
-  - Realm/Headers (3.17.3)
-  - SDWebImage (5.1.0):
-    - SDWebImage/Core (= 5.1.0)
-  - SDWebImage/Core (5.1.0)
+  - IQKeyboardManager (6.5.0)
+  - Realm (3.19.0):
+    - Realm/Headers (= 3.19.0)
+  - Realm/Headers (3.19.0)
+  - SDWebImage (5.2.2):
+    - SDWebImage/Core (= 5.2.2)
+  - SDWebImage/Core (5.2.2)
   - Socket.IO-Client-Swift (15.1.0):
     - Starscream (~> 3.1)
   - Starscream (3.1.0)
@@ -49,14 +51,14 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: c075f2076139fdcab0540df70a21dc4ec55fe74a
-  Crashlytics: 2dfd686bcb918dc10ee0e76f7f853fe42c7bd552
+  Backendless: 3cd722334fa639296035ec00e35ad054e4b7afd8
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
-  FBSDKCoreKit: 39748deefe37a005f983722e433be2ddcdd83ae7
-  FBSDKLoginKit: bc0329e10045789e8d40b12d4f15ddbd07a898e2
-  IQKeyboardManager: fcef267266379c003181fc3592f6bdb8bf4db839
-  Realm: 5a1d9d47bfc101dd597668b1a8af4288a2557f6d
-  SDWebImage: fb387001955223213dde14bc08c8b73f371f8d8f
+  FBSDKCoreKit: 0d2d450fe9447e204fa6e912e0df76dd36693699
+  FBSDKLoginKit: 4127e8260b96e0e4cc8ba0c10c95ee63941aa24a
+  IQKeyboardManager: 700e5155d6a292383b54e8678aec769e14fc78fc
+  Realm: 995d585bcf699aaff226715886c849a29dd3d07f
+  SDWebImage: 5fcdb02cc35e05fc35791ec514b191d27189f872
   Socket.IO-Client-Swift: 7cb44c0ffb86e158cee32d0642d30ec5fdcf8f61
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca

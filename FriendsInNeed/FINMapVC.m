@@ -626,6 +626,7 @@
     }
     else
     {
+        //TODO: check if it is indeed FINAnnotation!
         FINAnnotation *ann = (FINAnnotation *)annotation;
         
         newAnnotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];

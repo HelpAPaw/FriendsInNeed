@@ -20,8 +20,9 @@
 
 #import <StoreKit/StoreKit.h>
 
+#import <FBSDKCoreKit/FBSDKCoreKit+Internal.h>
+
 #import "FBSDKAppEvents+Internal.h"
-#import "FBSDKCoreKit+Internal.h"
 #import "FBSDKDynamicFrameworkLoader.h"
 #import "FBSDKLogger.h"
 #import "FBSDKSettings.h"
@@ -44,6 +45,8 @@ static NSString *const FBSDKAppEventParameterNameTrialPeriod = @"fb_iap_trial_pe
 static NSString *const FBSDKAppEventParameterNameTrialPrice = @"fb_iap_trial_price";
 static int const FBSDKMaxParameterValueLength = 100;
 static NSMutableArray *g_pendingRequestors;
+
+static NSString *const FBSDKGateKeeperAppEventsIfAutoLogSubs = @"app_events_if_auto_log_subs";
 
 @interface FBSDKPaymentProductRequestor : NSObject<SKProductsRequestDelegate>
 
@@ -210,7 +213,6 @@ static NSMutableArray *g_pendingRequestors;
 {
   if ([self isSubscription:product] &&
       [FBSDKGateKeeperManager boolForKey:FBSDKGateKeeperAppEventsIfAutoLogSubs
-                                   appID:[FBSDKSettings appID]
                             defaultValue:NO]) {
     [self logImplicitSubscribeTransaction:self.transaction ofProduct:product];
   } else {

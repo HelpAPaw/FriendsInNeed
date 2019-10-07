@@ -43,8 +43,8 @@
 #define FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY @"smarstLoginBookmarkMenuURL"
 #define FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY @"SDKUpdateMessage"
 #define FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS  @"eventBindings"
-#define FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES @"restrictiveRules"
 #define FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS @"restrictiveParams"
+#define FBSDK_SERVER_CONFIGURATION_AAM_RULES @"AAMRules"
 #define FBSDK_SERVER_CONFIGURATION_VERSION_KEY @"version"
 #define FBSDK_SERVER_CONFIGURATION_TRACK_UNINSTALL_ENABLED_KEY @"trackAppUninstallEnabled"
 
@@ -103,8 +103,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
         smartLoginMenuIconURL:(NSURL *)smartLoginMenuIconURL
                 updateMessage:(NSString *)updateMessage
                 eventBindings:(NSArray *)eventBindings
-             restrictiveRules:(NSArray<NSDictionary<NSString *, id> *> *)restrictiveRules
             restrictiveParams:(NSDictionary<NSString *, id> *)restrictiveParams
+                     AAMRules:(NSDictionary<NSString *, id> *)AAMRules
 {
   if ((self = [super init])) {
     _appID = [appID copy];
@@ -131,8 +131,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
     _smartLoginBookmarkIconURL = [smartLoginBookmarkIconURL copy];
     _updateMessage = [updateMessage copy];
     _eventBindings = eventBindings;
-    _restrictiveRules = restrictiveRules;
     _restrictiveParams = restrictiveParams;
+    _AAMRules = AAMRules;
     _version = FBSDKServerConfigurationVersion;
   }
   return self;
@@ -218,8 +218,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
   NSURL *smartLoginMenuIconURL = [decoder decodeObjectOfClass:[NSURL class] forKey:FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY];
   NSString *updateMessage = [decoder decodeObjectOfClass:[NSString class] forKey:FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY];
   NSArray *eventBindings = [decoder decodeObjectOfClass:[NSArray class] forKey:FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS];
-  NSArray<NSDictionary<NSString *, id> *> *restrictiveRules = [decoder decodeObjectOfClass:[NSArray class] forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES];
   NSDictionary<NSString *, id> *restrictiveParams = [decoder decodeObjectOfClass:[NSDictionary class] forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS];
+  NSDictionary<NSString *, id> *AAMRules = [decoder decodeObjectOfClass:[NSDictionary class] forKey:FBSDK_SERVER_CONFIGURATION_AAM_RULES];
   NSInteger version = [decoder decodeIntegerForKey:FBSDK_SERVER_CONFIGURATION_VERSION_KEY];
   FBSDKServerConfiguration *configuration = [self initWithAppID:appID
                                                         appName:appName
@@ -245,8 +245,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
                                           smartLoginMenuIconURL:smartLoginMenuIconURL
                                                   updateMessage:updateMessage
                                                   eventBindings:eventBindings
-                                               restrictiveRules:restrictiveRules
                                               restrictiveParams:restrictiveParams
+                                                       AAMRules:AAMRules
                                              ];
   configuration->_version = version;
   return configuration;
@@ -280,8 +280,8 @@ implicitPurchaseLoggingEnabled:(BOOL)implicitPurchaseLoggingEnabled
   [encoder encodeObject:_smartLoginMenuIconURL forKey:FBSDK_SERVER_CONFIGURATION_SMART_LOGIN_MENU_ICON_URL_KEY];
   [encoder encodeObject:_updateMessage forKey:FBSDK_SERVER_CONFIGURATION_UPDATE_MESSAGE_KEY];
   [encoder encodeObject:_eventBindings forKey:FBSDK_SERVER_CONFIGURATION_EVENT_BINDINGS];
-  [encoder encodeObject:_restrictiveRules forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_RULES];
   [encoder encodeObject:_restrictiveParams forKey:FBSDK_SERVER_CONFIGURATION_RESTRICTIVE_PARAMS];
+  [encoder encodeObject:_AAMRules forKey:FBSDK_SERVER_CONFIGURATION_AAM_RULES];
   [encoder encodeInteger:_version forKey:FBSDK_SERVER_CONFIGURATION_VERSION_KEY];
 }
 

@@ -1,5 +1,5 @@
 PODS:
-  - Backendless (5.4.1):
+  - Backendless (5.5.0):
     - Socket.IO-Client-Swift
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
@@ -51,7 +51,7 @@ SPEC REPOS:
     - ViewDeck
 
 SPEC CHECKSUMS:
-  Backendless: 3cd722334fa639296035ec00e35ad054e4b7afd8
+  Backendless: 98c135ce4cab83b25e654416f0e209af8af86d33
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBSDKCoreKit: 0d2d450fe9447e204fa6e912e0df76dd36693699

@@ -188,12 +188,14 @@ enum
         case kSettings:
         {
             FINSettingsVC *settingsVC = [[FINSettingsVC alloc] initWithNibName:nil bundle:nil];
+            settingsVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:settingsVC animated:YES completion:nil];
             break;
         }
         case kFAQ:
         {
             FINFaqVC *facVC = [[FINFaqVC alloc] initWithNibName:nil bundle:nil];
+            facVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:facVC animated:YES completion:nil];
             break;
         }
@@ -205,12 +207,14 @@ enum
         case kPrivacyPolicy:
         {
             FINPrivacyPolicyVC *ppVC = [[FINPrivacyPolicyVC alloc] initWithNibName:nil bundle:nil];
+            ppVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:ppVC animated:YES completion:nil];
             break;
         }
         case kAbout:
         {
             FINAboutVC *aboutVC = [[FINAboutVC alloc] initWithNibName:nil bundle:nil];
+            aboutVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:aboutVC animated:YES completion:nil];
             break;
         }

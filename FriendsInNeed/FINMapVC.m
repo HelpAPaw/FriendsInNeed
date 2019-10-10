@@ -599,37 +599,10 @@
     {
         return nil;
     }
-    
-    MKAnnotationView *newAnnotationView;
-    
-    if (annotation == _submitSignalAnnotation)
+    else if ([annotation isKindOfClass:[FINAnnotation class]])
     {
-        MKPinAnnotationView *pinAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kSubmitSignalAnnotationView];
-        if (pinAnnotationView == nil)
-        {
-            pinAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kSubmitSignalAnnotationView];
-            pinAnnotationView.pinTintColor = kButtonBlueColor;
-            pinAnnotationView.animatesDrop = YES;
-            pinAnnotationView.draggable = YES;
-            pinAnnotationView.canShowCallout = NO;
-        }
-        else
-        {
-            pinAnnotationView.annotation = annotation;
-            pinAnnotationView.alpha = 1.0f;
-        }
-        
-        [pinAnnotationView setSelected:YES animated:YES];
-        
-        newAnnotationView = pinAnnotationView;
-        _submitSignalAnnotationView = pinAnnotationView;
-    }
-    else
-    {
-        //TODO: check if it is indeed FINAnnotation!
-        FINAnnotation *ann = (FINAnnotation *)annotation;
-        
-        newAnnotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
+        FINAnnotation *ann = (FINAnnotation *)annotation;        
+        MKAnnotationView *newAnnotationView = (MKAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kStandardSignalAnnotationView];
         if (newAnnotationView == nil)
         {
             newAnnotationView = [[MKAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kStandardSignalAnnotationView];
@@ -650,9 +623,33 @@
         UIImage *pinImage = [ann.signal createStatusImage];
         newAnnotationView.image = pinImage;
         newAnnotationView.centerOffset = CGPointMake(0, -20);
+        
+        return newAnnotationView;
+    }
+    else if ([annotation isKindOfClass:[MKPointAnnotation class]])
+    {
+        MKPinAnnotationView *pinAnnotationView = (MKPinAnnotationView *) [mapView dequeueReusableAnnotationViewWithIdentifier:kSubmitSignalAnnotationView];
+        if (pinAnnotationView == nil)
+        {
+            pinAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:kSubmitSignalAnnotationView];
+            pinAnnotationView.pinTintColor = kButtonBlueColor;
+            pinAnnotationView.animatesDrop = YES;
+            pinAnnotationView.draggable = YES;
+            pinAnnotationView.canShowCallout = NO;
+        }
+        else
+        {
+            pinAnnotationView.annotation = annotation;
+            pinAnnotationView.alpha = 1.0f;
+        }
+        
+        [pinAnnotationView setSelected:YES animated:YES];
+        
+        _submitSignalAnnotationView = pinAnnotationView;
+        return pinAnnotationView;
     }
     
-    return newAnnotationView;
+    return nil;
 }
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view

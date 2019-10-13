@@ -532,7 +532,7 @@ enum {
                 [self prepareCellFor:tableView AtIndexPath:indexPath];
                 _status = 3;
                 
-                [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:_annotation.signal completion:^(FINError *error) {
+                [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:_annotation.signal withCurrentComments:self.comments completion:^(FINError *error) {
                     if (error != nil) {
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
                         self.status = currentStatus;
@@ -594,7 +594,7 @@ enum {
     [_addCommentTextField resignFirstResponder];
 
     [self setSendingCommentMode];
-    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal completion:^(FINComment *comment, FINError *error) {
+    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
         
         [self resetSendingCommentMode];
         

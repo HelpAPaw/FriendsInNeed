@@ -53,6 +53,13 @@
     return user.name;
 }
 
+- (NSString *)authorId;
+{
+    BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    
+    return user.objectId;
+}
+
 - (NSString *)authorPhone
 {    
     BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
@@ -173,6 +180,22 @@
     }
     
     return statusImage;
+}
+
++ (NSString *)localizedStatusString:(FINSignalStatus)status
+{
+    switch (status) {
+        case FINSignalStatus2:
+            return NSLocalizedString(@"Solved", nil);
+            break;
+        case FINSignalStatus1:
+            return NSLocalizedString(@"Somebody on the way", nil);
+            break;
+            
+        default:
+            return NSLocalizedString(@"Help needed", nil);
+            break;
+    }
 }
 
 @end

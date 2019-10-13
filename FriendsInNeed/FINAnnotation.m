@@ -21,21 +21,7 @@
 
 - (void)updateAnnotationSubtitle
 {    
-    NSString *statusString;
-    
-    switch (_signal.status) {
-        case FINSignalStatus2:
-            statusString = NSLocalizedString(@"Solved",nil);
-            break;
-        case FINSignalStatus1:
-            statusString = NSLocalizedString(@"Somebody on the way",nil);
-            break;
-            
-        default:
-            statusString = NSLocalizedString(@"Help needed",nil);
-            break;
-    }
-    
+    NSString *statusString = [FINSignal localizedStatusString:_signal.status];    
     self.subtitle = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
 }
 

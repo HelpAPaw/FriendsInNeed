@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 - (void)setTitle:(NSString *)newTitle;
 
 - (NSString *)authorName;
+- (NSString *)authorId;
 - (NSString *)authorPhone;
 
 - (NSString *)dateString;
@@ -49,5 +50,6 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 
 
 - (UIImage *)createStatusImage;
++ (NSString *)localizedStatusString:(FINSignalStatus)status;
 
 @end

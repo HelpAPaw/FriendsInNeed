@@ -772,7 +772,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             [publishOptions assignHeaders:@{@"android-ticker-text":NSLocalizedString(@"New signal", nil),
                                             @"android-content-title":signal.title,
                                             @"ios-alert-title":signal.title,
-                                            @"ios-alert-subtitle":NSLocalizedString(@"New signal", nil),
                                             @"ios-badge":@1,
                                             @"ios-sound":@"default",
                                             @"signalId":signal.geoPoint.objectId,

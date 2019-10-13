@@ -864,12 +864,12 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             NSString *updateContent = @"";
             if (signalUpdate == SignalUpdateNewComment)
             {
-                updateType = @"New comment";
+                updateType = NSLocalizedString(@"New comment", nil);
                 updateContent = newComment;
             }
             else if (signalUpdate == SignalUpdateNewStatus)
             {
-                updateType = @"New status";
+                updateType = NSLocalizedString(@"New status", nil);
                 updateContent = [FINSignal localizedStatusString:newStatus];
             }
             

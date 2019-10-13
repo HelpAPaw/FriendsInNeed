@@ -21,7 +21,7 @@
 "I see" = "Разбрах";
 "Please fill all required fields" = "Моля попълнете всички задължителни полета";
 
-//FinMapVc.m
+//FinMapVC.m
 "Empty description" = "Празно описание";
 "Please enter a description of the signal." = "Моля въведете описание на сигнала.";
 "Your signal was submitted but the attached photo was not. The problem is:\n%@" = "Вашият сигнал беше приет, но снимката не. Проблемът е:\n%@";
@@ -75,3 +75,7 @@
 "days" = "дни";
 "kilometer" = "километър";
 "kilometers" = "километра";
+
+//FINDataManager (push notifications)
+"New comment" = "Нов коментар"
+"New status" = "Нов статус"

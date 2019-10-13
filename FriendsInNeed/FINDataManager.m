@@ -25,6 +25,11 @@
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
+typedef NS_ENUM(NSUInteger, SignalUpdate) {
+    SignalUpdateNewComment,
+    SignalUpdateNewStatus
+};
+
 
 @interface FINDataManager ()
 
@@ -372,52 +377,7 @@
         }
         
         //Send push notifications to all interested devices in the area
-        DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
-        [queryBuilder setRelationsDepth:1];
-        //Get all devices within 100km of the signal
-        [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", savedGeoPoint.latitude, savedGeoPoint.longitude]];
-        
-        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
-        [dataStore find:queryBuilder response:^(NSArray *devices) {
-            NSLog(@"Devices: %@", devices);
-            NSMutableArray *deviceIds = [NSMutableArray new];
-            for (NSDictionary *device in devices)
-            {
-                NSString *deviceId = [device objectForKey:@"deviceId"];
-                //Skip current device
-                if (![backendless.messaging.currentDevice.deviceId isEqualToString:deviceId])
-                {
-                    [deviceIds addObject:deviceId];
-                }
-            }
-            
-            if (deviceIds.count > 0)
-            {
-                PublishOptions *publishOptions = [PublishOptions new];
-                [publishOptions assignHeaders:@{@"ios-alert":title,
-                                                @"ios-badge":@1,
-                                                @"ios-sound":@"default",
-                                                @"signalId":savedGeoPoint.objectId,
-                                                @"ios-category":kNotificationCategoryNewSignal}];
-                
-                DeliveryOptions *deliveryOptions = [DeliveryOptions new];
-                deliveryOptions.pushSinglecast = deviceIds;
-                
-                [backendless.messaging publish:[self getCurrentNotificationChannel]
-                                       message:title
-                                publishOptions:publishOptions
-                               deliveryOptions:deliveryOptions
-                                      response:^(MessageStatus *status) {
-                                          NSLog(@"Status: %@", status);
-                                      }
-                                         error:^(Fault *fault) {
-                                             NSLog(@"Server reported an error: %@", fault);
-                                         }];
-            }
-            
-        } error:^(Fault *fault) {
-            NSLog(@"Error executing query: %@", fault.message);
-        }];
+        [self sendPushNotificationsForNewSignal:savedSignal];
         
     } error:^(Fault *fault) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -427,14 +387,17 @@
     }];
 }
 
-- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal completion:(void (^)(FINError *error))completion
+- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINError *error))completion
 {
     GeoPoint *point = [signal geoPoint];
     [point.metadata setObject:[NSString stringWithFormat:@"%lu", (unsigned long)status] forKey:kSignalStatusKey];
     
     [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
+        signal.geoPoint = returnedGeoPoint;
+        
+        [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
-            signal.geoPoint = returnedGeoPoint;
             completion(nil);
         });
     } error:^(Fault *fault) {
@@ -585,6 +548,8 @@
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID]];
     [queryBuilder setSortBy:@[@"created"]];
     [queryBuilder addRelated:@"author"];
+    //TODO: get ALL signals?
+    [queryBuilder setPageSize:100];
     
     id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
     [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
@@ -599,7 +564,7 @@
     }];
 }
 
-- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal completion:(void (^)(FINComment *comment, FINError *error))completion
+- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion
 {
     FINComment *comment = [FINComment new];
     comment.text = commentText;
@@ -610,8 +575,11 @@
     [commentsStore save:comment response:^(FINComment *comment) {
         BackendlessUser *author = backendless.userService.currentUser;
         [commentsStore setRelation:@"author" parentObjectId:comment.objectId childObjects:@[author.objectId] response:^(NSNumber *setRelations) {
+            comment.author = author;
+            
+            [self sendPushNotificationsForNewComment:commentText onSignal:signal withCurrentComments:currentComments];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                comment.author = author;
                 completion(comment, nil);
             });
         } error:^(Fault *fault) {
@@ -773,6 +741,169 @@
     {
         return @"default";
     }
+}
+
+#pragma MARK - Push notifications
+
+- (void)sendPushNotificationsForNewSignal:(FINSignal *)signal {
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setRelationsDepth:1];
+    //Get all devices within 100km of the signal
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", signal.geoPoint.latitude, signal.geoPoint.longitude]];
+    
+    id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+    [dataStore find:queryBuilder response:^(NSArray *devices) {
+        NSLog(@"Devices: %@", devices);
+        NSMutableArray *deviceIds = [NSMutableArray new];
+        for (NSDictionary *device in devices)
+        {
+            NSString *deviceId = [device objectForKey:@"deviceId"];
+            //Skip current device
+            if (![backendless.messaging.currentDevice.deviceId isEqualToString:deviceId])
+            {
+                [deviceIds addObject:deviceId];
+            }
+        }
+        
+        if (deviceIds.count > 0)
+        {
+            //TODO: add android headers
+            PublishOptions *publishOptions = [PublishOptions new];
+            [publishOptions assignHeaders:@{@"ios-alert":signal.title,
+                                            @"ios-badge":@1,
+                                            @"ios-sound":@"default",
+                                            @"signalId":signal.geoPoint.objectId,
+                                            @"ios-category":kNotificationCategoryNewSignal}];
+            
+            DeliveryOptions *deliveryOptions = [DeliveryOptions new];
+            deliveryOptions.pushSinglecast = deviceIds;
+            
+            [backendless.messaging publish:[self getCurrentNotificationChannel]
+                                   message:signal.title
+                            publishOptions:publishOptions
+                           deliveryOptions:deliveryOptions
+                                  response:^(MessageStatus *status) {
+                NSLog(@"Status: %@", status);
+            }
+                                     error:^(Fault *fault) {
+                NSLog(@"Server reported an error: %@", fault);
+            }];
+        }
+        
+    } error:^(Fault *fault) {
+        NSLog(@"Error executing query: %@", fault.message);
+    }];
+}
+
+- (void)sendPushNotificationsForNewComment:(NSString *)newComment
+                                  onSignal:(FINSignal *)signal
+                       withCurrentComments:(NSArray<FINComment *> *)currentComments
+{
+    [self sendPushNotificationsForUpdatedSignal:signal
+                            withCurrentComments:currentComments
+                                     updateType:SignalUpdateNewComment
+                                      newStatus:0
+                                     newComment:newComment];
+}
+
+- (void)sendPushNotificationsForNewStatus:(FINSignalStatus)newStatus
+                                 onSignal:(FINSignal *)signal
+                      withCurrentComments:(NSArray<FINComment *> *)currentComments
+{
+    [self sendPushNotificationsForUpdatedSignal:signal
+                            withCurrentComments:currentComments
+                                     updateType:SignalUpdateNewStatus
+                                      newStatus:newStatus
+                                     newComment:nil];
+}
+
+- (void)sendPushNotificationsForUpdatedSignal:(FINSignal *)signal
+                          withCurrentComments:(NSArray<FINComment *> *)currentComments
+                                   updateType:(SignalUpdate) signalUpdate
+                                    newStatus:(FINSignalStatus)newStatus
+                                   newComment:(NSString *)newComment
+{
+    // Use Set to ensure there are no double entries
+    NSMutableSet *interestedUserIds = [NSMutableSet new];
+    // Add author of the signal
+    [interestedUserIds addObject:signal.authorId];
+    // Add all people that posted comments
+    for (FINComment *comment in currentComments)
+    {
+        [interestedUserIds addObject:comment.author.objectId];
+    }
+    // Remove current user
+    [interestedUserIds removeObject:backendless.userService.currentUser.objectId];
+    
+    // Create a comma separated list
+    NSMutableString *userIds = [NSMutableString new];
+    for (NSString *string in interestedUserIds)
+    {
+        // Strings in the WHERE clause array need to be in single quotes
+        NSString *quotedString = [NSString stringWithFormat:@"'%@'", string];
+        [userIds length] > 0 ? [userIds appendFormat:@",%@", quotedString] : [userIds appendString:quotedString];
+    }
+    
+    // Build query
+    NSString *whereClause = [NSString stringWithFormat:@"user.objectid IN (%@)", userIds];
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setWhereClause:whereClause];
+        
+    id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
+    [dataStore find:queryBuilder response:^(NSArray *devices) {
+        NSMutableArray *deviceIds = [NSMutableArray new];
+        for (NSDictionary *device in devices)
+        {
+            NSString *deviceId = [device objectForKey:@"deviceId"];
+            [deviceIds addObject:deviceId];
+        }
+        
+        if (deviceIds.count > 0)
+        {
+            NSString *updateType = @"";
+            NSString *updateContent = @"";
+            if (signalUpdate == SignalUpdateNewComment)
+            {
+                updateType = @"New comment";
+                updateContent = newComment;
+            }
+            else if (signalUpdate == SignalUpdateNewStatus)
+            {
+                updateType = @"New status";
+                updateContent = [FINSignal localizedStatusString:newStatus];
+            }
+            
+            PublishOptions *publishOptions = [PublishOptions new];
+            [publishOptions assignHeaders:@{@"android-ticker-text":updateType,
+                                            @"android-content-title":signal.title,
+                                            @"android-content-text":updateContent,
+                                            @"ios-alert":updateContent,
+                                            @"ios-alert-title":updateType,
+                                            @"ios-alert-subtitle":signal.title,
+                                            @"ios-alert-body":updateContent,
+                                            @"ios-badge":@1,
+                                            @"ios-sound":@"default",
+                                            @"signalId":signal.geoPoint.objectId,
+                                            @"ios-category":kNotificationCategoryNewSignal}];
+            
+            DeliveryOptions *deliveryOptions = [DeliveryOptions new];
+            deliveryOptions.pushSinglecast = deviceIds;
+            
+            [backendless.messaging publish:[self getCurrentNotificationChannel]
+                                   message:updateContent
+                            publishOptions:publishOptions
+                           deliveryOptions:deliveryOptions
+                                  response:^(MessageStatus *status) {
+                NSLog(@"Status: %@", status);
+            }
+                                     error:^(Fault *fault) {
+                NSLog(@"Server reported an error: %@", fault);
+            }];
+        }
+        
+    } error:^(Fault *fault) {
+        NSLog(@"Error executing query: %@", fault.message);
+    }];
 }
 
 #pragma MARK - Settings

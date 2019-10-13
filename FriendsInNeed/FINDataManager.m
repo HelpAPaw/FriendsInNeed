@@ -745,7 +745,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 #pragma MARK - Push notifications
 
-- (void)sendPushNotificationsForNewSignal:(FINSignal *)signal {
+- (void)sendPushNotificationsForNewSignal:(FINSignal *)signal
+{
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setRelationsDepth:1];
     //Get all devices within 100km of the signal
@@ -767,9 +768,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         
         if (deviceIds.count > 0)
         {
-            //TODO: add android headers
             PublishOptions *publishOptions = [PublishOptions new];
-            [publishOptions assignHeaders:@{@"ios-alert":signal.title,
+            [publishOptions assignHeaders:@{@"android-ticker-text":NSLocalizedString(@"New signal", nil),
+                                            @"android-content-title":signal.title,
+                                            @"ios-alert-title":signal.title,
+                                            @"ios-alert-subtitle":NSLocalizedString(@"New signal", nil),
                                             @"ios-badge":@1,
                                             @"ios-sound":@"default",
                                             @"signalId":signal.geoPoint.objectId,
@@ -779,7 +782,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             deliveryOptions.pushSinglecast = deviceIds;
             
             [backendless.messaging publish:[self getCurrentNotificationChannel]
-                                   message:signal.title
+                                   message:NSLocalizedString(@"New signal", nil)
                             publishOptions:publishOptions
                            deliveryOptions:deliveryOptions
                                   response:^(MessageStatus *status) {

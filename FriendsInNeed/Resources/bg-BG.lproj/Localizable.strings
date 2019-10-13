@@ -77,5 +77,6 @@
 "kilometers" = "километра";
 
 //FINDataManager (push notifications)
-"New comment" = "Нов коментар"
-"New status" = "Нов статус"
+"New signal" = "Нов сигнал";
+"New comment" = "Нов коментар";
+"New status" = "Нов статус";

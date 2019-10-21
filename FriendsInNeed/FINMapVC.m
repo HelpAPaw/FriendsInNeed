@@ -577,6 +577,11 @@
 {
     [_signalTitleField resignFirstResponder];
     
+    if (_isInSubmitMode == YES)
+    {
+        self.submitSignalAnnotation.coordinate = self.mapView.centerCoordinate;
+    }
+    
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
         if ([gestureRecognizer isKindOfClass:[UIPinchGestureRecognizer class]])
@@ -592,6 +597,16 @@
 }
 
 #pragma mark - Map Delegate
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
+{
+    if (_isInSubmitMode == YES)
+    {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.submitSignalAnnotation.coordinate = self.mapView.centerCoordinate;
+        }];
+    }
+}
+
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id)annotation
 {
     // If the annotation is the user location, just return nil so the default annotation view is used

@@ -22,6 +22,7 @@
 #define kSettingTimeoutDefault      7
 #define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 #define kDeviceTokenKey             @"kDeviceTokenKey"
+#define kPageSize                   100
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -745,16 +746,25 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 #pragma MARK - Push notifications
 
+// Public method for sending push notifications for new signal
 - (void)sendPushNotificationsForNewSignal:(FINSignal *)signal
 {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setRelationsDepth:1];
+    [queryBuilder setPageSize:kPageSize];
     //Get all devices within 100km of the signal
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", signal.geoPoint.latitude, signal.geoPoint.longitude]];
     
+    [self sendPushNotificationsWith:queryBuilder offset:0 forSignal:signal];
+}
+
+// Internal method to recursively send notifications to all pages of interested devices
+- (void)sendPushNotificationsWith:(DataQueryBuilder *)queryBuilder offset:(int)offset forSignal:(FINSignal *)signal
+{
+    [queryBuilder setOffset:offset];
     id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
     [dataStore find:queryBuilder response:^(NSArray *devices) {
-        NSLog(@"Devices: %@", devices);
+        
         NSMutableArray *deviceIds = [NSMutableArray new];
         for (NSDictionary *device in devices)
         {
@@ -792,11 +802,16 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             }];
         }
         
+        if (devices.count == kPageSize) {
+            [self sendPushNotificationsWith:queryBuilder offset:(offset + kPageSize) forSignal:signal];
+        }
+        
     } error:^(Fault *fault) {
         NSLog(@"Error executing query: %@", fault.message);
     }];
 }
 
+// Public methods for sending push notifications for new status and comments
 - (void)sendPushNotificationsForNewComment:(NSString *)newComment
                                   onSignal:(FINSignal *)signal
                        withCurrentComments:(NSArray<FINComment *> *)currentComments
@@ -821,7 +836,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)sendPushNotificationsForUpdatedSignal:(FINSignal *)signal
                           withCurrentComments:(NSArray<FINComment *> *)currentComments
-                                   updateType:(SignalUpdate) signalUpdate
+                                   updateType:(SignalUpdate)signalUpdate
                                     newStatus:(FINSignalStatus)newStatus
                                    newComment:(NSString *)newComment
 {
@@ -850,7 +865,23 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *whereClause = [NSString stringWithFormat:@"user.objectid IN (%@)", userIds];
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
+    [queryBuilder setPageSize:kPageSize];
         
+    [self sendPushNotificationsWith:queryBuilder
+                             offset:0
+                          forSignal:signal
+                         updateType:signalUpdate
+                          newStatus:newStatus
+                         newComment:newComment];
+}
+
+// Internal method to recursively send notifications to all pages of interested devices
+- (void)sendPushNotificationsWith:(DataQueryBuilder *)queryBuilder
+                           offset:(int)offset
+                        forSignal:(FINSignal *)signal
+                       updateType:(SignalUpdate)signalUpdate
+                        newStatus:(FINSignalStatus)newStatus
+                       newComment:(NSString *)newComment {
     id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
     [dataStore find:queryBuilder response:^(NSArray *devices) {
         NSMutableArray *deviceIds = [NSMutableArray new];
@@ -901,6 +932,15 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                                      error:^(Fault *fault) {
                 NSLog(@"Server reported an error: %@", fault);
             }];
+        }
+        
+        if (devices.count == kPageSize) {
+            [self sendPushNotificationsWith:queryBuilder
+                offset:(offset + kPageSize)
+             forSignal:signal
+            updateType:signalUpdate
+             newStatus:newStatus
+            newComment:newComment];
         }
         
     } error:^(Fault *fault) {

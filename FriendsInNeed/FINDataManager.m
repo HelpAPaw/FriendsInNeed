@@ -543,25 +543,47 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_REST_API_KEY, kSignalPhotosDirectory, signal.signalID]];
 }
 
+// Public method for getting signal comments
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion
 {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID]];
     [queryBuilder setSortBy:@[@"created"]];
     [queryBuilder addRelated:@"author"];
-    //TODO: get ALL signals?
-    [queryBuilder setPageSize:100];
+    [queryBuilder setPageSize:kPageSize];
     
-    id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
-    [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
+    [self getCommentsWithQuery:queryBuilder offset:0 response:^(NSArray *comments) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(comments, nil);
         });
-    } error:^(Fault *fault) {
+    } error:^(FINError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
             completion(nil, error);
         });
+    }];
+}
+
+// Internal method to recursively getting all pages with comments
+- (void)getCommentsWithQuery:(DataQueryBuilder *)queryBuilder offset:(int)offset response:(void (^)(NSArray *comments))response error:(void (^)(FINError *error))failure
+{
+    [queryBuilder setOffset:offset];
+    id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
+    [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
+        if (comments.count == kPageSize)
+        {
+            [self getCommentsWithQuery:queryBuilder offset:(offset + kPageSize) response:^(NSArray *comments2) {
+                response([comments arrayByAddingObjectsFromArray:comments2]);
+            } error:^(FINError *error) {
+                failure(error);
+            }];
+        }
+        else
+        {
+            response(comments);
+        }
+    } error:^(Fault *fault) {
+        FINError *err = [[FINError alloc] initWithFault:fault];
+        failure(err);
     }];
 }
 

@@ -29,6 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
+@property (weak, nonatomic) IBOutlet UITextField *authorPhoneField;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendSignalButtonWidthConstraint;
@@ -274,7 +275,7 @@
         
        self.cancelButton.transform = CGAffineTransformMakeRotation(rotationAngle*M_PI);
         
-        CGRect frame =self.addSignalView.frame;
+        CGRect frame = self.addSignalView.frame;
         if (self.isInSubmitMode)
         {
             frame.origin.y += kAddSignalViewYbounce;

@@ -3,4 +3,6 @@
 "VRP-un-208.normalTitle" = "Send";
 
 /* Class = "UITextField"; placeholder = "signal description"; ObjectID = "gGJ-xu-E0V"; */
-"gGJ-xu-E0V.placeholder" = "signal description";
+"gGJ-xu-E0V.placeholder" = "Signal description";
+
+"3Gi-Gw-2Xp.placeholder" = "Your phone";

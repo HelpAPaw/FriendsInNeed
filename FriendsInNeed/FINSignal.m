@@ -62,9 +62,9 @@
 
 - (NSString *)authorPhone
 {    
-    BackendlessUser *user = [_geoPoint.metadata objectForKey:kSignalAuthorKey];
+    NSString *authorPhone = [_geoPoint.metadata objectForKey:kSignalAuthorPhoneKey];
     
-    return [user getProperty:kUserPropertyPhoneNumber];
+    return authorPhone;
 }
 
 

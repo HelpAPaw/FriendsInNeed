@@ -12,6 +12,7 @@
 
 #define kSignalTitleKey         @"title"
 #define kSignalAuthorKey        @"author"
+#define kSignalAuthorPhoneKey   @"authorPhone"
 #define kSignalDateSubmittedKey @"dateSubmitted"
 #define kSignalStatusKey        @"status"
 

@@ -330,7 +330,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
+- (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
     BackendlessUser *currentUser = backendless.userService.currentUser;
     
@@ -340,7 +340,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
     NSString *submitDate = [NSString stringWithFormat:@"%.3f", timeInterval];
     submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
-    NSDictionary *geoPointMeta = @{kSignalTitleKey:title, kSignalAuthorKey:currentUser, kSignalDateSubmittedKey:submitDate, kSignalStatusKey:@0};
+    NSDictionary *geoPointMeta = @{kSignalTitleKey:title,
+                                   kSignalAuthorKey:currentUser,
+                                   kSignalAuthorPhoneKey:authorPhone,
+                                   kSignalDateSubmittedKey:submitDate,
+                                   kSignalStatusKey:@0};
     NSMutableArray *cats = [NSMutableArray new];
     if (_isInTestMode)
     {

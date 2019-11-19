@@ -312,6 +312,7 @@
                     self.signalPhoto = nil;
                     
                     [self.signalTitleField resignFirstResponder];
+                    [self.authorPhoneField resignFirstResponder];
                 }
                 else
                 {

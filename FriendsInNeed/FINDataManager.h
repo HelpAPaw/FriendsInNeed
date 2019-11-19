@@ -48,6 +48,7 @@
 - (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value;
 - (NSString *)getUserName;
 - (NSString *)getUserEmail;
+- (NSString *)getUserPhone;
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email password:(NSString *)password phoneNumber:(NSString *)phoneNumber completion:(void (^)(FINError *error))completion;
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion;
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;

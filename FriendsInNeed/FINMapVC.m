@@ -264,6 +264,7 @@
         [_mapView addAnnotation:_submitSignalAnnotation];
         
         _signalTitleField.text = @"";
+        _authorPhoneField.text = [_dataManager getUserPhone];
     }
     else
     {

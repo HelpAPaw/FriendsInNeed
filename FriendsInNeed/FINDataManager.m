@@ -491,6 +491,18 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     return currentUser.email;
 }
 
+- (NSString *)getUserPhone
+{
+    BackendlessUser *currentUser = backendless.userService.currentUser;
+    if (currentUser != nil)
+    {
+        NSString *phone = [currentUser getProperty:kUserPropertyPhoneNumber];
+        return phone;
+    }
+    
+    return @"";
+}
+
 - (void)registerUser:(NSString *)name withEmail:(NSString *)email password:(NSString *)password phoneNumber:(NSString *)phoneNumber completion:(void (^)(FINError *error))completion
 {
     BackendlessUser *user = [BackendlessUser new];

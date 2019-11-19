@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,11 +13,11 @@
             <rect key="frame" x="0.0" y="0.0" width="609" height="273"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="609" height="272.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="609" height="273"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_paw.png" translatesAutoresizingMaskIntoConstraints="NO" id="i7Z-IZ-R4E" userLabel="Photo">
-                        <rect key="frame" x="240" y="11" width="128" height="128"/>
+                        <rect key="frame" x="240.5" y="11" width="128" height="128"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="128" id="2ld-zR-owd"/>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="128" id="H8B-Cc-89p"/>
@@ -29,32 +26,32 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dog hit by a car" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oxU-LU-43t" userLabel="Title">
-                        <rect key="frame" x="20" y="147" width="569" height="42"/>
+                        <rect key="frame" x="15" y="147" width="579" height="42"/>
                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xe4-u3-AGd" userLabel="Photo Number">
-                        <rect key="frame" x="357" y="118" width="11" height="21"/>
+                        <rect key="frame" x="357.5" y="118" width="11" height="21"/>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zSG-km-x6o">
-                        <rect key="frame" x="20" y="218" width="569" height="44"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zSG-km-x6o">
+                        <rect key="frame" x="15" y="218" width="579" height="44"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="44" id="3iI-nZ-iJ8"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Italic" family="Helvetica Neue" pointSize="12"/>
+                        <color key="tintColor" red="0.97647058823529409" green="0.50980392156862742" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <state key="normal" title=" 1234567890" image="ic_call.png">
-                            <color key="titleColor" red="0.42352941176470588" green="0.42352941176470588" blue="0.42352941176470588" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="titleColor" red="0.97647058823529409" green="0.50980392156862742" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="onCallButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Sbe-Rh-Rr1"/>
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UQT-kp-Xll" userLabel="Date">
-                        <rect key="frame" x="20" y="197" width="173" height="21"/>
+                        <rect key="frame" x="15" y="197" width="173" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="rti-IQ-c6D"/>
                         </constraints>
@@ -77,7 +74,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gCA-Lc-iFK" userLabel="Author">
-                        <rect key="frame" x="201" y="197" width="388" height="21"/>
+                        <rect key="frame" x="196" y="197" width="398" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="ENY-AL-0hp"/>
                         </constraints>

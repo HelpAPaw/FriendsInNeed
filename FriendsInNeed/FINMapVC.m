@@ -336,6 +336,7 @@
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
         [_signalTitleField resignFirstResponder];
+        [_authorPhoneField resignFirstResponder];
         [self showLoginScreen];
         return;
     }
@@ -388,6 +389,7 @@
     }];
     
     [_signalTitleField resignFirstResponder];
+    [_authorPhoneField resignFirstResponder];
 }
 
 - (IBAction)onAttachPhotoButton:(id)sender
@@ -579,6 +581,7 @@
 - (void)userDidMoveMap:(UIGestureRecognizer*)gestureRecognizer
 {
     [_signalTitleField resignFirstResponder];
+    [_authorPhoneField resignFirstResponder];
     
     if (_isInSubmitMode == YES)
     {
@@ -801,6 +804,7 @@
 - (void)menuButtonTapped:(id)sender
 {
     [_signalTitleField resignFirstResponder];
+    [_authorPhoneField resignFirstResponder];
     
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
 }

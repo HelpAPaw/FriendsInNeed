@@ -327,20 +327,32 @@
 }
 
 - (IBAction)onAddSignalButton:(id)sender
-{    
+{
+    if ([[FINDataManager sharedManager] userIsLogged] == NO)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"registration_required",nil)
+                                                                       message:NSLocalizedString(@"only_registered_users_can_submit_signals",nil)
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {
+                                                                  [self showLoginScreen];
+                                                              }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil)
+                                                              style:UIAlertActionStyleCancel
+                                                            handler:^(UIAlertAction * action) {}];
+        [alert addAction:okAction];
+        [alert addAction:cancelAction];
+        [self presentViewController:alert animated:YES completion:^{}];
+        
+        return;
+    }
+    
     [self toggleSubmitMode];
 }
 
 - (IBAction)onSendButton:(id)sender
 {
-    if ([[FINDataManager sharedManager] userIsLogged] == NO)
-    {
-        [_signalTitleField resignFirstResponder];
-        [_authorPhoneField resignFirstResponder];
-        [self showLoginScreen];
-        return;
-    }
-    
     // Input validation
     BOOL validation = [InputValidator validateGeneralInputFor:@[_signalTitleField] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
     if (!validation)

@@ -518,9 +518,24 @@ enum {
 {
     if (indexPath.section == kSectionIndexStatus)
     {
+        // Check if user is logged
         if ([[FINDataManager sharedManager] userIsLogged] == NO)
         {
-            [self showLoginScreen];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"registration_required",nil)
+                                                                           message:NSLocalizedString(@"only_registered_users_can_change_status",nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self showLoginScreen];
+                                                                  }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil)
+                                                                  style:UIAlertActionStyleCancel
+                                                                handler:^(UIAlertAction * action) {}];
+            [alert addAction:okAction];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+            
             return;
         }
         
@@ -578,13 +593,6 @@ enum {
 
 - (IBAction)onAddCommentButton:(id)sender
 {
-    if ([[FINDataManager sharedManager] userIsLogged] == NO)
-    {
-        [self.view endEditing:YES];
-        [self showLoginScreen];
-        return;
-    }
-    
     BOOL inputValidation = [InputValidator validateGeneralInputFor:@[_addCommentTextField] message:NSLocalizedString(@"Please enter a comment", nil) parent:self];
     if (!inputValidation)
     {
@@ -628,6 +636,38 @@ enum {
 }
 
 #pragma mark - UITextField Delegate
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField == _addCommentTextField)
+    {
+        if ([[FINDataManager sharedManager] userIsLogged] == NO)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"registration_required",nil)
+                                                                           message:NSLocalizedString(@"only_registered_users_can_comment",nil)
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
+                                                                    style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {
+                                                                      [self showLoginScreen];
+                                                                  }];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil)
+                                                                  style:UIAlertActionStyleCancel
+                                                                handler:^(UIAlertAction * action) {}];
+            [alert addAction:okAction];
+            [alert addAction:cancelAction];
+            [self presentViewController:alert animated:YES completion:^{}];
+            
+            return NO;
+        }
+        else
+        {
+            return YES;
+        }
+    }
+    
+    return YES;
+}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

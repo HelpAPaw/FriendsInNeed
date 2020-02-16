@@ -14,3 +14,11 @@
 "A3" = "When a signal is submitted it starts with status 'Help needed'. When somebody decides to answer the signal he/she changes the status to 'Somebody on the way' so that other people know. If for example the person arrives at the place but needs some assistance the status can be changed back to 'Help needed'. When the animal finally receives the needed help the signal is marked as 'Solved'. Signals are color-coded in red, orange and green according to their status.";
 "Q4" = "Does this app track my location?";
 "A4" = "No. Your location is obtained and used only locally on your device. It will not be recorded on a server or used with any other purpose beside notifying you of animals in need in your area.";
+
+//FINMapVC.m
+"registration_required" = "Registration required";
+"only_registered_users_can_submit_signals" = "Only registered users can submit signals";
+
+//FINSignalDetails.m
+"only_registered_users_can_change_status" = "Only registered users can change signal status";
+"only_registered_users_can_comment" = "Only registered users can write comments";

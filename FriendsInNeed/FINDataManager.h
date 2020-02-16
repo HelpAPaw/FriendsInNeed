@@ -53,7 +53,7 @@
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion;
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion;
-- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion;
+- (void)saveComment:(NSString *)commentText forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion;
 - (BOOL)getIsInTestMode;
 - (void)setIsInTestMode:(BOOL)isInTestMode;
 - (void)registerDeviceToken:(NSData *)deviceToken;

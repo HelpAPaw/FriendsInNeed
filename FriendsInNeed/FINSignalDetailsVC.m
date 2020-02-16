@@ -594,7 +594,7 @@ enum {
     [_addCommentTextField resignFirstResponder];
 
     [self setSendingCommentMode];
-    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSigna:_annotation.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
+    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSignal:_annotation.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
         
         [self resetSendingCommentMode];
         

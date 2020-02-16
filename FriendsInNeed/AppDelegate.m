@@ -18,6 +18,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
 #import <Realm/Realm.h>
+@import Firebase;
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 
@@ -48,8 +49,8 @@
                                      ofItemAtPath:folderPath error:nil];
     
     // Setup Crashlytics
-    [[Crashlytics sharedInstance] setDebugMode:YES];
     [Fabric with:@[[Crashlytics class]]];
+    [FIRApp configure];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     

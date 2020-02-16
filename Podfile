@@ -12,6 +12,7 @@ target "Help A Paw" do
     pod 'ViewDeck'
     pod 'Fabric'
     pod 'Crashlytics'
+    pod 'Firebase/Analytics'
     pod 'SDWebImage'
     pod 'FBSDKLoginKit'
     pod 'IQKeyboardManager'

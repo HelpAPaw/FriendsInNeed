@@ -603,7 +603,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
-- (void)saveComment:(NSString *)commentText forSigna:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion
+- (void)saveComment:(NSString *)commentText forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion
 {
     FINComment *comment = [FINComment new];
     comment.text = commentText;

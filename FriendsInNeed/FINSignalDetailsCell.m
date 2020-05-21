@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhotoView;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhotoNumber;
-@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
+@property (weak, nonatomic) IBOutlet UITextView *tvTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnCall;
@@ -65,8 +65,6 @@
     _lbPhotoNumber.layer.borderWidth = 0.5f;
     _lbPhotoNumber.layer.borderColor = [UIColor blackColor].CGColor;
     
-    _lbTitle.adjustsFontSizeToFitWidth = YES;
-    
     if (_phoneNumber)
     {
         _btnCall.hidden = NO;
@@ -87,7 +85,7 @@
 
 - (void)setTitle:(NSString *)title
 {
-    _lbTitle.text = title;
+    _tvTitle.text = title;
 }
 
 - (void)setAuthor:(NSString *)author

@@ -299,7 +299,6 @@ enum {
                 [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
             
-            
             cell = detailsCell;
             
             break;

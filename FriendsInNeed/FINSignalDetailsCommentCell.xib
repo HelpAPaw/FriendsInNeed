@@ -69,8 +69,8 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="lbAuthorLabel" destination="k3a-PC-YyD" id="3kc-ck-V4n"/>
-                <outlet property="lbCommentLabel" destination="oBT-Kt-Kgc" id="Su9-SW-uSM"/>
                 <outlet property="lbDateLabel" destination="Ifx-a0-nze" id="iCk-vG-rh1"/>
+                <outlet property="tvCommentText" destination="oBT-Kt-Kgc" id="Su9-SW-uSM"/>
                 <outlet property="vCellContainer" destination="5dX-sE-Lx9" id="dNn-ch-dat"/>
             </connections>
             <point key="canvasLocation" x="265" y="354.5"/>

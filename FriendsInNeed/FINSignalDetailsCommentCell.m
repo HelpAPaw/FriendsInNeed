@@ -12,7 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *lbDateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *lbCommentLabel;
+@property (weak, nonatomic) IBOutlet UITextView *tvCommentText;
 @property (weak, nonatomic) IBOutlet UIView *vCellContainer;
 
 @end
@@ -50,7 +50,7 @@
 
 - (void)setCommentText:(NSString *)text
 {
-    _lbCommentLabel.text = text;
+    _tvCommentText.text = text;
 }
 
 - (void)setAuthor:(NSString *)author

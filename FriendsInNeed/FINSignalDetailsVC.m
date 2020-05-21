@@ -455,7 +455,7 @@ enum {
     return cell;
 }
 // Code dublication with finMapVc
--(void) imageGetterFrom:(NSURL *)url forCell:(FINSignalDetailsCell *)cell {
+-(void)imageGetterFrom:(NSURL *)url forCell:(FINSignalDetailsCell *)cell {
     
     SDWebImageManager *manager = [SDWebImageManager sharedManager];
     [manager loadImageWithURL:url
@@ -497,8 +497,8 @@ enum {
             {
                 FINComment *comment = _comments[indexPath.row];
                 NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:18]}];
-                CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (15 * 2), 200} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
-                height = ceilf(rect.size.height) + 55;
+                CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (21 * 2), 200} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+                height = ceilf(rect.size.height) + 70;
             }
             else
             {

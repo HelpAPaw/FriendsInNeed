@@ -94,25 +94,28 @@
 
 - (FINSignalStatus)status
 {
-    FINSignalStatus status;
+    FINSignalStatus status = FINSignalStatus0;
     
-    NSString *statusString = [_geoPoint.metadata objectForKey:kSignalStatusKey];
-    if ([statusString isEqualToString:@"3"])
+    @try
     {
-        status = FINSignalStatus3;
-    }
-    else if ([statusString isEqualToString:@"2"])
-    {
-        status = FINSignalStatus2;
-    }
-    else if ([statusString isEqualToString:@"1"])
-    {
-        status = FINSignalStatus1;
-    }
-    else
-    {
-        status = FINSignalStatus0;
-    }
+        NSString *statusString = [_geoPoint.metadata objectForKey:kSignalStatusKey];
+        if ([statusString isEqualToString:@"3"])
+        {
+            status = FINSignalStatus3;
+        }
+        else if ([statusString isEqualToString:@"2"])
+        {
+            status = FINSignalStatus2;
+        }
+        else if ([statusString isEqualToString:@"1"])
+        {
+            status = FINSignalStatus1;
+        }
+        else
+        {
+            status = FINSignalStatus0;
+        }
+    } @catch (NSException *exception) {}
     
     return status;
 }

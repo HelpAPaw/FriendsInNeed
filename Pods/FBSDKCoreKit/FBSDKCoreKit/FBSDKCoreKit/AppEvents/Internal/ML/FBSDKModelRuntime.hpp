@@ -24,287 +24,310 @@
 #include <math.h>
 #include <stdint.h>
 #include <unordered_map>
-#include <unordered_set>
 
 #import <Accelerate/Accelerate.h>
 
-#include "FBSDKStandaloneModel.hpp"
+#include "FBSDKTensor.hpp"
 
 #define SEQ_LEN 128
-#define ALPHABET_SIZE 256
-#define EMBEDDING_SIZE 64
 #define DENSE_FEATURE_LEN 30
 
-const int CONV_BLOCKS[3][3] = {{32, 2, SEQ_LEN - 1}, {32, 3, SEQ_LEN - 2}, {32, 5, SEQ_LEN - 4}};
+namespace fbsdk {
 
-namespace mat1 {
-    static void relu(float *data, int len) {
-        float min = 0;
-        float max = FLT_MAX;
-        vDSP_vclip(data, 1, &min, &max, data, 1, len);
+static void relu(MTensor& x) {
+  float min = 0;
+  float max = FLT_MAX;
+  float *x_data = x.mutable_data();
+  vDSP_vclip(x_data, 1, &min, &max, x_data, 1, x.count());
+}
+
+static void flatten(MTensor& x, int start_dim) {
+  const std::vector<int>& shape = x.sizes();
+  std::vector<int> new_shape;
+  for (int i = 0; i < start_dim; i++) {
+    new_shape.push_back(shape[i]);
+  }
+  int count = 1;
+  for (int i = start_dim; i < shape.size(); i++) {
+    count *= shape[i];
+  }
+  new_shape.push_back(count);
+  x.Reshape(new_shape);
+}
+
+static MTensor concatenate(std::vector<MTensor *>& tensors) {
+  int n_examples = tensors[0]->size(0);
+  int count = 0;
+  for (int i = 0; i < tensors.size(); i++) {
+    count += tensors[i]->size(1);
+  }
+  MTensor y({n_examples, count});
+  float *y_data = y.mutable_data();
+  for (int i = 0; i < tensors.size(); i++) {
+    int this_count = (int)tensors[i]->size(1);
+    const float *this_data = tensors[i]->data();
+    for (int n = 0; n < n_examples; n++) {
+      memcpy(y_data + n * count, this_data + n * this_count, this_count * sizeof(float));
     }
+    y_data += this_count;
+  }
+  return y;
+}
 
-    static void concatenate(float *dst, float *a, float *b, int a_len, int b_len) {
-        memcpy(dst, a, a_len * sizeof(float));
-        memcpy(dst + a_len, b, b_len * sizeof(float));
+static void softmax(MTensor& x) {
+  int n_examples = x.size(0);
+  int n_channel = x.size(1);
+  float *x_data = x.mutable_data();
+  float max;
+  float sum;
+  for (int n = 0; n < n_examples; n++) {
+    vDSP_maxv(x_data, 1, &max, n_channel);
+    max = -max;
+    vDSP_vsadd(x_data, 1, &max, x_data, 1, n_channel);
+    vvexpf(x_data, x_data, &n_channel);
+    vDSP_sve(x_data, 1, &sum, n_channel);
+    vDSP_vsdiv(x_data, 1, &sum, x_data, 1, n_channel);
+    x_data += n_channel;
+  }
+}
+
+static std::vector<int> vectorize(const char *texts, const int seq_length) {
+  int str_len = (int)strlen(texts);
+  std::vector<int> vec(seq_length, 0);
+  for (int i = 0; i < seq_length; i++) {
+    if (i < str_len){
+      vec[i] = static_cast<unsigned char>(texts[i]);
     }
+  }
+  return vec;
+}
 
-    static void softmax(float *data, int n) {
-        int i = 0;
-        float max = FLT_MIN;
-        float sum = 0;
-
-        for (i = 0; i < n; i++) {
-            if (data[i] > max) {
-                max = data[i];
-            }
-        }
-
-        for (i = 0; i < n; i++){
-            data[i] = expf(data[i] - max);
-        }
-
-        for (i = 0; i < n; i++){
-            sum += data[i];
-        }
-
-        for (i = 0; i < n; i++){
-            data[i] = data[i] / sum;
-        }
+static MTensor embedding(const char *texts, const int seq_length, const MTensor& w) {
+  // TODO: T65152708 support batch prediction
+  const std::vector<int>& vec = vectorize(texts, seq_length);
+  int n_examples = 1;
+  int embedding_size = w.size(1);
+  MTensor y({n_examples, seq_length, embedding_size});
+  const float* w_data = w.data();
+  float *y_data = y.mutable_data();
+  for (int i = 0; i < n_examples; i++) {
+    for (int j = 0; j < seq_length; j++) {
+      memcpy(y_data, w_data + vec[i * seq_length + j] * embedding_size, (size_t)(embedding_size * sizeof(float)));
+      y_data += embedding_size;
     }
+  }
+  return y;
+}
 
-    static float* embedding(int *a, float *b, int n_examples, int seq_length, int embedding_size) {
-        int i,j,k,val;
-        float* res = (float *)malloc(sizeof(float) * (n_examples * seq_length * embedding_size));
-        for (i = 0; i < n_examples; i++) {
-            for (j = 0; j < seq_length; j++) {
-                val = a[i * seq_length + j];
-                for (k = 0; k < embedding_size; k++) {
-                    res[(embedding_size * seq_length) * i + embedding_size * j + k] = b[val * embedding_size + k];
-                }
-            }
-        }
-        return res;
-    }
+/*
+ x shape: n_examples, in_vector_size
+ w shape: in_vector_size, out_vector_size
+ b shape: out_vector_size
+ return shape: n_examples, out_vector_size
+ */
+static MTensor dense(const MTensor& x, const MTensor& w, const MTensor& b) {
+  int n_examples = x.size(0);
+  int in_vector_size = x.size(1);
+  int out_vector_size = w.size(1);
+  MTensor y({n_examples, out_vector_size});
+  float *y_data = y.mutable_data();
+  const float *b_data = b.data();
+  vDSP_mmul(x.data(), 1, w.data(), 1, y_data, 1, n_examples, out_vector_size, in_vector_size);
+  for (int i = 0; i < out_vector_size; i++) {
+    vDSP_vsadd(y_data + i, out_vector_size, b_data + i, y_data + i, out_vector_size, n_examples);
+  }
+  return y;
+}
 
-    /*
-        a shape: n_examples, in_vector_size
-        b shape: n_examples, out_vector_size
-        c shape: out_vector_size
-        return shape: n_examples, out_vector_size
-     */
-    static float* dense(float *a, float *b, float *c, int n_examples, int in_vector_size, int out_vector_size) {
-        int i,j;
-        float *m_res = (float *)malloc(sizeof(float) * (n_examples * out_vector_size));
-        vDSP_mmul(a, 1, b, 1, m_res, 1, n_examples, out_vector_size, in_vector_size);
-        for (i = 0; i < n_examples; i++) {
-            for (j = 0; j < out_vector_size; j++) {
-                m_res[i * out_vector_size + j] += c[j];
-            }
-        }
-        return m_res;
-    }
-
-    /*
-        x shape: n_examples, seq_len, input_size
-        w shape: kernel_size, input_size, output_size
-        return shape: n_examples, seq_len - kernel_size + 1, output_size
-     */
-    static float* conv1D(float *x, float *w, int n_examples, int seq_len, int input_size, int kernel_size, int output_size) {
-        int n, o, i, k, m;
-        float sum;
-        float *res = (float *)malloc(sizeof(float) * (n_examples * (seq_len - kernel_size + 1) * output_size));
-        float *temp_x = (float *)malloc(sizeof(float) * (kernel_size * input_size));
-        float *temp_w = (float *)malloc(sizeof(float) * (kernel_size * input_size));
-        for (n = 0; n < n_examples; n++){
-            for (o = 0; o < output_size; o++){
-                for (i = 0; i < seq_len - kernel_size + 1; i++) {
-                    sum = 0;
-                    for (m = 0; m < kernel_size; m++) {
-                        for (k = 0; k < input_size; k++) {
-                          temp_x[m * input_size + k] = x[n * (seq_len * input_size) + (m + i) * input_size + k];
-                          temp_w[m * input_size + k] = w[(m * input_size + k) * output_size + o];
-                        }
-                    }
-                    vDSP_dotpr(temp_x, 1, temp_w, 1, &sum, kernel_size * input_size);
-                    res[(n * (output_size * (seq_len - kernel_size + 1)) + i * output_size + o)] = sum;
-                }
-            }
-        }
-        free(temp_x);
-        free(temp_w);
-        return res;
-    }
-
-    /*
-       input shape: n_examples, len, n_channel
-       return shape: n_examples, len - pool_size + 1, n_channel
-    */
-    static float* maxPool1D(float *input, int n_examples, int input_len, int n_channel, int pool_size) {
-        int res_len = input_len - pool_size + 1;
-        float* res = (float *)calloc(n_examples * res_len * n_channel, sizeof(float));
-
-        for (int n = 0; n < n_examples; n++) {
-          for (int c = 0; c < n_channel; c++) {
-            for (int i  = 0; i < res_len; i++) {
-              for (int r = i; r < i + pool_size; r++) {
-                int res_pos = n * (n_channel * res_len) + i * n_channel + c;
-                int input_pos = n * (n_channel * input_len) + r * n_channel + c;
-                if (r == i) {
-                  res[res_pos] = input[input_pos];
-                } else {
-                  res[res_pos] = fmax(res[res_pos], input[input_pos]);
-                }
-              }
-            }
+/*
+ x shape: n_examples, seq_len, input_size
+ w shape: kernel_size, input_size, output_size
+ return shape: n_examples, seq_len - kernel_size + 1, output_size
+ */
+static MTensor conv1D(const MTensor& x, const MTensor& w) {
+  int n_examples = x.size(0);
+  int seq_len = x.size(1);
+  int input_size = x.size(2);
+  int kernel_size = w.size(0);
+  int output_size = w.size(2);
+  MTensor y({n_examples, seq_len - kernel_size + 1, output_size});
+  MTensor temp_x({kernel_size, input_size});
+  MTensor temp_w({kernel_size, input_size});
+  const float *x_data = x.data();
+  const float *w_data = w.data();
+  float *y_data = y.mutable_data();
+  float *temp_x_data = temp_x.mutable_data();
+  float *temp_w_data = temp_w.mutable_data();
+  float sum;
+  for (int n = 0; n < n_examples; n++){
+    for (int o = 0; o < output_size; o++){
+      for (int i = 0; i < seq_len - kernel_size + 1; i++) {
+        for (int m = 0; m < kernel_size; m++) {
+          for (int k = 0; k < input_size; k++) {
+            temp_x_data[m * input_size + k] = x_data[n * (seq_len * input_size) + (m + i) * input_size + k];
+            temp_w_data[m * input_size + k] = w_data[(m * input_size + k) * output_size + o];
           }
         }
-        return res;
+        vDSP_dotpr(temp_x_data, 1, temp_w_data, 1, &sum, (size_t)(kernel_size * input_size));
+        y_data[(n * (output_size * (seq_len - kernel_size + 1)) + i * output_size + o)] = sum;
+      }
     }
+  }
+  return y;
+}
 
-    static int* vectorize(const char *texts, int str_len, int max_len) {
-        int *res = (int *)malloc(sizeof(int) * max_len);
-        for (int i = 0; i < max_len; i++) {
-            if (i < str_len){
-                res[i] = static_cast<unsigned char>(texts[i]);
-            } else {
-                res[i] = 0;
-            }
+/*
+ input shape: n_examples, len, n_channel
+ return shape: n_examples, len - pool_size + 1, n_channel
+ */
+static MTensor maxPool1D(const MTensor& x, const int pool_size) {
+  int n_examples = x.size(0);
+  int input_len = x.size(1);
+  int n_channel = x.size(2);
+  int output_len = input_len - pool_size + 1;
+  MTensor y({n_examples, output_len, n_channel});
+  const float *x_data = x.data();
+  float *y_data = y.mutable_data();
+  for (int n = 0; n < n_examples; n++) {
+    for (int c = 0; c < n_channel; c++) {
+      for (int i  = 0; i < output_len; i++) {
+        float this_max = -FLT_MAX;
+        for (int r = i; r < i + pool_size; r++) {
+          this_max = fmax(this_max, x_data[n * (n_channel * input_len) + r * n_channel + c]);
         }
-        return res;
+        y_data[n * (n_channel * output_len) + i * n_channel + c] = this_max;
+      }
     }
+  }
+  return y;
+}
 
-    /*
-       input shape: m, n
-       return shape: n, m
-    */
-    static float* transpose2D(float *input, int m, int n) {
-        float *transposed = (float *)malloc(sizeof(float) * m * n);
-        for (int i = 0; i < m; i++){
-            for (int j = 0; j < n; j++) {
-                transposed[j * m + i] = input[i * n + j];
-            }
-        }
-        return transposed;
+/*
+ input shape: m, n
+ return shape: n, m
+ */
+static MTensor transpose2D(const MTensor& x) {
+  int m = x.size(0);
+  int n = x.size(1);
+  MTensor y({n, m});
+  float *y_data = y.mutable_data();
+  const float *x_data = x.data();
+  for (int i = 0; i < m; i++){
+    for (int j = 0; j < n; j++) {
+      y_data[j * m + i] = x_data[i * n + j];
     }
+  }
+  return y;
+}
 
-    /*
-       input shape: m, n, p
-       return shape: p, n, m
-    */
-    static float* transpose3D(float *input, int64_t m, int n, int p) {
-        float *transposed = (float *)malloc((size_t)(sizeof(float) * m * n * p));
-        for (int i = 0; i < m; i++){
-            for (int j = 0; j < n; j++) {
-                for (int k = 0; k < p; k++) {
-                    transposed[k * m * n + j * m + i] = input[i * n * p + j * p + k];
-                }
-            }
-        }
-        return transposed;
+/*
+ input shape: m, n, p
+ return shape: p, n, m
+ */
+static MTensor transpose3D(const MTensor& x) {
+  int m = x.size(0);
+  int n = x.size(1);
+  int p = x.size(2);
+  MTensor y({p, n, m});
+  float *y_data = y.mutable_data();
+  const float *x_data = x.data();
+  for (int i = 0; i < m; i++){
+    for (int j = 0; j < n; j++) {
+      for (int k = 0; k < p; k++) {
+        y_data[k * m * n + j * m + i] = x_data[i * n * p + j * p + k];
+      }
     }
+  }
+  return y;
+}
 
-    static float* add(float *a, float *b, int m, int n, int p) {
-        for(int i = 0; i < m * n; i++){
-            for(int j = 0; j < p; j++){
-                a[i * p + j] += b[j];
-            }
-        }
-        return a;
-    }
+static void addmv(MTensor& y, const MTensor& x) {
+  int m = y.size(0);
+  int n = y.size(1);
+  int p = y.size(2);
+  float *y_data = y.mutable_data();
+  const float *x_data = x.data();
+  for (int i = 0; i < p; i++) {
+    vDSP_vsadd(y_data + i, p, x_data + i, y_data + i, p, m * n);
+  }
+}
 
-    static float* predictOnText(const char *texts, std::unordered_map<std::string, mat::MTensor>& weights, float *df) {
-        int *x;
-        float *embed_x;
-        float *dense1_x;
-        float *dense2_x;
-        float *dense3_x;
-        float *c1;
-        float *c2;
-        float *c3;
-        float *ca;
-        float *cb;
-        float *cc;
+static MTensor getDenseTensor(const float *df) {
+  MTensor dense_tensor({1, DENSE_FEATURE_LEN});
+  if (df) {
+    memcpy(dense_tensor.mutable_data(), df, DENSE_FEATURE_LEN * sizeof(float));
+  } else {
+    memset(dense_tensor.mutable_data(), 0, DENSE_FEATURE_LEN * sizeof(float));
+  }
+  return dense_tensor;
+}
 
-        mat::MTensor& embed_t = weights.at("embed.weight");
-        mat::MTensor& conv1w_t = weights.at("convs.0.weight"); // (32, 64, 2)
-        mat::MTensor& conv2w_t = weights.at("convs.1.weight");
-        mat::MTensor& conv3w_t = weights.at("convs.2.weight");
-        mat::MTensor& conv1b_t = weights.at("convs.0.bias");
-        mat::MTensor& conv2b_t = weights.at("convs.1.bias");
-        mat::MTensor& conv3b_t = weights.at("convs.2.bias");
-        mat::MTensor& fc1w_t = weights.at("fc1.weight"); // (128, 126)
-        mat::MTensor& fc1b_t = weights.at("fc1.bias");  // 128
-        mat::MTensor& fc2w_t = weights.at("fc2.weight"); // (64, 128)
-        mat::MTensor& fc2b_t = weights.at("fc2.bias"); // 64
-        mat::MTensor& fc3w_t = weights.at("fc3.weight"); // (2, 64) or (4, 64)
-        mat::MTensor& fc3b_t = weights.at("fc3.bias"); // 2 or 4
+static MTensor predictOnMTML(const std::string task, const char *texts, const std::unordered_map<std::string, MTensor>& weights, const float *df) {
+  MTensor dense_tensor = getDenseTensor(df);
+  std::string final_layer_weight_key = task + ".weight";
+  std::string final_layer_bias_key = task + ".bias";
 
-        float *embed_weight = embed_t.data<float>();
-        float *convs_0_weight = transpose3D(conv1w_t.data<float>(), (int)conv1w_t.size(0), (int)conv1w_t.size(1), (int)conv1w_t.size(2)); // (2, 64, 32)
-        float *convs_1_weight = transpose3D(conv2w_t.data<float>(), (int)conv2w_t.size(0), (int)conv2w_t.size(1), (int)conv2w_t.size(2));
-        float *convs_2_weight = transpose3D(conv3w_t.data<float>(), (int)conv3w_t.size(0), (int)conv3w_t.size(1), (int)conv3w_t.size(2));
-        float *convs_0_bias = conv1b_t.data<float>();
-        float *convs_1_bias = conv2b_t.data<float>();
-        float *convs_2_bias = conv3b_t.data<float>();
-        float *fc1_weight = transpose2D(fc1w_t.data<float>(), (int)fc1w_t.size(0), (int)fc1w_t.size(1));
-        float *fc2_weight = transpose2D(fc2w_t.data<float>(), (int)fc2w_t.size(0), (int)fc2w_t.size(1));
-        float *fc3_weight = transpose2D(fc3w_t.data<float>(), (int)fc3w_t.size(0), (int)fc3w_t.size(1));
-        float *fc1_bias = fc1b_t.data<float>();
-        float *fc2_bias = fc2b_t.data<float>();
-        float *fc3_bias = fc3b_t.data<float>();
+  const MTensor& embed_t = weights.at("embed.weight");
+  const MTensor& conv0w_t = weights.at("convs.0.weight");
+  const MTensor& conv1w_t = weights.at("convs.1.weight");
+  const MTensor& conv2w_t = weights.at("convs.2.weight");
+  const MTensor& conv0b_t = weights.at("convs.0.bias");
+  const MTensor& conv1b_t = weights.at("convs.1.bias");
+  const MTensor& conv2b_t = weights.at("convs.2.bias");
+  const MTensor& fc1w_t = weights.at("fc1.weight"); // (128, 190)
+  const MTensor& fc1b_t = weights.at("fc1.bias"); // 128
+  const MTensor& fc2w_t = weights.at("fc2.weight"); // (64, 128)
+  const MTensor& fc2b_t = weights.at("fc2.bias"); // 64
+  const MTensor& final_layer_weight_t = weights.at(final_layer_weight_key); // (2, 64) or (5, 64)
+  const MTensor& final_layer_bias_t = weights.at(final_layer_bias_key); // 2 or 5
 
-        // vectorize text
-        x = vectorize(texts, (int)strlen(texts), SEQ_LEN);
+  const MTensor& convs_0_weight = transpose3D(conv0w_t);
+  const MTensor& convs_1_weight = transpose3D(conv1w_t);
+  const MTensor& convs_2_weight = transpose3D(conv2w_t);
+  const MTensor& fc1_weight = transpose2D(fc1w_t);
+  const MTensor& fc2_weight = transpose2D(fc2w_t);
+  const MTensor& final_layer_weight = transpose2D(final_layer_weight_t);
 
-        // embedding
-        embed_x = embedding(x, embed_weight, 1, SEQ_LEN, EMBEDDING_SIZE); // (1, 128, 64)
-        free(x);
+  // embedding
+  const MTensor& embed_x = embedding(texts, SEQ_LEN, embed_t);
 
-        // conv1D
-        c1 = conv1D(embed_x, convs_0_weight, 1, SEQ_LEN, EMBEDDING_SIZE, (int)conv1w_t.size(2), (int)conv1w_t.size(0)); // (1, 127, 32) CONV_BLOCKS[0][1], CONV_BLOCKS[0][0]
-        c2 = conv1D(embed_x, convs_1_weight, 1, SEQ_LEN, EMBEDDING_SIZE, (int)conv2w_t.size(2), (int)conv2w_t.size(0)); // (1, 126, 32)
-        c3 = conv1D(embed_x, convs_2_weight, 1, SEQ_LEN, EMBEDDING_SIZE, (int)conv3w_t.size(2), (int)conv3w_t.size(0)); // (1, 124, 32)
-        free(embed_x);
+  // conv0
+  MTensor c0 = conv1D(embed_x, convs_0_weight); // (1, 126, 32)
+  addmv(c0, conv0b_t);
+  relu(c0);
 
-        // add bias
-        add(c1, convs_0_bias, 1, (int)(SEQ_LEN - conv1w_t.size(2) + 1), (int)conv1w_t.size(0));
-        add(c2, convs_1_bias, 1, (int)(SEQ_LEN - conv2w_t.size(2) + 1), (int)conv2w_t.size(0));
-        add(c3, convs_2_bias, 1, (int)(SEQ_LEN - conv3w_t.size(2) + 1), (int)conv3w_t.size(0));
+  // conv1
+  MTensor c1 = conv1D(c0, convs_1_weight); // (1, 124, 64)
+  addmv(c1, conv1b_t);
+  relu(c1);
+  c1 = maxPool1D(c1, 2); // (1, 123, 64)
 
-        // relu
-        relu(c1, (int)(SEQ_LEN - conv1w_t.size(2) + 1) * (int)conv1w_t.size(0));
-        relu(c2, (int)(SEQ_LEN - conv2w_t.size(2) + 1) * (int)conv2w_t.size(0));
-        relu(c3, (int)(SEQ_LEN - conv3w_t.size(2) + 1) * (int)conv3w_t.size(0));
+  // conv2
+  MTensor c2 = conv1D(c1, convs_2_weight); // (1, 121, 64)
+  addmv(c2, conv2b_t);
+  relu(c2);
 
-        // max pooling
-        ca = maxPool1D(c1, 1, (int)(SEQ_LEN - conv1w_t.size(2) + 1), (int)conv1w_t.size(0), (int)(SEQ_LEN - conv1w_t.size(2) + 1)); // (1, 1, 32)
-        cb = maxPool1D(c2, 1, (int)(SEQ_LEN - conv2w_t.size(2) + 1), (int)conv2w_t.size(0), (int)(SEQ_LEN - conv2w_t.size(2) + 1)); // (1, 1, 32)
-        cc = maxPool1D(c3, 1, (int)(SEQ_LEN - conv3w_t.size(2) + 1), (int)conv3w_t.size(0), (int)(SEQ_LEN - conv3w_t.size(2) + 1)); // (1, 1, 32)
-        free(c1);
-        free(c2);
-        free(c3);
+  // max pooling
+  MTensor ca = maxPool1D(c0, c0.size(1));
+  MTensor cb = maxPool1D(c1, c1.size(1));
+  MTensor cc = maxPool1D(c2, c2.size(1));
 
-        // concatenate
-        float *concat = (float *)malloc((size_t)(sizeof(float) * (conv1w_t.size(0) + conv2w_t.size(0) + conv3w_t.size(0) + 30)));
-        concatenate(concat, ca, cb, (int)conv1w_t.size(0), (int)conv2w_t.size(0));
-        concatenate(concat + conv1w_t.size(0) + conv2w_t.size(0), cc, df, (int)conv3w_t.size(0), 30);
-        free(ca);
-        free(cb);
-        free(cc);
+  // concatenate
+  flatten(ca, 1);
+  flatten(cb, 1);
+  flatten(cc, 1);
+  std::vector<MTensor *> concat_tensors { &ca, &cb, &cc, &dense_tensor };
+  const MTensor& concat = concatenate(concat_tensors);
 
-        // dense + relu
-        dense1_x = dense(concat, fc1_weight, fc1_bias, 1, (int)fc1w_t.size(1), (int)fc1w_t.size(0));
-        free(concat);
-        relu(dense1_x, (int)fc1b_t.size(0));
-        dense2_x = dense(dense1_x, fc2_weight, fc2_bias, 1, (int)fc2w_t.size(1), (int)fc2w_t.size(0));
-        relu(dense2_x, (int)fc2b_t.size(0));
-        free(dense1_x);
-        dense3_x = dense(dense2_x, fc3_weight, fc3_bias, 1, (int)fc3w_t.size(1), (int)fc3w_t.size(0));
-        free(dense2_x);
-        softmax(dense3_x, (int)fc3b_t.size(0));
-        return dense3_x;
-    }
+  // dense + relu
+  MTensor dense1_x = dense(concat, fc1_weight, fc1b_t);
+  relu(dense1_x);
+  MTensor dense2_x = dense(dense1_x, fc2_weight, fc2b_t);
+  relu(dense2_x);
+  MTensor final_layer_dense_x = dense(dense2_x, final_layer_weight, final_layer_bias_t);
+  softmax(final_layer_dense_x);
+  return final_layer_dense_x;
+}
 }
 
 #endif

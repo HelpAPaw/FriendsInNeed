@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Backendless.h"
 
 @interface FINError : NSObject
 
-- (id)initWithFault:(Fault *)fault;
+@property (strong, nonatomic) NSString *message;
+
+- (id)initWithMessage:(NSString *)message;
 - (NSString *)message;
 
 @end

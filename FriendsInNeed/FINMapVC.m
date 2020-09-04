@@ -381,7 +381,7 @@
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           // Add new annotation to map and focus it when OK button is pressed
-                                                                          self.focusSignalID = savedSignal.signalID;
+                                                                          self.focusSignalID = savedSignal.signalId;
                                                                           [self addAnnotationToMapFromSignal:savedSignal];
                                                                       }];
                 [alert addAction:defaultAction];
@@ -390,7 +390,7 @@
             else
             {
                 // Add new annotation to map and focus it when OK button is pressed
-                self.focusSignalID = savedSignal.signalID;
+                self.focusSignalID = savedSignal.signalId;
                 [self addAnnotationToMapFromSignal:savedSignal];
             }
         }
@@ -496,7 +496,7 @@
         else
         {
             // Only remove not focused annotations
-            if (   ([ann.signal.signalID isEqualToString:signal.signalID] == YES)
+            if (   ([ann.signal.signalId isEqualToString:signal.signalId] == YES)
                 && ([_mapView.selectedAnnotations indexOfObject:ann] == NSNotFound)   )
             {
                 [_mapView removeAnnotation:ann];
@@ -509,7 +509,7 @@
     FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
     [_mapView addAnnotation:annotation];
     
-    if ([annotation.signal.signalID isEqualToString:_focusSignalID])
+    if ([annotation.signal.signalId isEqualToString:_focusSignalID])
     {
         [self focusAnnotation:annotation andCenterOnMap:YES];
     }

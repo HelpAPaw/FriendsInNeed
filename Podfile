@@ -8,7 +8,7 @@ inhibit_all_warnings!
 
 target "Help A Paw" do
     
-    pod 'Backendless'
+    pod 'BackendlessSwift'
     pod 'ViewDeck'
     pod 'Fabric'
     pod 'Crashlytics'
@@ -22,6 +22,6 @@ end
 
 target 'NotificationService' do
   
-    pod 'Backendless'
+    pod 'BackendlessSwift'
   
 end

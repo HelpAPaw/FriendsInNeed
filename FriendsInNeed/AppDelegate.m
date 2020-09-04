@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "Backendless.h"
+#import <Backendless-Swift.h>
 #import "FINMapVC.h"
 #import "FINMenuVC.h"
 #import "FINDataManager.h"
@@ -18,6 +18,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
 #import <Realm/Realm.h>
+#import <UserNotifications/UserNotifications.h>
 @import Firebase;
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
@@ -34,11 +35,6 @@
                                     didFinishLaunchingWithOptions:launchOptions];
     
     IQKeyboardManager.sharedManager.enable = YES;
-    
-    // Setup Backendless
-    [backendless initApp:BCKNDLSS_APP_ID APIKey:BCKNDLSS_IOS_API_KEY];
-    [backendless.userService setStayLoggedIn:YES];
-    [backendless.data mapTableToClass:@"Users" type:[BackendlessUser class]];
     
     // Setup Realm
     RLMRealm *realm = [RLMRealm defaultRealm];
@@ -82,12 +78,6 @@
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    @try {
-        [backendless initAppFault];
-    }
-    @catch (Fault *fault) {
-        NSLog(@"didFinishLaunchingWithOptions: %@", fault);
-    }
     return r;
 }
 

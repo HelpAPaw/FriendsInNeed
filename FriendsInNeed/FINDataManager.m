@@ -11,7 +11,10 @@
 #import "FINGlobalConstants.pch"
 #import <Crashlytics/Crashlytics.h>
 #import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <Backendless-Swift.h>
 #import "RLMSignal.h"
+@import UserNotifications;
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
@@ -24,7 +27,25 @@
 #define kDeviceTokenKey             @"kDeviceTokenKey"
 #define kPageSize                   100
 
-#import <SDWebImage/UIImageView+WebCache.h>
+#define kField_ObjectId             @"objectId"
+#define kField_Author               @"author"
+#define kField_AuthorPhone          @"authorPhone"
+#define kField_Location             @"location"
+#define kField_Status               @"status"
+#define kField_Title                @"title"
+#define kField_Type                 @"type"
+#define kField_Created              @"created"
+#define kField_SignalRadius         @"signalRadius"
+#define kField_SignalTimeout        @"signalTimeout"
+#define kField_LastLocation         @"lastLocation"
+#define kField_SignalId             @"signalID"
+#define kField_Text                 @"text"
+#define kField_Type                 @"type"
+
+
+#define kTable_DeviceRegistration   @"DeviceRegistration"
+#define kTable_Comments             @"FINComment"
+
 
 typedef NS_ENUM(NSUInteger, SignalUpdate) {
     SignalUpdateNewComment,
@@ -96,18 +117,19 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     
     [self loadSettings];
     
-    BOOL isValidUserToken = NO;
-    @try {
-        isValidUserToken = [backendless.userService isValidUserToken];
+    // Setup Backendless
+    [Backendless.shared initAppWithApplicationId:BCKNDLSS_APP_ID apiKey:BCKNDLSS_IOS_API_KEY];
+    [Backendless.shared.userService setStayLoggedIn:YES];
+    [Backendless.shared.userService isValidUserTokenWithResponseHandler:^(BOOL isValidUserToken) {
         if (isValidUserToken == NO)
         {
-            [backendless.userService logout];
+            [self logoutWithCompletion:^(FINError *error) {
+                //Do nothing
+            }];
         }
-    } @catch (NSException *exception) {
-        NSLog(@"Crashed with exception %@", exception);
-    } @catch (Fault *fault) {
-        NSLog(@"Fault: %@", fault);
-    }
+    } errorHandler:^(Fault * _Nonnull fault) {
+        //Do nothing
+    }];
     
     return self;
 }
@@ -131,27 +153,58 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
     if (deviceRegistrationId != nil)
     {
-        id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
-        [dataStore findById:deviceRegistrationId
-                   response:^(DeviceRegistration *deviceRegistration) {
-                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:@"signalRadius"];
-                       [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:@"signalTimeout"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:self.lastSavedDeviceLocation.coordinate.latitude] forKey:@"lastLatitude"];
-                       [deviceRegistration setValue:[NSNumber numberWithDouble:self.lastSavedDeviceLocation.coordinate.longitude] forKey:@"lastLongitude"];
-                       
-                       @try {
-                           [dataStore save:deviceRegistration];
-                       } @catch (NSException *exception) {
-                           NSLog(@"An exception occurred: %@", exception);
-                       } @catch (Fault *fault) {
-                           NSLog(@"A fault occurred: %@", fault);
-                       }
-                   }
-                      error:^(Fault *fault) {
-                          NSLog(@"Server reported an error: %@", fault);
-                      }
-         ];
+        //TODO: test
+        NSMutableDictionary *deviceRegistration = [NSMutableDictionary new];
+        [deviceRegistration setValue:deviceRegistrationId forKey:kField_ObjectId];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:kField_SignalRadius];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:kField_SignalTimeout];
+        NSString *lastLocation = [self getWktPointWithLongitude:self.lastSavedDeviceLocation.coordinate.longitude
+                                                    andLatitude:self.lastSavedDeviceLocation.coordinate.latitude];
+        [deviceRegistration setValue:lastLocation forKey:kField_LastLocation];
+        
+        MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
+        [dataStore updateWithEntity:deviceRegistration
+                    responseHandler:^(NSDictionary *updatedObject) {
+            NSLog(@"Object has been updated: %@", updatedObject); }
+                       errorHandler:^(Fault *fault) {
+            NSLog(@"Server reported an error: %@", fault);
+        }];
     }
+}
+
+- (NSString *)getWktPointWithLongitude:(double)longitude andLatitude:(double)latitude
+{
+    return [NSString stringWithFormat:@"Point (%.15f %.15f)", longitude, latitude];
+}
+
+- (NSURL *)getPhotoUrlForSignal:(FINSignal *)signal
+{
+    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_REST_API_KEY, kSignalPhotosDirectory, signal.signalId]];
+}
+
+- (FINSignal *)signalFromDictionary:(NSDictionary *)signalDict
+{
+    FINSignal *parsedSignal = [FINSignal new];
+    parsedSignal.signalId = [signalDict objectForKey:kField_ObjectId];
+    parsedSignal.title = [signalDict objectForKey:kField_Title];
+    NSNumber *statusNumber = [signalDict objectForKey:kField_Status];
+    parsedSignal.status = [statusNumber intValue];
+    BLPoint *locationPoint = [signalDict objectForKey:kField_Location];
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = locationPoint.latitude;
+    coordinate.longitude = locationPoint.longitude;
+    parsedSignal.coordinate = coordinate;
+    parsedSignal.authorPhone = [signalDict objectForKey:kField_AuthorPhone];
+    BackendlessUser *author = [signalDict objectForKey:kField_Author];
+    if ((author != nil) && ([author isKindOfClass:[BackendlessUser class]])) {
+        parsedSignal.authorId = author.objectId;
+        parsedSignal.authorName = author.name;
+    }
+    NSNumber *createdTimestampNumber = [signalDict objectForKey:kField_Created];
+    parsedSignal.dateCreated = [NSDate dateWithTimeIntervalSince1970:createdTimestampNumber.longValue/1000];
+    parsedSignal.photoUrl = [self getPhotoUrlForSignal:parsedSignal];
+    
+    return parsedSignal;
 }
 
 - (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -172,42 +225,32 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     // If new location is above minimum threshold - save it
     _lastSignalCheckLocation = location;
     
-    GEO_POINT center;
-    center.latitude = location.coordinate.latitude;
-    center.longitude = location.coordinate.longitude;
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithPoint:center radius:(radius * 1000) units:METERS categories:nil];
-    query.includeMeta = @YES;
-    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
-    query.whereClause = [NSString stringWithFormat:@"dateSubmitted > %lu", (long)([timeoutDate timeIntervalSince1970] * 1000)];
+    NSString *wktPoint = [self getWktPointWithLongitude:location.coordinate.longitude andLatitude:location.coordinate.latitude];
+    NSString *whereClause1 = [NSString stringWithFormat:@"distanceOnSphere(location, '%@') <= %ld", wktPoint, radius * 1000];
     
-    if (_isInTestMode)
-    {
-        NSMutableArray *cats = [NSMutableArray new];
-        [cats addObject:@"Debug"];
-        query.categories = cats;
-    }
+    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
+    NSString *whereClause2 = [NSString stringWithFormat:@"%@ > %lu", kField_Created, (long)([timeoutDate timeIntervalSince1970] * 1000)];
+    
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
     
     NSLog(@"Get signals for location: %@", location);
-    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
-        NSLog(@"Received %lu signals", (unsigned long)receivedGeoPoints.count);
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore findWithQueryBuilder:queryBuilder
+                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> *result) {
+        NSLog(@"Received %lu signals", (unsigned long)result.count);
         
         NSMutableArray *newSignals = [NSMutableArray new];
         NSMutableArray *tempNearbySignals = [NSMutableArray new];
-        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
+        for (NSDictionary *signalDict in result)
         {
-            // Is this protection really needed!?
-            if (!receivedGeoPoint)
-            {
-                continue;
-            }
-            // Convert received GeoPoint to FINSignal
-            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
-            
+            FINSignal *receivedSignal = [self signalFromDictionary:signalDict];
+
             // Check if the signal is already present
             BOOL alreadyPresent = NO;
             for (FINSignal *signal in self.nearbySignals)
             {
-                if ([signal.signalID isEqualToString:receivedSignal.signalID])
+                if ([signal.signalId isEqualToString:receivedSignal.signalId])
                 {
                     alreadyPresent = YES;
                     break;
@@ -217,81 +260,77 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             if (alreadyPresent == NO)
             {
                 [newSignals addObject:receivedSignal];
-                NSLog(@"New signal: %@", receivedSignal.title);                
+                NSLog(@"New signal: %@", receivedSignal.title);
             }
-            
-            receivedSignal.photoUrl = [self getPhotoUrlForSignal:receivedSignal];
-            
+
             // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
             [tempNearbySignals addObject:receivedSignal];
         }
-        
+
         self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // If application is currently active show received signals on map
-            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+
+        // If application is currently active show received signals on map
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+        {
+            [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
+            if (completionHandler)
             {
-                [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
+                CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
+                completionHandler(UIBackgroundFetchResultNewData);
+            }
+        }
+        // If not - show notification(s)
+        else
+        {
+            if (newSignals.count > 0)
+            {
+                NSInteger badgeNumber = 0;
+                for (FINSignal *signal in newSignals)
+                {
+                    BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalId];
+                    if (notificationAlreadyShown)
+                    {
+                        continue;
+                    }
+
+                    // Only show notifications about signals that haven't been solved yet
+                    if (signal.status < FINSignalStatus2)
+                    {
+                        badgeNumber++;
+
+                        // Create local notification and show it
+                        UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
+                        notifContent.body = signal.title;
+                        notifContent.sound = [UNNotificationSound defaultSound];
+                        notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
+
+                        NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                        [userInfo setObject:signal.signalId forKey:kNotificationSignalId];
+                        notifContent.userInfo = userInfo;
+
+                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
+                        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
+                    }
+                }
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
+
                 if (completionHandler)
                 {
                     CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }
-            // If not - show notification(s)
             else
             {
-                if (newSignals.count > 0)
+                if (completionHandler)
                 {
-                    NSInteger badgeNumber = 0;
-                    for (FINSignal *signal in newSignals)
-                    {
-                        BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalID];
-                        if (notificationAlreadyShown)
-                        {
-                            continue;
-                        }
-                        
-                        // Only show notifications about signals that haven't been solved yet
-                        if (signal.status < FINSignalStatus2)
-                        {
-                            badgeNumber++;
-                            
-                            // Create local notification and show it
-                            UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
-                            notifContent.body = signal.title;
-                            notifContent.sound = [UNNotificationSound defaultSound];
-                            notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
-                            
-                            NSMutableDictionary *userInfo = [NSMutableDictionary new];
-                            [userInfo setObject:signal.signalID forKey:kNotificationSignalId];
-                            notifContent.userInfo = userInfo;
-                            
-                            UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
-                            [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
-                        }
-                    }
-                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
-                    
-                    if (completionHandler)
-                    {
-                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
-                        completionHandler(UIBackgroundFetchResultNewData);
-                    }
-                }
-                else
-                {
-                    if (completionHandler)
-                    {
-                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
-                        completionHandler(UIBackgroundFetchResultNoData);
-                    }
+                    CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
+                    completionHandler(UIBackgroundFetchResultNoData);
                 }
             }
-        });
-        
-    } error:^(Fault *fault) {
+        }
+    }
+                       errorHandler:^(Fault *fault) {
         CLS_LOG(@"[FIN] Getting signals failed with error: %@", fault.description);
         
         self.lastSignalCheckLocation = nil;
@@ -332,131 +371,103 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
+    BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
+
+    NSDictionary *signalData = @{kField_Title:title,
+                                 kField_AuthorPhone:authorPhone,
+                                 kField_Location:[self getWktPointWithLongitude:locationCoordinate.longitude andLatitude:locationCoordinate.latitude],
+                                   kField_Status:@0};
     
-    GEO_POINT coordinate;
-    coordinate.latitude = locationCoordinate.latitude;
-    coordinate.longitude = locationCoordinate.longitude;
-    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
-    NSString *submitDate = [NSString stringWithFormat:@"%.3f", timeInterval];
-    submitDate = [submitDate stringByReplacingOccurrencesOfString:@"." withString:@""];
-    NSDictionary *geoPointMeta = @{kSignalTitleKey:title,
-                                   kSignalAuthorKey:currentUser,
-                                   kSignalAuthorPhoneKey:authorPhone,
-                                   kSignalDateSubmittedKey:submitDate,
-                                   kSignalStatusKey:@0};
-    NSMutableArray *cats = [NSMutableArray new];
-    if (_isInTestMode)
-    {
-        [cats addObject:@"Debug"];
-    }
-    GeoPoint *point = [GeoPoint geoPoint:coordinate categories:cats metadata:geoPointMeta];
     
-    [backendless.geoService savePoint:point response:^(GeoPoint *savedGeoPoint) {
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore saveWithEntity:signalData responseHandler:^(NSDictionary<NSString *,id> * _Nonnull savedSignalDict) {
         
-        FINSignal *savedSignal = [[FINSignal alloc] initWithGeoPoint:savedGeoPoint];
-        [self.nearbySignals addObject:savedSignal];
-        
-        if (photo)
-        {
-            NSString *fileName = [NSString stringWithFormat:@"%@/%@.jpg", kSignalPhotosDirectory, savedSignal.signalID];
-            [backendless.fileService uploadFile:fileName content:UIImageJPEGRepresentation(photo, 0.1) overwriteIfExist:YES response:^(BackendlessFile *savedFile) {
-                savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileURL];
-                [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileURL completion:^{
-                    dispatch_async(dispatch_get_main_queue(), ^{
+        [dataStore setRelationWithColumnName:kField_Author
+                              parentObjectId:savedSignalDict[kField_ObjectId]
+                           childrenObjectIds:@[currentUser.objectId]
+                             responseHandler:^(NSInteger relations) {
+            NSMutableDictionary *relatedSignalDict = [NSMutableDictionary dictionaryWithDictionary:savedSignalDict];
+            [relatedSignalDict setObject:currentUser forKey:kField_Author];
+            FINSignal *savedSignal = [self signalFromDictionary:relatedSignalDict];
+            [self.nearbySignals addObject:savedSignal];
+
+            if (photo)
+            {
+                NSString *fileName = [NSString stringWithFormat:@"%@.jpg", savedSignal.signalId];
+                [Backendless.shared.fileService uploadFileWithFileName:fileName
+                                                              filePath:kSignalPhotosDirectory
+                                                           fileContent:UIImageJPEGRepresentation(photo, 0.1)
+                                                             overwrite:YES
+                                                       responseHandler:^(BackendlessFile * _Nonnull savedFile) {
+                    savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileUrl];
+                    [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileUrl completion:^{
                         completion(savedSignal, nil);
-                    });
-                }];
-            } error:^(Fault *fault) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    FINError *error = [[FINError alloc] initWithFault:fault];
+                    }];
+                } errorHandler:^(Fault * _Nonnull fault) {
+                    FINError *error = [[FINError alloc] initWithMessage:fault.message];
                     completion(savedSignal, error);
-                });
-            }];
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
+                }];
+            }
+            else
+            {
                 completion(savedSignal, nil);
-            });
-        }
-        
-        //Send push notifications to all interested devices in the area
-        [self sendPushNotificationsForNewSignal:savedSignal];
-        
-    } error:^(Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
+            }
+
+            //Send push notifications to all interested devices in the area
+            [self sendPushNotificationsForNewSignal:savedSignal];
+        } errorHandler:^(Fault * _Nonnull fault) {
+            FINError *error = [[FINError alloc] initWithMessage:fault.message];
             completion(nil, error);
-        });
+        }];
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(nil, error);
     }];
 }
 
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINError *error))completion
 {
-    GeoPoint *point = [signal geoPoint];
-    [point.metadata setObject:[NSString stringWithFormat:@"%lu", (unsigned long)status] forKey:kSignalStatusKey];
-    
-    [backendless.geoService savePoint:point response:^(GeoPoint *returnedGeoPoint) {
-        signal.geoPoint = returnedGeoPoint;
-        
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    NSMutableDictionary *changes = [NSMutableDictionary new];
+    [changes setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kField_Status];
+    [dataStore updateBulkWithWhereClause:[NSString stringWithFormat:@"%@ = '%@'", kField_ObjectId, signal.signalId]
+                                 changes:changes
+                         responseHandler:^(NSInteger updated) {
         [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(nil);
-        });
-    } error:^(Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{            
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(error);
-        });
+        signal.status = status;
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
     }];
 }
-
-- (void)getSignalWithID:(NSString *)signalID completion:(void (^)(FINSignal *signal, FINError *error))completion
+//TODO: get it from cache if present!?
+- (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
-    NSMutableArray *cats = [NSMutableArray new];
-    if (_isInTestMode)
-    {
-        [cats addObject:@"Debug"];
-    }
-    
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:cats];
-    query.whereClause = [NSString stringWithFormat:@"objectid='%@'", signalID];
-    [query includeMeta:YES];
-    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *geoPoints) {
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore findByIdWithObjectId:signalId
+                    responseHandler:^(NSDictionary<NSString *,id> * _Nonnull signalDict) {
         
-        if (geoPoints.count > 0)
-        {
-            GeoPoint *geoPoint = (GeoPoint *) geoPoints.firstObject;
-            FINSignal *signal = [[FINSignal alloc] initWithGeoPoint:geoPoint];
-            signal.photoUrl = [self getPhotoUrlForSignal:signal];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(signal, nil);
-            });
-        }
-    } error:^(Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(nil, error);
-        });
+        FINSignal *signal = [self signalFromDictionary:signalDict];
+        completion(signal, nil);
+        
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(nil, error);
     }];
 }
 
 - (BOOL)userIsLogged
-{
-    BackendlessUser *currentUser = backendless.userService.currentUser;
-    
-    return (currentUser != nil);
+{    
+    return Backendless.shared.userService.currentUser != nil;
 }
 
 - (BOOL)getUserHasAcceptedPrivacyPolicy
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
+    BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
     if (currentUser != nil)
     {
-        NSNumber *acceptedPrivacyPolicy = [currentUser getProperty:kUserPropertyAcceptedPrivacyPolicy];
+        NSNumber *acceptedPrivacyPolicy = currentUser.properties[kUserPropertyAcceptedPrivacyPolicy];
         return [acceptedPrivacyPolicy boolValue];
     }
     
@@ -465,13 +476,14 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
+    BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
     if (currentUser != nil)
     {
-        [currentUser setProperty:kUserPropertyAcceptedPrivacyPolicy object:[NSNumber numberWithBool:value]];
-        [backendless.userService update:currentUser response:^(BackendlessUser *updatedUser) {
+        NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithDictionary:currentUser.properties];
+        [properties setObject:[NSNumber numberWithBool:value] forKey:kUserPropertyAcceptedPrivacyPolicy];
+        [Backendless.shared.userService updateWithUser:currentUser responseHandler:^(BackendlessUser * _Nonnull updatedUser) {
             //Do nothing, be happy
-        } error:^(Fault *fault) {
+        } errorHandler:^(Fault * _Nonnull fault) {
             //Do nothing, be sad
         }];
     }
@@ -479,25 +491,23 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (NSString *)getUserName
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
-    
-    return currentUser.name;
+    return Backendless.shared.userService.currentUser.name;
 }
 
 - (NSString *)getUserEmail
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
-    
-    return currentUser.email;
+    return Backendless.shared.userService.currentUser.email;
 }
 
 - (NSString *)getUserPhone
 {
-    BackendlessUser *currentUser = backendless.userService.currentUser;
+    BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
     if (currentUser != nil)
     {
-        NSString *phone = [currentUser getProperty:kUserPropertyPhoneNumber];
-        return phone;
+        NSString *phone = currentUser.properties[kUserPropertyPhoneNumber];
+        if ([phone isKindOfClass:[NSString class]]) {
+            return phone;
+        }
     }
     
     return @"";
@@ -509,86 +519,107 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     user.name = name;
     user.email = email;
     user.password = password;
-    [user setProperty:kUserPropertyPhoneNumber object:phoneNumber];
-    [user setProperty:kUserPropertyAcceptedPrivacyPolicy object:[NSNumber numberWithBool:YES]];    
-    
-    [backendless.userService registerUser:user response:^void (BackendlessUser *registeredUser) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(nil);
-        });
-    } error:^void (Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(error);
-        });
+    NSMutableDictionary *properties = [NSMutableDictionary new];
+    [properties setObject:phoneNumber forKey:kUserPropertyPhoneNumber];
+    [properties setObject:[NSNumber numberWithBool:YES] forKey:kUserPropertyAcceptedPrivacyPolicy];
+    [user setProperties:properties];
+
+    [Backendless.shared.userService registerUserWithUser:user
+                                         responseHandler:^(BackendlessUser * _Nonnull registeredUser) {
+        completion(nil);
+    }
+                                            errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
     }];
 }
 
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
-    [backendless.userService login:email password:password response:^void (BackendlessUser *loggeduser) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
-                                                                object:nil];
-            completion(nil);
-        });
-    } error:^void (Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(error);
-        });
+    [Backendless.shared.userService loginWithIdentity:email
+                                             password:password
+                                      responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
+                                                            object:nil];
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
+- (void)loginWithFacebookAccessToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion
+{
+    NSDictionary *fieldsMapping = @{@"email":@"email"};
+    [Backendless.shared.userService logingWithFacebookWithAccessToken:tokenString
+                                                        fieldsMapping:fieldsMapping
+                                                      responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
+                                                            object:nil];
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
     }];
 }
 
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion
 {
-    [backendless.userService logout:^void () {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(nil);
-        });
-    } error:^void (Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completion(error);
-        });
+    [Backendless.shared.userService logoutWithResponseHandler:^{
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
     }];
-}
-
-- (NSURL *)getPhotoUrlForSignal:(FINSignal *)signal
-{
-    return [NSURL URLWithString:[NSString stringWithFormat:@"https://api.backendless.com/%@/%@/files/%@/%@.jpg", BCKNDLSS_APP_ID, BCKNDLSS_REST_API_KEY, kSignalPhotosDirectory, signal.signalID]];
 }
 
 // Public method for getting signal comments
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion
 {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
-    [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalID = \'%@\'", signal.signalID]];
-    [queryBuilder setSortBy:@[@"created"]];
-    [queryBuilder addRelated:@"author"];
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalId = \'%@\'", signal.signalId]];
+    [queryBuilder setSortBy:@[kField_Created]];
+    [queryBuilder addRelatedWithRelated:kField_Author];
     [queryBuilder setPageSize:kPageSize];
     
     [self getCommentsWithQuery:queryBuilder offset:0 response:^(NSArray *comments) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(comments, nil);
-        });
+        completion(comments, nil);
     } error:^(FINError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(nil, error);
-        });
+        completion(nil, error);
     }];
+}
+
+- (FINComment *)parseComment:(NSDictionary *)commentDict {
+    FINComment *comment = [FINComment new];
+    comment.text = [commentDict objectForKey:kField_Text];
+    comment.type = [commentDict objectForKey:kField_Type];
+    comment.objectId = [commentDict objectForKey:kField_ObjectId];
+    NSNumber *createdTimestamp = [commentDict objectForKey:kField_Created];;
+    comment.created = [NSDate dateWithTimeIntervalSince1970:createdTimestamp.doubleValue/1000];
+    comment.signalId = [commentDict objectForKey:kField_SignalId];
+    BackendlessUser *author = [commentDict objectForKey:kField_Author];
+    comment.authorId = author.objectId;
+    comment.authorName = author.name;
+    return comment;
 }
 
 // Internal method to recursively getting all pages with comments
 - (void)getCommentsWithQuery:(DataQueryBuilder *)queryBuilder offset:(int)offset response:(void (^)(NSArray *comments))response error:(void (^)(FINError *error))failure
 {
     [queryBuilder setOffset:offset];
-    id<IDataStore> commentsStore = [backendless.data of:[FINComment class]];
-    [commentsStore find:queryBuilder response:^(NSArray<FINComment *> *comments) {
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_Comments];
+    [dataStore findWithQueryBuilder:queryBuilder
+                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> * _Nonnull commentsDicts) {
+        NSMutableArray *comments = [NSMutableArray new];
+        for (NSDictionary *commentDict in commentsDicts) {
+            [comments addObject:[self parseComment:commentDict]];
+        }
+        
         if (comments.count == kPageSize)
         {
             [self getCommentsWithQuery:queryBuilder offset:(offset + kPageSize) response:^(NSArray *comments2) {
-                response([comments arrayByAddingObjectsFromArray:comments2]);
+                [comments addObjectsFromArray:comments2];
+                response(comments);
             } error:^(FINError *error) {
                 failure(error);
             }];
@@ -597,41 +628,42 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         {
             response(comments);
         }
-    } error:^(Fault *fault) {
-        FINError *err = [[FINError alloc] initWithFault:fault];
+
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *err = [[FINError alloc] initWithMessage:fault.message];
         failure(err);
     }];
 }
 
 - (void)saveComment:(NSString *)commentText forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion
 {
-    FINComment *comment = [FINComment new];
-    comment.text = commentText;
-    comment.author = backendless.userService.currentUser;
-    comment.signalID = signal.signalID;
+    NSMutableDictionary *commentDict = [NSMutableDictionary new];
+    [commentDict setObject:commentText forKey:kField_Text];
+    [commentDict setObject:signal.signalId forKey:kField_SignalId];
     
-    id<IDataStore>commentsStore = [backendless.data of:[FINComment class]];
-    [commentsStore save:comment response:^(FINComment *comment) {
-        BackendlessUser *author = backendless.userService.currentUser;
-        [commentsStore setRelation:@"author" parentObjectId:comment.objectId childObjects:@[author.objectId] response:^(NSNumber *setRelations) {
-            comment.author = author;
-            
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_Comments];
+    [dataStore saveWithEntity:commentDict
+              responseHandler:^(NSDictionary<NSString *,id> * _Nonnull savedCommentDict) {
+        
+        BackendlessUser *author = Backendless.shared.userService.currentUser;
+        [dataStore setRelationWithColumnName:kField_Author
+                              parentObjectId:[savedCommentDict objectForKey:kField_ObjectId]
+                           childrenObjectIds:@[author.objectId]
+                             responseHandler:^(NSInteger relations) {
+            NSMutableDictionary *relatedCommentDict = [NSMutableDictionary dictionaryWithDictionary:savedCommentDict];
+            [relatedCommentDict setObject:author forKey:kField_Author];
+            FINComment *savedComment = [self parseComment:relatedCommentDict];
+
             [self sendPushNotificationsForNewComment:commentText onSignal:signal withCurrentComments:currentComments];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(comment, nil);
-            });
-        } error:^(Fault *fault) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                FINError *error = [[FINError alloc] initWithFault:fault];
-                completion(nil, error);
-            });
-        }];
-    } error:^(Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
+            completion(savedComment, nil);
+        } errorHandler:^(Fault * _Nonnull fault) {
+            FINError *error = [[FINError alloc] initWithMessage:fault.message];
             completion(nil, error);
-        });
+        }];
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(nil, error);
     }];
 }
 
@@ -654,43 +686,45 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     return 0;
 }
 
+//TODO: WTF!?
+//Probably implement a smart counting function on the backend
 - (void)getAllSignalsFromPage:(NSInteger)page withCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
 {
-    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Default"]];
-    query.includeMeta = @YES;
-    query.pageSize = @100;
-    query.offset = [NSNumber numberWithInteger:page*100];
-    
-    NSMutableArray *totalSignals = [NSMutableArray new];
-    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
-        
-        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
-        {
-            // Convert received GeoPoint to FINSignal
-            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
-            [totalSignals addObject:receivedSignal];
-        }
-        if (receivedGeoPoints.count == 0)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completionHandler(totalSignals, nil);
-            });
-        }
-        else {
-            [self getAllSignalsFromPage:page+1 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [totalSignals addObjectsFromArray:signals];
-                    completionHandler(totalSignals, nil);
-                });
-            }];
-        }
-        
-    } error:^(Fault *fault) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            FINError *error = [[FINError alloc] initWithFault:fault];
-            completionHandler(nil, error);
-        });
-    }];
+//    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Default"]];
+//    query.includeMeta = @YES;
+//    query.pageSize = @100;
+//    query.offset = [NSNumber numberWithInteger:page*100];
+//
+//    NSMutableArray *totalSignals = [NSMutableArray new];
+//    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
+//
+//        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
+//        {
+//            // Convert received GeoPoint to FINSignal
+//            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
+//            [totalSignals addObject:receivedSignal];
+//        }
+//        if (receivedGeoPoints.count == 0)
+//        {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                completionHandler(totalSignals, nil);
+//            });
+//        }
+//        else {
+//            [self getAllSignalsFromPage:page+1 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [totalSignals addObjectsFromArray:signals];
+//                    completionHandler(totalSignals, nil);
+//                });
+//            }];
+//        }
+//
+//    } error:^(Fault *fault) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            FINError *error = [[FINError alloc] initWithFault:fault];
+//            completionHandler(nil, error);
+//        });
+//    }];
 }
 
 - (void)getAllSignalsWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
@@ -709,7 +743,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)setIsInTestMode:(BOOL)isInTestMode
 {
-    [backendless.messaging unregisterDevice];
+    [Backendless.shared.messaging unregisterDeviceWithResponseHandler:^(BOOL isUnregistered) {
+        //Do nothing, be happy
+    } errorHandler:^(Fault * _Nonnull fault) {
+        //DO nothing, be sad
+    }];
     
     _isInTestMode = isInTestMode;
     [self saveIsInTestMode:isInTestMode];
@@ -726,6 +764,18 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 {
     [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSString *)getSignalsTableName
+{
+    if (_isInTestMode)
+    {
+        return @"SignalsTest";
+    }
+    else
+    {
+        return @"Signals";
+    }
 }
 
 #pragma MARK - Device token registration
@@ -755,19 +805,18 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (void)registerDeviceToken:(NSData *)deviceToken
 {
     NSString *currentNotificationChannel = [self getCurrentNotificationChannel];
-    [backendless.messaging registerDevice:deviceToken
-                                 channels:@[currentNotificationChannel]
-                                 response:^(NSString *registeredDeviceId) {
-                                     //Get only the objectId part
-                                     NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
-                                     [FINDataManager saveDeviceRegistrationId:components[0]];
-                                     [FINDataManager saveDeviceToken:deviceToken];
-                                     
-                                     [self updateDeviceRegistrationWithLocation:nil];
-                                 }
-                                    error:^(Fault *fault) {
-                                        //Do nothing
-                                    }];
+    [Backendless.shared.messaging registerDeviceWithDeviceToken:deviceToken
+                                                       channels:@[currentNotificationChannel]
+                                                responseHandler:^(NSString * _Nonnull registeredDeviceId) {
+        //Get only the objectId part
+        NSArray *components = [registeredDeviceId componentsSeparatedByString:@":"];
+        [FINDataManager saveDeviceRegistrationId:components[0]];
+        [FINDataManager saveDeviceToken:deviceToken];
+
+        [self updateDeviceRegistrationWithLocation:nil];
+    } errorHandler:^(Fault * _Nonnull fault) {
+        //Do nothing
+    }];
 }
 
 - (NSString *)getCurrentNotificationChannel
@@ -791,8 +840,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [queryBuilder setRelationsDepth:1];
     [queryBuilder setPageSize:kPageSize];
     //Get all devices within 100km of the signal
-    [queryBuilder setWhereClause:[NSString stringWithFormat:@"distance( %@, %@, lastLatitude, lastLongitude ) < signalRadius * 1000", signal.geoPoint.latitude, signal.geoPoint.longitude]];
-    
+    NSString *signalLocationAsWKT = [self getWktPointWithLongitude:signal.coordinate.longitude andLatitude:signal.coordinate.latitude];
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"distanceOnSphere( %@, '%@') < signalRadius * 1000", kField_LastLocation, signalLocationAsWKT]];
+
     [self sendPushNotificationsWith:queryBuilder offset:0 forSignal:signal];
 }
 
@@ -800,51 +850,49 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (void)sendPushNotificationsWith:(DataQueryBuilder *)queryBuilder offset:(int)offset forSignal:(FINSignal *)signal
 {
     [queryBuilder setOffset:offset];
-    id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
-    [dataStore find:queryBuilder response:^(NSArray *devices) {
-        
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
+    [dataStore findWithQueryBuilder:queryBuilder
+                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> * _Nonnull devices) {
         NSMutableArray *deviceIds = [NSMutableArray new];
         for (NSDictionary *device in devices)
         {
             NSString *deviceId = [device objectForKey:@"deviceId"];
             //Skip current device
-            if (![backendless.messaging.currentDevice.deviceId isEqualToString:deviceId])
+            if (![Backendless.shared.messaging.currentDevice.deviceId isEqualToString:deviceId])
             {
                 [deviceIds addObject:deviceId];
             }
         }
-        
+
         if (deviceIds.count > 0)
         {
             PublishOptions *publishOptions = [PublishOptions new];
-            [publishOptions assignHeaders:@{@"android-ticker-text":NSLocalizedString(@"New signal", nil),
+            [publishOptions setHeaders:@{@"android-ticker-text":NSLocalizedString(@"New signal", nil),
                                             @"android-content-title":signal.title,
                                             @"ios-alert-title":signal.title,
                                             @"ios-badge":@1,
                                             @"ios-sound":@"default",
-                                            @"signalId":signal.geoPoint.objectId,
+                                            @"signalId":signal.signalId,
                                             @"ios-category":kNotificationCategoryNewSignal}];
-            
+
             DeliveryOptions *deliveryOptions = [DeliveryOptions new];
             deliveryOptions.pushSinglecast = deviceIds;
-            
-            [backendless.messaging publish:[self getCurrentNotificationChannel]
-                                   message:NSLocalizedString(@"New signal", nil)
-                            publishOptions:publishOptions
-                           deliveryOptions:deliveryOptions
-                                  response:^(MessageStatus *status) {
+
+            [Backendless.shared.messaging publishWithChannelName:[self getCurrentNotificationChannel]
+                                                         message:NSLocalizedString(@"New signal", nil)
+                                                  publishOptions:publishOptions
+                                                 deliveryOptions:deliveryOptions
+                                                 responseHandler:^(MessageStatus * _Nonnull status) {
                 NSLog(@"Status: %@", status);
-            }
-                                     error:^(Fault *fault) {
-                NSLog(@"Server reported an error: %@", fault);
+            } errorHandler:^(Fault * _Nonnull fault) {
+                 NSLog(@"Server reported an error: %@", fault);
             }];
         }
-        
+
         if (devices.count == kPageSize) {
             [self sendPushNotificationsWith:queryBuilder offset:(offset + kPageSize) forSignal:signal];
         }
-        
-    } error:^(Fault *fault) {
+    } errorHandler:^(Fault * _Nonnull fault) {
         NSLog(@"Error executing query: %@", fault.message);
     }];
 }
@@ -885,10 +933,14 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     // Add all people that posted comments
     for (FINComment *comment in currentComments)
     {
-        [interestedUserIds addObject:comment.author.objectId];
+        [interestedUserIds addObject:comment.authorId];
     }
     // Remove current user
-    [interestedUserIds removeObject:backendless.userService.currentUser.objectId];
+    [interestedUserIds removeObject:Backendless.shared.userService.currentUser.objectId];
+    
+    if (interestedUserIds.count == 0) {
+        return;
+    }
     
     // Create a comma separated list
     NSMutableString *userIds = [NSMutableString new];
@@ -920,15 +972,16 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                        updateType:(SignalUpdate)signalUpdate
                         newStatus:(FINSignalStatus)newStatus
                        newComment:(NSString *)newComment {
-    id<IDataStore> dataStore = [backendless.data ofTable:@"DeviceRegistration"];
-    [dataStore find:queryBuilder response:^(NSArray *devices) {
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
+    [dataStore findWithQueryBuilder:queryBuilder
+                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> * _Nonnull devices) {
         NSMutableArray *deviceIds = [NSMutableArray new];
         for (NSDictionary *device in devices)
         {
             NSString *deviceId = [device objectForKey:@"deviceId"];
             [deviceIds addObject:deviceId];
         }
-        
+
         if (deviceIds.count > 0)
         {
             NSString *updateType = @"";
@@ -943,9 +996,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 updateType = NSLocalizedString(@"New status", nil);
                 updateContent = [FINSignal localizedStatusString:newStatus];
             }
-            
+
             PublishOptions *publishOptions = [PublishOptions new];
-            [publishOptions assignHeaders:@{@"android-ticker-text":updateType,
+            [publishOptions setHeaders:@{@"android-ticker-text":updateType,
                                             @"android-content-title":signal.title,
                                             @"android-content-text":updateContent,
                                             @"ios-alert":updateContent,
@@ -954,24 +1007,23 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                                             @"ios-alert-body":updateContent,
                                             @"ios-badge":@1,
                                             @"ios-sound":@"default",
-                                            @"signalId":signal.geoPoint.objectId,
+                                            @"signalId":signal.signalId,
                                             @"ios-category":kNotificationCategoryNewSignal}];
-            
+
             DeliveryOptions *deliveryOptions = [DeliveryOptions new];
             deliveryOptions.pushSinglecast = deviceIds;
-            
-            [backendless.messaging publish:[self getCurrentNotificationChannel]
-                                   message:updateContent
-                            publishOptions:publishOptions
-                           deliveryOptions:deliveryOptions
-                                  response:^(MessageStatus *status) {
+
+            [Backendless.shared.messaging publishWithChannelName:[self getCurrentNotificationChannel]
+                                                         message:updateContent
+                                                  publishOptions:publishOptions
+                                                 deliveryOptions:deliveryOptions
+                                                 responseHandler:^(MessageStatus * _Nonnull status) {
                 NSLog(@"Status: %@", status);
-            }
-                                     error:^(Fault *fault) {
+            } errorHandler:^(Fault * _Nonnull fault) {
                 NSLog(@"Server reported an error: %@", fault);
             }];
         }
-        
+
         if (devices.count == kPageSize) {
             [self sendPushNotificationsWith:queryBuilder
                 offset:(offset + kPageSize)
@@ -980,8 +1032,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
              newStatus:newStatus
             newComment:newComment];
         }
-        
-    } error:^(Fault *fault) {
+    } errorHandler:^(Fault * _Nonnull fault) {
         NSLog(@"Error executing query: %@", fault.message);
     }];
 }

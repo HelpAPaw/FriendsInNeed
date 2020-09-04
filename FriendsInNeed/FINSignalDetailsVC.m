@@ -292,7 +292,7 @@ enum {
             [detailsCell setTitle:_annotation.signal.title];
             [detailsCell setAuthor:_annotation.signal.authorName];
             [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
-            [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.date]];
+            [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.dateCreated]];
             if (_annotation.signal.photoUrl)
             {
                 detailsCell.delegate = self;
@@ -402,7 +402,7 @@ enum {
                     
                     NSInteger newStatusCode = [FINDataManager getNewStatusCodeFromStatusChangedComment:comment.text];
                     NSString *newStatusString = [FINStatusHelper getStatusNameForCode:newStatusCode];
-                    commentText = [NSString stringWithFormat:NSLocalizedString(@"%@ changed the status to\n\'%@\'", nil), comment.author.name, newStatusString];
+                    commentText = [NSString stringWithFormat:NSLocalizedString(@"%@ changed the status to\n\'%@\'", nil), comment.authorName, newStatusString];
                     
                     [(FINSignalDetailsStatusChangeCommentCell *)commentCell setStatusImage:[FINStatusHelper getStatusImageForCode:newStatusCode]];
                 } 
@@ -410,7 +410,7 @@ enum {
                 {
                     commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
                     
-                    [(FINSignalDetailsCommentCell *)commentCell setAuthor:comment.author.name];
+                    [(FINSignalDetailsCommentCell *)commentCell setAuthor:comment.authorName];
                     
                     commentText = comment.text;
                 }

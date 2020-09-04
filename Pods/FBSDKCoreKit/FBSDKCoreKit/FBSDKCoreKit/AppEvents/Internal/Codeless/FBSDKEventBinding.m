@@ -30,6 +30,7 @@
 #import "FBSDKUtility.h"
 #import "FBSDKViewHierarchy.h"
 #import "FBSDKViewHierarchyMacros.h"
+#import "FBSDKTypeUtility.h"
 
 #define CODELESS_PATH_TYPE_ABSOLUTE  @"absolute"
 #define CODELESS_PATH_TYPE_RELATIVE  @"relative"
@@ -50,7 +51,7 @@
     NSMutableArray *mut = [NSMutableArray array];
     for (NSDictionary *info in pathComponents) {
       FBSDKCodelessPathComponent *component = [[FBSDKCodelessPathComponent alloc] initWithJSON:info];
-      [mut addObject:component];
+      [FBSDKTypeUtility array:mut addObject:component];
     }
     _path = [mut copy];
 
@@ -58,7 +59,7 @@
     mut = [NSMutableArray array];
     for (NSDictionary *info in parameters) {
       FBSDKCodelessParameterComponent *component = [[FBSDKCodelessParameterComponent alloc] initWithJSON:info];
-      [mut addObject:component];
+      [FBSDKTypeUtility array:mut addObject:component];
     }
     _parameters = [mut copy];
   }
@@ -69,7 +70,7 @@
 {
   UIView *sourceView = [sender isKindOfClass:[UIView class]] ? (UIView *)sender : nil;
   NSMutableDictionary *params = [NSMutableDictionary dictionary];
-  params[CODELESS_CODELESS_EVENT_KEY] = @"1";
+  [FBSDKTypeUtility dictionary:params setObject:@"1" forKey:CODELESS_CODELESS_EVENT_KEY];
   for (FBSDKCodelessParameterComponent *component in self.parameters) {
     NSString *text = component.value;
     if (!text || text.length == 0) {
@@ -77,12 +78,12 @@
                                            pathType:component.pathType
                                          sourceView:sourceView];
     }
-    if (text) {
+    if (text.length > 0) {
       if ([component.name isEqualToString:PARAMETER_NAME_PRICE]) {
         NSNumber *value = [FBSDKAppEventsUtility getNumberValue:text];
-        params[component.name] = value;
+        [FBSDKTypeUtility dictionary:params setObject:value forKey:component.name];
       } else {
-        params[component.name] = text;
+        [FBSDKTypeUtility dictionary:params setObject:text forKey:component.name];
       }
     }
   }
@@ -164,8 +165,8 @@ pathComponent:(FBSDKCodelessPathComponent *)component
     NSInteger idxPath = path.count - i - 1;
     NSInteger idxViewPath = viewPath.count - i - 1;
 
-    FBSDKCodelessPathComponent *pathComponent = path[idxPath];
-    FBSDKCodelessPathComponent *viewPathComponent = viewPath[idxViewPath];
+    FBSDKCodelessPathComponent *pathComponent = [FBSDKTypeUtility array:path objectAtIndex:idxPath];
+    FBSDKCodelessPathComponent *viewPathComponent = [FBSDKTypeUtility array:viewPath objectAtIndex:idxViewPath];
 
     if (![pathComponent.className isEqualToString:viewPathComponent.className]) {
       return NO;
@@ -210,7 +211,7 @@ pathComponent:(FBSDKCodelessPathComponent *)component
     return nil;
   }
 
-  FBSDKCodelessPathComponent *pathComponent = path[level];
+  FBSDKCodelessPathComponent *pathComponent = [FBSDKTypeUtility array:path objectAtIndex:level];
 
   //  If found parent, skip to next level
   if ([pathComponent.className isEqualToString:CODELESS_MAPPING_PARENT_CLASS_NAME]) {
@@ -236,7 +237,7 @@ pathComponent:(FBSDKCodelessPathComponent *)component
   if (path.count - 1 == level) {
     int index = pathComponent.index;
     if (index >= 0) {
-      NSObject *child = index < children.count ? children[index] : nil;
+      NSObject *child = index < children.count ? [FBSDKTypeUtility array:children objectAtIndex:index] : nil;
       if ([self match:child pathComponent:pathComponent]) {
         return child;
       }
@@ -257,6 +258,42 @@ pathComponent:(FBSDKCodelessPathComponent *)component
   }
 
   return nil;
+}
+
+- (BOOL)isEqualToBinding:(FBSDKEventBinding *)binding
+{
+  if (_path.count != binding.path.count ||
+      _parameters.count != binding.parameters.count) {
+    return NO;
+  }
+
+  NSString *current = [NSString stringWithFormat:@"%@|%@|%@|%@",
+                       _eventName ?: @"",
+                       _eventType ?: @"",
+                       _appVersion ?: @"",
+                       _pathType ?: @""];
+  NSString *compared = [NSString stringWithFormat:@"%@|%@|%@|%@",
+                        binding.eventName ?: @"",
+                        binding.eventType ?: @"",
+                        binding.appVersion ?: @"",
+                        binding.pathType ?: @""];
+  if (![current isEqualToString:compared]) {
+    return NO;
+  }
+
+  for (int i = 0; i < _path.count; i++) {
+    if (![[FBSDKTypeUtility array:_path objectAtIndex:i] isEqualToPath:[FBSDKTypeUtility array:binding.path objectAtIndex:i]]) {
+      return NO;
+    }
+  }
+
+  for (int i = 0; i < _parameters.count; i++) {
+    if (![[FBSDKTypeUtility array:_parameters objectAtIndex:i] isEqualToParameter:[FBSDKTypeUtility array:binding.parameters objectAtIndex:i]]) {
+      return NO;
+    }
+  }
+
+  return YES;
 }
 
 //  MARK: - find event parameters via relative path

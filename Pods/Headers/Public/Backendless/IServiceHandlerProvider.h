@@ -1,1 +1,0 @@
-../../../Backendless/SDK/ios/backendless/include/IServiceHandlerProvider.h

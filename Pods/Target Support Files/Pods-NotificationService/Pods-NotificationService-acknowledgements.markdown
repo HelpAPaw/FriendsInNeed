@@ -1,9 +1,9 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
-## Backendless
+## BackendlessSwift
 
-Copyright (c) 2013-2019 by Backendless.com
+Copyright (c) 2013-2020 by Backendless Corp
 
 ## Socket.IO-Client-Swift
 

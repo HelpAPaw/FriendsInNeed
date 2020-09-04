@@ -160,7 +160,7 @@
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
-- (IBAction)onLoginButton:(id)sender
+- (IBAction)onLoginWithFacebookButton:(id)sender
 {
     [_activityIndicator startAnimating];
     
@@ -180,26 +180,17 @@
          }
          else
          {
-             @try
-             {
-                 FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
-                 NSString *userId = token.userID;
-                 NSString *tokenString = token.tokenString;
-                 NSDate *expirationDate = token.expirationDate;
-                 NSDictionary *fieldsMapping = @{@"email":@"email"};
-                 [backendless.userService loginWithFacebookSDK:userId
-                                                   tokenString:tokenString
-                                                expirationDate:expirationDate
-                                                 fieldsMapping:fieldsMapping];
+             FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+             [[FINDataManager sharedManager] loginWithFacebookAccessToken:token.tokenString
+                                                               completion:^(FINError *error) {
                  [self.activityIndicator stopAnimating];
                  
-                 [self askForPrivacyPolicyAcceptanceAfterLogin];
-             }
-             @catch (Fault *fault)
-             {
-                 [self.activityIndicator stopAnimating];
-                 [self showError:fault.message];
-             }
+                 if (error != nil) {
+                     [self showError:error.message];
+                 } else {
+                     [self askForPrivacyPolicyAcceptanceAfterLogin];
+                 }
+             }];
          }
      }];
 }

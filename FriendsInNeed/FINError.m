@@ -8,26 +8,15 @@
 
 #import "FINError.h"
 
-@interface FINError()
-
-@property (strong, nonatomic) Fault *fault;
-
-@end
-
 @implementation FINError
 
-- (id)initWithFault:(Fault *)fault
+- (id)initWithMessage:(NSString *)message
 {
     self = [super init];
     
-    _fault = fault;
+    _message = message;
     
     return self;
-}
-
-- (NSString *)message
-{
-    return _fault.detail;
 }
 
 @end

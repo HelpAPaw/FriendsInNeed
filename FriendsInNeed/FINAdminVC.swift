@@ -23,14 +23,14 @@ class FINAdminVC: UIViewController {
                 var ontheway = 0
                 var solved = 0
                 for signal in signals {
-                    switch signal.status() {
+                    switch signal.status {
                     case FINSignalStatus.status0:
                         unsolved += 1
                     case .status1:
                         ontheway += 1
                     case .status2:
                         solved += 1
-                        print("\(String(describing: signal.title()))")
+                        print("\(String(describing: signal.title))")
                     case .status3:
                         print("WTF!?")
                     @unknown default:

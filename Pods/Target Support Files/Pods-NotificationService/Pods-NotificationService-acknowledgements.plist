@@ -14,11 +14,11 @@
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright (c) 2013-2019 by Backendless.com</string>
+			<string>Copyright (c) 2013-2020 by Backendless Corp</string>
 			<key>License</key>
-			<string>Apache</string>
+			<string>MIT</string>
 			<key>Title</key>
-			<string>Backendless</string>
+			<string>BackendlessSwift</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

@@ -65,7 +65,7 @@
     _lbPhotoNumber.layer.borderWidth = 0.5f;
     _lbPhotoNumber.layer.borderColor = [UIColor blackColor].CGColor;
     
-    if (_phoneNumber)
+    if ((_phoneNumber != nil) && (![_phoneNumber isEqualToString:@""]))
     {
         _btnCall.hidden = NO;
         _btnCallHeightConstraint.constant = 44.0;

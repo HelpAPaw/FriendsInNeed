@@ -15,6 +15,7 @@
 #import "FINMailComposer.h"
 #import "FINFaqVC.h"
 #import "Help_A_Paw-Swift.h"
+#import "MBProgressHUD.h"
 
 #define kMenuCell @"MenuCell"
 
@@ -166,13 +167,16 @@ enum
         {
             if ([[FINDataManager sharedManager] userIsLogged])
             {
-                // TODO: add loading indicator
+                MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                 [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
-                    // TODO: handle error
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
+                    [loadingIndicator hideAnimated:YES];
+                    if (error == nil) {
                         [self refreshLoginStatus];
-                    });
+                    } else {
+                        [self showAlertViewControllerWithTitle:NSLocalizedString(@"Error", nil)
+                                                       message:error.message
+                                                       actions:nil];
+                    }
                 }];
             }
             else

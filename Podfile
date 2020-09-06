@@ -17,6 +17,7 @@ target "Help A Paw" do
     pod 'FBSDKLoginKit'
     pod 'IQKeyboardManager'
     pod 'Realm'
+    pod 'MBProgressHUD'
     
 end
 

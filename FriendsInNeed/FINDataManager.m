@@ -235,113 +235,138 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
     
     NSLog(@"Get signals for location: %@", location);
-    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
-    [dataStore findWithQueryBuilder:queryBuilder
-                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> *result) {
-        NSLog(@"Received %lu signals", (unsigned long)result.count);
-        
-        NSMutableArray *newSignals = [NSMutableArray new];
-        NSMutableArray *tempNearbySignals = [NSMutableArray new];
-        for (NSDictionary *signalDict in result)
-        {
-            FINSignal *receivedSignal = [self signalFromDictionary:signalDict];
-
-            // Check if the signal is already present
-            BOOL alreadyPresent = NO;
-            for (FINSignal *signal in self.nearbySignals)
+    [self getSignalsWithQueryBuilder:queryBuilder
+               withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
+        if (error == nil) {
+            NSLog(@"Received %lu signals", (unsigned long)result.count);
+            
+            NSMutableArray *newSignals = [NSMutableArray new];
+            NSMutableArray *tempNearbySignals = [NSMutableArray new];
+            for (NSDictionary *signalDict in result)
             {
-                if ([signal.signalId isEqualToString:receivedSignal.signalId])
+                FINSignal *receivedSignal = [self signalFromDictionary:signalDict];
+
+                // Check if the signal is already present
+                BOOL alreadyPresent = NO;
+                for (FINSignal *signal in self.nearbySignals)
                 {
-                    alreadyPresent = YES;
-                    break;
-                }
-            }
-            // If not, then it is new; add it to newSignals array
-            if (alreadyPresent == NO)
-            {
-                [newSignals addObject:receivedSignal];
-                NSLog(@"New signal: %@", receivedSignal.title);
-            }
-
-            // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
-            [tempNearbySignals addObject:receivedSignal];
-        }
-
-        self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
-
-        // If application is currently active show received signals on map
-        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-        {
-            [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
-            if (completionHandler)
-            {
-                CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
-                completionHandler(UIBackgroundFetchResultNewData);
-            }
-        }
-        // If not - show notification(s)
-        else
-        {
-            if (newSignals.count > 0)
-            {
-                NSInteger badgeNumber = 0;
-                for (FINSignal *signal in newSignals)
-                {
-                    BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalId];
-                    if (notificationAlreadyShown)
+                    if ([signal.signalId isEqualToString:receivedSignal.signalId])
                     {
-                        continue;
-                    }
-
-                    // Only show notifications about signals that haven't been solved yet
-                    if (signal.status < FINSignalStatus2)
-                    {
-                        badgeNumber++;
-
-                        // Create local notification and show it
-                        UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
-                        notifContent.body = signal.title;
-                        notifContent.sound = [UNNotificationSound defaultSound];
-                        notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
-
-                        NSMutableDictionary *userInfo = [NSMutableDictionary new];
-                        [userInfo setObject:signal.signalId forKey:kNotificationSignalId];
-                        notifContent.userInfo = userInfo;
-
-                        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
-                        [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
+                        alreadyPresent = YES;
+                        break;
                     }
                 }
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
+                // If not, then it is new; add it to newSignals array
+                if (alreadyPresent == NO)
+                {
+                    [newSignals addObject:receivedSignal];
+                    NSLog(@"New signal: %@", receivedSignal.title);
+                }
 
+                // Add all received signals to a temp array that will replace newarbySignals when enumeration is finished
+                [tempNearbySignals addObject:receivedSignal];
+            }
+
+            self.nearbySignals = [NSMutableArray arrayWithArray:tempNearbySignals];
+
+            // If application is currently active show received signals on map
+            if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+            {
+                [self.mapDelegate updateMapWithNearbySignals:self.nearbySignals];
                 if (completionHandler)
                 {
                     CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
                     completionHandler(UIBackgroundFetchResultNewData);
                 }
             }
+            // If not - show notification(s)
             else
             {
-                if (completionHandler)
+                if (newSignals.count > 0)
                 {
-                    CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
-                    completionHandler(UIBackgroundFetchResultNoData);
+                    NSInteger badgeNumber = 0;
+                    for (FINSignal *signal in newSignals)
+                    {
+                        BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalId];
+                        if (notificationAlreadyShown)
+                        {
+                            continue;
+                        }
+
+                        // Only show notifications about signals that haven't been solved yet
+                        if (signal.status < FINSignalStatus2)
+                        {
+                            badgeNumber++;
+
+                            // Create local notification and show it
+                            UNMutableNotificationContent *notifContent = [UNMutableNotificationContent new];
+                            notifContent.body = signal.title;
+                            notifContent.sound = [UNNotificationSound defaultSound];
+                            notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
+
+                            NSMutableDictionary *userInfo = [NSMutableDictionary new];
+                            [userInfo setObject:signal.signalId forKey:kNotificationSignalId];
+                            notifContent.userInfo = userInfo;
+
+                            UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];
+                            [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
+                        }
+                    }
+                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badgeNumber];
+
+                    if (completionHandler)
+                    {
+                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
+                        completionHandler(UIBackgroundFetchResultNewData);
+                    }
+                }
+                else
+                {
+                    if (completionHandler)
+                    {
+                        CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
+                        completionHandler(UIBackgroundFetchResultNoData);
+                    }
                 }
             }
+        } else {
+            CLS_LOG(@"[FIN] Getting signals failed with error: %@", error.message);
+            
+            self.lastSignalCheckLocation = nil;
+            
+            if (completionHandler != nil)
+            {
+                CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
+                completionHandler(UIBackgroundFetchResultFailed);
+            }
+        }
+    }];
+}
+
+- (void)getSignalsWithQueryBuilder:(DataQueryBuilder *)queryBuilder withCompletionHandler:(void (^)(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error))completion
+{
+    queryBuilder.pageSize = kPageSize;
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore findWithQueryBuilder:queryBuilder
+                    responseHandler:^(NSArray<NSDictionary<NSString *,id> *> *result) {
+        if (result.count == kPageSize) {
+            queryBuilder.offset += kPageSize;
+            [self getSignalsWithQueryBuilder:queryBuilder withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *nextPageResult, FINError *error) {
+                if (error == nil) {
+                    NSMutableArray *combinedResult = [NSMutableArray arrayWithArray:result];
+                    [combinedResult addObjectsFromArray:nextPageResult];
+                    completion(combinedResult, nil);
+                } else {
+                    completion(nil, error);
+                }
+            }];
+        } else {
+            completion(result, nil);
         }
     }
                        errorHandler:^(Fault *fault) {
-        CLS_LOG(@"[FIN] Getting signals failed with error: %@", fault.description);
-        
-        self.lastSignalCheckLocation = nil;
-        
-        if (completionHandler != nil)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                CLS_LOG(@"[FIN] Calling background fetch completion handler: %@", completionHandler);
-                completionHandler(UIBackgroundFetchResultFailed);
-            });
-        }
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(nil, error);
     }];
 }
 

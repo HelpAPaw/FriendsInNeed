@@ -26,13 +26,21 @@ import Foundation
 
 @objc extension UIViewController {
     
- @objc   func showAlertViewControllerWithTitle(_ title:String, message:String, actions:[UIAlertAction]) {
+ @objc   func showAlertViewControllerWithTitle(_ title:String, message:String, actions:[UIAlertAction]?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
     
+        if let actions = actions {
             for action in actions {
                 alert.addAction(action)
             }
-        
+        }
+        else {
+            let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""),
+                                         style: UIAlertAction.Style.default,
+                                         handler: nil)
+            alert.addAction(okAction)
+        }
+    
         if let topController = UIApplication.topViewController() {
             topController.present(alert, animated: true, completion: nil)
         }

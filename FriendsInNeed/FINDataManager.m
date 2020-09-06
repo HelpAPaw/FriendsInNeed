@@ -394,6 +394,31 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }
 }
 
+- (void)getCountForSignalsWithStatus:(FINSignalStatus)status withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion
+{
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    queryBuilder.whereClause = [NSString stringWithFormat:@"%@ = '%lu'", kField_Status, (unsigned long)status];
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore getObjectCountWithQueryBuilder:queryBuilder
+                              responseHandler:^(NSInteger count) {
+        completion(count, nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(0, error);
+    }];
+}
+
+- (void)getTotalSignalCountWithCompletionHandler:(void (^)(NSInteger count, FINError *error))completion
+{
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    [dataStore getObjectCountWithResponseHandler:^(NSInteger count) {
+        completion(count, nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(0, error);
+    }];
+}
+
 - (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
     BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
@@ -466,7 +491,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(error);
     }];
 }
-//TODO: get it from cache if present!?
+
 - (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion
 {
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
@@ -709,54 +734,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }
     
     return 0;
-}
-
-//TODO: WTF!?
-//Probably implement a smart counting function on the backend
-- (void)getAllSignalsFromPage:(NSInteger)page withCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
-{
-//    BackendlessGeoQuery *query = [BackendlessGeoQuery queryWithCategories:@[@"Default"]];
-//    query.includeMeta = @YES;
-//    query.pageSize = @100;
-//    query.offset = [NSNumber numberWithInteger:page*100];
-//
-//    NSMutableArray *totalSignals = [NSMutableArray new];
-//    [backendless.geoService getPoints:query response:^(NSArray<GeoPoint *> *receivedGeoPoints) {
-//
-//        for (GeoPoint *receivedGeoPoint in receivedGeoPoints)
-//        {
-//            // Convert received GeoPoint to FINSignal
-//            FINSignal *receivedSignal = [[FINSignal alloc] initWithGeoPoint:receivedGeoPoint];
-//            [totalSignals addObject:receivedSignal];
-//        }
-//        if (receivedGeoPoints.count == 0)
-//        {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                completionHandler(totalSignals, nil);
-//            });
-//        }
-//        else {
-//            [self getAllSignalsFromPage:page+1 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    [totalSignals addObjectsFromArray:signals];
-//                    completionHandler(totalSignals, nil);
-//                });
-//            }];
-//        }
-//
-//    } error:^(Fault *fault) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            FINError *error = [[FINError alloc] initWithFault:fault];
-//            completionHandler(nil, error);
-//        });
-//    }];
-}
-
-- (void)getAllSignalsWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completionHandler
-{
-    [self getAllSignalsFromPage:0 withCompletionHandler:^(NSArray<FINSignal *> *signals, FINError *error) {
-        completionHandler(signals, error);
-    }];
 }
 
 #pragma MARK - TEST Mode

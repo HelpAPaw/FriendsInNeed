@@ -17,33 +17,29 @@ class FINAdminVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        FINDataManager.shared().getAllSignals { (signals, error) in
-            if let signals = signals {
-                var unsolved = 0
-                var ontheway = 0
-                var solved = 0
-                for signal in signals {
-                    switch signal.status {
-                    case FINSignalStatus.status0:
-                        unsolved += 1
-                    case .status1:
-                        ontheway += 1
-                    case .status2:
-                        solved += 1
-                        print("\(String(describing: signal.title))")
-                    case .status3:
-                        print("WTF!?")
-                    @unknown default:
-                        print("WTF!?!?")
-                    }
-                }
-                self.lbHelpNeeded.text = "\(unsolved) Help needed"
-                self.lbOnTheWay.text = "\(ontheway) Somebody On The Way"
-                self.lbSolved.text = "\(solved) Solved"
-                self.lbTotal.text = "\(signals.count) Total"
-                print("Total signals: \(signals.count), unsolved: \(unsolved), ontheway: \(ontheway), solved: \(solved)")
+        FINDataManager.shared()?.getTotalSignalCount(completionHandler: { (count, error) in
+            if (error == nil) {
+                self.lbTotal.text = "\(count) Total"
             }
-        }
+        })
+        
+        FINDataManager.shared()?.getCountForSignals(with: FINSignalStatus.status0, withCompletionHandler: { (count, error) in
+            if (error == nil) {
+                self.lbHelpNeeded.text = "\(count) Help needed"
+            }
+        })
+        
+        FINDataManager.shared()?.getCountForSignals(with: FINSignalStatus.status1, withCompletionHandler: { (count, error) in
+            if (error == nil) {
+                self.lbOnTheWay.text = "\(count) Somebody On The Way"
+            }
+        })
+        
+        FINDataManager.shared()?.getCountForSignals(with: FINSignalStatus.status2, withCompletionHandler: { (count, error) in
+            if (error == nil) {
+                self.lbSolved.text = "\(count) Solved"
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {

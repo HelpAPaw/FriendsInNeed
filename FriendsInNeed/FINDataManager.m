@@ -480,16 +480,16 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
     NSMutableDictionary *changes = [NSMutableDictionary new];
     [changes setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kField_Status];
-    [dataStore updateBulkWithWhereClause:[NSString stringWithFormat:@"%@ = '%@'", kField_ObjectId, signal.signalId]
-                                 changes:changes
-                         responseHandler:^(NSInteger updated) {
-        [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
-        signal.status = status;
-        completion(nil);
-    } errorHandler:^(Fault * _Nonnull fault) {
-        FINError *error = [[FINError alloc] initWithMessage:fault.message];
-        completion(error);
-    }];
+    [changes setObject:signal.signalId forKey:kField_ObjectId];
+    [dataStore updateWithEntity:changes
+        responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
+            [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
+            signal.status = status;
+            completion(nil);
+        } errorHandler:^(Fault * _Nonnull fault) {
+            FINError *error = [[FINError alloc] initWithMessage:fault.message];
+            completion(error);
+        }];
 }
 
 - (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion
@@ -648,6 +648,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     comment.created = [NSDate dateWithTimeIntervalSince1970:createdTimestamp.doubleValue/1000];
     comment.signalId = [commentDict objectForKey:kField_SignalId];
     BackendlessUser *author = [commentDict objectForKey:kField_Author];
+    //TODO: protect agains null
     comment.authorId = author.objectId;
     comment.authorName = author.name;
     return comment;

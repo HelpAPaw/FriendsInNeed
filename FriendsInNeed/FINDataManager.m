@@ -153,7 +153,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *deviceRegistrationId = [FINDataManager getDeviceRegistrationId];
     if (deviceRegistrationId != nil)
     {
-        //TODO: test
         NSMutableDictionary *deviceRegistration = [NSMutableDictionary new];
         [deviceRegistration setValue:deviceRegistrationId forKey:kField_ObjectId];
         [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:kField_SignalRadius];
@@ -651,9 +650,10 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     comment.created = [NSDate dateWithTimeIntervalSince1970:createdTimestamp.doubleValue/1000];
     comment.signalId = [commentDict objectForKey:kField_SignalId];
     BackendlessUser *author = [commentDict objectForKey:kField_Author];
-    //TODO: protect agains null
-    comment.authorId = author.objectId;
-    comment.authorName = author.name;
+    if (author != nil) {
+        comment.authorId = author.objectId;
+        comment.authorName = author.name;
+    }
     return comment;
 }
 

@@ -531,10 +531,13 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     {
         NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithDictionary:currentUser.properties];
         [properties setObject:[NSNumber numberWithBool:value] forKey:kUserPropertyAcceptedPrivacyPolicy];
+        currentUser.properties = properties;
         [Backendless.shared.userService updateWithUser:currentUser responseHandler:^(BackendlessUser * _Nonnull updatedUser) {
             //Do nothing, be happy
+            NSLog(@"Successfully saved privacy policy acceptance!");
         } errorHandler:^(Fault * _Nonnull fault) {
             //Do nothing, be sad
+            CLS_LOG(@"Could not save privacy policy acception: %@", fault.message);
         }];
     }
 }
@@ -975,6 +978,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                        updateType:(SignalUpdate)signalUpdate
                         newStatus:(FINSignalStatus)newStatus
                        newComment:(NSString *)newComment {
+    queryBuilder.offset = offset;
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
     [dataStore findWithQueryBuilder:queryBuilder
                     responseHandler:^(NSArray<NSDictionary<NSString *,id> *> * _Nonnull devices) {

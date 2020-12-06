@@ -14,6 +14,7 @@
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "FINGlobalConstants.pch"
+@import FirebaseCrashlytics;
 
 
 #define kAddSignalViewYposition 15.0f
@@ -327,9 +328,7 @@
 }
 
 - (IBAction)onAddSignalButton:(id)sender
-{// Force a test crash
-    @[][1];
-
+{
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"registration_required",nil)
@@ -361,6 +360,8 @@
     {
         return;
     }
+    
+    CLS_LOG(@"Submitting new signal...");
     
     [self setSendingSignalMode];
     [_dataManager submitNewSignalWithTitle:_signalTitleField.text andAuthorPhone:(NSString *)_authorPhoneField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, FINError *error) {
@@ -705,6 +706,9 @@
 - (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control
 {
     FINAnnotation *annotation = (FINAnnotation *)view.annotation;
+    
+    CLS_LOG(@"Show details for signal %@", annotation.signal.signalId);
+    
     FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithAnnotation:annotation];
     signalDetailsVC.delegate = self;
     signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;

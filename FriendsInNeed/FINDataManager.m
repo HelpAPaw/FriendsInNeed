@@ -476,6 +476,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINError *error))completion
 {
+    CLS_LOG(@"Set new status for signal %@", signal.signalId);
+    
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
     NSMutableDictionary *changes = [NSMutableDictionary new];
     [changes setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kField_Status];
@@ -593,6 +595,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                                       responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
                                                             object:nil];
+        
+        [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
+        
         completion(nil);
     } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
@@ -608,6 +613,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                                                       responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
                                                             object:nil];
+        
+        [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
+        
         completion(nil);
     } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
@@ -691,6 +699,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
 - (void)saveComment:(NSString *)commentText forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion
 {
+    CLS_LOG(@"Add new comment for signal %@", signal.signalId);
+    
     NSMutableDictionary *commentDict = [NSMutableDictionary new];
     [commentDict setObject:commentText forKey:kField_Text];
     [commentDict setObject:signal.signalId forKey:kField_SignalId];

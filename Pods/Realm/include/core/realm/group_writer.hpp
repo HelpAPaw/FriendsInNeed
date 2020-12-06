@@ -25,8 +25,8 @@
 
 #include <realm/util/file.hpp>
 #include <realm/alloc.hpp>
+#include <realm/array.hpp>
 #include <realm/impl/array_writer.hpp>
-#include <realm/array_integer.hpp>
 #include <realm/db_options.hpp>
 
 
@@ -91,9 +91,9 @@ private:
     class MapWindow;
     Group& m_group;
     SlabAlloc& m_alloc;
-    ArrayInteger m_free_positions; // 4th slot in Group::m_top
-    ArrayInteger m_free_lengths;   // 5th slot in Group::m_top
-    ArrayInteger m_free_versions;  // 6th slot in Group::m_top
+    Array m_free_positions; // 4th slot in Group::m_top
+    Array m_free_lengths;   // 5th slot in Group::m_top
+    Array m_free_versions;  // 6th slot in Group::m_top
     uint64_t m_current_version = 0;
     uint64_t m_readlock_version;
     size_t m_window_alignment;
@@ -170,7 +170,6 @@ private:
 
     /// Search only a range of the free list for a block as big as the
     /// specified size. Return a pair with index and size of the found chunk.
-    /// \param found indicates whether a suitable block was found.
     FreeListElement search_free_space_in_part_of_freelist(size_t size);
 
     /// Extend the file to ensure that a chunk of free space of the

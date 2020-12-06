@@ -1,22 +1,3 @@
-/*************************************************************************
- *
- * REALM CONFIDENTIAL
- * __________________
- *
- *  [2011] - [2016] Realm Inc
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Realm Incorporated and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Realm Incorporated
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Realm Incorporated.
- *
- **************************************************************************/
 
 #ifndef REALM_UTIL_TIME_HPP
 #define REALM_UTIL_TIME_HPP
@@ -43,8 +24,8 @@ std::tm gmtime(std::time_t);
 /// std::put_time() is unavailable in GCC 4. This function is thread safe.
 ///
 /// The default format is ISO 8601 date and time.
-template<class C, class T>
-void put_time(std::basic_ostream<C,T>&, const std::tm&, const C* format = "%FT%T%z");
+template <class C, class T>
+void put_time(std::basic_ostream<C, T>&, const std::tm&, const C* format = "%FT%T%z");
 
 // @{
 /// These functions combine localtime() or gmtime() with put_time() and
@@ -60,15 +41,13 @@ std::string format_utc_time(std::time_t, const char* format = "%FT%T%z");
 double local_time_microseconds();
 
 
-
-
 // Implementation
 
-template<class C, class T>
-inline void put_time(std::basic_ostream<C,T>& out, const std::tm& tm, const C* format)
+template <class C, class T>
+inline void put_time(std::basic_ostream<C, T>& out, const std::tm& tm, const C* format)
 {
     const auto& facet = std::use_facet<std::time_put<C>>(out.getloc()); // Throws
-    facet.put(std::ostreambuf_iterator<C>(out), out, ' ', &tm,
+    facet.put(std::ostreambuf_iterator<C>(out), out, out.widen(' '), &tm,
               format, format + T::length(format)); // Throws
 }
 
@@ -77,7 +56,7 @@ inline std::string format_local_time(std::time_t time, const char* format)
     std::tm tm = util::localtime(time);
     std::ostringstream out;
     util::put_time(out, tm, format); // Throws
-    return out.str(); // Throws
+    return out.str();                // Throws
 }
 
 inline std::string format_utc_time(std::time_t time, const char* format)
@@ -85,7 +64,7 @@ inline std::string format_utc_time(std::time_t time, const char* format)
     std::tm tm = util::gmtime(time);
     std::ostringstream out;
     util::put_time(out, tm, format); // Throws
-    return out.str(); // Throws
+    return out.str();                // Throws
 }
 
 } // namespace util

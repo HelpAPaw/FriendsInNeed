@@ -19,6 +19,7 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
 import SocketIO
 
 class RTClient {
@@ -87,14 +88,14 @@ class RTClient {
                     }
                 }
                 else {                    
-                    if let connectErrorSubscriptions = self.eventSubscriptions[connectEvents.connectError] {
+                    if let connectErrorSubscriptions = self.eventSubscriptions[ConnectEvents.connectError] {
                         for subscription in connectErrorSubscriptions {
                             subscription.onResult!("Cannot connect to Backendless")
                         }
                     }
                     if !self.onDisconnectCalledOnce {
                         self.onDisconnectCalledOnce = true
-                        self.onConnectErrorOrDisconnect(reason: "Cannot connect to Backendless", type: connectEvents.disconnect)
+                        self.onConnectErrorOrDisconnect(reason: "Cannot connect to Backendless", type: ConnectEvents.disconnect)
                     }
                     self.onReconnectAttempt()
                 }
@@ -108,7 +109,7 @@ class RTClient {
         })
     }
     
-    func subscribe(data: [String : Any], subscription: RTSubscription) {        
+    func subscribe(data: [String : Any], subscription: RTSubscription) {
         DispatchQueue.global(qos: .default).async {            
             self._lock.lock()
             if self.socketConnected {
@@ -143,7 +144,7 @@ class RTClient {
         }
         if self.subscriptions.count == 0, self.socket != nil, self.socketManager != nil {
             self.removeSocket()
-        } 
+        }
     }
     
     func sendCommand(data: Any, method: RTMethodRequest?) {
@@ -187,7 +188,7 @@ class RTClient {
                 self.onResult()
                 self.onMethodResult()
                 
-                if let connectSubscriptions = self.eventSubscriptions[connectEvents.connect] {
+                if let connectSubscriptions = self.eventSubscriptions[ConnectEvents.connect] {
                     for connectSubscription in connectSubscriptions {
                         connectSubscription.onResult!(nil)
                     }
@@ -196,27 +197,27 @@ class RTClient {
             
             self.socket?.on("connect_error", callback: { data, ack in                
                 if let reason = data.first as? String {
-                    self.onConnectErrorOrDisconnect(reason: reason, type: connectEvents.connectError)
+                    self.onConnectErrorOrDisconnect(reason: reason, type: ConnectEvents.connectError)
                 }
             })
             
             self.socket?.on("connect_timeout", callback: { data, ack in
                 if let reason = data.first as? String {
-                    self.onConnectErrorOrDisconnect(reason: reason, type: connectEvents.connectError)
+                    self.onConnectErrorOrDisconnect(reason: reason, type: ConnectEvents.connectError)
                 }
             })
             
             self.socket?.on("error", callback: { data, ack in
                 if let reason = data.first as? String {
-                    self.onConnectErrorOrDisconnect(reason: reason, type: connectEvents.disconnect)
-                    self.onConnectErrorOrDisconnect(reason: reason, type: connectEvents.connectError)
+                    self.onConnectErrorOrDisconnect(reason: reason, type: ConnectEvents.disconnect)
+                    self.onConnectErrorOrDisconnect(reason: reason, type: ConnectEvents.connectError)
                 }
             })
             
             self.socket?.on("disconnect", callback: { data, ack in
                 self.socketManager?.disconnectSocket(self.socket!)
                 if let reason = data.first as? String {
-                    self.onConnectErrorOrDisconnect(reason: reason, type: connectEvents.disconnect)
+                    self.onConnectErrorOrDisconnect(reason: reason, type: ConnectEvents.disconnect)
                 }
             })
         }
@@ -234,7 +235,7 @@ class RTClient {
     }
     
     func onReconnectAttempt() {
-        if let reconnectAttemptSubscriptions = eventSubscriptions[connectEvents.reconnectAttempt] {
+        if let reconnectAttemptSubscriptions = eventSubscriptions[ConnectEvents.reconnectAttempt] {
             for subscription in reconnectAttemptSubscriptions {
                 let attempt = NSNumber(value: self.reconnectAttempt)
                 let timeout = NSNumber(value: maxTimeInterval * 1000)
@@ -266,9 +267,8 @@ class RTClient {
     
     func onResult() {
         if !self.onResultReady {
-            self.socket?.on("SUB_RES", callback: { data, ack in
-                self.onResultReady = true
-                
+            self.socket?.on("SUB_RES", callback: { data, ack in                
+                self.onResultReady = true                
                 if let resultData = data.first as? [String : Any],
                     let subscriptionId = resultData["id"] as? String,
                     let subscription = self.subscriptions[subscriptionId] {

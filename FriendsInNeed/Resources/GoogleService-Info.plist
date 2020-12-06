@@ -3,37 +3,35 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>960611584456-7gb4ifov4i7v8eqelp9erd2st2i3cmuj.apps.googleusercontent.com</string>
+	<string>960611584456-611crnbo2u66a2sqs4djci6e0d2gcmph.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.960611584456-7gb4ifov4i7v8eqelp9erd2st2i3cmuj</string>
+	<string>com.googleusercontent.apps.960611584456-611crnbo2u66a2sqs4djci6e0d2gcmph</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>960611584456-38oirrft9m53qa3c4h2f7q1ldei2madp.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDWpE__ex2vCCRx1U1hkJ0rDURI8jndqEk</string>
-	<key>CFBundleIdentifier</key>
-	<string></string>
 	<key>GCM_SENDER_ID</key>
 	<string>960611584456</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.HelpAPaw.HelpAPaw</string>
+	<string>com.helpapaw.helpapaw</string>
 	<key>PROJECT_ID</key>
 	<string>help-a-paw-android</string>
 	<key>STORAGE_BUCKET</key>
 	<string>help-a-paw-android.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:960611584456:ios:b3399aa5642313518658fd</string>
+	<string>1:960611584456:ios:63bc0a5d0b73d9398658fd</string>
 	<key>DATABASE_URL</key>
 	<string>https://help-a-paw-android.firebaseio.com</string>
 </dict>

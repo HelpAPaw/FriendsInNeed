@@ -9,12 +9,12 @@
 #import "FINDataManager.h"
 #import "FINLocationManager.h"
 #import "FINGlobalConstants.pch"
-#import <Crashlytics/Crashlytics.h>
 #import <SDWebImage/SDImageCache.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <Backendless-Swift.h>
 #import "RLMSignal.h"
 @import UserNotifications;
+@import FirebaseCrashlytics;
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"

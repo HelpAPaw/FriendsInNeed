@@ -25,6 +25,7 @@
 FOUNDATION_EXPORT NSString *const FBSDKLoginManagerLoggerAuthMethod_Native;
 FOUNDATION_EXPORT NSString *const FBSDKLoginManagerLoggerAuthMethod_Browser;
 FOUNDATION_EXPORT NSString *const FBSDKLoginManagerLoggerAuthMethod_SFVC;
+FOUNDATION_EXPORT NSString *const FBSDKLoginManagerLoggerAuthMethod_Applink;
 
 
 NS_SWIFT_NAME(LoginManagerLogger)
@@ -47,6 +48,8 @@ NS_SWIFT_NAME(LoginManagerLogger)
 - (void)willAttemptAppSwitchingBehavior;
 
 - (void)logNativeAppDialogResult:(BOOL)result dialogDuration:(NSTimeInterval)dialogDuration;
+
+- (void)addSingleLoggingExtra:(id)extra forKey:(NSString *)key;
 @end
 
 #endif

@@ -5,6 +5,7 @@
 #define HAVE_MALLOC_H 0
 
 // Realm-specific configuration
+/* #undef REALM_HAVE_READDIR64 */
 #define REALM_MAX_BPNODE_SIZE 1000
 #define REALM_ENABLE_ASSERTIONS 1
 #define REALM_ENABLE_ALLOC_SET_ZERO 0

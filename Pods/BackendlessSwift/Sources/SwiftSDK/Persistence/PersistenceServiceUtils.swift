@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 class PersistenceServiceUtils {
     
     private var tableName: String = ""
@@ -253,6 +255,7 @@ class PersistenceServiceUtils {
         if let offset = queryBuilder?.offset {
             parameters["offset"] = offset
         }
+        parameters["distinct"] = queryBuilder?.distinct
         BackendlessRequestManager(restMethod: "data/\(tableName)/find", httpMethod: .post, headers: headers, parameters: parameters).makeRequest(getResponse: { response in
             if let result = ProcessResponse.shared.adapt(response: response, to: [JSON].self) {
                 if result is Fault {
@@ -302,7 +305,7 @@ class PersistenceServiceUtils {
             }
         }
             
-        // relationsPageSize = nil
+            // relationsPageSize = nil
         else {
             if related != nil {
                 restMethod += "?loadRelations=\(DataTypesUtils.shared.arrayToString(array: related!))"
@@ -495,11 +498,10 @@ class PersistenceServiceUtils {
     }
     
     func getTableName(entity: Any) -> String {
-        var name = String(describing: entity)
-        if name == "BackendlessUser" {
-            name = "Users"
+        if entity is BackendlessUser.Type {
+            return "Users"
         }
-        return name
+        return String(describing: entity)
     }
     
     func getClassName(entity: Any) -> String {
@@ -567,7 +569,7 @@ class PersistenceServiceUtils {
         if let userEntity = entity as? BackendlessUser {
             let properties = userEntity.properties
             for (key, value) in properties {
-                entityDictionary[key] = value
+                entityDictionary[key] = JSONUtils.shared.objectToJson(objectToParse: value)
             }
         }
         else {
@@ -659,10 +661,6 @@ class PersistenceServiceUtils {
             }
             return backendlessUser
         }
-        else if tableName == "GeoPoint" || className == "GeoPoint",
-            let geoPoint = ProcessResponse.shared.adaptToGeoPoint(geoDictionary: dictionary) {
-            return geoPoint
-        }
         else if tableName == "DeviceRegistration" || className == "DeviceRegistration" {
             let deviceRegistration = ProcessResponse.shared.adaptToDeviceRegistration(responseResult: dictionary)
             if let objectId = deviceRegistration.objectId {
@@ -695,12 +693,10 @@ class PersistenceServiceUtils {
             let entityClassName = getClassName(entity: entity.classForCoder)
             let columnToPropertyMappings = Mappings.shared.getColumnToPropertyMappings(className: entityClassName)
             
-            for dictionaryField in dictionary.keys {
+            for dictionaryField in dictionary.keys {                
                 if !(dictionary[dictionaryField] is NSNull) {
                     if columnToPropertyMappings.keys.contains(dictionaryField) {
-                        
                         let mappedPropertyName = columnToPropertyMappings[dictionaryField]!
-                        
                         if let arrayValue = dictionary[dictionaryField] as? [Any] {
                             var result = [Any]()
                             for value in arrayValue {
@@ -751,10 +747,6 @@ class PersistenceServiceUtils {
                                     let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
                                     entity.setValue(userObject as! BackendlessUser, forKey: dictionaryField)
                                 }
-                                else if relationDictionary["___class"] as? String == "GeoPoint",
-                                    let geoPointObject = ProcessResponse.shared.adaptToGeoPoint(geoDictionary: relationDictionary) {
-                                    entity.setValue(geoPointObject, forKey: dictionaryField)
-                                }
                                 else if relationDictionary["___class"] as? String == "DeviceRegistration" {
                                     let deviceRegistrationObject = ProcessResponse.shared.adaptToDeviceRegistration(responseResult: relationDictionary)
                                     entity.setValue(deviceRegistrationObject, forKey: dictionaryField)
@@ -780,10 +772,6 @@ class PersistenceServiceUtils {
                                 if relationDictionary["___class"] as? String == "Users",
                                     let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
                                     relationsArray.append(userObject as! BackendlessUser)
-                                }
-                                else if relationDictionary["___class"] as? String == "GeoPoint",
-                                    let geoPointObject = ProcessResponse.shared.adaptToGeoPoint(geoDictionary: relationDictionary) {
-                                    relationsArray.append(geoPointObject)
                                 }
                                 else if relationDictionary["___class"] as? String == "DeviceRegistration" {
                                     let deviceRegistrationObject = ProcessResponse.shared.adaptToDeviceRegistration(responseResult: relationDictionary)
@@ -834,38 +822,6 @@ class PersistenceServiceUtils {
         }
         return nil
     }
-    
-    /*func convertToGeometryType(dictionary: [String : Any]) -> [String : Any] {
-        var resultDictionary = dictionary
-        for (key, value) in dictionary {
-            if let dictValue = value as? [String : Any] {
-                if dictValue["___class"] as? String == BLPoint.geometryClassName || dictValue["type"] as? String == BLPoint.geoJsonType {
-                    resultDictionary[key] = try? GeoJSONParser.dictionaryToPoint(dictValue)
-                }
-                else if dictValue["___class"] as? String == BLLineString.geometryClassName || dictValue["type"] as? String == BLLineString.geoJsonType {
-                    resultDictionary[key] = try? GeoJSONParser.dictionaryToLineString(dictValue)
-                }
-                else if dictValue["___class"] as? String == BLPolygon.geometryClassName || dictValue["type"] as? String == BLPolygon.geoJsonType {
-                    resultDictionary[key] = try? GeoJSONParser.dictionaryToPolygon(dictValue)
-                }
-            }
-            else if let dictValue = value as? String {
-                if dictValue.contains(BLPoint.wktType) {
-                    resultDictionary[key] = try? BLPoint.fromWkt(dictValue)
-                }
-                else if dictValue.contains(BLLineString.wktType) {
-                    resultDictionary[key] = try? BLLineString.fromWkt(dictValue)
-                }
-                else if dictValue.contains(BLPolygon.wktType) {
-                    resultDictionary[key] = try? BLPolygon.fromWkt(dictValue)
-                }
-            }
-            else if var dictValue = value as? [String : Any] {
-                dictValue = convertToGeometryType(dictionary: dictValue)
-            }
-        }
-        return resultDictionary
-    }*/
     
     func convertFromGeometryType(dictionary: [String : Any]) -> [String : Any] {
         var resultDictionary = dictionary

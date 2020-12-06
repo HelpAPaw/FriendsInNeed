@@ -10,8 +10,7 @@ target "Help A Paw" do
     
     pod 'BackendlessSwift'
     pod 'ViewDeck'
-    pod 'Fabric'
-    pod 'Crashlytics'
+    pod 'Firebase/Crashlytics'
     pod 'Firebase/Analytics'
     pod 'SDWebImage'
     pod 'FBSDKLoginKit'

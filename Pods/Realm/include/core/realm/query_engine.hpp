@@ -95,7 +95,10 @@ AggregateState      State of the aggregate - contains a state variable that stor
 #include <realm/array_string.hpp>
 #include <realm/array_binary.hpp>
 #include <realm/array_timestamp.hpp>
+#include <realm/array_decimal128.hpp>
+#include <realm/array_object_id.hpp>
 #include <realm/array_list.hpp>
+#include <realm/array_bool.hpp>
 #include <realm/array_backlink.hpp>
 #include <realm/column_type_traits.hpp>
 #include <realm/metrics/query_info.hpp>
@@ -166,18 +169,20 @@ public:
 
     double cost() const
     {
-        return 8 * bitwidth_time_unit / m_dD +
-               m_dT; // dt = 1/64 to 1. Match dist is 8 times more important than bitwidth
+        // dt = 1/64 to 1. Match dist is 8 times more important than bitwidth
+        return 8 * bitwidth_time_unit / m_dD + m_dT;
     }
 
     size_t find_first(size_t start, size_t end);
 
     bool match(ConstObj& obj);
 
-    virtual void init()
+    virtual void init(bool will_query_ranges)
     {
+        m_dD = 100.0;
+
         if (m_child)
-            m_child->init();
+            m_child->init(will_query_ranges);
 
         m_column_action_specializer = nullptr;
     }
@@ -218,6 +223,8 @@ public:
     virtual size_t find_first_local(size_t start, size_t end) = 0;
 
     virtual void aggregate_local_prepare(Action TAction, DataType col_id, bool nullable);
+    template <Action action>
+    void aggregate_local_prepare(DataType col_id, bool nullable);
 
     template <Action TAction, class LeafType>
     bool column_action_specialization(QueryStateBase* st, ArrayPayload* source_column, size_t r)
@@ -228,9 +235,8 @@ public:
         using TResult = typename AggregateResultType<TSourceValue, TAction>::result_type;
 
         // Sum of float column must accumulate in double
-        static_assert(!(TAction == act_Sum &&
-                        (std::is_same<TSourceValue, float>::value && !std::is_same<TResult, double>::value)),
-                      "");
+        static_assert(
+            !(TAction == act_Sum && (std::is_same_v<TSourceValue, float> && !std::is_same_v<TResult, double>)), "");
 
         TSourceValue av{};
         // uses_val test because compiler cannot see that IntegerColumn::get has no side effect and result is
@@ -302,13 +308,38 @@ public:
         return s;
     }
 
+    bool consume_condition(ParentNode& other, bool ignore_indexes)
+    {
+        // We can only combine conditions if they're the same operator on the
+        // same column and there's no additional conditions ANDed on
+        if (m_condition_column_key != other.m_condition_column_key)
+            return false;
+        if (m_child || other.m_child)
+            return false;
+        if (typeid(*this) != typeid(other))
+            return false;
+
+        // If a search index is present, don't try to combine conditions since index search is most likely faster.
+        // Assuming N elements to search and M conditions to check:
+        // 1) search index present:                     O(log(N)*M)
+        // 2) no search index, combine conditions:      O(N)
+        // 3) no search index, conditions not combined: O(N*M)
+        // In practice N is much larger than M, so if we have a search index, choose 1, otherwise if possible
+        // choose 2. The exception is if we're inside a Not group or if the query is restricted to a view, as in those
+        // cases end will always be start+1 and we'll have O(N*M) runtime even with a search index, so we want to
+        // combine even with an index.
+        if (has_search_index() && !ignore_indexes)
+            return false;
+        return do_consume_condition(other);
+    }
+
     std::unique_ptr<ParentNode> m_child;
     std::vector<ParentNode*> m_children;
     std::string m_condition_column_name;
     mutable ColKey m_condition_column_key = ColKey(); // Column of search criteria
 
     double m_dD;       // Average row distance between each local match at current position
-    double m_dT = 0.0; // Time overhead of testing index i + 1 if we have just tested index i. > 1 for linear scans, 0
+    double m_dT = 1.0; // Time overhead of testing index i + 1 if we have just tested index i. > 1 for linear scans, 0
     // for index/tableview
 
     size_t m_probes = 0;
@@ -335,40 +366,12 @@ private:
     {
         // TODO: Should eventually be pure
     }
-};
-
-
-namespace _impl {
-
-template <class LeafType>
-struct CostHeuristic;
-
-template <>
-struct CostHeuristic<ArrayInteger> {
-    static constexpr double dD()
+    virtual bool do_consume_condition(ParentNode&)
     {
-        return 100.0;
-    }
-    static constexpr double dT()
-    {
-        return 1.0 / 4.0;
+        return false;
     }
 };
 
-template <>
-struct CostHeuristic<ArrayIntNull> {
-    static constexpr double dD()
-    {
-        return 100.0;
-    }
-    static constexpr double dT()
-    {
-        return 1.0 / 4.0;
-    }
-};
-
-// FIXME: Add AdaptiveStringColumn, BasicColumn, etc.
-}
 
 class ColumnNodeBase : public ParentNode {
 protected:
@@ -521,12 +524,11 @@ protected:
         m_leaf_ptr = m_array_ptr.get();
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        ColumnNodeBase::init();
+        ColumnNodeBase::init(will_query_ranges);
 
-        m_dT = _impl::CostHeuristic<LeafType>::dT();
-        m_dD = _impl::CostHeuristic<LeafType>::dD();
+        m_dT = .25;
     }
 
     bool should_run_in_fastmode(ArrayPayload* source_leaf) const
@@ -589,6 +591,8 @@ protected:
                 return get_specialized_callback_3<TAction, type_Double, TConditionFunction>(is_nullable);
             case type_Timestamp:
                 return get_specialized_callback_3<TAction, type_Timestamp, TConditionFunction>(is_nullable);
+            case type_Decimal:
+                return get_specialized_callback_3<TAction, type_Decimal, TConditionFunction>(is_nullable);
             default:
                 break;
         }
@@ -677,6 +681,28 @@ public:
     }
 };
 
+template <size_t linear_search_threshold, class LeafType, class NeedleContainer>
+static size_t find_first_haystack(LeafType& leaf, NeedleContainer& needles, size_t start, size_t end)
+{
+    // for a small number of conditions, it is faster to do a linear search than to compute the hash
+    // the exact thresholds were found experimentally
+    if (needles.size() < linear_search_threshold) {
+        for (size_t i = start; i < end; ++i) {
+            auto element = leaf.get(i);
+            if (std::find(needles.begin(), needles.end(), element) != needles.end())
+                return i;
+        }
+    }
+    else {
+        for (size_t i = start; i < end; ++i) {
+            auto element = leaf.get(i);
+            if (needles.count(element))
+                return i;
+        }
+    }
+    return realm::npos;
+}
+
 template <class LeafType>
 class IntegerNode<LeafType, Equal> : public IntegerNodeBase<LeafType> {
 public:
@@ -692,9 +718,9 @@ public:
     {
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        BaseType::init();
+        BaseType::init(will_query_ranges);
         m_nb_needles = m_needles.size();
 
         if (has_search_index()) {
@@ -708,14 +734,16 @@ public:
         }
     }
 
-    void consume_condition(IntegerNode<LeafType, Equal>* other)
+    bool do_consume_condition(ParentNode& node) override
     {
-        REALM_ASSERT(this->m_condition_column_key == other->m_condition_column_key);
-        REALM_ASSERT(other->m_needles.empty());
+        auto& other = static_cast<ThisType&>(node);
+        REALM_ASSERT(this->m_condition_column_key == other.m_condition_column_key);
+        REALM_ASSERT(other.m_needles.empty());
         if (m_needles.empty()) {
             m_needles.insert(this->m_value);
         }
-        m_needles.insert(other->m_value);
+        m_needles.insert(other.m_value);
+        return true;
     }
 
     bool has_search_index() const override
@@ -754,7 +782,10 @@ public:
         size_t s = realm::npos;
 
         if (start < end) {
-            if (has_search_index()) {
+            if (m_nb_needles) {
+                s = find_first_haystack<22>(*this->m_leaf_ptr, m_needles, start, end);
+            }
+            else if (has_search_index()) {
                 ObjKey first_key = BaseType::m_cluster->get_real_key(start);
                 if (first_key < m_last_start_key) {
                     // We are not advancing through the clusters. We basically don't know where we are,
@@ -784,10 +815,6 @@ public:
                         ObjKey(actual_key.value - BaseType::m_cluster->get_offset()));
                 }
                 return not_found;
-            }
-
-            if (m_nb_needles) {
-                s = find_first_haystack(start, end);
             }
             else if (end - start == 1) {
                 if (this->m_leaf_ptr->get(start) == this->m_value) {
@@ -843,32 +870,6 @@ private:
         , m_needles(from.m_needles)
     {
     }
-    size_t find_first_haystack(size_t start, size_t end)
-    {
-        const auto not_in_set = m_needles.end();
-        // for a small number of conditions, it is faster to do a linear search than to compute the hash
-        // the decision threshold was determined experimentally to be 22 conditions
-        bool search = m_nb_needles < 22;
-        auto cmp_fn = [this, search, not_in_set](const auto& v) {
-            if (search) {
-                for (auto it = m_needles.begin(); it != not_in_set; ++it) {
-                    if (*it == v)
-                        return true;
-                }
-                return false;
-            }
-            else {
-                return (m_needles.find(v) != not_in_set);
-            }
-        };
-        for (size_t i = start; i < end; ++i) {
-            auto val = this->m_leaf_ptr->get(i);
-            if (cmp_fn(val)) {
-                return i;
-            }
-        }
-        return realm::npos;
-    }
 };
 
 
@@ -903,12 +904,6 @@ public:
         m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) LeafType(m_table.unchecked_ptr()->get_alloc()));
         m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
         m_leaf_ptr = m_array_ptr.get();
-    }
-
-    void init() override
-    {
-        ParentNode::init();
-        m_dD = 100.0;
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -972,6 +967,7 @@ public:
         : m_value(v)
     {
         m_condition_column_key = column;
+        m_dT = 20.0;
     }
 
     void cluster_changed() override
@@ -984,12 +980,6 @@ public:
         m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) LeafType(m_table.unchecked_ptr()->get_alloc()));
         m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
         m_leaf_ptr = m_array_ptr.get();
-    }
-
-    void init() override
-    {
-        ParentNode::init();
-        m_dD = 10.0;
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -1028,14 +1018,23 @@ private:
     int64_t m_value;
 };
 
+extern size_t size_of_list_from_ref(ref_type ref, Allocator& alloc, ColumnType col_type, bool nullable);
 
-template <class T, class TConditionFunction>
+template <class TConditionFunction>
 class SizeListNode : public ParentNode {
 public:
     SizeListNode(int64_t v, ColKey column)
         : m_value(v)
     {
         m_condition_column_key = column;
+        m_dT = 30.0;
+    }
+
+    void reset_cache()
+    {
+        m_cached_col_type = m_condition_column_key.get_type();
+        m_cached_nullable = m_condition_column_key.is_nullable();
+        REALM_ASSERT_DEBUG(m_condition_column_key.is_list());
     }
 
     void cluster_changed() override
@@ -1048,22 +1047,22 @@ public:
         m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) ArrayList(m_table.unchecked_ptr()->get_alloc()));
         m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
         m_leaf_ptr = m_array_ptr.get();
+        reset_cache();
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        ParentNode::init();
-        m_dD = 50.0;
+        ParentNode::init(will_query_ranges);
+        reset_cache();
     }
 
     size_t find_first_local(size_t start, size_t end) override
     {
+        Allocator& alloc = m_table.unchecked_ptr()->get_alloc();
         for (size_t s = start; s < end; ++s) {
             ref_type ref = m_leaf_ptr->get(s);
             if (ref) {
-                ListType list(m_table.unchecked_ptr()->get_alloc());
-                list.init_from_ref(ref);
-                int64_t sz = list.size();
+                int64_t sz = size_of_list_from_ref(ref, alloc, m_cached_col_type, m_cached_nullable);
                 if (TConditionFunction()(sz, m_value))
                     return s;
             }
@@ -1084,7 +1083,6 @@ public:
 
 private:
     // Leaf cache
-    using ListType = BPlusTree<T>;
     using LeafCacheStorage = typename std::aligned_storage<sizeof(ArrayList), alignof(ArrayList)>::type;
     using LeafPtr = std::unique_ptr<ArrayList, PlacementDelete>;
     LeafCacheStorage m_leaf_cache_storage;
@@ -1092,6 +1090,9 @@ private:
     const ArrayList* m_leaf_ptr = nullptr;
 
     int64_t m_value;
+
+    ColumnType m_cached_col_type;
+    bool m_cached_nullable;
 };
 
 
@@ -1104,8 +1105,8 @@ public:
     BinaryNode(BinaryData v, ColKey column)
         : m_value(v)
     {
-        m_dT = 100.0;
         m_condition_column_key = column;
+        m_dT = 100.0;
     }
 
     BinaryNode(null, ColKey column)
@@ -1119,13 +1120,6 @@ public:
         m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) ArrayBinary(m_table.unchecked_ptr()->get_alloc()));
         m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
         m_leaf_ptr = m_array_ptr.get();
-    }
-
-    void init() override
-    {
-        ParentNode::init();
-
-        m_dD = 100.0;
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -1191,13 +1185,6 @@ public:
         m_leaf_ptr = m_array_ptr.get();
     }
 
-    void init() override
-    {
-        ParentNode::init();
-
-        m_dD = 100.0;
-    }
-
     size_t find_first_local(size_t start, size_t end) override
     {
         TConditionFunction condition;
@@ -1239,6 +1226,7 @@ public:
         : m_value(v)
     {
         m_condition_column_key = column;
+        m_dT = 2.0;
     }
 
     TimestampNodeBase(null, ColKey column)
@@ -1252,13 +1240,6 @@ public:
         m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) ArrayTimestamp(m_table.unchecked_ptr()->get_alloc()));
         m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
         m_leaf_ptr = m_array_ptr.get();
-    }
-
-    void init() override
-    {
-        ParentNode::init();
-
-        m_dD = 100.0;
     }
 
 protected:
@@ -1297,6 +1278,187 @@ public:
     {
         return std::unique_ptr<ParentNode>(new TimestampNode(*this));
     }
+
+protected:
+    TimestampNode(const TimestampNode& from, Transaction* tr)
+        : TimestampNodeBase(from, tr)
+    {
+    }
+};
+
+class DecimalNodeBase : public ParentNode {
+public:
+    using TConditionValue = Decimal128;
+    static const bool special_null_node = false;
+
+    DecimalNodeBase(Decimal128 v, ColKey column)
+        : m_value(v)
+    {
+        m_condition_column_key = column;
+    }
+
+    DecimalNodeBase(null, ColKey column)
+        : DecimalNodeBase(Decimal128{null()}, column)
+    {
+    }
+
+    void cluster_changed() override
+    {
+        m_array_ptr = nullptr;
+        m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) ArrayDecimal128(m_table.unchecked_ptr()->get_alloc()));
+        m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
+        m_leaf_ptr = m_array_ptr.get();
+    }
+
+    void init(bool will_query_ranges) override
+    {
+        ParentNode::init(will_query_ranges);
+
+        m_dD = 100.0;
+    }
+
+protected:
+    DecimalNodeBase(const DecimalNodeBase& from)
+        : ParentNode(from)
+        , m_value(from.m_value)
+    {
+    }
+
+    Decimal128 m_value;
+    using LeafCacheStorage = typename std::aligned_storage<sizeof(ArrayDecimal128), alignof(ArrayDecimal128)>::type;
+    using LeafPtr = std::unique_ptr<ArrayDecimal128, PlacementDelete>;
+    LeafCacheStorage m_leaf_cache_storage;
+    LeafPtr m_array_ptr;
+    const ArrayDecimal128* m_leaf_ptr = nullptr;
+};
+
+template <class TConditionFunction>
+class DecimalNode : public DecimalNodeBase {
+public:
+    using DecimalNodeBase::DecimalNodeBase;
+
+    size_t find_first_local(size_t start, size_t end) override
+    {
+        TConditionFunction cond;
+        bool value_is_null = m_value.is_null();
+        for (size_t i = start; i < end; i++) {
+            Decimal128 val = m_leaf_ptr->get(i);
+            if (cond(val, m_value, val.is_null(), value_is_null))
+                return i;
+        }
+        return realm::npos;
+    }
+
+    std::string describe(util::serializer::SerialisationState& state) const override
+    {
+        REALM_ASSERT(m_condition_column_key);
+        return state.describe_column(ParentNode::m_table, m_condition_column_key) + " " +
+               TConditionFunction::description() + " " + util::serializer::print_value(DecimalNode::m_value);
+    }
+
+    std::unique_ptr<ParentNode> clone() const override
+    {
+        return std::unique_ptr<ParentNode>(new DecimalNode(*this));
+    }
+
+protected:
+    DecimalNode(const DecimalNode& from, Transaction* tr)
+        : DecimalNodeBase(from, tr)
+    {
+    }
+};
+
+class ObjectIdNodeBase : public ParentNode {
+public:
+    using TConditionValue = ObjectId;
+    static const bool special_null_node = false;
+
+    ObjectIdNodeBase(ObjectId v, ColKey column)
+        : m_value(v)
+    {
+        m_condition_column_key = column;
+    }
+
+    ObjectIdNodeBase(null, ColKey column)
+        : ObjectIdNodeBase(ObjectId{}, column)
+    {
+        m_value_is_null = true;
+    }
+
+    void cluster_changed() override
+    {
+        m_array_ptr = nullptr;
+        m_array_ptr = LeafPtr(new (&m_leaf_cache_storage) ArrayObjectIdNull(m_table.unchecked_ptr()->get_alloc()));
+        m_cluster->init_leaf(this->m_condition_column_key, m_array_ptr.get());
+        m_leaf_ptr = m_array_ptr.get();
+    }
+
+    void init(bool will_query_ranges) override
+    {
+        ParentNode::init(will_query_ranges);
+
+        m_dD = 100.0;
+    }
+
+protected:
+    ObjectIdNodeBase(const ObjectIdNodeBase& from)
+        : ParentNode(from)
+        , m_value(from.m_value)
+        , m_value_is_null(from.m_value_is_null)
+    {
+    }
+
+    ObjectId m_value;
+    bool m_value_is_null = false;
+    using LeafCacheStorage =
+        typename std::aligned_storage<sizeof(ArrayObjectIdNull), alignof(ArrayObjectIdNull)>::type;
+    using LeafPtr = std::unique_ptr<ArrayObjectIdNull, PlacementDelete>;
+    LeafCacheStorage m_leaf_cache_storage;
+    LeafPtr m_array_ptr;
+    const ArrayObjectIdNull* m_leaf_ptr = nullptr;
+};
+
+template <class TConditionFunction>
+class ObjectIdNode : public ObjectIdNodeBase {
+public:
+    using ObjectIdNodeBase::ObjectIdNodeBase;
+
+    size_t find_first_local(size_t start, size_t end) override
+    {
+        TConditionFunction cond;
+        for (size_t i = start; i < end; i++) {
+            util::Optional<ObjectId> val = m_leaf_ptr->get(i);
+            if (val) {
+                if (cond(*val, m_value, false, m_value_is_null))
+                    return i;
+            }
+            else {
+                if (cond(ObjectId{}, m_value, true, m_value_is_null))
+                    return i;
+            }
+        }
+        return realm::npos;
+    }
+
+    std::string describe(util::serializer::SerialisationState& state) const override
+    {
+        REALM_ASSERT(m_condition_column_key);
+        return state.describe_column(ParentNode::m_table, m_condition_column_key) + " " +
+               TConditionFunction::description() + " " +
+               (m_value_is_null ? util::serializer::print_value(realm::null())
+                                : util::serializer::print_value(ObjectIdNode::m_value));
+    }
+
+    std::unique_ptr<ParentNode> clone() const override
+    {
+        return std::unique_ptr<ParentNode>(new ObjectIdNode(*this));
+    }
+
+protected:
+    ObjectIdNode(const ObjectIdNode& from, Transaction* tr)
+        : ObjectIdNode(from, tr)
+    {
+    }
 };
 
 class StringNodeBase : public ParentNode {
@@ -1308,6 +1470,7 @@ public:
         : m_value(v.is_null() ? util::none : util::make_optional(std::string(v)))
     {
         m_condition_column_key = column;
+        m_dT = 10.0;
     }
 
     void table_changed() override
@@ -1328,11 +1491,10 @@ public:
         m_leaf_ptr = m_array_ptr.get();
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        ParentNode::init();
+        ParentNode::init(will_query_ranges);
 
-        m_dT = 10.0;
         m_probes = 0;
         m_matches = 0;
         m_end_s = 0;
@@ -1402,13 +1564,10 @@ public:
         }
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
+        StringNodeBase::init(will_query_ranges);
         clear_leaf_state();
-
-        m_dD = 100.0;
-
-        StringNodeBase::init();
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -1467,15 +1626,13 @@ public:
             unsigned char c = v[i];
             m_charmap[c] = jump;
         }
+        m_dT = 50.0;
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
+        StringNodeBase::init(will_query_ranges);
         clear_leaf_state();
-
-        m_dD = 100.0;
-
-        StringNodeBase::init();
     }
 
 
@@ -1546,15 +1703,13 @@ public:
             m_charmap[uc] = jump;
             m_charmap[lc] = jump;
         }
+        m_dT = 75.0;
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
+        StringNodeBase::init(will_query_ranges);
         clear_leaf_state();
-
-        m_dD = 100.0;
-
-        StringNodeBase::init();
     }
 
 
@@ -1611,7 +1766,7 @@ public:
     {
     }
 
-    void init() override;
+    void init(bool) override;
 
     bool has_search_index() const override
     {
@@ -1670,7 +1825,7 @@ public:
 
     void _search_index_init() override;
 
-    void consume_condition(StringNode<Equal>* other);
+    bool do_consume_condition(ParentNode& other) override;
 
     std::unique_ptr<ParentNode> clone() const override
     {
@@ -1682,14 +1837,14 @@ public:
     StringNode<Equal>(const StringNode& from)
         : StringNodeEqualBase(from)
     {
-        for (auto it = from.m_needles.begin(); it != from.m_needles.end(); ++it) {
-            if (it->data() == nullptr && it->size() == 0) {
-                m_needles.insert(StringData()); // nulls
+        for (auto& needle : from.m_needles) {
+            if (needle.is_null()) {
+                m_needles.emplace();
             }
             else {
-                m_needle_storage.emplace_back(StringBuffer());
-                m_needle_storage.back().append(it->data(), it->size());
-                m_needles.insert(StringData(m_needle_storage.back().data(), m_needle_storage.back().size()));
+                m_needle_storage.push_back(std::make_unique<char[]>(needle.size()));
+                std::copy(needle.data(), needle.data() + needle.size(), m_needle_storage.back().get());
+                m_needles.insert(StringData(m_needle_storage.back().get(), needle.size()));
             }
         }
     }
@@ -1729,7 +1884,7 @@ private:
 
     size_t _find_first_local(size_t start, size_t end) override;
     std::unordered_set<StringData> m_needles;
-    std::vector<StringBuffer> m_needle_storage;
+    std::vector<std::unique_ptr<char[]>> m_needle_storage;
 };
 
 
@@ -1877,18 +2032,10 @@ public:
         }
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        ParentNode::init();
-
-        m_dD = 10.0;
-
-        std::sort(m_conditions.begin(), m_conditions.end(),
-                  [](auto& a, auto& b) { return a->m_condition_column_key < b->m_condition_column_key; });
-
-        combine_conditions<StringNode<Equal>>();
-        combine_conditions<IntegerNode<ArrayInteger, Equal>>();
-        combine_conditions<IntegerNode<ArrayIntNull, Equal>>();
+        ParentNode::init(will_query_ranges);
+        combine_conditions(!will_query_ranges);
 
         m_start.clear();
         m_start.resize(m_conditions.size(), 0);
@@ -1901,7 +2048,7 @@ public:
 
         std::vector<ParentNode*> v;
         for (auto& condition : m_conditions) {
-            condition->init();
+            condition->init(will_query_ranges);
             v.clear();
             condition->gather_children(v);
         }
@@ -1971,34 +2118,19 @@ public:
     std::vector<std::unique_ptr<ParentNode>> m_conditions;
 
 private:
-    template<class QueryNodeType>
-    void combine_conditions() {
-        QueryNodeType* first_match = nullptr;
-        QueryNodeType* advance = nullptr;
-        auto it = m_conditions.begin();
-        while (it != m_conditions.end()) {
-            // Only try to optimize on QueryNodeType conditions without search index
-            auto node = it->get();
-            if ((first_match = dynamic_cast<QueryNodeType*>(node)) && first_match->m_child == nullptr &&
-                !first_match->has_search_index()) {
-                auto col_key = first_match->m_condition_column_key;
-                auto next = it + 1;
-                while (next != m_conditions.end() && (*next)->m_condition_column_key == col_key) {
-                    auto next_node = next->get();
-                    if ((advance = dynamic_cast<QueryNodeType*>(next_node)) && next_node->m_child == nullptr) {
-                        first_match->consume_condition(advance);
-                        next = m_conditions.erase(next);
-                    }
-                    else {
-                        ++next;
-                    }
-                }
-                it = next;
-            }
-            else {
-                ++it;
-            }
-        }
+    void combine_conditions(bool ignore_indexes)
+    {
+        std::sort(m_conditions.begin(), m_conditions.end(),
+                  [](auto& a, auto& b) { return a->m_condition_column_key < b->m_condition_column_key; });
+
+        auto prev = m_conditions.begin()->get();
+        auto cond = [&](auto& node) {
+            if (prev->consume_condition(*node, ignore_indexes))
+                return true;
+            prev = &*node;
+            return false;
+        };
+        m_conditions.erase(std::remove_if(m_conditions.begin() + 1, m_conditions.end(), cond), m_conditions.end());
     }
 
     // start index of the last find for each cond
@@ -2032,15 +2164,12 @@ public:
         m_first_in_known_range = not_found;
     }
 
-    void init() override
+    void init(bool will_query_ranges) override
     {
-        ParentNode::init();
-
-        m_dD = 10.0;
-
+        ParentNode::init(will_query_ranges);
         std::vector<ParentNode*> v;
 
-        m_condition->init();
+        m_condition->init(false);
         v.clear();
         m_condition->gather_children(v);
     }
@@ -2155,12 +2284,6 @@ public:
         return TConditionFunction::description();
     }
 
-    void init() override
-    {
-        ParentNode::init();
-        m_dD = 100.0;
-    }
-
     size_t find_first_local(size_t start, size_t end) override
     {
         size_t s = start;
@@ -2238,7 +2361,7 @@ class ExpressionNode : public ParentNode {
 public:
     ExpressionNode(std::unique_ptr<Expression>);
 
-    void init() override;
+    void init(bool) override;
     size_t find_first_local(size_t start, size_t end) override;
 
     void table_changed() override;
@@ -2261,7 +2384,6 @@ public:
     LinksToNode(ColKey origin_column_key, ObjKey target_key)
         : m_target_keys(1, target_key)
     {
-        m_dD = 10.0;
         m_dT = 50.0;
         m_condition_column_key = origin_column_key;
     }
@@ -2269,7 +2391,6 @@ public:
     LinksToNode(ColKey origin_column_key, const std::vector<ObjKey>& target_keys)
         : m_target_keys(target_keys)
     {
-        m_dD = 10.0;
         m_dT = 50.0;
         m_condition_column_key = origin_column_key;
     }

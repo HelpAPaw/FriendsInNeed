@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 class ProcessResponse {
     
     static let shared = ProcessResponse()
@@ -80,7 +82,7 @@ class ProcessResponse {
         }
         else if let _response = response.response {
             if let data = response.data {
-                if let responseResultDictionary =  try? JSONSerialization.jsonObject(with: data, options: []) {
+                if let responseResultDictionary = try? JSONSerialization.jsonObject(with: data, options: []) {
                     if let faultDictionary = responseResultDictionary as? [String: Any],
                         let faultCode = faultDictionary["code"] as? Int,
                         let faultMessage = faultDictionary["message"] as? String {
@@ -94,6 +96,9 @@ class ProcessResponse {
                     return responseResultDictionary
                 }
                 else if let responseString = String(data: data, encoding: .utf8) {
+                    if responseString == "null" {
+                        return nil
+                    }
                     return responseString
                 }
             }
@@ -174,91 +179,6 @@ class ProcessResponse {
         return deviceRegistration
     }
     
-    func adaptToGeoPoint(geoDictionary: [String : Any]) -> GeoPoint? { 
-        if let latitude = geoDictionary["latitude"] as? Double,
-            let longitude = geoDictionary["longitude"] as? Double,
-            let categories = geoDictionary["categories"] as? [String] {
-            let objectId = geoDictionary["objectId"] as? String
-            let distance = geoDictionary["distance"] as? Double
-            if let metadata = geoDictionary["metadata"] as? [String: String] {
-                let geoPoint = GeoPoint(objectId: objectId, latitude: latitude, longitude: longitude, distance: distance ?? 0.0, categories: categories, metadata: JSON(metadata))
-                if objectId != nil {
-                    StoredObjects.shared.rememberObjectId(objectId: objectId!, forObject: geoPoint)
-                }
-                return geoPoint
-            }
-            let geoPoint = GeoPoint(objectId: objectId, latitude: latitude, longitude: longitude, distance: distance ?? 0.0, categories: categories, metadata: nil)
-            if objectId != nil {
-                StoredObjects.shared.rememberObjectId(objectId: objectId!, forObject: geoPoint)
-            }
-            return geoPoint
-        }
-        return nil
-    }
-    
-    func adaptToGeoCluster(geoDictionary: [String : Any]) -> GeoCluster? {
-        if let objectId = geoDictionary["objectId"] as? String,
-            let latitude = geoDictionary["latitude"] as? Double,
-            let longitude = geoDictionary["longitude"] as? Double,
-            let categories = geoDictionary["categories"] as? [String],
-            let totalPoints = geoDictionary["totalPoints"] as? Int {
-            let distance = geoDictionary["distance"] as? Double
-            if let metadata = geoDictionary["metadata"] as? [String: String] {
-                let geoCluster = GeoCluster(objectId: objectId, latitude: latitude, longitude: longitude, distance: distance ?? 0.0, categories: categories, metadata: JSON(metadata))
-                geoCluster.totalPoints = totalPoints
-                StoredObjects.shared.rememberObjectId(objectId: objectId, forObject: geoCluster)
-                return geoCluster
-            }
-            let geoCluster = GeoCluster(objectId: objectId, latitude: latitude, longitude: longitude, distance: distance ?? 0.0, categories: categories, metadata: nil)
-            geoCluster.totalPoints = totalPoints
-            StoredObjects.shared.rememberObjectId(objectId: objectId, forObject: geoCluster)
-            return geoCluster
-        }
-        return nil
-    }
-    
-    func adaptToGeoFence(geoFenceDictionary: [String : Any]) -> GeoFence? {
-        if let geofenceName = geoFenceDictionary["geofenceName"] as? String {
-            let geoFence = GeoFence(geofenceName: geofenceName)
-            if let objectId = geoFenceDictionary["objectId"] as? String {
-                geoFence.objectId = objectId
-            }
-            if let onStayDuration = geoFenceDictionary["onStayDuration"] as? NSNumber {
-                geoFence.onStayDuration = onStayDuration
-            }
-            if let geoFenceType = geoFenceDictionary["type"] as? String {
-                geoFence.geoFenceType = FenceType(rawValue: geoFenceType)
-            }
-            if let nodes = geoFenceDictionary["nodes"] as? [[String : Any]] {
-                var geoFenceNodes = [GeoPoint]()
-                for node in nodes {
-                    if node["___class"] as? String == "GeoPoint",
-                        let latitude = node["latitude"] as? Double,
-                        let longitude = node["longitude"] as? Double {
-                        let geoPoint = GeoPoint(latitude: latitude, longitude: longitude)
-                        geoFenceNodes.append(geoPoint)
-                    }
-                }
-                geoFence.nodes = geoFenceNodes
-            }
-            if geoFence.objectId != nil {
-                StoredObjects.shared.rememberObjectId(objectId: geoFence.objectId!, forObject: geoFence)
-            }
-            return geoFence
-        }
-        return nil
-    }
-    
-    func adaptToSearchMatchesResult(searchMatchesResultDictionary: [String : Any]) -> SearchMatchesResult? {
-        if let matchesData = searchMatchesResultDictionary["fields"] as? [String : Any],
-            let geoPointDictionary = matchesData["geoPoint"] as? [String : Any],
-            let matches = matchesData["matches"] as? Double,
-            let geoPoint = adaptToGeoPoint(geoDictionary: geoPointDictionary) {
-            return SearchMatchesResult(geoPoint: geoPoint, matches: matches)
-        }
-        return nil
-    }
-    
     func adaptToCommandObject(commandObjectDictionary: [String : Any]) -> CommandObject {
         let commandObject = CommandObject()
         if let type = commandObjectDictionary["type"] as? String {
@@ -330,6 +250,23 @@ class ProcessResponse {
             invokeObject.args = JSONUtils.shared.jsonToObject(objectToParse: args) as? [Any]
         }
         return invokeObject
+    }
+    
+    func adaptToRelationStatus(relationStatusDictionary: [String : Any]) -> RelationStatus {
+        let relationStatus = RelationStatus()
+        if let parentObjectId = relationStatusDictionary["parentObjectId"] as? String {
+            relationStatus.parentObjectId = parentObjectId
+        }
+        if let isCondotional = relationStatusDictionary["conditional"] as? NSNumber {
+            relationStatus.isConditional = isCondotional.boolValue
+        }
+        if let whereClause = relationStatusDictionary["whereClause"] as? String {
+            relationStatus.whereClause = whereClause
+        }
+        if let children = relationStatusDictionary["children"] as? [String] {
+            relationStatus.children = children
+        }
+        return relationStatus
     }
     
     func adaptToBackendlessFile(backendlessFileDictionary: [String : Any]) -> BackendlessFile {

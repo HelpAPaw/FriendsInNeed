@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 @objcMembers public class DataQueryBuilder: NSObject, Codable {
     
     public var whereClause: String?
@@ -36,6 +38,7 @@
     public var related: [String]?
     public var groupBy: [String]?
     public var havingClause: String?
+    public var distinct = false
     
     var isRelationsDepthSet = false
     

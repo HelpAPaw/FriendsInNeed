@@ -327,7 +327,9 @@
 }
 
 - (IBAction)onAddSignalButton:(id)sender
-{
+{// Force a test crash
+    @[][1];
+
     if ([[FINDataManager sharedManager] userIsLogged] == NO)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"registration_required",nil)

@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import WebKit
 
 class FINPrivacyPolicyVC: UIViewController {
     @IBOutlet weak var toolbar: UIView!
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
@@ -20,10 +21,10 @@ class FINPrivacyPolicyVC: UIViewController {
         toolbar.layer.shadowOpacity = 1.0
         toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
         
-        webView.delegate = self
+        webView.navigationDelegate = self
         let url = URL(string: SharedConstants.kPrivacyPolicyUrl);
         let request = URLRequest(url: url!)
-        webView.loadRequest(request);
+        webView.load(request)
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,12 +37,12 @@ class FINPrivacyPolicyVC: UIViewController {
     }
 }
 
-extension FINPrivacyPolicyVC: UIWebViewDelegate {
-    func webViewDidStartLoad(_ webView: UIWebView) {
+extension FINPrivacyPolicyVC: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         loadingIndicator.startAnimating()
     }
     
-    func webViewDidFinishLoad(_ webView: UIWebView) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         loadingIndicator.stopAnimating()
     }
 }

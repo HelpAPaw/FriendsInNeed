@@ -1,22 +1,3 @@
-/*************************************************************************
- *
- * REALM CONFIDENTIAL
- * __________________
- *
- *  [2011] - [2016] Realm Inc
- *  All Rights Reserved.
- *
- * NOTICE:  All information contained herein is, and remains
- * the property of Realm Incorporated and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Realm Incorporated
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Realm Incorporated.
- *
- **************************************************************************/
 
 #ifndef REALM_UTIL_CIRCULAR_BUFFER_HPP
 #define REALM_UTIL_CIRCULAR_BUFFER_HPP
@@ -83,24 +64,26 @@ namespace util {
 /// capacity unchanged.
 ///
 /// Iterators are of the "random access" kind (std::random_access_iterator_tag).
-template<class T> class CircularBuffer {
+template <class T>
+class CircularBuffer {
 private:
-    template<class> class Iter;
+    template <class>
+    class Iter;
 
-    template<class I> using RequireIter =
-        std::enable_if_t<std::is_convertible<typename std::iterator_traits<I>::iterator_category,
-                                             std::input_iterator_tag>::value>;
+    template <class I>
+    using RequireIter = std::enable_if_t<
+        std::is_convertible<typename std::iterator_traits<I>::iterator_category, std::input_iterator_tag>::value>;
 
 public:
     static_assert(std::is_nothrow_destructible<T>::value, "");
 
-    using value_type      = T;
-    using size_type       = std::size_t;
-    using reference       = value_type&;
+    using value_type = T;
+    using size_type = std::size_t;
+    using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator        = Iter<value_type>;
-    using const_iterator  = Iter<const value_type>;
-    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using iterator = Iter<value_type>;
+    using const_iterator = Iter<const value_type>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     CircularBuffer() noexcept;
@@ -109,7 +92,8 @@ public:
     CircularBuffer(std::initializer_list<T>);
     explicit CircularBuffer(size_type size);
     CircularBuffer(size_type size, const T& value);
-    template<class I, class = RequireIter<I>> CircularBuffer(I begin, I end);
+    template <class I, class = RequireIter<I>>
+    CircularBuffer(I begin, I end);
     ~CircularBuffer() noexcept;
 
     CircularBuffer& operator=(const CircularBuffer&);
@@ -118,7 +102,8 @@ public:
 
     void assign(std::initializer_list<T>);
     void assign(size_type size, const T& value);
-    template<class I, class = RequireIter<I>> void assign(I begin, I end);
+    template <class I, class = RequireIter<I>>
+    void assign(I begin, I end);
 
     // Element access
 
@@ -169,13 +154,16 @@ public:
     reference push_front(T&&);
     reference push_back(T&&);
 
-    template<class... Args> reference emplace_front(Args&&...);
-    template<class... Args> reference emplace_back(Args&&...);
+    template <class... Args>
+    reference emplace_front(Args&&...);
+    template <class... Args>
+    reference emplace_back(Args&&...);
 
     void pop_front() noexcept;
     void pop_back() noexcept;
 
-    // FIXME: emplace(const_iterator i, ...) -> j = unwrap(i.m_index); if (j >= (m_size+1)/2) insert_near_back(j, ...); else insert_near_front(j, ...);                            
+    // FIXME: emplace(const_iterator i, ...) -> j = unwrap(i.m_index); if (j >= (m_size+1)/2) insert_near_back(j,
+    // ...); else insert_near_front(j, ...);
 
     void clear() noexcept;
     void resize(size_type size);
@@ -185,24 +173,26 @@ public:
 
     // Comparison
 
-    template<class U> bool operator==(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() == std::declval<U>()));
-    template<class U> bool operator!=(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() == std::declval<U>()));
-    template<class U> bool operator<(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() < std::declval<U>()));
-    template<class U> bool operator>(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() < std::declval<U>()));
-    template<class U> bool operator<=(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() < std::declval<U>()));
-    template<class U> bool operator>=(const CircularBuffer<U>&) const
-        noexcept(noexcept(std::declval<T>() < std::declval<U>()));
+    template <class U>
+    bool operator==(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() == std::declval<U>()));
+    template <class U>
+    bool operator!=(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() == std::declval<U>()));
+    template <class U>
+    bool operator<(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() < std::declval<U>()));
+    template <class U>
+    bool operator>(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() < std::declval<U>()));
+    template <class U>
+    bool operator<=(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() < std::declval<U>()));
+    template <class U>
+    bool operator>=(const CircularBuffer<U>&) const noexcept(noexcept(std::declval<T>() < std::declval<U>()));
 
 private:
     using Strut = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
     std::unique_ptr<Strut[]> m_memory_owner;
 
     // Index of first element in allocated memory chunk.
+    //
+    // INVARIANT: m_allocated_size == 0 ? m_begin == 0 : m_begin < m_allocated_size
     size_type m_begin = 0;
 
     // The number of elements within the allocated memory chunk, that are
@@ -216,7 +206,7 @@ private:
     // than m_size. This is required to ensure that the iterators returned by
     // begin() and end() are equal only when the buffer is empty.
     //
-    // INVARIANT: m_size == 0 ? m_allocated_size == 0 : m_size < m_allocated_size
+    // INVARIANT: m_size == 0 || m_allocated_size > m_size
     size_type m_allocated_size = 0;
 
     T* get_memory_ptr() noexcept;
@@ -227,9 +217,12 @@ private:
     size_type wrap(size_type index) noexcept;
     size_type unwrap(size_type index) noexcept;
 
-    template<class I> void copy(I begin, I end);
-    template<class I> void copy(I begin, I end, std::input_iterator_tag);
-    template<class I> void copy(I begin, I end, std::forward_iterator_tag);
+    template <class I>
+    void copy(I begin, I end);
+    template <class I>
+    void copy(I begin, I end, std::input_iterator_tag);
+    template <class I>
+    void copy(I begin, I end, std::forward_iterator_tag);
 
     void destroy(size_type offset = 0) noexcept;
 
@@ -237,31 +230,31 @@ private:
 };
 
 
-template<class T> void swap(CircularBuffer<T>&, CircularBuffer<T>&) noexcept;
-
-
+template <class T>
+void swap(CircularBuffer<T>&, CircularBuffer<T>&) noexcept;
 
 
 // Implementation
 
-template<class T> template<class U> class CircularBuffer<T>::Iter :
-        public std::iterator<std::random_access_iterator_tag, U> {
+template <class T>
+template <class U>
+class CircularBuffer<T>::Iter : public std::iterator<std::random_access_iterator_tag, U> {
 public:
     using difference_type = std::ptrdiff_t;
 
-    Iter() noexcept
-    {
-    }
+    Iter() noexcept {}
 
-    template<class V> Iter(const Iter<V>& i) noexcept
+    template <class V>
+    Iter(const Iter<V>& i) noexcept
     {
         operator=(i);
     }
 
-    template<class V> Iter& operator=(const Iter<V>& i) noexcept
+    template <class V>
+    Iter& operator=(const Iter<V>& i) noexcept
     {
         // Check constness convertability
-        static_assert(std::is_convertible<V*,U*>::value, "");
+        static_assert(std::is_convertible<V*, U*>::value, "");
         m_buffer = i.m_buffer;
         m_index = i.m_index;
         return *this;
@@ -358,26 +351,30 @@ public:
         return j;
     }
 
-    template<class V> difference_type operator-(const Iter<V>& i) const noexcept
+    template <class V>
+    difference_type operator-(const Iter<V>& i) const noexcept
     {
         REALM_ASSERT(m_buffer == i.m_buffer);
         size_type i_1 = m_buffer->unwrap(m_index);
         size_type i_2 = i.m_buffer->unwrap(i.m_index);
-        return from_twos_compl<difference_type>(size_type(i_1 - i_2));
+        return difference_type(size_type(i_1 - i_2));
     }
 
-    template<class V> bool operator==(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator==(const Iter<V>& i) const noexcept
     {
         REALM_ASSERT(m_buffer == i.m_buffer);
         return (m_index == i.m_index);
     }
 
-    template<class V> bool operator!=(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator!=(const Iter<V>& i) const noexcept
     {
         return !operator==(i);
     }
 
-    template<class V> bool operator<(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator<(const Iter<V>& i) const noexcept
     {
         REALM_ASSERT(m_buffer == i.m_buffer);
         size_type i_1 = m_buffer->unwrap(m_index);
@@ -385,17 +382,20 @@ public:
         return (i_1 < i_2);
     }
 
-    template<class V> bool operator>(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator>(const Iter<V>& i) const noexcept
     {
         return (i < *this);
     }
 
-    template<class V> bool operator<=(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator<=(const Iter<V>& i) const noexcept
     {
         return !operator>(i);
     }
 
-    template<class V> bool operator>=(const Iter<V>& i) const noexcept
+    template <class V>
+    bool operator>=(const Iter<V>& i) const noexcept
     {
         return !operator<(i);
     }
@@ -407,21 +407,24 @@ private:
     // beginning of m_buffer->get_memory_ptr().
     size_type m_index = 0;
 
-    Iter(CircularBuffer* buffer, size_type index) noexcept :
-        m_buffer{buffer},
-        m_index{index}
+    Iter(CircularBuffer* buffer, size_type index) noexcept
+        : m_buffer{buffer}
+        , m_index{index}
     {
     }
 
     friend class CircularBuffer<T>;
-    template<class> friend class Iter;
+    template <class>
+    friend class Iter;
 };
 
-template<class T> inline CircularBuffer<T>::CircularBuffer() noexcept
+template <class T>
+inline CircularBuffer<T>::CircularBuffer() noexcept
 {
 }
 
-template<class T> inline CircularBuffer<T>::CircularBuffer(const CircularBuffer& buffer)
+template <class T>
+inline CircularBuffer<T>::CircularBuffer(const CircularBuffer& buffer)
 {
     try {
         copy(buffer.begin(), buffer.end()); // Throws
@@ -434,18 +437,20 @@ template<class T> inline CircularBuffer<T>::CircularBuffer(const CircularBuffer&
     }
 }
 
-template<class T> inline CircularBuffer<T>::CircularBuffer(CircularBuffer&& buffer) noexcept :
-    m_memory_owner{std::move(buffer.m_memory_owner)},
-    m_begin{buffer.m_begin},
-    m_size{buffer.m_size},
-    m_allocated_size{buffer.m_allocated_size}
+template <class T>
+inline CircularBuffer<T>::CircularBuffer(CircularBuffer&& buffer) noexcept
+    : m_memory_owner{std::move(buffer.m_memory_owner)}
+    , m_begin{buffer.m_begin}
+    , m_size{buffer.m_size}
+    , m_allocated_size{buffer.m_allocated_size}
 {
-    buffer.m_begin          = 0;
-    buffer.m_size           = 0;
+    buffer.m_begin = 0;
+    buffer.m_size = 0;
     buffer.m_allocated_size = 0;
 }
 
-template<class T> inline CircularBuffer<T>::CircularBuffer(std::initializer_list<T> list)
+template <class T>
+inline CircularBuffer<T>::CircularBuffer(std::initializer_list<T> list)
 {
     try {
         copy(list.begin(), list.end()); // Throws
@@ -458,7 +463,8 @@ template<class T> inline CircularBuffer<T>::CircularBuffer(std::initializer_list
     }
 }
 
-template<class T> inline CircularBuffer<T>::CircularBuffer(size_type count)
+template <class T>
+inline CircularBuffer<T>::CircularBuffer(size_type count)
 {
     try {
         resize(count); // Throws
@@ -472,7 +478,8 @@ template<class T> inline CircularBuffer<T>::CircularBuffer(size_type count)
     }
 }
 
-template<class T> inline CircularBuffer<T>::CircularBuffer(size_type count, const T& value)
+template <class T>
+inline CircularBuffer<T>::CircularBuffer(size_type count, const T& value)
 {
     try {
         resize(count, value); // Throws
@@ -485,7 +492,9 @@ template<class T> inline CircularBuffer<T>::CircularBuffer(size_type count, cons
     }
 }
 
-template<class T> template<class I, class> inline CircularBuffer<T>::CircularBuffer(I begin, I end)
+template <class T>
+template <class I, class>
+inline CircularBuffer<T>::CircularBuffer(I begin, I end)
 {
     try {
         copy(begin, end); // Throws
@@ -498,12 +507,13 @@ template<class T> template<class I, class> inline CircularBuffer<T>::CircularBuf
     }
 }
 
-template<class T> inline CircularBuffer<T>::~CircularBuffer() noexcept
+template <class T>
+inline CircularBuffer<T>::~CircularBuffer() noexcept
 {
     destroy();
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::operator=(const CircularBuffer& buffer) -> CircularBuffer&
 {
     clear();
@@ -511,21 +521,21 @@ inline auto CircularBuffer<T>::operator=(const CircularBuffer& buffer) -> Circul
     return *this;
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::operator=(CircularBuffer&& buffer) noexcept -> CircularBuffer&
 {
     destroy();
-    m_memory_owner   = std::move(buffer.m_memory_owner);
-    m_begin          = buffer.m_begin;
-    m_size           = buffer.m_size;
+    m_memory_owner = std::move(buffer.m_memory_owner);
+    m_begin = buffer.m_begin;
+    m_size = buffer.m_size;
     m_allocated_size = buffer.m_allocated_size;
-    buffer.m_begin          = 0;
-    buffer.m_size           = 0;
+    buffer.m_begin = 0;
+    buffer.m_size = 0;
     buffer.m_allocated_size = 0;
     return *this;
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::operator=(std::initializer_list<T> list) -> CircularBuffer&
 {
     clear();
@@ -533,37 +543,43 @@ inline auto CircularBuffer<T>::operator=(std::initializer_list<T> list) -> Circu
     return *this;
 }
 
-template<class T> inline void CircularBuffer<T>::assign(std::initializer_list<T> list)
+template <class T>
+inline void CircularBuffer<T>::assign(std::initializer_list<T> list)
 {
     clear();
     copy(list.begin(), list.end()); // Throws
 }
 
-template<class T> inline void CircularBuffer<T>::assign(size_type count, const T& value)
+template <class T>
+inline void CircularBuffer<T>::assign(size_type count, const T& value)
 {
     clear();
     resize(count, value); // Throws
 }
 
-template<class T> template<class I, class> inline void CircularBuffer<T>::assign(I begin, I end)
+template <class T>
+template <class I, class>
+inline void CircularBuffer<T>::assign(I begin, I end)
 {
     clear();
     copy(begin, end); // Throws
 }
 
-template<class T> inline auto CircularBuffer<T>::at(size_type i) -> reference
+template <class T>
+inline auto CircularBuffer<T>::at(size_type i) -> reference
 {
     if (REALM_LIKELY(i < m_size))
         return operator[](i);
     throw util::out_of_range{"Index"};
 }
 
-template<class T> inline auto CircularBuffer<T>::at(size_type i) const -> const_reference
+template <class T>
+inline auto CircularBuffer<T>::at(size_type i) const -> const_reference
 {
     return const_cast<CircularBuffer*>(this)->at(i); // Throws
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::operator[](size_type i) noexcept -> reference
 {
     REALM_ASSERT(i < m_size);
@@ -572,105 +588,123 @@ inline auto CircularBuffer<T>::operator[](size_type i) noexcept -> reference
     return memory[j];
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::operator[](size_type i) const noexcept -> const_reference
 {
     return const_cast<CircularBuffer*>(this)->operator[](i);
 }
 
-template<class T> inline auto CircularBuffer<T>::front() noexcept -> reference
+template <class T>
+inline auto CircularBuffer<T>::front() noexcept -> reference
 {
     return operator[](0);
 }
 
-template<class T> inline auto CircularBuffer<T>::front() const noexcept -> const_reference
+template <class T>
+inline auto CircularBuffer<T>::front() const noexcept -> const_reference
 {
     return operator[](0);
 }
 
-template<class T> inline auto CircularBuffer<T>::back() noexcept -> reference
+template <class T>
+inline auto CircularBuffer<T>::back() noexcept -> reference
 {
-    return operator[](m_size-1);
+    return operator[](m_size - 1);
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::back() const noexcept -> const_reference
 {
-    return operator[](m_size-1);
+    return operator[](m_size - 1);
 }
 
-template<class T> inline auto CircularBuffer<T>::begin() noexcept -> iterator
+template <class T>
+inline auto CircularBuffer<T>::begin() noexcept -> iterator
 {
     return iterator{this, m_begin};
 }
 
-template<class T> inline auto CircularBuffer<T>::begin() const noexcept -> const_iterator
+template <class T>
+inline auto CircularBuffer<T>::begin() const noexcept -> const_iterator
 {
     return const_cast<CircularBuffer*>(this)->begin();
 }
 
-template<class T> inline auto CircularBuffer<T>::cbegin() const noexcept -> const_iterator
+template <class T>
+inline auto CircularBuffer<T>::cbegin() const noexcept -> const_iterator
 {
     return begin();
 }
 
-template<class T> inline auto CircularBuffer<T>::end() noexcept -> iterator
+template <class T>
+inline auto CircularBuffer<T>::end() noexcept -> iterator
 {
     size_type i = wrap(m_size);
     return iterator{this, i};
 }
 
-template<class T> inline auto CircularBuffer<T>::end() const noexcept -> const_iterator
+template <class T>
+inline auto CircularBuffer<T>::end() const noexcept -> const_iterator
 {
     return const_cast<CircularBuffer*>(this)->end();
 }
 
-template<class T> inline auto CircularBuffer<T>::cend() const noexcept -> const_iterator
+template <class T>
+inline auto CircularBuffer<T>::cend() const noexcept -> const_iterator
 {
     return end();
 }
 
-template<class T> inline auto CircularBuffer<T>::rbegin() noexcept -> reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::rbegin() noexcept -> reverse_iterator
 {
     return std::reverse_iterator<iterator>(end());
 }
 
-template<class T> inline auto CircularBuffer<T>::rbegin() const noexcept -> const_reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::rbegin() const noexcept -> const_reverse_iterator
 {
     return const_cast<CircularBuffer*>(this)->rbegin();
 }
 
-template<class T> inline auto CircularBuffer<T>::crbegin() const noexcept -> const_reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::crbegin() const noexcept -> const_reverse_iterator
 {
     return rbegin();
 }
 
-template<class T> inline auto CircularBuffer<T>::rend() noexcept -> reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::rend() noexcept -> reverse_iterator
 {
     return std::reverse_iterator<iterator>(begin());
 }
 
-template<class T> inline auto CircularBuffer<T>::rend() const noexcept -> const_reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::rend() const noexcept -> const_reverse_iterator
 {
     return const_cast<CircularBuffer*>(this)->rend();
 }
 
-template<class T> inline auto CircularBuffer<T>::crend() const noexcept -> const_reverse_iterator
+template <class T>
+inline auto CircularBuffer<T>::crend() const noexcept -> const_reverse_iterator
 {
     return rend();
 }
 
-template<class T> inline bool CircularBuffer<T>::empty() const noexcept
+template <class T>
+inline bool CircularBuffer<T>::empty() const noexcept
 {
     return (m_size == 0);
 }
 
-template<class T> inline auto CircularBuffer<T>::size() const noexcept -> size_type
+template <class T>
+inline auto CircularBuffer<T>::size() const noexcept -> size_type
 {
     return m_size;
 }
 
-template<class T> void CircularBuffer<T>::reserve(size_type capacity)
+template <class T>
+void CircularBuffer<T>::reserve(size_type capacity)
 {
     if (capacity == 0)
         return;
@@ -693,7 +727,8 @@ template<class T> void CircularBuffer<T>::reserve(size_type capacity)
     realloc(new_allocated_size); // Throws
 }
 
-template<class T> inline void CircularBuffer<T>::shrink_to_fit()
+template <class T>
+inline void CircularBuffer<T>::shrink_to_fit()
 {
     if (m_size > 0) {
         // An extra element of capacity is needed such that the end iterator can
@@ -710,33 +745,39 @@ template<class T> inline void CircularBuffer<T>::shrink_to_fit()
     }
 }
 
-template<class T> inline auto CircularBuffer<T>::capacity() const noexcept -> size_type
+template <class T>
+inline auto CircularBuffer<T>::capacity() const noexcept -> size_type
 {
     return (m_allocated_size > 0 ? m_allocated_size - 1 : 0);
 }
 
-template<class T> inline auto CircularBuffer<T>::push_front(const T& value) -> reference
+template <class T>
+inline auto CircularBuffer<T>::push_front(const T& value) -> reference
 {
     return emplace_front(value); // Throws
 }
 
-template<class T> inline auto CircularBuffer<T>::push_back(const T& value) -> reference
+template <class T>
+inline auto CircularBuffer<T>::push_back(const T& value) -> reference
 {
     return emplace_back(value); // Throws
 }
 
-template<class T> inline auto CircularBuffer<T>::push_front(T&& value) -> reference
+template <class T>
+inline auto CircularBuffer<T>::push_front(T&& value) -> reference
 {
-    return emplace_front(value); // Throws
+    return emplace_front(std::move(value)); // Throws
 }
 
-template<class T> inline auto CircularBuffer<T>::push_back(T&& value) -> reference
+template <class T>
+inline auto CircularBuffer<T>::push_back(T&& value) -> reference
 {
-    return emplace_back(value); // Throws
+    return emplace_back(std::move(value)); // Throws
 }
 
-template<class T>
-template<class... Args> inline auto CircularBuffer<T>::emplace_front(Args&&... args) -> reference
+template <class T>
+template <class... Args>
+inline auto CircularBuffer<T>::emplace_front(Args&&... args) -> reference
 {
     size_type new_size = m_size + 1;
     reserve(new_size); // Throws
@@ -749,8 +790,9 @@ template<class... Args> inline auto CircularBuffer<T>::emplace_front(Args&&... a
     return memory[i];
 }
 
-template<class T>
-template<class... Args> inline auto CircularBuffer<T>::emplace_back(Args&&... args) -> reference
+template <class T>
+template <class... Args>
+inline auto CircularBuffer<T>::emplace_back(Args&&... args) -> reference
 {
     size_type new_size = m_size + 1;
     reserve(new_size); // Throws
@@ -762,7 +804,8 @@ template<class... Args> inline auto CircularBuffer<T>::emplace_back(Args&&... ar
     return memory[i];
 }
 
-template<class T> inline void CircularBuffer<T>::pop_front() noexcept
+template <class T>
+inline void CircularBuffer<T>::pop_front() noexcept
 {
     REALM_ASSERT(m_size > 0);
     T* memory = get_memory_ptr();
@@ -771,7 +814,8 @@ template<class T> inline void CircularBuffer<T>::pop_front() noexcept
     --m_size;
 }
 
-template<class T> inline void CircularBuffer<T>::pop_back() noexcept
+template <class T>
+inline void CircularBuffer<T>::pop_back() noexcept
 {
     REALM_ASSERT(m_size > 0);
     T* memory = get_memory_ptr();
@@ -781,14 +825,16 @@ template<class T> inline void CircularBuffer<T>::pop_back() noexcept
     m_size = new_size;
 }
 
-template<class T> inline void CircularBuffer<T>::clear() noexcept
+template <class T>
+inline void CircularBuffer<T>::clear() noexcept
 {
     destroy();
     m_begin = 0;
     m_size = 0;
 }
 
-template<class T> inline void CircularBuffer<T>::resize(size_type size)
+template <class T>
+inline void CircularBuffer<T>::resize(size_type size)
 {
     if (size <= m_size) {
         size_type offset = size;
@@ -803,11 +849,11 @@ template<class T> inline void CircularBuffer<T>::resize(size_type size)
         new (&memory[i]) T(); // Throws
         i = circular_inc(i);
         ++m_size;
-    }
-    while (m_size < size);
+    } while (m_size < size);
 }
 
-template<class T> inline void CircularBuffer<T>::resize(size_type size, const T& value)
+template <class T>
+inline void CircularBuffer<T>::resize(size_type size, const T& value)
 {
     if (size <= m_size) {
         size_type offset = size;
@@ -822,66 +868,73 @@ template<class T> inline void CircularBuffer<T>::resize(size_type size, const T&
         new (&memory[i]) T(value); // Throws
         i = circular_inc(i);
         ++m_size;
-    }
-    while (m_size < size);
+    } while (m_size < size);
 }
 
-template<class T> inline void CircularBuffer<T>::swap(CircularBuffer& buffer) noexcept
+template <class T>
+inline void CircularBuffer<T>::swap(CircularBuffer& buffer) noexcept
 {
-    std::swap(m_memory_owner,   buffer.m_memory_owner);
-    std::swap(m_begin,          buffer.m_begin);
-    std::swap(m_size,           buffer.m_size);
+    std::swap(m_memory_owner, buffer.m_memory_owner);
+    std::swap(m_begin, buffer.m_begin);
+    std::swap(m_size, buffer.m_size);
     std::swap(m_allocated_size, buffer.m_allocated_size);
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator==(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() == std::declval<U>()))
 {
     return std::equal(begin(), end(), buffer.begin(), buffer.end()); // Throws
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator!=(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() == std::declval<U>()))
 {
     return !operator==(buffer); // Throws
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator<(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() < std::declval<U>()))
 {
     return std::lexicographical_compare(begin(), end(), buffer.begin(), buffer.end()); // Throws
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator>(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() < std::declval<U>()))
 {
     return (buffer < *this); // Throws
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator<=(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() < std::declval<U>()))
 {
     return !operator>(buffer); // Throws
 }
 
-template<class T> template<class U>
+template <class T>
+template <class U>
 inline bool CircularBuffer<T>::operator>=(const CircularBuffer<U>& buffer) const
     noexcept(noexcept(std::declval<T>() < std::declval<U>()))
 {
     return !operator<(buffer); // Throws
 }
 
-template<class T> inline T* CircularBuffer<T>::get_memory_ptr() noexcept
+template <class T>
+inline T* CircularBuffer<T>::get_memory_ptr() noexcept
 {
     return static_cast<T*>(static_cast<void*>(m_memory_owner.get()));
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::circular_inc(size_type index) noexcept -> size_type
 {
     size_type index_2 = index + 1;
@@ -890,7 +943,7 @@ inline auto CircularBuffer<T>::circular_inc(size_type index) noexcept -> size_ty
     return 0;
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::circular_dec(size_type index) noexcept -> size_type
 {
     if (REALM_LIKELY(index > 0))
@@ -898,7 +951,7 @@ inline auto CircularBuffer<T>::circular_dec(size_type index) noexcept -> size_ty
     return m_allocated_size - 1;
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::wrap(size_type index) noexcept -> size_type
 {
     size_type top = m_allocated_size - m_begin;
@@ -907,7 +960,7 @@ inline auto CircularBuffer<T>::wrap(size_type index) noexcept -> size_type
     return index - top;
 }
 
-template<class T>
+template <class T>
 inline auto CircularBuffer<T>::unwrap(size_type index) noexcept -> size_type
 {
     if (index >= m_begin)
@@ -915,20 +968,24 @@ inline auto CircularBuffer<T>::unwrap(size_type index) noexcept -> size_type
     return m_allocated_size - (m_begin - index);
 }
 
-template<class T> template<class I> inline void CircularBuffer<T>::copy(I begin, I end)
+template <class T>
+template <class I>
+inline void CircularBuffer<T>::copy(I begin, I end)
 {
     using iterator_category = typename std::iterator_traits<I>::iterator_category;
     copy(begin, end, iterator_category{}); // Throws
 }
 
-template<class T> template<class I>
+template <class T>
+template <class I>
 inline void CircularBuffer<T>::copy(I begin, I end, std::input_iterator_tag)
 {
     for (I j = begin; j != end; ++j)
         push_back(*j); // Throws
 }
 
-template<class T> template<class I>
+template <class T>
+template <class I>
 inline void CircularBuffer<T>::copy(I begin, I end, std::forward_iterator_tag)
 {
     REALM_ASSERT(m_begin == 0);
@@ -942,24 +999,25 @@ inline void CircularBuffer<T>::copy(I begin, I end, std::forward_iterator_tag)
     }
 }
 
-template<class T> inline void CircularBuffer<T>::destroy(size_type offset) noexcept
+template <class T>
+inline void CircularBuffer<T>::destroy(size_type offset) noexcept
 {
     T* memory = get_memory_ptr();
-    size_type j = m_begin;
+    size_type j = wrap(offset);
     for (size_type i = offset; i < m_size; ++i) {
         memory[j].~T();
         j = circular_inc(j);
     }
 }
 
-template<class T> void CircularBuffer<T>::realloc(size_type new_allocated_size)
+template <class T>
+void CircularBuffer<T>::realloc(size_type new_allocated_size)
 {
     REALM_ASSERT(new_allocated_size > 1);
     REALM_ASSERT(new_allocated_size > m_size);
 
     // Allocate new buffer
-    std::unique_ptr<Strut[]> new_memory_owner =
-        std::make_unique<Strut[]>(new_allocated_size); // Throws
+    std::unique_ptr<Strut[]> new_memory_owner = std::make_unique<Strut[]>(new_allocated_size); // Throws
     T* memory = get_memory_ptr();
 
     // Move or copy elements to new buffer
@@ -999,7 +1057,8 @@ template<class T> void CircularBuffer<T>::realloc(size_type new_allocated_size)
     m_allocated_size = new_allocated_size;
 }
 
-template<class T> inline void swap(CircularBuffer<T>& a, CircularBuffer<T>& b) noexcept
+template <class T>
+inline void swap(CircularBuffer<T>& a, CircularBuffer<T>& b) noexcept
 {
     a.swap(b);
 }
@@ -1008,4 +1067,3 @@ template<class T> inline void swap(CircularBuffer<T>& a, CircularBuffer<T>& b) n
 } // namespace realm
 
 #endif // REALM_UTIL_CIRCULAR_BUFFER_HPP
-

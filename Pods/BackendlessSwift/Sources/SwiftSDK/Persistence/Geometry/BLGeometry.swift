@@ -19,7 +19,7 @@
  *  ********************************************************************************************************************
  */
 
-enum geoParserErrors {
+enum GeoParserErrors {
     static let wrongFormat = "Provided geo data has wrong format" // Invalid GIS data provided to function st_geometryfromtext
     static let nullLatLong = "Longitude or latitude can't be null"
     static let lineStringPointsCount = "LineString must have 2 or more points"

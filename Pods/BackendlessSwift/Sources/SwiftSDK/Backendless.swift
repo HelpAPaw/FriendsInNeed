@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 @objcMembers public class Backendless: NSObject {    
 
     public static let shared = Backendless()
@@ -87,15 +89,6 @@
     public lazy var fileService: FileService = {
         let _fileSevice = FileService()
         return _fileSevice
-    }()
-    
-    public lazy var geo: GeoService = {
-        return self.geoService
-    }()
-    
-    public lazy var geoService: GeoService = {
-        let _geoSevice = GeoService()
-        return _geoSevice
     }()
     
     public lazy var logging: Logging = {

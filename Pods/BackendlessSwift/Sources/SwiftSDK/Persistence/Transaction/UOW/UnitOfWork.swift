@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 @objc public enum IsolationLevel: Int {
     case REPEATABLE_READ
     case READ_COMMITTED
@@ -36,7 +38,7 @@
 
 // **************************************************************
 
-enum uowProps {
+enum UowProps {
     static let ref = "___ref"
     static let opResultId = "opResultId"
     static let resultIndex = "resultIndex"

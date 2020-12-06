@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 @objcMembers public class OpResultValueReference: NSObject {
     
     public var opResult: OpResult?
@@ -48,10 +50,10 @@
     public func makeReference() -> [String : Any]? {
         var reference = opResult?.makeReference()
         if resultIndex != nil {
-            reference?[uowProps.resultIndex] = resultIndex
+            reference?[UowProps.resultIndex] = resultIndex
         }
         if propName != nil {
-            reference?[uowProps.propName] = propName
+            reference?[UowProps.propName] = propName
         }
         return reference
     }

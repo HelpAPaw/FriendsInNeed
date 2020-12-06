@@ -31,10 +31,8 @@
 #include "util/scheduler.hpp"
 
 #if REALM_ENABLE_SYNC
-#include "sync/impl/work_queue.hpp"
 #include "sync/impl/sync_file.hpp"
 #include "sync/async_open_task.hpp"
-#include "sync/partial_sync.hpp"
 #include "sync/sync_config.hpp"
 #include "sync/sync_manager.hpp"
 #include "sync/sync_session.hpp"
@@ -104,7 +102,9 @@ void RealmCoordinator::create_sync_session(bool force_client_resync)
         throw std::logic_error("The realm encryption key specified in SyncConfig does not match the one in Realm::Config");
     }
 
-    m_sync_session = SyncManager::shared().get_session(m_config.path, *m_config.sync_config, force_client_resync);
+    m_sync_session = m_config.sync_config->user->sync_manager()->get_session(m_config.path,
+                                                                             *m_config.sync_config,
+                                                                             force_client_resync);
 
     std::weak_ptr<RealmCoordinator> weak_self = shared_from_this();
     SyncSession::Internal::set_sync_transact_callback(*m_sync_session,
@@ -184,8 +184,8 @@ void RealmCoordinator::set_config(const Realm::Config& config)
             if (m_config.sync_config->user != config.sync_config->user) {
                 throw MismatchedConfigException("Realm at path '%1' already opened with different sync user.", config.path);
             }
-            if (m_config.sync_config->realm_url() != config.sync_config->realm_url()) {
-                throw MismatchedConfigException("Realm at path '%1' already opened with different sync server URL.", config.path);
+            if (m_config.sync_config->partition_value != config.sync_config->partition_value) {
+                throw MismatchedConfigException("Realm at path '%1' already opened with different partition value.", config.path);
             }
             if (m_config.sync_config->transformer != config.sync_config->transformer) {
                 throw MismatchedConfigException("Realm at path '%1' already opened with different transformer.", config.path);
@@ -195,21 +195,72 @@ void RealmCoordinator::set_config(const Realm::Config& config)
             }
         }
 #endif
+        // Mixing cached and uncached Realms is allowed
+        m_config.cache = config.cache;
 
         // Realm::update_schema() handles complaining about schema mismatches
     }
 }
 
+std::shared_ptr<Realm> RealmCoordinator::get_cached_realm(Realm::Config const& config, std::shared_ptr<util::Scheduler> scheduler)
+{
+    if (!config.cache)
+        return nullptr;
+    util::CheckedUniqueLock lock(m_realm_mutex);
+    return do_get_cached_realm(config, scheduler);
+}
+
+std::shared_ptr<Realm> RealmCoordinator::do_get_cached_realm(Realm::Config const& config, std::shared_ptr<util::Scheduler> scheduler)
+{
+    if (!config.cache)
+        return nullptr;
+
+    if (!scheduler) {
+        scheduler = config.scheduler;
+    }
+
+    if (!scheduler)
+        return nullptr;
+
+    for (auto& cached_realm : m_weak_realm_notifiers) {
+        if (!cached_realm.is_cached_for_scheduler(scheduler))
+            continue;
+        // can be null if we jumped in between ref count hitting zero and
+        // unregister_realm() getting the lock
+        if (auto realm = cached_realm.realm()) {
+            // If the file is uninitialized and was opened without a schema,
+            // do the normal schema init
+            if (realm->schema_version() == ObjectStore::NotVersioned)
+                break;
+
+            // Otherwise if we have a realm schema it needs to be an exact
+            // match (even having the same properties but in different
+            // orders isn't good enough)
+            if (config.schema && realm->schema() != *config.schema)
+                throw MismatchedConfigException("Realm at path '%1' already opened on current thread with different schema.", config.path);
+
+            return realm;
+        }
+    }
+    return nullptr;
+}
+
 std::shared_ptr<Realm> RealmCoordinator::get_realm(Realm::Config config, util::Optional<VersionID> version)
 {
     if (!config.scheduler)
-        config.scheduler = version ? util::Scheduler::get_frozen() : util::Scheduler::make_default();
+        config.scheduler = version ? util::Scheduler::get_frozen(version.value()) : util::Scheduler::make_default();
     // realm must be declared before lock so that the mutex is released before
     // we release the strong reference to realm, as Realm's destructor may want
     // to acquire the same lock
     std::shared_ptr<Realm> realm;
     util::CheckedUniqueLock lock(m_realm_mutex);
     set_config(config);
+    if ((realm = do_get_cached_realm(config))) {
+        if (version) {
+            REALM_ASSERT(realm->read_transaction_version() == version.value());
+        }
+        return realm;
+    }
     do_get_realm(std::move(config), realm, version, lock);
     return realm;
 }
@@ -220,6 +271,9 @@ std::shared_ptr<Realm> RealmCoordinator::get_realm(std::shared_ptr<util::Schedul
     util::CheckedUniqueLock lock(m_realm_mutex);
     auto config = m_config;
     config.scheduler = scheduler ? scheduler : util::Scheduler::make_default();
+    if ((realm = do_get_cached_realm(config))) {
+        return realm;
+    }
     do_get_realm(std::move(config), realm, none, lock);
     return realm;
 }
@@ -234,7 +288,7 @@ ThreadSafeReference RealmCoordinator::get_unbound_realm()
 
 void RealmCoordinator::do_get_realm(Realm::Config config, std::shared_ptr<Realm>& realm,
                                     util::Optional<VersionID> version,
-                                    CheckedUniqueLock& realm_lock)
+                                    util::CheckedUniqueLock& realm_lock)
 {
     open_db();
 
@@ -254,7 +308,7 @@ void RealmCoordinator::do_get_realm(Realm::Config config, std::shared_ptr<Realm>
                                      get_path(), ex.code().message(), "");
         }
     }
-    m_weak_realm_notifiers.emplace_back(realm);
+    m_weak_realm_notifiers.emplace_back(realm, config.cache);
 
     if (realm->config().sync_config)
         create_sync_session(false);
@@ -264,44 +318,9 @@ void RealmCoordinator::do_get_realm(Realm::Config config, std::shared_ptr<Realm>
 
     realm_lock.unlock_unchecked();
     if (schema) {
-#if REALM_ENABLE_SYNC && REALM_PLATFORM_JAVA
-        // Workaround for https://github.com/realm/realm-java/issues/6619
-        // Between Realm Java 5.10.0 and 5.13.0 created_at/updated_at was optional
-        // when created from Java, even though the Object Store code specified them as
-        // required. Due to how the Realm was initialized, this wasn't a problem before
-        // 5.13.0, but after that the Object Store initializer code was changed causing
-        // problems when Java clients upgraded. In order to prevent older clients from
-        // breaking with a schema mismatch when upgrading we thus fix the schema in transit.
-        // This means that schema reported back from Realm will be different than the one
-        // specified in the Java model class, but this seemed like the approach with the
-        // least amount of disadvantages.
-        if (realm->is_partial()) {
-            auto& new_schema = schema.value();
-            auto current_schema = realm->schema();
-            auto current_resultsets_schema_obj = current_schema.find("__ResultSets");
-            if (current_resultsets_schema_obj != current_schema.end()) {
-                Property* p = current_resultsets_schema_obj->property_for_public_name("created_at");
-                if (is_nullable(p->type)) {
-                    auto it = new_schema.find("__ResultSets");
-                    if (it != new_schema.end()) {
-                        auto created_at_property = it->property_for_public_name("created_at");
-                        auto updated_at_property = it->property_for_public_name("updated_at");
-                        if (created_at_property && updated_at_property) {
-                            created_at_property->type = created_at_property->type | PropertyType::Nullable;
-                            updated_at_property->type = updated_at_property->type | PropertyType::Nullable;
-                        }
-                    }
-                }
-            }
-        }
-#endif
         realm->update_schema(std::move(*schema), config.schema_version, std::move(migration_function),
                              std::move(initialization_function));
     }
-#if REALM_ENABLE_SYNC
-    else if (realm->is_partial())
-        _impl::ensure_partial_sync_schema_initialized(*realm);
-#endif
 }
 
 void RealmCoordinator::bind_to_context(Realm& realm)
@@ -324,8 +343,9 @@ std::shared_ptr<AsyncOpenTask> RealmCoordinator::get_synchronized_realm(Realm::C
 
     util::CheckedLockGuard lock(m_realm_mutex);
     set_config(config);
-    bool exists = File::exists(m_config.path);
-    create_sync_session(!config.sync_config->is_partial && !exists);
+    // FIXME: Re-enable once the server reintroduces support for State Realms.
+    // bool exists = File::exists(m_config.path);
+    create_sync_session(false /* exists */);
     return std::make_shared<AsyncOpenTask>(shared_from_this(), m_sync_session);
 }
 
@@ -334,15 +354,9 @@ void RealmCoordinator::create_session(const Realm::Config& config)
     REALM_ASSERT(config.sync_config);
     util::CheckedLockGuard lock(m_realm_mutex);
     set_config(config);
-    bool exists = File::exists(m_config.path);
-    create_sync_session(!config.sync_config->is_partial && !exists);
-}
-
-void RealmCoordinator::open_with_config(Realm::Config config)
-{
-    CheckedLockGuard lock(m_realm_mutex);
-    set_config(config);
-    open_db();
+    // FIXME: Re-enable once the server reintroduces support for State Realms.
+    // bool exists = File::exists(m_config.path);
+    create_sync_session(false /* exists */);
 }
 
 #endif
@@ -555,9 +569,6 @@ void RealmCoordinator::advance_schema_cache(uint64_t previous, uint64_t next)
 }
 
 RealmCoordinator::RealmCoordinator()
-#if REALM_ENABLE_SYNC
-: m_partial_sync_work_queue(std::make_unique<_impl::partial_sync::WorkQueue>())
-#endif
 {
 }
 
@@ -622,7 +633,7 @@ void RealmCoordinator::clear_cache() NO_THREAD_SAFETY_ANALYSIS
             coordinator->m_notifier = nullptr;
 
             // Gather a list of all of the realms which will be removed
-            CheckedLockGuard lock(coordinator->m_realm_mutex);
+            util::CheckedLockGuard lock(coordinator->m_realm_mutex);
             for (auto& weak_realm_notifier : coordinator->m_weak_realm_notifiers) {
                 if (auto realm = weak_realm_notifier.realm()) {
                     realms_to_close.push_back(realm);
@@ -947,6 +958,12 @@ void RealmCoordinator::run_async_notifiers()
         // skipped
         // FIXME: this is comically slow
         version = m_db->start_read()->get_version_of_current_transaction();
+        if (version == m_notifier_sg->get_version_of_current_transaction()) {
+            // We were spuriously woken up and there isn't actually anything to do
+            REALM_ASSERT(!m_notifier_skip_version.version);
+            m_notifier_cv.notify_all();
+            return;
+        }
     }
 
     auto skip_version = m_notifier_skip_version;
@@ -954,7 +971,18 @@ void RealmCoordinator::run_async_notifiers()
 
     // Make a copy of the notifiers vector and then release the lock to avoid
     // blocking other threads trying to register or unregister notifiers while we run them
-    auto notifiers = m_notifiers;
+    decltype(m_notifiers) notifiers;
+    if (version != m_notifier_sg->get_version_of_current_transaction()) {
+        // We only want to rerun the existing notifiers if the version has changed.
+        // This is both a minor optimization and required for notification
+        // skipping to work. The skip logic assumes that the notifier can't be
+        // running when suppress_next() is called because it can only be called
+        // from within a write transaction, and starting the write transaction
+        // would have blocked until the notifier is done running. However,
+        // on_change() can be triggered by things other than writes, so we may
+        // be here even if the notifiers don't need to rerun.
+        notifiers = m_notifiers;
+    }
     m_notifiers.insert(m_notifiers.end(), new_notifiers.begin(), new_notifiers.end());
     lock.unlock();
 
@@ -1153,10 +1181,3 @@ bool RealmCoordinator::compact()
 {
     return m_db->compact();
 }
-
-#if REALM_ENABLE_SYNC
-_impl::partial_sync::WorkQueue& RealmCoordinator::partial_sync_work_queue()
-{
-    return *m_partial_sync_work_queue;
-}
-#endif

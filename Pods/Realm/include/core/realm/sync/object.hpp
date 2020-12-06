@@ -97,12 +97,12 @@ inline TableRef create_table(Transaction& wt, StringData name)
 ///
 /// The Group must be in a write transaction.
 inline TableRef create_table_with_primary_key(Transaction& wt, StringData name, DataType pk_type,
-                                       StringData pk_column_name, bool nullable = false)
+                                              StringData pk_column_name, bool nullable = false)
 {
     if (TableRef table = wt.get_table(name)) {
         if (!table->get_primary_key_column() ||
-                table->get_column_name(table->get_primary_key_column()) != pk_column_name ||
-                table->is_nullable(table->get_primary_key_column()) != nullable) {
+            table->get_column_name(table->get_primary_key_column()) != pk_column_name ||
+            table->is_nullable(table->get_primary_key_column()) != nullable) {
             throw std::runtime_error("Inconsistent schema");
         }
         return table;
@@ -143,12 +143,19 @@ bool table_has_primary_key(const TableInfoCache&, const Table&);
 GlobalKey object_id_for_row(const TableInfoCache&, const Table&, ObjKey);
 GlobalKey object_id_for_row(const TableInfoCache&, const ConstObj&);
 
+PrimaryKey primary_key_for_row(const Table&, ObjKey);
+PrimaryKey primary_key_for_row(const ConstObj&);
+
 /// Get the index of the row with the object ID.
 ///
 /// \returns realm::npos if the object does not exist in the table.
 ObjKey row_for_object_id(const TableInfoCache&, const Table&, GlobalKey);
 Obj obj_for_object_id(const TableInfoCache&, Table&, GlobalKey);
 ConstObj obj_for_object_id(const TableInfoCache&, const Table&, GlobalKey);
+
+ObjKey row_for_primary_key(const Table&, PrimaryKey);
+ConstObj obj_for_primary_key(const Table&, PrimaryKey);
+Obj obj_for_primary_key(Table&, PrimaryKey);
 
 //@{
 /// Add a row to the table and populate the object ID with an appropriate value.
@@ -284,5 +291,3 @@ inline TableInfoCache::TableInfoCache(ReadTransaction& rt)
 } // namespace realm
 
 #endif // REALM_SYNC_OBJECT_HPP
-
-

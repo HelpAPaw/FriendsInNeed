@@ -135,7 +135,9 @@ public:
     /// may constitute a race with a call to close().
     /// Instead of using DB::close() to release resources, we recommend using transactions
     /// to control release as follows:
-    ///  * explicitly close() transactions at earliest time possible and
+    ///  * explicitly nullify TransactionRefs at earliest time possible and
+    ///  * for read or write transactions - but not frozen transactions, explicitly call
+    ///    close() at earliest time possible
     ///  * explicitly nullify any DBRefs you may have.
     void close(bool allow_open_read_transactions = false);
 
@@ -288,58 +290,59 @@ public:
     void test_ringbuf();
 #endif
 
-/// Once created, accessors belong to a transaction and can only be used for
-/// access as long as that transaction is still active. Copies of accessors
-/// can be created in association with another transaction, the importing transaction,
-/// using said transactions import_copy_of method. This process is called
-/// accessor import. Prior to Core 6, the corresponding mechanism was known
-/// as "handover".
-///
-/// For TableViews, there are 3 forms of import determined by the PayloadPolicy.
-///
-/// - with payload move: the payload imported ends up as a payload
-///   held by the accessor at the importing side. The accessor on the
-///   exporting side will rerun its query and generate a new payload, if
-///   TableView::sync_if_needed() is called. If the original payload was in
-///   sync at the exporting side, it will also be in sync at the importing
-///   side. This is indicated to handover_export() by the argument
-///   PayloadPolicy::Move
-///
-/// - with payload copy: a copy of the payload is imported, so both the
-///   accessors on the exporting side *and* the accessors created at the
-///   importing side has their own payload. This is indicated to
-///   handover_export() by the argument PayloadPolicy::Copy
-///
-/// - without payload: the payload stays with the accessor on the exporting
-///   side. On the importing side, the new accessor is created without
-///   payload. A call to TableView::sync_if_needed() will trigger generation
-///   of a new payload. This form of handover is indicated to
-///   handover_export() by the argument PayloadPolicy::Stay.
-///
-/// For all other (non-TableView) accessors, importing is done with payload
-/// copy, since the payload is trivial.
-///
-/// Importing *without* payload is useful when you want to ship a tableview
-/// with its query for execution in a background thread. Handover with
-/// *payload move* is useful when you want to transfer the result back.
-///
-/// Importing *without* payload or with payload copy is guaranteed *not* to
-/// change the accessors on the exporting side.
-///
-/// Importing is *not* thread safe and should be carried out
-/// by the thread that "owns" the involved accessors.
-///
-/// Importing is transitive:
-/// If the object being imported depends on other views
-/// (table- or link- ), those objects will be imported as well. The mode
-/// (payload copy, payload move, without payload) is applied
-/// recursively. Note: If you are importing a tableview dependent upon
-/// another tableview and using MutableSourcePayload::Move,
-/// you are on thin ice!
-///
-/// On the importing side, the top-level accessor being created during
-/// import takes ownership of all other accessors (if any) being created as
-/// part of the import.
+    /// The relation between accessors, threads and the Transaction object.
+    ///
+    /// Once created, accessors belong to a transaction and can only be used for
+    /// access as long as that transaction is still active. Copies of accessors
+    /// can be created in association with another transaction, the importing transaction,
+    /// using said transactions import_copy_of() method. This process is called
+    /// accessor import. Prior to Core 6, the corresponding mechanism was known
+    /// as "handover".
+    ///
+    /// For TableViews, there are 3 forms of import determined by the PayloadPolicy.
+    ///
+    /// - with payload move: the payload imported ends up as a payload
+    ///   held by the accessor at the importing side. The accessor on the
+    ///   exporting side will rerun its query and generate a new payload, if
+    ///   TableView::sync_if_needed() is called. If the original payload was in
+    ///   sync at the exporting side, it will also be in sync at the importing
+    ///   side. This policy is selected by PayloadPolicy::Move
+    ///
+    /// - with payload copy: a copy of the payload is imported, so both the
+    ///   accessors on the exporting side *and* the accessors created at the
+    ///   importing side has their own payload. This is policy is selected
+    ///   by PayloadPolicy::Copy
+    ///
+    /// - without payload: the payload stays with the accessor on the exporting
+    ///   side. On the importing side, the new accessor is created without
+    ///   payload. A call to TableView::sync_if_needed() will trigger generation
+    ///   of a new payload. This policy is selected by PayloadPolicy::Stay.
+    ///
+    /// For all other (non-TableView) accessors, importing is done with payload
+    /// copy, since the payload is trivial.
+    ///
+    /// Importing *without* payload is useful when you want to ship a tableview
+    /// with its query for execution in a background thread. Handover with
+    /// *payload move* is useful when you want to transfer the result back.
+    ///
+    /// Importing *without* payload or with payload copy is guaranteed *not* to
+    /// change the accessors on the exporting side.
+    ///
+    /// Importing is generally *not* thread safe and should be carried out
+    /// by the thread that "owns" the involved accessors. However, importing
+    /// *is* thread-safe when it occurs from a *frozen* accessor.
+    ///
+    /// Importing is transitive:
+    /// If the object being imported depends on other views
+    /// (table- or link- ), those objects will be imported as well. The mode
+    /// (payload copy, payload move, without payload) is applied
+    /// recursively. Note: If you are importing a tableview dependent upon
+    /// another tableview and using MutableSourcePayload::Move,
+    /// you are on thin ice!
+    ///
+    /// On the importing side, the top-level accessor being created during
+    /// import takes ownership of all other accessors (if any) being created as
+    /// part of the import.
     std::shared_ptr<metrics::Metrics> get_metrics()
     {
         return m_metrics;
@@ -349,7 +352,7 @@ public:
     // can be acquired, the callback will be executed with the lock and then return true.
     // Otherwise false will be returned directly.
     // The lock taken precludes races with other threads or processes accessing the
-    // files through a SharedGroup.
+    // files through a DB.
     // It is safe to delete/replace realm files inside the callback.
     // WARNING: It is not safe to delete the lock file in the callback.
     using CallbackWithLock = std::function<void(const std::string& realm_path)>;
@@ -477,11 +480,6 @@ private:
     ///
     /// As a side effect update memory mapping to ensure that the ringbuffer
     /// entries referenced in the readlock info is accessible.
-    ///
-    /// FIXME: It needs to be made more clear exactly under which conditions
-    /// this function fails. Also, why is it useful to promise anything about
-    /// detection of bad versions? Can we really promise enough to make such a
-    /// promise useful to the caller?
     void grab_read_lock(ReadLockInfo&, VersionID);
 
     // Release a specific read lock. The read lock MUST have been obtained by a
@@ -502,8 +500,7 @@ private:
     // if not, expand the mapped area. Returns true if the area is expanded.
     bool grow_reader_mapping(uint_fast32_t index);
 
-    // Must be called only by someone that has a lock on the write
-    // mutex.
+    // Must be called only by someone that has a lock on the write mutex.
     void low_level_commit(uint_fast64_t new_version, Transaction& transaction);
 
     void do_async_commits();
@@ -522,7 +519,7 @@ private:
         m_alloc.reset_free_space_tracking();
     }
 
-    void close_internal(std::unique_lock<InterprocessMutex>, bool allow_open_read_transactions);
+    void close_internal(std::unique_lock<util::InterprocessMutex>, bool allow_open_read_transactions);
     friend class Transaction;
 };
 
@@ -558,8 +555,8 @@ public:
 
     /// Get the approximate size of the data that would be written to the file if
     /// a commit were done at this point. The reported size will always be bigger
-    /// than what will eventually be needed as we reserve a bit more memory that
-    /// will be needed.
+    /// than what will eventually be needed as we reserve a bit more memory than
+    /// what will be needed.
     size_t get_commit_size() const;
 
     DB::version_type commit();
@@ -612,8 +609,7 @@ public:
     /// Get the current transaction type
     DB::TransactStage get_transact_stage() const noexcept;
 
-    /// Get a version id which may be used to request a different SharedGroup
-    /// to start transaction at a specific version.
+    /// Get a version id which may be used to request a different transaction locked to specific version.
     VersionID get_version_of_current_transaction();
 
     void upgrade_file_format(int target_file_format_version);
@@ -761,6 +757,11 @@ public:
     TableRef add_table(StringData name) const
     {
         return trans->add_table(name); // Throws
+    }
+
+    TableRef add_embedded_table(StringData name) const
+    {
+        return trans->add_embedded_table(name); // Throws
     }
 
     TableRef get_or_add_table(StringData name, bool* was_added = nullptr) const
@@ -925,7 +926,9 @@ inline void Transaction::rollback_and_continue_as_read(O* observer)
     ref_type top_ref = m_read_lock.m_top_ref;
     size_t file_size = m_read_lock.m_file_size;
     _impl::ReversedNoCopyInputStream reversed_in(reverser);
-    advance_transact(top_ref, file_size, reversed_in, false); // Throws
+    m_alloc.update_reader_view(file_size); // Throws
+    update_allocator_wrappers(false);
+    advance_transact(top_ref, reversed_in, false); // Throws
 
     db->do_end_write();
 
@@ -949,29 +952,24 @@ inline bool Transaction::internal_advance_read(O* observer, VersionID version_id
         return false;
     }
 
+    DB::version_type old_version = m_read_lock.m_version;
     DB::ReadLockGuard g(*db, new_read_lock);
-    {
-        DB::version_type new_version = new_read_lock.m_version;
-        size_t new_file_size = new_read_lock.m_file_size;
-        ref_type new_top_ref = new_read_lock.m_top_ref;
+    DB::version_type new_version = new_read_lock.m_version;
+    size_t new_file_size = new_read_lock.m_file_size;
+    ref_type new_top_ref = new_read_lock.m_top_ref;
 
-        // Synchronize readers view of the file
-        SlabAlloc& alloc = m_alloc;
-        alloc.update_reader_view(new_file_size);
-        update_allocator_wrappers(writable);
-        using gf = _impl::GroupFriend;
-        // remap(new_file_size); // Throws
-        ref_type hist_ref = gf::get_history_ref(alloc, new_top_ref);
-
-        hist.update_from_ref_and_version(hist_ref, new_version);
-    }
+    // Synchronize readers view of the file
+    SlabAlloc& alloc = m_alloc;
+    alloc.update_reader_view(new_file_size);
+    update_allocator_wrappers(writable);
+    using gf = _impl::GroupFriend;
+    ref_type hist_ref = gf::get_history_ref(alloc, new_top_ref);
+    hist.update_from_ref_and_version(hist_ref, new_version);
 
     if (observer) {
         // This has to happen in the context of the originally bound snapshot
         // and while the read transaction is still in a fully functional state.
         _impl::TransactLogParser parser;
-        DB::version_type old_version = m_read_lock.m_version;
-        DB::version_type new_version = new_read_lock.m_version;
         _impl::ChangesetInputStream in(hist, old_version, new_version);
         parser.parse(in, *observer); // Throws
         observer->parse_complete();  // Throws
@@ -986,15 +984,8 @@ inline bool Transaction::internal_advance_read(O* observer, VersionID version_id
     // that the history was always implemented as a versioned entity, that was
     // part of the Realm state, then it would not have been necessary to retain
     // the old read lock beyond this point.
-
-    {
-        DB::version_type old_version = m_read_lock.m_version;
-        DB::version_type new_version = new_read_lock.m_version;
-        ref_type new_top_ref = new_read_lock.m_top_ref;
-        size_t new_file_size = new_read_lock.m_file_size;
-        _impl::ChangesetInputStream in(hist, old_version, new_version);
-        advance_transact(new_top_ref, new_file_size, in, writable); // Throws
-    }
+    _impl::ChangesetInputStream in(hist, old_version, new_version);
+    advance_transact(new_top_ref, in, writable); // Throws
     g.release();
     db->release_read_lock(m_read_lock);
     m_read_lock = new_read_lock;

@@ -19,6 +19,8 @@
  *  ********************************************************************************************************************
  */
 
+import Foundation
+
 @objcMembers public class UserService: NSObject {
     
     public var stayLoggedIn: Bool {
@@ -127,14 +129,17 @@
         })
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func logingWithFacebook(accessToken: String, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         facebookLogin(accessToken: accessToken, guestUser: nil, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func loginWithFacebook(accessToken: String, guestUser: BackendlessUser, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         facebookLogin(accessToken: accessToken, guestUser: guestUser, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     private func facebookLogin(accessToken: String, guestUser: BackendlessUser?, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         let headers = ["Content-Type": "application/json"]
         var parameters = ["accessToken": accessToken, "fieldsMapping": fieldsMapping] as [String : Any]
@@ -154,14 +159,17 @@
         })
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func loginWithTwitter(authToken: String, authTokenSecret: String, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         twitterLogin(authToken: authToken, authTokenSecret: authTokenSecret, guestUser: nil, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func loginWithTwitter(authToken: String, authTokenSecret: String, guestUser: BackendlessUser, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         twitterLogin(authToken: authToken, authTokenSecret: authTokenSecret, guestUser: guestUser, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     private func twitterLogin(authToken: String, authTokenSecret: String, guestUser: BackendlessUser?, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         let headers = ["Content-Type": "application/json"]
         var parameters = ["accessToken": authToken, "accessTokenSecret": authTokenSecret, "fieldsMapping": fieldsMapping] as [String : Any]
@@ -181,14 +189,17 @@
         })
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func loginWithGoogle(accessToken: String, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         googleLogin(accessToken: accessToken, guestUser: nil, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     public func loginWithGoogle(accessToken: String, guestUser: BackendlessUser, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         googleLogin(accessToken: accessToken, guestUser: guestUser, fieldsMapping: fieldsMapping, responseHandler: responseHandler, errorHandler: errorHandler)
     }
     
+    @available(*, deprecated, message: "Please use the loginWithOauth2 and loginWithOauth1 methods instead")
     private func googleLogin(accessToken: String, guestUser: BackendlessUser?, fieldsMapping: [String: String], responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
         let headers = ["Content-Type": "application/json"]
         var parameters = ["accessToken": accessToken, "fieldsMapping": fieldsMapping] as [String : Any]
@@ -196,6 +207,63 @@
             parameters["guestUser"] = JSONUtils.shared.objectToJson(objectToParse: guestUser!)
         }
         BackendlessRequestManager(restMethod: "users/social/googleplus/login", httpMethod: .post, headers: headers, parameters: parameters).makeRequest(getResponse: { response in
+            if let result = ProcessResponse.shared.adapt(response: response, to: BackendlessUser.self) {
+                if result is Fault {
+                    errorHandler(result as! Fault)
+                }
+                else {
+                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    responseHandler(result as! BackendlessUser)
+                }
+            }
+        })
+    }
+    
+    public func loginWithOauth2(providerCode: String, token: String, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        oauth2Login(providerCode: providerCode, token: token, guestUser: nil, fieldsMapping: fieldsMapping, stayLoggedIn: stayLoggedIn, responseHandler: responseHandler, errorHandler: errorHandler)
+    }
+    
+    public func loginWithOauth2(providerCode: String, token: String, guestUser: BackendlessUser, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        oauth2Login(providerCode: providerCode, token: token, guestUser: guestUser, fieldsMapping: fieldsMapping, stayLoggedIn: stayLoggedIn, responseHandler: responseHandler, errorHandler: errorHandler)
+    }
+    
+    private func oauth2Login(providerCode: String, token: String, guestUser: BackendlessUser?, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        self.stayLoggedIn = stayLoggedIn
+        let headers = ["Content-Type": "application/json"]
+        var parameters = ["accessToken": token, "fieldsMapping": fieldsMapping] as [String : Any]
+        if guestUser != nil {
+            parameters["guestUser"] = JSONUtils.shared.objectToJson(objectToParse: guestUser!)
+        }
+        BackendlessRequestManager(restMethod: "users/social/\(providerCode)/login", httpMethod: .post, headers: headers, parameters: parameters).makeRequest(getResponse: { response in
+            if let result = ProcessResponse.shared.adapt(response: response, to: BackendlessUser.self) {
+                if result is Fault {
+                    errorHandler(result as! Fault)
+                }
+                else {
+                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    responseHandler(result as! BackendlessUser)
+                }
+            }
+        })
+    }
+    
+    public func loginWithOauth1(providerCode: String, token: String, tokenSecret: String, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        oauth1Login(providerCode: providerCode, token: token, tokenSecret: tokenSecret, guestUser: nil, fieldsMapping: fieldsMapping, stayLoggedIn: stayLoggedIn, responseHandler: responseHandler, errorHandler: errorHandler)
+    }
+    
+    public func loginWithOauth1(providerCode: String, token: String, tokenSecret: String, guestUser: BackendlessUser, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        oauth1Login(providerCode: providerCode, token: token, tokenSecret: tokenSecret, guestUser: guestUser, fieldsMapping: fieldsMapping, stayLoggedIn: stayLoggedIn, responseHandler: responseHandler, errorHandler: errorHandler)
+    }
+    
+    private func oauth1Login(providerCode: String, token: String, tokenSecret: String, guestUser: BackendlessUser?, fieldsMapping: [String : String], stayLoggedIn: Bool, responseHandler: ((BackendlessUser) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        self.stayLoggedIn = stayLoggedIn
+        let headers = ["Content-Type": "application/json"]
+        var parameters = ["accessToken": token, "accessTokenSecret": tokenSecret, "fieldsMapping": fieldsMapping] as [String : Any]
+        
+        if guestUser != nil {
+            parameters["guestUser"] = JSONUtils.shared.objectToJson(objectToParse: guestUser!)
+        }
+        BackendlessRequestManager(restMethod: "users/social/twitter/login", httpMethod: .post, headers: headers, parameters: parameters).makeRequest(getResponse: { response in
             if let result = ProcessResponse.shared.adapt(response: response, to: BackendlessUser.self) {
                 if result is Fault {
                     errorHandler(result as! Fault)
@@ -257,9 +325,9 @@
                     else {
                         let updatedUser = result as! BackendlessUser
                         if self.stayLoggedIn,
-                            let current = self.currentUser,
-                            updatedUser.objectId == current.objectId,
-                            let currentToken = current.userToken {
+                           let current = self.currentUser,
+                           updatedUser.objectId == current.objectId,
+                           let currentToken = current.userToken {
                             updatedUser.setUserToken(value: currentToken)
                             self.setPersistentUser(currentUser: updatedUser)
                         }
@@ -317,8 +385,8 @@
         })
     }
     
-    public func resendEmailConfirmation(email: String, responseHandler: (() -> Void)!, errorHandler: ((Fault) -> Void)!) {
-        BackendlessRequestManager(restMethod: "users/resendconfirmation/\(email)", httpMethod: .post, headers: nil, parameters: nil).makeRequest(getResponse: { response in
+    public func resendEmailConfirmation(identity: String, responseHandler: (() -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        BackendlessRequestManager(restMethod: "users/resendconfirmation/\(identity)", httpMethod: .post, headers: nil, parameters: nil).makeRequest(getResponse: { response in
             if let result = ProcessResponse.shared.adapt(response: response, to: NoReply.self) {
                 if result is Fault {
                     errorHandler(result as! Fault)
@@ -326,6 +394,19 @@
             }
             else {
                 responseHandler()
+            }
+        })
+    }
+    
+    public func createEmailConfirmation(identity: String, responseHandler: (([String : Any]) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        BackendlessRequestManager(restMethod: "users/createEmailConfirmationURL/\(identity)", httpMethod: .post, headers: nil, parameters: nil).makeRequest(getResponse: { response in
+            if let result = ProcessResponse.shared.adapt(response: response, to: JSON.self) {
+                if result is Fault {
+                    errorHandler(result as! Fault)
+                }
+                else if let resultDictionary = (result as! JSON).dictionaryObject {
+                    responseHandler(resultDictionary)
+                }
             }
         })
     }

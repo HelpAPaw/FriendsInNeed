@@ -47,8 +47,12 @@
 			</dict>
 		</array>
 	</dict>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
+	<false/>
 	<key>FacebookAppID</key>
 	<string>166635750523179</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<false/>
 	<key>FacebookDisplayName</key>
 	<string>Help A Paw</string>
 	<key>LSApplicationCategoryType</key>

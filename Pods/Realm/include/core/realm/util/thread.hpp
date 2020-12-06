@@ -41,6 +41,7 @@
 #include <realm/util/assert.hpp>
 #include <realm/util/terminate.hpp>
 #include <memory>
+#include <stdexcept>
 
 #include <atomic>
 
@@ -736,7 +737,7 @@ inline void CondVar::wait(RobustMutex& m, Func recover_func, const struct timesp
             if (r == ERROR_TIMEOUT)
                 return;
         } else {
-            r = 0
+            r = 0;
         }
 #else
         r = pthread_cond_timedwait(&m_impl, &m.m_impl, tp);

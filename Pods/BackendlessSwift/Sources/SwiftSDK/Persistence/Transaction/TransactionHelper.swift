@@ -27,8 +27,8 @@ class TransactionHelper {
 
     func makeOpResult(tableName: String, operationResultId: String, operationType: OperationType, uow: UnitOfWork) -> OpResult {
         var reference = [String : Any]()
-        reference[uowProps.ref] = true
-        reference[uowProps.opResultId] = operationResultId
+        reference[UowProps.ref] = true
+        reference[UowProps.opResultId] = operationResultId
         return OpResult(tableName: tableName, operationType: operationType, opResultId: operationResultId, uow: uow)
     }
     
@@ -53,7 +53,7 @@ class TransactionHelper {
             return (tableName, dictionaryArray)
         }
         let tableName = psu.getTableName(entity: type(of: entity))
-        let entityDictionary = psu.entityToDictionary(entity: entity)
+        let entityDictionary = psu.entityToDictionary(entity: entity)        
         return (tableName, entityDictionary)
     }
     
@@ -65,8 +65,8 @@ class TransactionHelper {
     }
     
     func objectIdFromCustomEntity(_ entity: Any) -> String {
-        let entityDict = PersistenceHelper.shared.entityToDictionary(entity: entity)
-        if let objectId = entityDict["objectId"] as? String {
+        if let entityDict = PersistenceHelper.shared.entityToSimpleType(entity: entity) as? [String : Any],
+            let objectId = entityDict["objectId"] as? String {
             return objectId
         }
         return ""

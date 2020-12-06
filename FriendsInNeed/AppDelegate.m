@@ -13,8 +13,6 @@
 #import "FINDataManager.h"
 #import "FINGlobalConstants.pch"
 #import <ViewDeck/ViewDeck.h>
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import "IQKeyboardManager.h"
 #import <Realm/Realm.h>
@@ -45,7 +43,6 @@
                                      ofItemAtPath:folderPath error:nil];
     
     // Setup Crashlytics
-    [Fabric with:@[[Crashlytics class]]];
     [FIRApp configure];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

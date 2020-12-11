@@ -214,8 +214,5 @@
     CLS_LOG(@"[FIN] Starting background fetch with completion handler: %@", completionHandler);
     [[FINDataManager sharedManager] getNewSignalsForLastLocationWithCompletionHandler:completionHandler];
 }
-    
-    
-    
 
 @end

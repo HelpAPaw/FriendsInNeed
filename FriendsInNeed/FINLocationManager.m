@@ -97,7 +97,8 @@
 
 - (void)saveLastKnownLocation:(CLLocation *)location
 {
-    NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location];
+    NSError *error;
+    NSData *locationData = [NSKeyedArchiver archivedDataWithRootObject:location requiringSecureCoding:YES error:&error];
     [[NSUserDefaults standardUserDefaults] setObject:locationData forKey:kLastKnownLocation];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -110,7 +111,8 @@
     @try
     {
         NSData *locationData = [[NSUserDefaults standardUserDefaults] objectForKey:kLastKnownLocation];
-        lastLocation = (CLLocation *)[NSKeyedUnarchiver unarchiveObjectWithData:locationData];
+        NSError *error;
+        lastLocation = (CLLocation *)[NSKeyedUnarchiver unarchivedObjectOfClass:CLLocation.class fromData:locationData error:&error];
     }
     @catch (NSException *exception)
     {

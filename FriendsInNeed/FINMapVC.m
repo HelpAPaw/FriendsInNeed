@@ -24,13 +24,15 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 @property (weak, nonatomic) IBOutlet UITextField *authorPhoneField;
+@property (weak, nonatomic) IBOutlet UITextField *signalTypeField;
+@property (strong, nonatomic) UIPickerView *signalTypePicker;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendSignalButtonWidthConstraint;
@@ -54,6 +56,7 @@
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
+@property (strong, nonatomic) NSArray *signalTypes;
 
 @end
 
@@ -102,6 +105,22 @@
     _addSignalView.layer.shadowOpacity = 1.0f;
     _addSignalView.layer.shadowColor = [UIColor grayColor].CGColor;
     _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
+    
+    NSURL *signalTypesUrl = [NSBundle.mainBundle URLForResource:@"SignalTypes" withExtension:@"plist"];
+    _signalTypes = [NSArray arrayWithContentsOfURL:signalTypesUrl];
+    
+    _signalTypePicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    _signalTypePicker.delegate = self;
+    _signalTypePicker.dataSource = self;
+    _signalTypeField.inputView = _signalTypePicker;
+    _signalTypeField.text = _signalTypes[0];
+    
+    UIButton *rightViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightViewButton setImage:[UIImage imageNamed:@"ic_dropdown"] forState:UIControlStateNormal];
+    rightViewButton.imageEdgeInsets = UIEdgeInsetsMake(6, 4, 6, 4);
+    [rightViewButton addTarget:self action:@selector(signalTypeDropdownTapped:) forControlEvents:UIControlEventTouchUpInside];
+    _signalTypeField.rightView = rightViewButton;
+    _signalTypeField.rightViewMode = UITextFieldViewModeAlways;
     
     _btnPhoto.layer.cornerRadius = 5.0f;
     _btnPhoto.clipsToBounds = YES;
@@ -314,6 +333,7 @@
                     
                     [self.signalTitleField resignFirstResponder];
                     [self.authorPhoneField resignFirstResponder];
+                    [self.signalTypeField resignFirstResponder];
                 }
                 else
                 {
@@ -767,6 +787,48 @@
     [self presentViewController:alert animated:YES completion:^{}];
 }
 
+#pragma mark
+- (void)signalTypeDropdownTapped:(id)sender
+{
+    [_signalTypeField becomeFirstResponder];
+}
+
+#pragma mark - UIPickerView Data Source
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    if (pickerView == _signalTypePicker) {
+        return 1;
+    }
+    
+    return 0;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        return _signalTypes.count;
+    }
+    
+    return 0;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        return _signalTypes[row];
+    }
+    
+    return @"";
+}
+
+#pragma mark - UIPickerView Delegate
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        _signalTypeField.text = _signalTypes[row];
+    }
+}
 
 #pragma mark - Refresh
 - (void)refreshButtonTapped:(id)sender

@@ -24,6 +24,8 @@
 		F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F301FE021EDEBA1000880ECE /* InputValidator.swift */; };
 		F30D08682266669F0038C7FF /* SharedConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30D08672266669F0038C7FF /* SharedConstants.swift */; };
 		F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */; };
+		F31BD2BF25E2900F0097FF36 /* FINDropdownTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */; };
+		F31BD2C825E29E600097FF36 /* SignalTypes.plist in Resources */ = {isa = PBXBuildFile; fileRef = F31BD2CA25E29E600097FF36 /* SignalTypes.plist */; };
 		F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */; };
 		F32711CE1CCABC5D00E51AEA /* ic_call.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CD1CCABC5D00E51AEA /* ic_call.png */; };
 		F32711D11CCAFBAD00E51AEA /* ic_call@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F32711CF1CCAFBAD00E51AEA /* ic_call@2x.png */; };
@@ -148,6 +150,10 @@
 		F30D08672266669F0038C7FF /* SharedConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedConstants.swift; sourceTree = "<group>"; };
 		F316CAE01C7A8B4000C4E00F /* FINAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAnnotation.h; sourceTree = "<group>"; };
 		F316CAE11C7A8B4000C4E00F /* FINAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAnnotation.m; sourceTree = "<group>"; };
+		F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINDropdownTextField.swift; sourceTree = "<group>"; };
+		F31BD2C925E29E600097FF36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/SignalTypes.plist; sourceTree = "<group>"; };
+		F31BD2CD25E29E660097FF36 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/SignalTypes.plist; sourceTree = "<group>"; };
+		F31BD2CE25E29E710097FF36 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "bg-BG"; path = "bg-BG.lproj/SignalTypes.plist"; sourceTree = "<group>"; };
 		F31FDD271DC4ABFC00076B56 /* FINMenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuVC.h; sourceTree = "<group>"; };
 		F31FDD281DC4ABFC00076B56 /* FINMenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuVC.m; sourceTree = "<group>"; };
 		F32711CD1CCABC5D00E51AEA /* ic_call.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_call.png; sourceTree = "<group>"; };
@@ -456,6 +462,7 @@
 				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
 				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
 				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
+				F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -513,6 +520,7 @@
 				F3A6DC691C84C0480050F9F3 /* ic_paw.png */,
 				147F2D0B1E72E6D2007B1017 /* Localizable.strings */,
 				F3B25049215984F300ED1D1D /* Localizable.stringsdict */,
+				F31BD2CA25E29E600097FF36 /* SignalTypes.plist */,
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
@@ -664,6 +672,7 @@
 				F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */,
 				F39C39481C9D8C1C007A2D8E /* ic_dropdown@3x.png in Resources */,
 				F338001F1C98C59D0080FACD /* ic_add.png in Resources */,
+				F31BD2C825E29E600097FF36 /* SignalTypes.plist in Resources */,
 				F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */,
 				F32711D21CCAFBAD00E51AEA /* ic_call@3x.png in Resources */,
 				F39C39471C9D8C1C007A2D8E /* ic_dropdown_reversed@2x.png in Resources */,
@@ -836,6 +845,7 @@
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
+				F31BD2BF25E2900F0097FF36 /* FINDropdownTextField.swift in Sources */,
 				1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -938,6 +948,16 @@
 				F303AA362383DAC80052DF48 /* en */,
 			);
 			name = FINMapVC.xib;
+			sourceTree = "<group>";
+		};
+		F31BD2CA25E29E600097FF36 /* SignalTypes.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F31BD2C925E29E600097FF36 /* Base */,
+				F31BD2CD25E29E660097FF36 /* en */,
+				F31BD2CE25E29E710097FF36 /* bg-BG */,
+			);
+			name = SignalTypes.plist;
 			sourceTree = "<group>";
 		};
 		F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */ = {

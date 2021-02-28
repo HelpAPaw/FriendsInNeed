@@ -299,6 +299,9 @@ enum {
                 [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
             
+            NSString *typeString = [FINDataManager sharedManager].signalTypes[_annotation.signal.type];
+            [detailsCell setType:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"signal_type", nil), typeString]];
+            
             cell = detailsCell;
             
             break;

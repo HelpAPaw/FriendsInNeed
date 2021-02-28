@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgPhotoView;
 @property (weak, nonatomic) IBOutlet UILabel *lbPhotoNumber;
+@property (weak, nonatomic) IBOutlet UILabel *lbType;
 @property (weak, nonatomic) IBOutlet UITextView *tvTitle;
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
@@ -56,8 +57,6 @@
     
     self.backgroundColor = [UIColor clearColor];
     _imgPhotoView.layer.cornerRadius = 5.0f;
-//    _imgPhotoView.layer.borderWidth = 0.5f;
-//    _imgPhotoView.layer.borderColor = [UIColor blackColor].CGColor;
     
     [_imgPhotoView setContentMode:UIViewContentModeScaleAspectFill];
     
@@ -86,6 +85,11 @@
 - (void)setTitle:(NSString *)title
 {
     _tvTitle.text = title;
+}
+
+- (void)setType:(NSString *)typeString
+{    
+    _lbType.text = typeString;
 }
 
 - (void)setAuthor:(NSString *)author

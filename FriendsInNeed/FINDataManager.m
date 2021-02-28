@@ -116,6 +116,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     _nearbySignals = [NSMutableArray new];
     _isInTestMode = [self loadIsInTestMode];
     
+    NSURL *signalTypesUrl = [NSBundle.mainBundle URLForResource:@"SignalTypes" withExtension:@"plist"];
+    _signalTypes = [NSArray arrayWithContentsOfURL:signalTypesUrl];
+    
     [self loadSettings];
     
     // Setup Backendless

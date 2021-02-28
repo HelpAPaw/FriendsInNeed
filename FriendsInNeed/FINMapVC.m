@@ -56,7 +56,6 @@
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
-@property (strong, nonatomic) NSArray *signalTypes;
 
 @end
 
@@ -72,6 +71,9 @@
     _locationManager.mapDelegate = self;
     
     [_locationManager startMonitoringSignificantLocationChanges];
+    
+    _dataManager = [FINDataManager sharedManager];
+    _dataManager.mapDelegate = self;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive:)
@@ -106,14 +108,11 @@
     _addSignalView.layer.shadowColor = [UIColor grayColor].CGColor;
     _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
     
-    NSURL *signalTypesUrl = [NSBundle.mainBundle URLForResource:@"SignalTypes" withExtension:@"plist"];
-    _signalTypes = [NSArray arrayWithContentsOfURL:signalTypesUrl];
-    
     _signalTypePicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
     _signalTypePicker.delegate = self;
     _signalTypePicker.dataSource = self;
     _signalTypeField.inputView = _signalTypePicker;
-    _signalTypeField.text = _signalTypes[0];
+    _signalTypeField.text = _dataManager.signalTypes[0];
     
     UIButton *rightViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightViewButton setImage:[UIImage imageNamed:@"ic_dropdown"] forState:UIControlStateNormal];
@@ -167,8 +166,6 @@
     
     if (_viewDidAppearOnce == NO)
     {
-        _dataManager = [FINDataManager sharedManager];
-        _dataManager.mapDelegate = self;
         [self checkForPrivacyPolicyAcceptance];
         [self updateTitle];
         _viewDidAppearOnce = YES;
@@ -811,7 +808,7 @@
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     if (pickerView == _signalTypePicker) {
-        return _signalTypes.count;
+        return _dataManager.signalTypes.count;
     }
     
     return 0;
@@ -820,7 +817,7 @@
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (pickerView == _signalTypePicker) {
-        return _signalTypes[row];
+        return _dataManager.signalTypes[row];
     }
     
     return @"";
@@ -831,7 +828,7 @@
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (pickerView == _signalTypePicker) {
-        _signalTypeField.text = _signalTypes[row];
+        _signalTypeField.text = _dataManager.signalTypes[row];
     }
 }
 

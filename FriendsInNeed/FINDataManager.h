@@ -31,6 +31,8 @@
 
 @interface FINDataManager : NSObject
 
+@property (strong, nonatomic) NSArray<NSString *> *signalTypes;
+
 + (instancetype)sharedManager;
 + (BOOL)setNotificationShownForSignalId:(NSString *)signalId;
 

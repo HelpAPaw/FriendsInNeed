@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSString *phoneNumber;
 
 - (void)setTitle:(NSString *)title;
+- (void)setType:(NSString *)typeString;
 - (void)setAuthor:(NSString *)author;
 - (void)setDate:(NSString *)date;
 - (void)setPhoto:(UIImage *)photo;

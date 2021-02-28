@@ -384,7 +384,12 @@
     CLS_LOG(@"Submitting new signal...");
     
     [self setSendingSignalMode];
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text andAuthorPhone:(NSString *)_authorPhoneField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, FINError *error) {
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text
+                                      type:[_signalTypePicker selectedRowInComponent:0]
+                            andAuthorPhone:(NSString *)_authorPhoneField.text
+                               forLocation:_submitSignalAnnotation.coordinate
+                                 withPhoto:_signalPhoto
+                                completion:^(FINSignal *savedSignal, FINError *error) {
         
         [self resetSendingSignalMode];
         

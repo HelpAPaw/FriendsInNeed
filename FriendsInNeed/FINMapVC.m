@@ -772,8 +772,8 @@
     UIImageView *signalImageView = [[UIImageView alloc] initWithImage:image];
     CGRect imageFrame = signalImageView.frame;
     
-    imageFrame.size.height = 44.0;
-    imageFrame.size.width  = 44.0;
+    imageFrame.size.height = 50.0;
+    imageFrame.size.width  = 50.0;
     signalImageView.frame = imageFrame;
     signalImageView.clipsToBounds = YES;
     signalImageView.layer.cornerRadius = 5.0f;

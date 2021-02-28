@@ -14,6 +14,5 @@
 @property (strong, nonatomic) FINSignal *signal;
 
 - (FINAnnotation *)initWithSignal:(FINSignal *)signal;
-- (void)updateAnnotationSubtitle;
 
 @end

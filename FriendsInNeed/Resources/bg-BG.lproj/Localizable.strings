@@ -70,6 +70,7 @@
 //Signal
 "(empty description)" = "(празно описание)";
 "Status: %@" = "Статус: %@";
+"Type: %@" = "Тип: %@";
 
 //FINSettingsVC
 "Radius" = "Радиус";

@@ -669,6 +669,19 @@
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
             newAnnotationView.rightCalloutAccessoryView = rightButton;
+            
+            // Add a details label that shows the status and type
+            UILabel *subtitleLabel = [UILabel new];
+            subtitleLabel.numberOfLines = 0;
+            subtitleLabel.font = [UIFont systemFontOfSize:UIFont.smallSystemFontSize];
+            subtitleLabel.textColor = [UIColor grayColor];
+            NSString *statusString = [FINSignal localizedStatusString:ann.signal.status];
+            statusString = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
+            NSString *typeString = [FINDataManager sharedManager].signalTypes[ann.signal.type];
+            typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
+            subtitleLabel.text = [NSString stringWithFormat:@"%@\n%@", statusString, typeString];
+            
+            newAnnotationView.detailCalloutAccessoryView = subtitleLabel;
         }
         else
         {
@@ -715,7 +728,6 @@
     if ([view.reuseIdentifier isEqualToString:kStandardSignalAnnotationView])
     {
         FINAnnotation *annotation = (FINAnnotation *)view.annotation;
-        [annotation updateAnnotationSubtitle];
         
         // If there is a signal photo, set it as the left accessory view
         if (annotation.signal.photoUrl)

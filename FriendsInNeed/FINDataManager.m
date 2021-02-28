@@ -30,6 +30,7 @@
 #define kField_ObjectId             @"objectId"
 #define kField_Author               @"author"
 #define kField_AuthorPhone          @"authorPhone"
+#define kField_SignalType           @"signalType"
 #define kField_Location             @"location"
 #define kField_Status               @"status"
 #define kField_Title                @"title"
@@ -186,6 +187,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     FINSignal *parsedSignal = [FINSignal new];
     parsedSignal.signalId = [signalDict objectForKey:kField_ObjectId];
     parsedSignal.title = [signalDict objectForKey:kField_Title];
+    NSNumber *typeNumber = [signalDict objectForKey:kField_SignalType];
+    parsedSignal.type = typeNumber.integerValue;
     NSNumber *statusNumber = [signalDict objectForKey:kField_Status];
     parsedSignal.status = [statusNumber intValue];
     BLPoint *locationPoint = [signalDict objectForKey:kField_Location];
@@ -418,11 +421,17 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
+- (void)submitNewSignalWithTitle:(NSString *)title
+                            type:(NSInteger)type
+                  andAuthorPhone:(NSString *)authorPhone
+                     forLocation:(CLLocationCoordinate2D)locationCoordinate
+                       withPhoto:(UIImage *)photo
+                      completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
     BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
 
     NSDictionary *signalData = @{kField_Title:title,
+                                 kField_SignalType: [NSNumber numberWithInteger:type],
                                  kField_AuthorPhone:authorPhone,
                                  kField_Location:[self getWktPointWithLongitude:locationCoordinate.longitude andLatitude:locationCoordinate.latitude],
                                    kField_Status:@0};

@@ -657,8 +657,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSNumber *createdTimestamp = [commentDict objectForKey:kField_Created];;
     comment.created = [NSDate dateWithTimeIntervalSince1970:createdTimestamp.doubleValue/1000];
     comment.signalId = [commentDict objectForKey:kField_SignalId];
-    BackendlessUser *author = [commentDict objectForKey:kField_Author];
-    if (author != nil) {
+    BackendlessUser *author = [commentDict objectForKey:kField_Author];    
+    if ((author != nil) && ![author isKindOfClass:NSNull.class]) {
         comment.authorId = author.objectId;
         comment.authorName = author.name;
     }

@@ -63,12 +63,6 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
     CLLocation *newLocation = locations.lastObject;
-    
-    // Check if location is too old
-    if (ABS([newLocation.timestamp timeIntervalSinceNow]) > 300)
-    {
-        return;
-    }
 
     CLLocationDistance distance = DBL_MAX;
     if (_lastSavedLocation)

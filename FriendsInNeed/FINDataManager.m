@@ -945,11 +945,15 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     // Use Set to ensure there are no double entries
     NSMutableSet *interestedUserIds = [NSMutableSet new];
     // Add author of the signal
-    [interestedUserIds addObject:signal.authorId];
+    if (signal.authorId != nil) {
+        [interestedUserIds addObject:signal.authorId];
+    }
     // Add all people that posted comments
     for (FINComment *comment in currentComments)
     {
-        [interestedUserIds addObject:comment.authorId];
+        if (comment.authorId != nil) {
+            [interestedUserIds addObject:comment.authorId];
+        }
     }
     // Remove current user
     [interestedUserIds removeObject:Backendless.shared.userService.currentUser.objectId];

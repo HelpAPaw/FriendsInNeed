@@ -867,7 +867,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setRelationsDepth:1];
     [queryBuilder setPageSize:kPageSize];
-    //Get all devices within 100km of the signal
+    //Get all devices within signalRadius of the signal
     NSString *signalLocationAsWKT = [self getWktPointWithLongitude:signal.coordinate.longitude andLatitude:signal.coordinate.latitude];
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"distanceOnSphere( %@, '%@') < signalRadius * 1000", kField_LastLocation, signalLocationAsWKT]];
 
@@ -888,7 +888,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             //Skip current device
             if (![Backendless.shared.messaging.currentDevice.deviceId isEqualToString:deviceId])
             {
-                [deviceIds addObject:deviceId];
+                NSNumber *signalTypesSetting = [device objectForKey:@"signalTypes"];
+                // Notify only users subscribed to this signal type
+                if ([self shouldNotifyAboutSignalType:signal.type withSettings:signalTypesSetting.integerValue]) {
+                    [deviceIds addObject:deviceId];
+                }
             }
         }
 
@@ -1105,6 +1109,12 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
     }
+}
+
+- (BOOL)shouldNotifyAboutSignalType:(NSInteger)signalType
+                       withSettings:(NSInteger)signalTypeSettings
+{
+    return ((signalTypeSettings & (1 << signalType)) > 0);
 }
 
 @end

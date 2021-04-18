@@ -24,6 +24,8 @@ class FINSettingsSliderCell: UITableViewCell {
     }
     
     func setup(with unit: String, min: Int, max: Int, currentValue: Int) {
+        self.selectionStyle = .none
+        
         self.unit = unit
         self.min = min
         self.max = max

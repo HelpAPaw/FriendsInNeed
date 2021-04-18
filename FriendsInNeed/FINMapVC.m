@@ -675,18 +675,23 @@
             subtitleLabel.numberOfLines = 0;
             subtitleLabel.font = [UIFont systemFontOfSize:UIFont.smallSystemFontSize];
             subtitleLabel.textColor = [UIColor grayColor];
-            NSString *statusString = [FINSignal localizedStatusString:ann.signal.status];
-            statusString = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
-            NSString *typeString = [FINDataManager sharedManager].signalTypes[ann.signal.type];
-            typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
-            subtitleLabel.text = [NSString stringWithFormat:@"%@\n%@", statusString, typeString];
-            
             newAnnotationView.detailCalloutAccessoryView = subtitleLabel;
         }
         else
         {
             newAnnotationView.annotation = annotation;
         }
+        
+        NSString *statusString = [FINSignal localizedStatusString:ann.signal.status];
+        statusString = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
+        NSString *typeString = @"";
+        if (ann.signal.type < [FINDataManager sharedManager].signalTypes.count)
+        {
+            typeString = [FINDataManager sharedManager].signalTypes[ann.signal.type];
+            typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
+        }
+        UILabel *subtitleLabel = (UILabel *)newAnnotationView.detailCalloutAccessoryView;
+        subtitleLabel.text = [NSString stringWithFormat:@"%@\n%@", statusString, typeString];        
         
         // Add a default image to the left side of the callout.
         [self setImage:[UIImage imageNamed:@"ic_paw"] forAnnotationView:newAnnotationView];

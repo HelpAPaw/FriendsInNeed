@@ -11,15 +11,16 @@ import UIKit
 enum Settings: Int, CaseIterable {
     case radius
     case timeout
+    case types
 }
 
 class FINSettingsVC: UIViewController {
     var radiusValue: Int = 0
     var timeoutValue: Int = 0
     let kSliderCellHeight: CGFloat = 75.0
+    let kReuseIdSliderCell = "SliderCell"
+    let kReuseIdSignalTypesCell = "SignalTypesCell"
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var toolbar: UIView!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -27,13 +28,18 @@ class FINSettingsVC: UIViewController {
         
         loadSettingsValues()
         
-        titleLabel.text = NSLocalizedString("Settings", comment: "")
+        navigationItem.title = NSLocalizedString("Settings", comment: "")
+        let closeButton = UIBarButtonItem(image: UIImage(named: "ic_close_x"), style: .plain, target: self, action: #selector(closeButtonTapped(_:)))
+        navigationItem.leftBarButtonItem = closeButton
         
-        toolbar.layer.shadowColor = UIColor.lightGray.cgColor
-        toolbar.layer.shadowOpacity = 1.0
-        toolbar.layer.shadowOffset = CGSize(width: 0, height: 2)
-        
-        tableView.register(UINib(nibName: "FINSettingsSliderCell", bundle:nil), forCellReuseIdentifier: "SliderCell")
+        tableView.register(UINib(nibName: "FINSettingsSliderCell", bundle:nil), forCellReuseIdentifier: kReuseIdSliderCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseIdSignalTypesCell)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+                
+        tableView.reloadData()
     }
     
     func loadSettingsValues() {
@@ -46,10 +52,10 @@ class FINSettingsVC: UIViewController {
         
         FINDataManager.shared()?.setRadiusSetting(radiusValue)
         FINDataManager.shared()?.setTimeoutSetting(timeoutValue)
-        FINDataManager.shared()?.updateDeviceRegistration(with: nil)
+        FINDataManager.shared()?.saveSettings()
     }
 
-    @IBAction func closeButtonTapped(_ sender: Any) {
+    @objc func closeButtonTapped(_ sender: Any) {
         saveSettingsValues()
         dismiss(animated: true) {}
     }
@@ -70,17 +76,22 @@ extension FINSettingsVC: UITableViewDataSource {
         
         switch indexPath.section {
         case Settings.radius.rawValue:
-            let sliderCell = tableView.dequeueReusableCell(withIdentifier: "SliderCell") as! FINSettingsSliderCell
+            let sliderCell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell) as! FINSettingsSliderCell
             sliderCell.setup(with: "number_of_kilometers", min: 1, max: 100, currentValue: radiusValue)
             sliderCell.valueChangedCallback = radiusValueChanged
             cell = sliderCell
         case Settings.timeout.rawValue:
-            let sliderCell = tableView.dequeueReusableCell(withIdentifier: "SliderCell") as! FINSettingsSliderCell
+            let sliderCell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell) as! FINSettingsSliderCell
             sliderCell.setup(with: "number_of_days", min: 1, max: 30, currentValue: timeoutValue)
             sliderCell.valueChangedCallback = timeoutValueChanged
             cell = sliderCell
+        case Settings.types.rawValue:
+            cell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSignalTypesCell)!
+            cell.accessoryType = .disclosureIndicator
+            cell.textLabel?.text = FINDataManager.shared()?.getStringForSignalTypesSetting()
+            cell.textLabel?.numberOfLines = 0
         default:
-            cell = tableView.dequeueReusableCell(withIdentifier: "SliderCell")!
+            cell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell)!
             break;
         }
         
@@ -93,6 +104,8 @@ extension FINSettingsVC: UITableViewDataSource {
             return NSLocalizedString("Radius", comment: "")
         case Settings.timeout.rawValue:
             return NSLocalizedString("Signal timeout", comment: "")
+        case Settings.types.rawValue:
+            return NSLocalizedString("Types", comment: "")
         default:
             return "";
         }
@@ -104,6 +117,8 @@ extension FINSettingsVC: UITableViewDataSource {
             return NSLocalizedString("The area around your current location at any moment that you want to be notified if new signals appear", comment: "")
         case Settings.timeout.rawValue:
             return NSLocalizedString("How old signals you want to be notified about", comment: "")
+        case Settings.types.rawValue:
+            return NSLocalizedString("signal_types_footer", comment: "")
         default:
             return "";
         }
@@ -118,7 +133,19 @@ extension FINSettingsVC: UITableViewDelegate {
         case Settings.timeout.rawValue:
             return kSliderCellHeight
         default:
-            return 44.0
+            return 75.0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case Settings.types.rawValue:
+            let typesVC = FINSignalTypesSettingsTVC()
+            navigationController?.pushViewController(typesVC, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
+        default:
+            return
+            //Do nothing
         }
     }
 }

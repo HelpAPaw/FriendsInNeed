@@ -76,11 +76,17 @@
 "Radius" = "Радиус";
 "Signal timeout" = "Времетраене на сигналите";
 "The area around your current location at any moment that you want to be notified if new signals appear" = "Областта около текущото ви местоположение във всеки един момент, за която искате да бъдете известявани в случай на нови сигнали";
-"How old signals you want to be notified about" = "Колко да са стари сигналите, за които бивате известявани";
+"How old signals you want to be notified about" = "Колко да са стари сигналите, за които желаете да бъдете известявани";
+"signal_types_footer" = "Типовете сигнали, за които желаете да бъдете известявани";
 "day" = "ден";
 "days" = "дни";
 "kilometer" = "километър";
 "kilometers" = "километра";
+"all_signal_types" = "Всички типове сигнали";
+"none_signal_types" = "Нито един";
+
+//FINSignalTypesSettingsTVC
+"Types" = "Типове";
 
 //FINDataManager (push notifications)
 "New signal" = "Нов сигнал";

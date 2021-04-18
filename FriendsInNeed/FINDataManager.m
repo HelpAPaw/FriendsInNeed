@@ -23,6 +23,8 @@
 #define kSettingRadiusDefault       10
 #define kSettingTimeoutKey          @"kSettingTimeoutKey"
 #define kSettingTimeoutDefault      7
+#define kSettingTypesKey            @"kSettingTypesKey"
+#define kMaxSignalTypesPadding      65535
 #define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 #define kDeviceTokenKey             @"kDeviceTokenKey"
 #define kPageSize                   100
@@ -38,6 +40,7 @@
 #define kField_Created              @"created"
 #define kField_SignalRadius         @"signalRadius"
 #define kField_SignalTimeout        @"signalTimeout"
+#define kField_SignalTypes          @"signalTypes"
 #define kField_LastLocation         @"lastLocation"
 #define kField_SignalId             @"signalID"
 #define kField_Text                 @"text"
@@ -61,6 +64,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
+@property (strong, nonatomic) NSArray<NSNumber *> *typesSetting;
 
 @end
 
@@ -159,11 +163,15 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     {
         NSMutableDictionary *deviceRegistration = [NSMutableDictionary new];
         [deviceRegistration setValue:deviceRegistrationId forKey:kField_ObjectId];
-        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:kField_SignalRadius];
-        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:kField_SignalTimeout];
-        NSString *lastLocation = [self getWktPointWithLongitude:self.lastSavedDeviceLocation.coordinate.longitude
-                                                    andLatitude:self.lastSavedDeviceLocation.coordinate.latitude];
-        [deviceRegistration setValue:lastLocation forKey:kField_LastLocation];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:_radius] forKey:kField_SignalRadius];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:_timeout] forKey:kField_SignalTimeout];
+        NSNumber *typesNumber = [NSNumber numberWithInteger:[self convertTypesBoolArrayToInt:_typesSetting]];
+        [deviceRegistration setValue:typesNumber forKey:kField_SignalTypes];
+        if (location != nil) {
+            NSString *lastLocation = [self getWktPointWithLongitude:self.lastSavedDeviceLocation.coordinate.longitude
+                                                        andLatitude:self.lastSavedDeviceLocation.coordinate.latitude];
+            [deviceRegistration setValue:lastLocation forKey:kField_LastLocation];
+        }
         
         MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
         [dataStore updateWithEntity:deviceRegistration
@@ -1079,6 +1087,10 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     
     NSInteger savedTimeout = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTimeoutKey];
     _timeout = savedTimeout != 0 ? savedTimeout : kSettingTimeoutDefault;
+    
+    NSInteger savedTypesSetting = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTypesKey];
+    savedTypesSetting = savedTypesSetting != 0 ? savedTypesSetting : kMaxSignalTypesPadding;
+    _typesSetting = [self convertTypesIntToBoolArray:savedTypesSetting];
 }
 
 - (NSInteger)getRadiusSetting
@@ -1089,6 +1101,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (NSInteger)getTimeoutSetting
 {
     return _timeout;
+}
+
+- (NSArray<NSNumber *> *)getTypesSetting
+{
+    return _typesSetting;
 }
 
 - (void)setRadiusSetting:(NSInteger)newRadius
@@ -1111,10 +1128,79 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }
 }
 
+- (void)setTypesSetting:(NSArray<NSNumber *>*)newTypesSetting
+{
+    if (![_typesSetting isEqualToArray:newTypesSetting]) {
+        _typesSetting = newTypesSetting;
+        
+        NSInteger typesInt = [self convertTypesBoolArrayToInt:_typesSetting];
+        [[NSUserDefaults standardUserDefaults] setInteger:typesInt forKey:kSettingTypesKey];
+    }    
+}
+
+- (NSInteger)convertTypesBoolArrayToInt:(NSArray<NSNumber *>*)boolArray
+{
+    NSInteger result = 0;
+    
+    // Put 1 on each position with a positive bool
+    for (int i = 0; i < boolArray.count; i++) {
+        result |= (boolArray[i].boolValue ? 1 : 0) << i;
+    }
+    
+    // Put 1s on all unused positions so that when new signals are introduced they are automatically subscribed to
+    result |= ((kMaxSignalTypesPadding << _signalTypes.count) & kMaxSignalTypesPadding);
+    return result;
+}
+
+- (NSArray<NSNumber *> *)convertTypesIntToBoolArray:(NSInteger)typesInt
+{
+    NSMutableArray<NSNumber *> *result = [NSMutableArray new];
+    for (int i = 0; i < _signalTypes.count; i++) {
+        BOOL typeSetting = ((typesInt >> i) & 1) == 1;
+        [result addObject:[NSNumber numberWithBool:typeSetting]];
+    }
+    
+    return result;
+}
+
+- (NSString *)getStringForSignalTypesSetting
+{
+    NSInteger count = 0;
+    for (NSNumber *typeSetting in _typesSetting) {
+        if (typeSetting.boolValue) {
+            count++;
+        }
+    }
+    
+    if (count == 0) {
+        return NSLocalizedString(@"none_signal_types", nil);
+    }
+    else if (count == _signalTypes.count) {
+        return NSLocalizedString(@"all_signal_types", nil);
+    }
+    else {
+        NSMutableString *result = [NSMutableString new];
+        
+        for (int i = 0; i < _signalTypes.count; i++) {
+            if (_typesSetting[i].boolValue) {
+                [result appendFormat:@"%@, ", _signalTypes[i]];
+            }
+        }
+        
+        // Remove last comma
+        return [result substringWithRange:NSMakeRange(0, result.length - 2)];;
+    }
+}
+
 - (BOOL)shouldNotifyAboutSignalType:(NSInteger)signalType
                        withSettings:(NSInteger)signalTypeSettings
 {
     return ((signalTypeSettings & (1 << signalType)) > 0);
+}
+
+- (void)saveSettings
+{
+    [self updateDeviceRegistrationWithLocation:nil];
 }
 
 @end

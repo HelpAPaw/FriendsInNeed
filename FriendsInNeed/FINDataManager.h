@@ -68,8 +68,12 @@
 
 - (NSInteger)getRadiusSetting;
 - (NSInteger)getTimeoutSetting;
+- (NSArray<NSNumber *>*)getTypesSetting;
 - (void)setRadiusSetting:(NSInteger)newRadius;
 - (void)setTimeoutSetting:(NSInteger)newTimeout;
+- (void)setTypesSetting:(NSArray<NSNumber *>*)typesArray;
+- (NSString *)getStringForSignalTypesSetting;
+- (void)saveSettings;
 
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
 

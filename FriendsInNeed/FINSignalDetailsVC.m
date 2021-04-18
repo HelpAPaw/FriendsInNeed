@@ -298,8 +298,12 @@ enum {
                 detailsCell.delegate = self;
                 [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
-            
-            NSString *typeString = [FINDataManager sharedManager].signalTypes[_annotation.signal.type];
+            NSString *typeString = @"-";
+            if (_annotation.signal.type < [FINDataManager sharedManager].signalTypes.count)
+            {
+                typeString = [FINDataManager sharedManager].signalTypes[_annotation.signal.type];
+                typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
+            }
             [detailsCell setType:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"signal_type", nil), typeString]];
             
             cell = detailsCell;

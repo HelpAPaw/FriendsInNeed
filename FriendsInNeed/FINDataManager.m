@@ -298,6 +298,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 if (newSignals.count > 0)
                 {
                     NSInteger badgeNumber = 0;
+                    NSInteger typesSettingInt = [self convertTypesBoolArrayToInt:self.typesSetting];
                     for (FINSignal *signal in newSignals)
                     {
                         BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalId];
@@ -307,7 +308,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                         }
 
                         // Only show notifications about signals that haven't been solved yet
-                        if (signal.status < FINSignalStatus2)
+                        if ((signal.status < FINSignalStatus2) &&
+                            ([self shouldNotifyAboutSignalType:signal.type withSettings:typesSettingInt]))
                         {
                             badgeNumber++;
 

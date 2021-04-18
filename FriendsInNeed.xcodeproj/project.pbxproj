@@ -56,8 +56,6 @@
 		F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72F21C00E04F00FBE20C /* AppDelegate.m */; };
 		F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FD1C00E04F00FBE20C /* Assets.xcassets */; };
 		F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */; };
-		F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B73081C00E39D00FBE20C /* MapKit.framework */; };
-		F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F38B730A1C00F31200FBE20C /* CoreLocation.framework */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
 		F3931A9E26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3931A9D26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift */; };
 		F398BA0E23F9E09400CCFAF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F398BA0D23F9E09400CCFAF9 /* GoogleService-Info.plist */; };
@@ -141,7 +139,6 @@
 		14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Help A Paw.entitlements"; sourceTree = "<group>"; };
 		383B0647A5D4387844651626 /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43EE5A4F9D8875970EE35700 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
-		4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E5599BA4D9D8DD51800A3C7 /* Pods-Help A Paw.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Help A Paw.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Help A Paw/Pods-Help A Paw.debug.xcconfig"; sourceTree = "<group>"; };
 		850A53F660CB027165B53E3D /* libPods-Help A Paw.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Help A Paw.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF9EE7504B2B25B316133CF3 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
@@ -200,8 +197,6 @@
 		F38B72FD1C00E04F00FBE20C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F38B73001C00E04F00FBE20C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F38B73021C00E04F00FBE20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F38B73081C00E39D00FBE20C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		F38B730A1C00F31200FBE20C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
 		F3931A9D26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSignalTypesSettingsTVC.swift; sourceTree = "<group>"; };
@@ -222,6 +217,9 @@
 		F3A6DC651C8488250050F9F3 /* FINDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINDataManager.h; sourceTree = "<group>"; };
 		F3A6DC661C8488250050F9F3 /* FINDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINDataManager.m; sourceTree = "<group>"; };
 		F3A6DC691C84C0480050F9F3 /* ic_paw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_paw.png; sourceTree = "<group>"; };
+		F3A94C81262C643B00FAE40B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		F3A94C82262C643D00FAE40B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		F3A94C85262C645100FAE40B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		F3B2503D21582DF900ED1D1D /* FINSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSettingsVC.swift; sourceTree = "<group>"; };
 		F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsVC.xib; sourceTree = "<group>"; };
 		F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSettingsSliderCell.swift; sourceTree = "<group>"; };
@@ -255,8 +253,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3BA753A22232BD3003FAC5F /* UserNotifications.framework in Frameworks */,
-				F38B730B1C00F31200FBE20C /* CoreLocation.framework in Frameworks */,
-				F38B73091C00E39D00FBE20C /* MapKit.framework in Frameworks */,
 				61DB1E2A6FDBEDF376061F39 /* Pods_Help_A_Paw.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +327,9 @@
 		14F14F821E9A095600977C8E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F3A94C85262C645100FAE40B /* CoreLocation.framework */,
+				F3A94C82262C643D00FAE40B /* MapKit.framework */,
+				F3A94C81262C643B00FAE40B /* CoreLocation.framework */,
 				F3BA753922232BD3003FAC5F /* UserNotifications.framework */,
 				09E981068B44BF25FEDB2236 /* Pods_Help_A_Paw.framework */,
 				383B0647A5D4387844651626 /* Pods_NotificationService.framework */,
@@ -367,14 +366,6 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
-		F334287520E000FF0062236E /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				4BD95FE2487E3F00034F4CE2 /* libPods-Help A Paw.a */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		F35258B1215ECF17001A0DE1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,16 +391,13 @@
 			isa = PBXGroup;
 			children = (
 				14F14F8E1E9A439000977C8E /* Help A Paw.entitlements */,
+				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
+				F3A6DC681C84C0480050F9F3 /* Resources */,
 				F3BA754022232CFD003FAC5F /* NotificationService */,
 				14F14F821E9A095600977C8E /* Frameworks */,
-				F3A6DC681C84C0480050F9F3 /* Resources */,
-				F38B730A1C00F31200FBE20C /* CoreLocation.framework */,
-				F38B73081C00E39D00FBE20C /* MapKit.framework */,
-				F38B72ED1C00E04F00FBE20C /* FriendsInNeed */,
 				F38B72EC1C00E04F00FBE20C /* Products */,
 				8E90546007900DD9E3332797 /* Pods */,
 				CE84D0F938D153CA1EAC0401 /* Frameworks */,
-				F334287520E000FF0062236E /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -425,47 +413,11 @@
 		F38B72ED1C00E04F00FBE20C /* FriendsInNeed */ = {
 			isa = PBXGroup;
 			children = (
-				F301FE011EDEB99100880ECE /* Helpers */,
-				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
-				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
-				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
-				F38B73021C00E04F00FBE20C /* Info.plist */,
-				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
-				F39C394D1C9EA428007A2D8E /* Models */,
-				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
 				F38B72F11C00E04F00FBE20C /* AppDelegate.h */,
 				F38B72F21C00E04F00FBE20C /* AppDelegate.m */,
-				1449F6161FC630DD0078317E /* Login */,
-				1449F6171FC630ED0078317E /* Map */,
-				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
-				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
-				1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */,
-				1470C8E31FC373220072568E /* FINSignalPhotoVC.xib */,
-				1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */,
-				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
-				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
-				1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */,
-				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
-				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
-				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
-				F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */,
-				F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */,
-				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
-				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
-				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
-				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
-				1449F6181FC6311D0078317E /* Menu */,
-				1449F6191FC631280078317E /* About */,
-				F35906031E05823800A61060 /* FINMailComposer.h */,
-				F35906011E05821C00A61060 /* FINMailComposer.m */,
-				1449F61A1FC631390078317E /* FAQ */,
-				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
-				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
-				F35258B1215ECF17001A0DE1 /* Settings */,
-				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
-				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
-				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
-				F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */,
+				F3A94C7E262C634900FAE40B /* UI */,
+				F3A94C7D262C632900FAE40B /* Data */,
+				F38B72EE1C00E04F00FBE20C /* Supporting Files */,
 			);
 			path = FriendsInNeed;
 			sourceTree = "<group>";
@@ -473,6 +425,8 @@
 		F38B72EE1C00E04F00FBE20C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F38B73021C00E04F00FBE20C /* Info.plist */,
+				147F2CD51E72BEC1007B1017 /* Help A Paw-Bridging-Header.h */,
 				F338001D1C9888280080FACD /* FINGlobalConstants.pch */,
 				F38B72EF1C00E04F00FBE20C /* main.m */,
 				F30D08672266669F0038C7FF /* SharedConstants.swift */,
@@ -499,6 +453,7 @@
 		F3A6DC681C84C0480050F9F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F38B72FD1C00E04F00FBE20C /* Assets.xcassets */,
 				F398BA0D23F9E09400CCFAF9 /* GoogleService-Info.plist */,
 				F35905FB1E0555D200A61060 /* ic_close_x.png */,
 				F35905FC1E0555D200A61060 /* ic_close_x@2x.png */,
@@ -527,6 +482,79 @@
 			);
 			name = Resources;
 			path = FriendsInNeed/Resources;
+			sourceTree = "<group>";
+		};
+		F3A94C7C262C626200FAE40B /* Signal Details */ = {
+			isa = PBXGroup;
+			children = (
+				F33800051C8E3F320080FACD /* FINSignalDetailsVC.h */,
+				F33800061C8E3F320080FACD /* FINSignalDetailsVC.m */,
+				1420BA6E1E72FF40006F0B0E /* FINSignalDetailsVC.xib */,
+				1470C8E31FC373220072568E /* FINSignalPhotoVC.xib */,
+				1470C8DF1FC372880072568E /* FINSignalPhotoVC.swift */,
+				F338000A1C96325B0080FACD /* FINSignalDetailsCell.h */,
+				F338000B1C96325B0080FACD /* FINSignalDetailsCell.m */,
+				1420BA811E730854006F0B0E /* FINSignalDetailsCell.xib */,
+				F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */,
+				F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */,
+				F39C39311C99B59A007A2D8E /* FINSignalDetailsCommentCell.xib */,
+				F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */,
+				F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */,
+			);
+			name = "Signal Details";
+			sourceTree = "<group>";
+		};
+		F3A94C7D262C632900FAE40B /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F39C394D1C9EA428007A2D8E /* Models */,
+				F38B73141C04412A00FBE20C /* FINLocationManager.h */,
+				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
+				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
+				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		F3A94C7E262C634900FAE40B /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */,
+				1449F6161FC630DD0078317E /* Login */,
+				1449F6171FC630ED0078317E /* Map */,
+				F3A94C7C262C626200FAE40B /* Signal Details */,
+				F3A94C80262C63C100FAE40B /* Side Menu */,
+				F301FE011EDEB99100880ECE /* Helpers */,
+				F3A94C7F262C635200FAE40B /* Reusable */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		F3A94C7F262C635200FAE40B /* Reusable */ = {
+			isa = PBXGroup;
+			children = (
+				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
+				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
+				F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */,
+			);
+			name = Reusable;
+			sourceTree = "<group>";
+		};
+		F3A94C80262C63C100FAE40B /* Side Menu */ = {
+			isa = PBXGroup;
+			children = (
+				1449F6181FC6311D0078317E /* Menu */,
+				1449F6191FC631280078317E /* About */,
+				F35906031E05823800A61060 /* FINMailComposer.h */,
+				F35906011E05821C00A61060 /* FINMailComposer.m */,
+				1449F61A1FC631390078317E /* FAQ */,
+				F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */,
+				F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */,
+				F35258B1215ECF17001A0DE1 /* Settings */,
+				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
+				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
+			);
+			name = "Side Menu";
 			sourceTree = "<group>";
 		};
 		F3BA754022232CFD003FAC5F /* NotificationService */ = {

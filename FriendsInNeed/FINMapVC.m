@@ -24,7 +24,7 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -41,6 +41,7 @@
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshingBarButton;
+@property (strong, nonatomic) UIBarButtonItem *filterBarButton;
 @property (assign, nonatomic) BOOL pauseRefreshing;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
@@ -56,51 +57,17 @@
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
+@property (strong, nonatomic) NSArray<NSNumber *> *selectedSignalTypes;
 
 @end
 
 @implementation FINMapVC
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    _viewDidAppearOnce = NO;
-    
-    _locationManager = [FINLocationManager sharedManager];
-    _locationManager.mapDelegate = self;
-    
-    [_locationManager startMonitoringSignificantLocationChanges];
-    
-    _dataManager = [FINDataManager sharedManager];
-    _dataManager.mapDelegate = self;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(applicationDidBecomeActive:)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(settingsChanged:)
-                                                 name:kNotificationSettingRadiusChanged
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(settingsChanged:)
-                                                 name:kNotificationSettingTimeoutChanged
-                                               object:nil];
-    
-    UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
-    [dragGR setDelegate:self];
-    [self.mapView addGestureRecognizer:dragGR];
-    UIPinchGestureRecognizer *pinchGR = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
-    [pinchGR setDelegate:self];
-    [self.mapView addGestureRecognizer:pinchGR];
-    
+- (void)setupAddSignalView {
     _cancelButton.tintColor = [UIColor redColor];
     _cancelButton.layer.shadowOpacity = 1.0f;
     _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
-    _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);    
+    _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);
     _cancelButton.alpha = 0.0f;
     
     _addSignalView.layer.cornerRadius = 5.0f;
@@ -129,7 +96,9 @@
     _sendSignalButtonWidthConstraint.constant = _btnSendSignal.frame.size.width + 10;
     
     _isInSubmitMode = NO;
-    
+}
+
+- (void)setupNavigationBar {
     self.navigationItem.title = @"Help a Paw";
     
     // Create add bar button
@@ -139,8 +108,7 @@
     [addButton setImage:addImage forState:UIControlStateNormal];
     [addButton addTarget:self action:@selector(onAddSignalButton:) forControlEvents:UIControlEventTouchUpInside];
     [addButton setShowsTouchWhenHighlighted:YES];
-    UIBarButtonItem *addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
-    _addBarButton = addBarButton;
+    _addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
     
     // Create refresh bar button
     _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTapped:)];
@@ -151,6 +119,15 @@
     [activityIndicator startAnimating];
     _refreshingBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     
+    // Create filter bar button
+    UIImage *filterImage = [UIImage imageNamed:@"ic_filter_list_white_36pt"];
+    UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [filterButton setFrame:CGRectMake(0, 0, filterImage.size.width, filterImage.size.height)];
+    [filterButton setImage:filterImage forState:UIControlStateNormal];
+    [filterButton addTarget:self action:@selector(onFilterButton:) forControlEvents:UIControlEventTouchUpInside];
+    [filterButton setShowsTouchWhenHighlighted:YES];
+    _filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:filterButton];
+    
     [self setupReadyMode];
     
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"]
@@ -158,6 +135,54 @@
                                                                   target:self
                                                                   action:@selector(menuButtonTapped:)];
     self.navigationItem.leftBarButtonItem = menuButton;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    _viewDidAppearOnce = NO;
+    
+    _locationManager = [FINLocationManager sharedManager];
+    _locationManager.mapDelegate = self;
+    
+    [_locationManager startMonitoringSignificantLocationChanges];
+    
+    _dataManager = [FINDataManager sharedManager];
+    _dataManager.mapDelegate = self;
+    
+    // Initially all signal types are selected
+    NSMutableArray *selectedSignalTypes = [NSMutableArray new];
+    for (int i = 0; i < _dataManager.signalTypes.count; i++) {
+        [selectedSignalTypes addObject:[NSNumber numberWithBool:YES]];
+    }
+    _selectedSignalTypes = selectedSignalTypes;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingRadiusChanged
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(settingsChanged:)
+                                                 name:kNotificationSettingTimeoutChanged
+                                               object:nil];
+    
+    UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
+    [dragGR setDelegate:self];
+    [self.mapView addGestureRecognizer:dragGR];
+    UIPinchGestureRecognizer *pinchGR = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
+    [pinchGR setDelegate:self];
+    [self.mapView addGestureRecognizer:pinchGR];
+    
+    [self setupAddSignalView];
+    
+    [self setupNavigationBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -891,12 +916,12 @@
 
 - (void)setupRefreshingMode
 {
-    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshingBarButton];
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshingBarButton, _filterBarButton];
 }
 
 - (void)setupReadyMode
 {
-    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton];
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton, _filterBarButton];
 }
 
 #pragma mark - Menu
@@ -906,6 +931,19 @@
     [_authorPhoneField resignFirstResponder];
     
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
+}
+
+#pragma mark - Filter
+- (void)onFilterButton:(id)sender
+{
+    FINSignalTypesSelectionTVC *stsTVC = [[FINSignalTypesSelectionTVC alloc] initWith:_selectedSignalTypes and:self];
+    [self.navigationController pushViewController:stsTVC animated:YES];
+}
+
+- (void)signalTypesSelectionFinishedWith:(NSArray<NSNumber *> *)newTypesSelection
+{
+    _selectedSignalTypes = newTypesSelection;
+    
 }
 
 #pragma mark - Privacy policy

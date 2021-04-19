@@ -8,14 +8,21 @@
 
 import UIKit
 
-class FINSignalTypesSettingsTVC: UITableViewController {
+@objc protocol FINSignalTypesSelectionDelegate {
+    func signalTypesSelectionFinished(with newTypesSelection: [NSNumber])
+}
+
+class FINSignalTypesSelectionTVC: UITableViewController {
     
     let kReuseIdentifier = "kReuseIdentifier"
     let signalTypes = FINDataManager.shared()!.signalTypes!
+    let delegate: FINSignalTypesSelectionDelegate
     var settings: [Bool]
     
-    init() {
-        settings = FINDataManager.shared()!.getTypesSetting().map({ (numberSetting) -> Bool in
+    @objc init(with selectedTypes:[NSNumber], and delegate: FINSignalTypesSelectionDelegate) {
+        self.delegate = delegate
+        
+        settings = selectedTypes.map({ (numberSetting) -> Bool in
             numberSetting.boolValue
         })
         
@@ -37,7 +44,7 @@ class FINSignalTypesSettingsTVC: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        FINDataManager.shared()?.setTypesSetting(settings.map({ (boolSetting) -> NSNumber in
+        delegate.signalTypesSelectionFinished(with: settings.map({ (boolSetting) -> NSNumber in
             NSNumber(booleanLiteral: boolSetting)
         }))
     }

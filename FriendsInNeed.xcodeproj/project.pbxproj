@@ -57,7 +57,7 @@
 		F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FD1C00E04F00FBE20C /* Assets.xcassets */; };
 		F38B73011C00E04F00FBE20C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */; };
 		F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B73151C04412A00FBE20C /* FINLocationManager.m */; };
-		F3931A9E26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3931A9D26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift */; };
+		F3931A9E26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3931A9D26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift */; };
 		F398BA0E23F9E09400CCFAF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F398BA0D23F9E09400CCFAF9 /* GoogleService-Info.plist */; };
 		F398BA0F23F9E09400CCFAF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F398BA0D23F9E09400CCFAF9 /* GoogleService-Info.plist */; };
 		F39C39321C99B59A007A2D8E /* FINSignalDetailsCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F39C39301C99B59A007A2D8E /* FINSignalDetailsCommentCell.m */; };
@@ -199,7 +199,7 @@
 		F38B73021C00E04F00FBE20C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F38B73141C04412A00FBE20C /* FINLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINLocationManager.h; sourceTree = "<group>"; };
 		F38B73151C04412A00FBE20C /* FINLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLocationManager.m; sourceTree = "<group>"; };
-		F3931A9D26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSignalTypesSettingsTVC.swift; sourceTree = "<group>"; };
+		F3931A9D26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINSignalTypesSelectionTVC.swift; sourceTree = "<group>"; };
 		F398BA0D23F9E09400CCFAF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F39BB3A1222330EA00967BC9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		F39C392F1C99B59A007A2D8E /* FINSignalDetailsCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINSignalDetailsCommentCell.h; sourceTree = "<group>"; };
@@ -373,7 +373,7 @@
 				F3B2503E21582DF900ED1D1D /* FINSettingsVC.xib */,
 				F3B25041215833FF00ED1D1D /* FINSettingsSliderCell.swift */,
 				F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */,
-				F3931A9D26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift */,
+				F3931A9D26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -852,7 +852,7 @@
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
 				F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */,
-				F3931A9E26225201001C5BC8 /* FINSignalTypesSettingsTVC.swift in Sources */,
+				F3931A9E26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
 				F316CAE21C7A8B4000C4E00F /* FINAnnotation.m in Sources */,
 				F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */,

@@ -36,12 +36,6 @@ class FINSettingsVC: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: kReuseIdSignalTypesCell)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-                
-        tableView.reloadData()
-    }
-    
     func loadSettingsValues() {
         
         radiusValue = (FINDataManager.shared()?.getRadiusSetting())!
@@ -140,7 +134,7 @@ extension FINSettingsVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case Settings.types.rawValue:
-            let typesVC = FINSignalTypesSettingsTVC()
+            let typesVC = FINSignalTypesSelectionTVC(with: FINDataManager.shared()!.getTypesSetting()!, and: self)
             navigationController?.pushViewController(typesVC, animated: true)
             tableView.deselectRow(at: indexPath, animated: true)
         default:
@@ -157,5 +151,12 @@ extension FINSettingsVC {
     
     func timeoutValueChanged(to newValue: Int) {
         timeoutValue = newValue
+    }
+}
+
+extension FINSettingsVC: FINSignalTypesSelectionDelegate {
+    func signalTypesSelectionFinished(with newTypesSelection: [NSNumber]) {
+        FINDataManager.shared()?.setTypesSetting(newTypesSelection)
+        tableView.reloadData()
     }
 }

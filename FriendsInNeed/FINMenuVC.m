@@ -192,8 +192,9 @@ enum
         case kSettings:
         {
             FINSettingsVC *settingsVC = [[FINSettingsVC alloc] initWithNibName:nil bundle:nil];
-            settingsVC.modalPresentationStyle = UIModalPresentationFullScreen;
-            [self presentViewController:settingsVC animated:YES completion:nil];
+            UINavigationController *navC = [[UINavigationController alloc] initWithRootViewController:settingsVC];
+            navC.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self presentViewController:navC animated:YES completion:nil];
             break;
         }
         case kFAQ:

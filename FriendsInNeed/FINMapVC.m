@@ -24,21 +24,25 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
 @property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
 @property (weak, nonatomic) IBOutlet UITextField *authorPhoneField;
+@property (weak, nonatomic) IBOutlet UITextField *signalTypeField;
+@property (strong, nonatomic) UIPickerView *signalTypePicker;
 @property (weak, nonatomic) IBOutlet UIButton *btnPhoto;
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendSignalButtonWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *liSendSignal;
+@property (weak, nonatomic) IBOutlet UILabel *filterIsActiveLabel;
 
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshingBarButton;
+@property (strong, nonatomic) UIBarButtonItem *filterBarButton;
 @property (assign, nonatomic) BOOL pauseRefreshing;
 
 @property (strong, nonatomic) FINLocationManager *locationManager;
@@ -54,10 +58,85 @@
 @property (strong, nonatomic) UITapGestureRecognizer *envSwitchGesture;
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
+@property (strong, nonatomic) NSArray<NSNumber *> *selectedSignalTypes;
 
 @end
 
 @implementation FINMapVC
+
+- (void)setupAddSignalView {
+    _cancelButton.tintColor = [UIColor redColor];
+    _cancelButton.layer.shadowOpacity = 1.0f;
+    _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
+    _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);
+    _cancelButton.alpha = 0.0f;
+    
+    _addSignalView.layer.cornerRadius = 5.0f;
+    _addSignalView.layer.shadowOpacity = 1.0f;
+    _addSignalView.layer.shadowColor = [UIColor grayColor].CGColor;
+    _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
+    
+    _signalTypePicker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    _signalTypePicker.delegate = self;
+    _signalTypePicker.dataSource = self;
+    _signalTypeField.inputView = _signalTypePicker;
+    _signalTypeField.text = _dataManager.signalTypes[0];
+    
+    UIButton *rightViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rightViewButton setImage:[UIImage imageNamed:@"ic_dropdown"] forState:UIControlStateNormal];
+    rightViewButton.imageEdgeInsets = UIEdgeInsetsMake(6, 4, 6, 4);
+    [rightViewButton addTarget:self action:@selector(signalTypeDropdownTapped:) forControlEvents:UIControlEventTouchUpInside];
+    _signalTypeField.rightView = rightViewButton;
+    _signalTypeField.rightViewMode = UITextFieldViewModeAlways;
+    
+    _btnPhoto.layer.cornerRadius = 5.0f;
+    _btnPhoto.clipsToBounds = YES;
+    [[_btnPhoto imageView] setContentMode: UIViewContentModeScaleAspectFill];
+    
+    [_btnSendSignal sizeToFit];
+    _sendSignalButtonWidthConstraint.constant = _btnSendSignal.frame.size.width + 10;
+    
+    _isInSubmitMode = NO;
+}
+
+- (void)setupNavigationBar {
+    self.navigationItem.title = @"Help a Paw";
+    
+    // Create add bar button
+    UIImage *addImage = [UIImage imageNamed:@"ic_add"];
+    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [addButton setFrame:CGRectMake(0, 0, addImage.size.width, addImage.size.height)];
+    [addButton setImage:addImage forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(onAddSignalButton:) forControlEvents:UIControlEventTouchUpInside];
+    [addButton setShowsTouchWhenHighlighted:YES];
+    _addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    
+    // Create refresh bar button
+    _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTapped:)];
+    
+    // Create loading bar button
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [activityIndicator setFrame:CGRectMake(0, 0, 30, 30)];
+    [activityIndicator startAnimating];
+    _refreshingBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    
+    // Create filter bar button
+    UIImage *filterImage = [UIImage imageNamed:@"ic_filter_list_white_36pt"];
+    UIButton *filterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [filterButton setFrame:CGRectMake(0, 0, filterImage.size.width, filterImage.size.height)];
+    [filterButton setImage:filterImage forState:UIControlStateNormal];
+    [filterButton addTarget:self action:@selector(onFilterButton:) forControlEvents:UIControlEventTouchUpInside];
+    [filterButton setShowsTouchWhenHighlighted:YES];
+    _filterBarButton = [[UIBarButtonItem alloc] initWithCustomView:filterButton];
+    
+    [self setupReadyMode];
+    
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(menuButtonTapped:)];
+    self.navigationItem.leftBarButtonItem = menuButton;
+}
 
 - (void)viewDidLoad
 {
@@ -69,6 +148,16 @@
     _locationManager.mapDelegate = self;
     
     [_locationManager startMonitoringSignificantLocationChanges];
+    
+    _dataManager = [FINDataManager sharedManager];
+    _dataManager.mapDelegate = self;
+    
+    // Initially all signal types are selected
+    NSMutableArray *selectedSignalTypes = [NSMutableArray new];
+    for (int i = 0; i < _dataManager.signalTypes.count; i++) {
+        [selectedSignalTypes addObject:[NSNumber numberWithBool:YES]];
+    }
+    _selectedSignalTypes = selectedSignalTypes;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive:)
@@ -92,54 +181,13 @@
     [pinchGR setDelegate:self];
     [self.mapView addGestureRecognizer:pinchGR];
     
-    _cancelButton.tintColor = [UIColor redColor];
-    _cancelButton.layer.shadowOpacity = 1.0f;
-    _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
-    _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);    
-    _cancelButton.alpha = 0.0f;
+    _filterIsActiveLabel.text = NSLocalizedString(@"filter_is_active", nil);
+    _filterIsActiveLabel.layer.cornerRadius = 15.0;
+    _filterIsActiveLabel.layer.masksToBounds = YES;
     
-    _addSignalView.layer.cornerRadius = 5.0f;
-    _addSignalView.layer.shadowOpacity = 1.0f;
-    _addSignalView.layer.shadowColor = [UIColor grayColor].CGColor;
-    _addSignalView.layer.shadowOffset = CGSizeMake(0, 0);
+    [self setupAddSignalView];
     
-    _btnPhoto.layer.cornerRadius = 5.0f;
-    _btnPhoto.clipsToBounds = YES;
-    [[_btnPhoto imageView] setContentMode: UIViewContentModeScaleAspectFill];
-    
-    [_btnSendSignal sizeToFit];
-    _sendSignalButtonWidthConstraint.constant = _btnSendSignal.frame.size.width + 10;
-    
-    _isInSubmitMode = NO;
-    
-    self.navigationItem.title = @"Help a Paw";
-    
-    // Create add bar button
-    UIImage *addImage = [UIImage imageNamed:@"ic_add"];
-    UIButton *addButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [addButton setFrame:CGRectMake(0, 0, addImage.size.width, addImage.size.height)];
-    [addButton setImage:addImage forState:UIControlStateNormal];
-    [addButton addTarget:self action:@selector(onAddSignalButton:) forControlEvents:UIControlEventTouchUpInside];
-    [addButton setShowsTouchWhenHighlighted:YES];
-    UIBarButtonItem *addBarButton = [[UIBarButtonItem alloc] initWithCustomView:addButton];
-    _addBarButton = addBarButton;
-    
-    // Create refresh bar button
-    _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(refreshButtonTapped:)];
-    
-    // Create loading bar button
-    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [activityIndicator setFrame:CGRectMake(0, 0, 30, 30)];
-    [activityIndicator startAnimating];
-    _refreshingBarButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    
-    [self setupReadyMode];
-    
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_menu"]
-                                                                   style:UIBarButtonItemStylePlain
-                                                                  target:self
-                                                                  action:@selector(menuButtonTapped:)];
-    self.navigationItem.leftBarButtonItem = menuButton;
+    [self setupNavigationBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -148,8 +196,6 @@
     
     if (_viewDidAppearOnce == NO)
     {
-        _dataManager = [FINDataManager sharedManager];
-        _dataManager.mapDelegate = self;
         [self checkForPrivacyPolicyAcceptance];
         [self updateTitle];
         _viewDidAppearOnce = YES;
@@ -314,6 +360,7 @@
                     
                     [self.signalTitleField resignFirstResponder];
                     [self.authorPhoneField resignFirstResponder];
+                    [self.signalTypeField resignFirstResponder];
                 }
                 else
                 {
@@ -364,7 +411,12 @@
     CLS_LOG(@"Submitting new signal...");
     
     [self setSendingSignalMode];
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text andAuthorPhone:(NSString *)_authorPhoneField.text forLocation:_submitSignalAnnotation.coordinate withPhoto:_signalPhoto completion:^(FINSignal *savedSignal, FINError *error) {
+    [_dataManager submitNewSignalWithTitle:_signalTitleField.text
+                                      type:[_signalTypePicker selectedRowInComponent:0]
+                            andAuthorPhone:(NSString *)_authorPhoneField.text
+                               forLocation:_submitSignalAnnotation.coordinate
+                                 withPhoto:_signalPhoto
+                                completion:^(FINSignal *savedSignal, FINError *error) {
         
         [self resetSendingSignalMode];
         
@@ -564,9 +616,13 @@
 {
     for (FINSignal *signal in nearbySignals)
     {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self addAnnotationToMapFromSignal:signal];
-        }];
+        // Only add signal if current filter has its type selected
+        if ((signal.type < _selectedSignalTypes.count) &&
+            (_selectedSignalTypes[signal.type].boolValue)) {
+            [UIView animateWithDuration:0.3 animations:^{
+                [self addAnnotationToMapFromSignal:signal];
+            }];
+        }
     }
 }
 
@@ -647,11 +703,29 @@
             // Because this is an iOS app, add the detail disclosure button to display details about the annotation in another view.
             UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
             newAnnotationView.rightCalloutAccessoryView = rightButton;
+            
+            // Add a details label that shows the status and type
+            UILabel *subtitleLabel = [UILabel new];
+            subtitleLabel.numberOfLines = 0;
+            subtitleLabel.font = [UIFont systemFontOfSize:UIFont.smallSystemFontSize];
+            subtitleLabel.textColor = [UIColor grayColor];
+            newAnnotationView.detailCalloutAccessoryView = subtitleLabel;
         }
         else
         {
             newAnnotationView.annotation = annotation;
         }
+        
+        NSString *statusString = [FINSignal localizedStatusString:ann.signal.status];
+        statusString = [NSString stringWithFormat:NSLocalizedString(@"Status: %@",nil), statusString];
+        NSString *typeString = @"";
+        if (ann.signal.type < [FINDataManager sharedManager].signalTypes.count)
+        {
+            typeString = [FINDataManager sharedManager].signalTypes[ann.signal.type];
+            typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
+        }
+        UILabel *subtitleLabel = (UILabel *)newAnnotationView.detailCalloutAccessoryView;
+        subtitleLabel.text = [NSString stringWithFormat:@"%@\n%@", statusString, typeString];        
         
         // Add a default image to the left side of the callout.
         [self setImage:[UIImage imageNamed:@"ic_paw"] forAnnotationView:newAnnotationView];
@@ -693,7 +767,6 @@
     if ([view.reuseIdentifier isEqualToString:kStandardSignalAnnotationView])
     {
         FINAnnotation *annotation = (FINAnnotation *)view.annotation;
-        [annotation updateAnnotationSubtitle];
         
         // If there is a signal photo, set it as the left accessory view
         if (annotation.signal.photoUrl)
@@ -738,8 +811,8 @@
     UIImageView *signalImageView = [[UIImageView alloc] initWithImage:image];
     CGRect imageFrame = signalImageView.frame;
     
-    imageFrame.size.height = 44.0;
-    imageFrame.size.width  = 44.0;
+    imageFrame.size.height = 50.0;
+    imageFrame.size.width  = 50.0;
     signalImageView.frame = imageFrame;
     signalImageView.clipsToBounds = YES;
     signalImageView.layer.cornerRadius = 5.0f;
@@ -767,6 +840,48 @@
     [self presentViewController:alert animated:YES completion:^{}];
 }
 
+#pragma mark
+- (void)signalTypeDropdownTapped:(id)sender
+{
+    [_signalTypeField becomeFirstResponder];
+}
+
+#pragma mark - UIPickerView Data Source
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    if (pickerView == _signalTypePicker) {
+        return 1;
+    }
+    
+    return 0;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        return _dataManager.signalTypes.count;
+    }
+    
+    return 0;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        return _dataManager.signalTypes[row];
+    }
+    
+    return @"";
+}
+
+#pragma mark - UIPickerView Delegate
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    if (pickerView == _signalTypePicker) {
+        _signalTypeField.text = _dataManager.signalTypes[row];
+    }
+}
 
 #pragma mark - Refresh
 - (void)refreshButtonTapped:(id)sender
@@ -810,12 +925,12 @@
 
 - (void)setupRefreshingMode
 {
-    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshingBarButton];
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshingBarButton, _filterBarButton];
 }
 
 - (void)setupReadyMode
 {
-    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton];
+    self.navigationItem.rightBarButtonItems = @[_addBarButton, _refreshBarButton, _filterBarButton];
 }
 
 #pragma mark - Menu
@@ -825,6 +940,36 @@
     [_authorPhoneField resignFirstResponder];
     
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];
+}
+
+#pragma mark - Filter
+- (void)onFilterButton:(id)sender
+{
+    FINSignalTypesSelectionTVC *stsTVC = [[FINSignalTypesSelectionTVC alloc] initWith:_selectedSignalTypes and:self];
+    [self.navigationController pushViewController:stsTVC animated:YES];
+}
+
+- (void)signalTypesSelectionFinishedWith:(NSArray<NSNumber *> *)newTypesSelection
+{
+    _selectedSignalTypes = newTypesSelection;
+    
+    // Re-add signals to apply the updated filter
+    [self removeAllSignalAnnotationsFromMap];
+    [self updateMapWithNearbySignals:_dataManager.nearbySignals];
+    
+    // Update filter label visibility
+    NSInteger count = 0;
+    for (NSNumber *typeSetting in _selectedSignalTypes) {
+        if (typeSetting.boolValue) {
+            count++;
+        }
+    }
+    if (count == _dataManager.signalTypes.count) {
+        _filterIsActiveLabel.hidden = YES;
+    }
+    else {
+        _filterIsActiveLabel.hidden = NO;
+    }
 }
 
 #pragma mark - Privacy policy

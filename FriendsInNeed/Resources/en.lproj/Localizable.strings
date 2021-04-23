@@ -18,7 +18,14 @@
 //FINMapVC.m
 "registration_required" = "Registration required";
 "only_registered_users_can_submit_signals" = "Only registered users can submit signals";
+"filter_is_active" = "There is an active filter";
 
 //FINSignalDetails.m
 "only_registered_users_can_change_status" = "Only registered users can change signal status";
 "only_registered_users_can_comment" = "Only registered users can write comments";
+"signal_type" = "Signal type: ";
+
+//FINSettingsVC
+"signal_types_footer" = "Signal types you want to be notified about";
+"all_signal_types" = "All signal types";
+"none_signal_types" = "None";

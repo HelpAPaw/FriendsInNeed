@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, FINSignalStatus) {
 
 @property (strong, nonatomic) NSString *signalId;
 @property (strong, nonatomic) NSString *title;
+@property (assign, nonatomic) NSInteger type;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSString *authorId;
 @property (strong, nonatomic) NSString *authorPhone;

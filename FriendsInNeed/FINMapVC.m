@@ -615,9 +615,13 @@
 {
     for (FINSignal *signal in nearbySignals)
     {
-        [UIView animateWithDuration:0.3 animations:^{
-            [self addAnnotationToMapFromSignal:signal];
-        }];
+        // Only add signal if current filter has its type selected
+        if ((signal.type < _selectedSignalTypes.count) &&
+            (_selectedSignalTypes[signal.type].boolValue)) {
+            [UIView animateWithDuration:0.3 animations:^{
+                [self addAnnotationToMapFromSignal:signal];
+            }];
+        }
     }
 }
 
@@ -948,6 +952,11 @@
 {
     _selectedSignalTypes = newTypesSelection;
     
+    // Re-add signals to apply the updated filter
+    [self removeAllSignalAnnotationsFromMap];
+    [self updateMapWithNearbySignals:_dataManager.nearbySignals];
+    
+    // Update filter label visibility
     NSInteger count = 0;
     for (NSNumber *typeSetting in _selectedSignalTypes) {
         if (typeSetting.boolValue) {

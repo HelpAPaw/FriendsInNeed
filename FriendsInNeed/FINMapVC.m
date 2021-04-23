@@ -181,6 +181,7 @@
     [pinchGR setDelegate:self];
     [self.mapView addGestureRecognizer:pinchGR];
     
+    _filterIsActiveLabel.text = NSLocalizedString(@"filter_is_active", nil);
     _filterIsActiveLabel.layer.cornerRadius = 15.0;
     _filterIsActiveLabel.layer.masksToBounds = YES;
     

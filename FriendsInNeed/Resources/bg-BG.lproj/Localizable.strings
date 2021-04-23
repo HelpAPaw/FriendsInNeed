@@ -31,6 +31,7 @@
 "Cancel" = "Отмени";
 "registration_required" = "Изисква се регистрация";
 "only_registered_users_can_submit_signals" = "Само регистрирани потребители могат да подават сигнали";
+"filter_is_active" = "Има активен филтър";
 
 //FinMenuVC.m
 "Login" = "Влез";

@@ -18,6 +18,7 @@
 //FINMapVC.m
 "registration_required" = "Registration required";
 "only_registered_users_can_submit_signals" = "Only registered users can submit signals";
+"filter_is_active" = "There is an active filter";
 
 //FINSignalDetails.m
 "only_registered_users_can_change_status" = "Only registered users can change signal status";

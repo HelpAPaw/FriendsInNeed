@@ -133,13 +133,14 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="VRP-un-208" secondAttribute="centerY" id="09p-pt-l1l"/>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="11y-al-fYl"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="top" secondItem="gGJ-xu-E0V" secondAttribute="bottom" constant="4" id="3xJ-DB-UPe"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="leading" id="47Y-pg-4MJ"/>
                 <constraint firstItem="GjR-Pw-wl2" firstAttribute="top" secondItem="3Gi-Gw-2Xp" secondAttribute="bottom" constant="2" id="4Sz-Xl-oHe"/>
                 <constraint firstItem="GjR-Pw-wl2" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="8fk-tg-KNJ"/>
                 <constraint firstAttribute="bottom" secondItem="GjR-Pw-wl2" secondAttribute="bottom" constant="2" id="AmZ-D2-FHu"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="B53-4Z-tm1"/>
-                <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
+                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
                 <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="1V9-Vl-MM8" secondAttribute="centerY" id="Lis-8h-vwj"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="7PG-tS-RcE" secondAttribute="trailing" constant="2" id="NvF-h9-llb"/>
                 <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="Oor-5C-VMS"/>
@@ -147,7 +148,6 @@
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="iZM-Fr-dIR"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="4" id="pfm-tb-KO6"/>
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="centerY" secondItem="1V9-Vl-MM8" secondAttribute="centerY" id="sFu-vM-xOT"/>
-                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="vke-fx-Jun"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

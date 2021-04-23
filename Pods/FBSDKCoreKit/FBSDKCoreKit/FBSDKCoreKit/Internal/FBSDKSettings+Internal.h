@@ -28,15 +28,32 @@
 #define DATA_PROCESSING_OPTIONS_COUNTRY @"data_processing_options_country"
 #define DATA_PROCESSING_OPTIONS_STATE   @"data_processing_options_state"
 
-@protocol FBSDKAccessTokenCaching;
+@protocol FBSDKTokenCaching;
+@protocol FBSDKDataPersisting;
+@protocol FBSDKAppEventsConfigurationProviding;
+@protocol FBSDKInfoDictionaryProviding;
+@protocol FBSDKEventLogging;
 
 @interface FBSDKSettings (Internal)
 
-+ (nullable NSObject<FBSDKAccessTokenCaching> *)accessTokenCache;
+@property (class, nullable, nonatomic, readonly, copy) NSString *graphAPIDebugParamValue;
 
-+ (void)setAccessTokenCache:(nullable NSObject<FBSDKAccessTokenCaching> *)accessTokenCache;
+// used by Unity.
+@property (class, nullable, nonatomic, copy) NSString *userAgentSuffix;
 
-+ (FBSDKAdvertisingTrackingStatus)getAdvertisingTrackingStatus;
+@property (class, nonnull, readonly) FBSDKSettings *sharedSettings;
+
++ (void)configureWithStore:(nonnull id<FBSDKDataPersisting>)store
+appEventsConfigurationProvider:(nonnull Class<FBSDKAppEventsConfigurationProviding>)provider
+    infoDictionaryProvider:(nonnull id<FBSDKInfoDictionaryProviding>)infoDictionaryProvider
+               eventLogger:(nonnull id<FBSDKEventLogging>)eventLogger
+NS_SWIFT_NAME(configure(store:appEventsConfigurationProvider:infoDictionaryProvider:eventLogger:));
+
++ (nullable NSObject<FBSDKTokenCaching> *)tokenCache;
+
++ (void)setTokenCache:(nullable NSObject<FBSDKTokenCaching> *)tokenCache;
+
++ (FBSDKAdvertisingTrackingStatus)advertisingTrackingStatus;
 
 + (void)setAdvertiserTrackingStatus:(FBSDKAdvertisingTrackingStatus)status;
 
@@ -56,9 +73,8 @@
 
 + (NSDate *_Nullable)getSetAdvertiserTrackingEnabledTimestamp;
 
-@property (class, nullable, nonatomic, readonly, copy) NSString *graphAPIDebugParamValue;
++ (void)logWarnings;
 
-// used by Unity.
-@property (class, nullable, nonatomic, copy) NSString *userAgentSuffix;
++ (void)logIfSDKSettingsChanged;
 
 @end

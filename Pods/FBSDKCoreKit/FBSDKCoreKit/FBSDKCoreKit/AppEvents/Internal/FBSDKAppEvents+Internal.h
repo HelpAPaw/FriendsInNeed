@@ -22,9 +22,17 @@
  #import <FBSDKCoreKit/FBSDKAppEvents.h>
 #endif
 
+#import <UIKit/UIApplication.h>
+
 #import "FBSDKAppEventsUtility.h"
 
-@class FBSDKGraphRequest;
+@protocol FBSDKGateKeeperManaging;
+@protocol FBSDKAppEventsConfigurationProviding;
+@protocol FBSDKServerConfigurationProviding;
+@protocol FBSDKGraphRequestProviding;
+@protocol FBSDKDataPersisting;
+@protocol FBSDKFeatureChecking;
+@protocol FBSDKLogging;
 
 // Internally known event names
 
@@ -79,6 +87,9 @@ FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSessionAuthMethodStart;
 /** Use to log the end of the last tried auth method as part of an auth request */
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSessionAuthMethodEnd;
 
+/** Use to log the post-login heartbeat event after  the end of an auth request*/
+FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSessionAuthHeartbeat;
+
 /** Use to log the start of a referral request */
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBReferralStart;
 
@@ -96,9 +107,6 @@ FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBDialogsWebLoginCompleted;
 
 /** Use to log the result of the App Switch OS AlertView. Only available on OS >= iOS10 */
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSessionFASLoginDialogResult;
-
-/** Use to log whether the app implements `applicationDidFinishLaunching:withOptions:` */
-FOUNDATION_EXPORT NSString *const FBSDKAppEventNameImplementsApplicationDidFinishLaunching;
 
 /** Use to log the live streaming events from sdk */
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKLiveStreamingStart;
@@ -164,7 +172,6 @@ FOUNDATION_EXPORT NSString *const FBSDKAppEventsNativeLoginDialogEndTime;
 FOUNDATION_EXPORT NSString *const FBSDKAppEventsWebLoginE2E;
 
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKLikeButtonImpression;
-FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKLoginButtonImpression;
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKSendButtonImpression;
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKShareButtonImpression;
 FOUNDATION_EXPORT NSString *const FBSDKAppEventNameFBSDKLiveStreamingButtonImpression;
@@ -203,9 +210,17 @@ FOUNDATION_EXPORT NSString *const FBSDKAppEventsWKWebViewMessagesPixelIDKey;
 
 @property (class, nonatomic, readonly, strong) FBSDKAppEvents *singleton;
 
-#ifdef DEBUG
-+ (void)resetSingleton;
-#endif
++ (void)setCanLogEvents;
+
++ (void)setApplicationState:(UIApplicationState)state;
+
++ (void)configureWithGateKeeperManager:(Class<FBSDKGateKeeperManaging>)gateKeeperManager
+        appEventsConfigurationProvider:(Class<FBSDKAppEventsConfigurationProviding>)appEventsConfigurationProvider
+           serverConfigurationProvider:(Class<FBSDKServerConfigurationProviding>)serverConfigurationProvider
+                  graphRequestProvider:(id<FBSDKGraphRequestProviding>)provider
+                        featureChecker:(Class<FBSDKFeatureChecking>)featureChecker
+                                 store:(id<FBSDKDataPersisting>)store
+                                logger:(Class<FBSDKLogging>)logger;
 
 + (void)logInternalEvent:(FBSDKAppEventName)eventName
       isImplicitlyLogged:(BOOL)isImplicitlyLogged;

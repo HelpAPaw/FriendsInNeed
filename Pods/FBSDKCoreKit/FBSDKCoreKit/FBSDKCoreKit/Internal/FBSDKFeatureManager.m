@@ -111,14 +111,13 @@ NS_ASSUME_NONNULL_BEGIN
     case FBSDKFeatureCrashReport: featureName = @"CrashReport"; break;
     case FBSDKFeatureCrashShield: featureName = @"CrashShield"; break;
     case FBSDKFeatureErrorReport: featureName = @"ErrorReport"; break;
-    case FBSDKFeatureMonitoring: featureName = @"Monitoring"; break;
     case FBSDKFeatureATELogging: featureName = @"ATELogging"; break;
 
     case FBSDKFeatureLogin: featureName = @"LoginKit"; break;
 
-    case FBDSDKFeatureShare: featureName = @"ShareKit"; break;
+    case FBSDKFeatureShare: featureName = @"ShareKit"; break;
 
-    case FBDSDKFeatureGamingServices: featureName = @"GamingServicesKit"; break;
+    case FBSDKFeatureGamingServices: featureName = @"GamingServicesKit"; break;
   }
 
   return featureName;
@@ -138,17 +137,16 @@ NS_ASSUME_NONNULL_BEGIN
     case FBSDKFeatureSuggestedEvents:
     case FBSDKFeatureIntelligentIntegrity:
     case FBSDKFeatureModelRequest:
-    case FBSDKFeatureMonitoring:
     case FBSDKFeatureATELogging:
     case FBSDKFeatureSKAdNetwork:
     case FBSDKFeatureSKAdNetworkConversionValue:
       return NO;
     case FBSDKFeatureLogin:
-    case FBDSDKFeatureShare:
+    case FBSDKFeatureShare:
     case FBSDKFeatureCore:
     case FBSDKFeatureAppEvents:
     case FBSDKFeatureCodelessEvents:
-    case FBDSDKFeatureGamingServices:
+    case FBSDKFeatureGamingServices:
       return YES;
   }
 }

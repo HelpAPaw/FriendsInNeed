@@ -8,7 +8,7 @@
  *
  *  ********************************************************************************************************************
  *
- *  Copyright 2020 BACKENDLESS.COM. All Rights Reserved.
+ *  Copyright 2021 BACKENDLESS.COM. All Rights Reserved.
  *
  *  NOTICE: All information contained herein is, and remains the property of Backendless.com and its suppliers,
  *  if any. The intellectual and technical concepts contained herein are proprietary to Backendless.com and its
@@ -72,30 +72,48 @@ class JSONUtils {
                 }
                 resultObject = resultArray
             }
-            else if let dictionaryToParse = objectToParse as? [String : Any] {
+            else if var dictionaryToParse = objectToParse as? [String : Any] {
                 var resultDictionary = [String : Any]()
-                if let className = dictionaryToParse["___class"] as? String {
-                    resultObject = PersistenceHelper.shared.convertToBLType(dictionaryToParse)
-                    resultObject = PersistenceHelper.shared.dictionaryToEntity(dictionaryToParse, className: className)!
-                }
-                else {
-                    for (key, value) in dictionaryToParse {
-                        if let value = value as? [String : Any] {
-                            resultDictionary[key] = jsonToObject(objectToParse: value)
-                        }
-                        else if let value = value as? [Any] {
-                            var valueArray = [Any]()
-                            for valueElement in value {
-                                valueArray.append(jsonToObject(objectToParse: valueElement))
+                
+                if let dates = dictionaryToParse["___dates___"] as? [String] {
+                    for dateString in dates {
+                        for (key, value) in dictionaryToParse {
+                            if value is String, value as! String == dateString {
+                                dictionaryToParse[key] = NumberFormatter().number(from: value as! String)!
                             }
-                            resultDictionary[key] = valueArray
-                        }
-                        else {                          
-                            resultDictionary[key] = value
+                            else {
+                                dictionaryToParse[key] = jsonToObject(objectToParse: value)
+                            }
                         }
                     }
-                    resultObject = resultDictionary
-                }                
+                }
+                dictionaryToParse["___dates___"] = nil
+                dictionaryToParse["___jsonclass"] = nil
+                
+                resultObject = PersistenceHelper.shared.convertToBLType(dictionaryToParse)
+                if resultObject is [String : Any] {
+                    if let className = dictionaryToParse["___class"] as? String {
+                        resultObject = PersistenceHelper.shared.dictionaryToEntity(resultObject as! [String : Any], className: className)!
+                    }
+                    else {
+                        for (key, value) in resultObject as! [String : Any] {                            
+                            if let value = value as? [String : Any] {
+                                resultDictionary[key] = jsonToObject(objectToParse: value)
+                            }
+                            else if let value = value as? [Any] {
+                                var valueArray = [Any]()
+                                for valueElement in value {
+                                    valueArray.append(jsonToObject(objectToParse: valueElement))
+                                }
+                                resultDictionary[key] = valueArray
+                            }
+                            else {
+                                resultDictionary[key] = value
+                            }
+                        }
+                        resultObject = resultDictionary
+                    }
+                }       
             }
             else {
                 if let dictionaryToParse = objectToParse as? [String : Any],

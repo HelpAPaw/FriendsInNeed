@@ -24,6 +24,8 @@
 
 #include <realm/unicode.hpp>
 #include <realm/binary_data.hpp>
+#include <realm/query_value.hpp>
+#include <realm/mixed.hpp>
 #include <realm/utilities.hpp>
 
 namespace realm {
@@ -35,11 +37,7 @@ enum Action {
     act_Min,
     act_Count,
     act_FindAll,
-    act_CallIdx,
     act_CallbackIdx,
-    act_CallbackVal,
-    act_CallbackNone,
-    act_CallbackBoth,
     act_Average
 };
 
@@ -49,13 +47,13 @@ class QueryStateBase {
 public:
     size_t m_match_count;
     size_t m_limit;
-    int64_t m_minmax_index; // used only for min/max, to save index of current min/max value
+    int64_t m_minmax_key; // used only for min/max, to save index of current min/max value
     uint64_t m_key_offset;
     const ClusterKeyArray* m_key_values;
     QueryStateBase(size_t limit)
         : m_match_count(0)
         , m_limit(limit)
-        , m_minmax_index(-1)
+        , m_minmax_key(-1)
         , m_key_offset(0)
         , m_key_values(nullptr)
     {
@@ -64,12 +62,65 @@ public:
     {
     }
 
+    // Called when we have a match.
+    // The return value indicates if the query should continue.
+    virtual bool match(size_t, Mixed) noexcept = 0;
+
+    virtual bool match_pattern(size_t, uint64_t)
+    {
+        return false;
+    }
+
+protected:
 private:
     virtual void dyncast();
 };
 
 template <class>
-class QueryState;
+class QueryStateMin;
+
+template <class>
+class QueryStateMax;
+
+class QueryStateCount : public QueryStateBase {
+public:
+    QueryStateCount(size_t limit = -1)
+        : QueryStateBase(limit)
+    {
+    }
+    bool match(size_t, Mixed) noexcept final
+    {
+        ++m_match_count;
+        return (m_limit > m_match_count);
+    }
+    size_t get_count() const noexcept
+    {
+        return m_match_count;
+    }
+};
+
+namespace aggregate_operations {
+
+template <typename T>
+static bool is_nan(T value)
+{
+    if constexpr (std::is_floating_point_v<T>) {
+        return std::isnan(value);
+    }
+    else {
+        // gcc considers the argument unused if it's only used in one branch of if constexpr
+        static_cast<void>(value);
+        return false;
+    }
+}
+
+template <>
+inline bool is_nan<Decimal128>(Decimal128 value)
+{
+    return value.is_nan();
+}
+
+} // namespace aggregate_operations
 
 
 // Array::VTable only uses the first 4 conditions (enums) in an array of function pointers
@@ -110,6 +161,18 @@ struct Contains : public HackClass {
     bool operator()(StringData v1, const std::array<uint8_t, 256> &charmap, StringData v2) const
     {
         return v2.contains(v1, charmap);
+    }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (m1.is_null())
+            return !m2.is_null();
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
     }
 
     template <class A, class B>
@@ -161,6 +224,18 @@ struct Like : public HackClass {
         return s2.like(s1);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (m1.is_null() && m2.is_null())
+            return true;
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
+    }
+
     template <class A, class B>
     bool operator()(A, B) const
     {
@@ -204,6 +279,16 @@ struct BeginsWith : public HackClass {
         return v2.begins_with(v1);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return b2.begins_with(b1);
+        }
+        return false;
+    }
+
     template <class A, class B, class C, class D>
     bool operator()(A, B, C, D) const
     {
@@ -240,6 +325,16 @@ struct EndsWith : public HackClass {
         return v2.ends_with(v1);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
+    }
+
     template <class A, class B>
     bool operator()(A, B) const
     {
@@ -272,6 +367,11 @@ struct Equal {
     bool operator()(BinaryData v1, BinaryData v2, bool = false, bool = false) const
     {
         return v1 == v2;
+    }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return (m1.is_null() && m2.is_null()) || (Mixed::types_are_comparable(m1, m2) && (m1 == m2));
     }
 
     template <class T>
@@ -314,6 +414,12 @@ struct NotEqual {
 
         return true;
     }
+
+    bool operator()(const QueryValue& m1, const Mixed& m2) const
+    {
+        return !Equal()(m1, m2);
+    }
+
 
     static const int condition = cond_NotEqual;
     bool can_match(int64_t v, int64_t lbound, int64_t ubound)
@@ -380,6 +486,17 @@ struct ContainsIns : public HackClass {
         return contains_ins(v2, v1_upper, v1_lower, v1.size(), charmap);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (m1.is_null())
+            return !m2.is_null();
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
+    }
 
     template <class A, class B>
     bool operator()(A, B) const
@@ -453,6 +570,18 @@ struct LikeIns : public HackClass {
         return string_like_ins(s2, s1_lower, s1_upper);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (m1.is_null() && m2.is_null())
+            return true;
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
+    }
+
     template <class A, class B>
     bool operator()(A, B) const
     {
@@ -506,6 +635,16 @@ struct BeginsWithIns : public HackClass {
         StringData s1(b1.data(), b1.size());
         StringData s2(b2.data(), b2.size());
         return this->operator()(s1, s2, false, false);
+    }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
     }
 
     template <class A, class B>
@@ -564,6 +703,16 @@ struct EndsWithIns : public HackClass {
         return this->operator()(s1, s2, false, false);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        if (Mixed::types_are_comparable(m1, m2)) {
+            BinaryData b1 = m1.get_binary();
+            BinaryData b2 = m2.get_binary();
+            return operator()(b1, b2, false, false);
+        }
+        return false;
+    }
+
     template <class A, class B>
     bool operator()(A, B) const
     {
@@ -617,6 +766,12 @@ struct EqualIns : public HackClass {
         StringData s1(b1.data(), b1.size());
         StringData s2(b2.data(), b2.size());
         return this->operator()(s1, s2, false, false);
+    }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return (m1.is_null() && m2.is_null()) ||
+               (Mixed::types_are_comparable(m1, m2) && operator()(m1.get_binary(), m2.get_binary(), false, false));
     }
 
     template <class A, class B>
@@ -673,6 +828,11 @@ struct NotEqualIns : public HackClass {
         return this->operator()(s1, s2, false, false);
     }
 
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return !EqualIns()(m1, m2);
+    }
+
     template <class A, class B>
     bool operator()(A, B) const
     {
@@ -703,6 +863,10 @@ struct Greater {
             return false;
 
         return v1 > v2;
+    }
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return Mixed::types_are_comparable(m1, m2) && (m1 > m2);
     }
     static const int condition = cond_Greater;
     template <class A, class B, class C, class D>
@@ -807,6 +971,12 @@ struct Less {
 
         return v1 < v2;
     }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return Mixed::types_are_comparable(m1, m2) && (m1 < m2);
+    }
+
     template <class A, class B, class C, class D>
     bool operator()(A, B, C, D) const
     {
@@ -847,6 +1017,12 @@ struct LessEqual : public HackClass {
 
         return (!v1null && !v2null && v1.value() <= v2.value());
     }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return (m1.is_null() && m2.is_null()) || (Mixed::types_are_comparable(m1, m2) && (m1 <= m2));
+    }
+
     template <class A, class B, class C, class D>
     bool operator()(A, B, C, D) const
     {
@@ -877,6 +1053,12 @@ struct GreaterEqual : public HackClass {
 
         return (!v1null && !v2null && v1.value() >= v2.value());
     }
+
+    bool operator()(const QueryValue& m1, const QueryValue& m2) const
+    {
+        return (m1.is_null() && m2.is_null()) || (Mixed::types_are_comparable(m1, m2) && (m1 >= m2));
+    }
+
     template <class A, class B, class C, class D>
     bool operator()(A, B, C, D) const
     {

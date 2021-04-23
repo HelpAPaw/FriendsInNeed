@@ -26,9 +26,13 @@ import Foundation
     public static let shared = Backendless()
     
     public var hostUrl = "https://api.backendless.com"
+    public var useSharedUrlSession = false
     
-    private var applicationId = "AppId"
-    private var apiKey = "APIKey"
+    var urlSessionConfig: URLSessionConfiguration?
+    var urlSession: URLSession?
+    
+    private var applicationId = ""
+    private var apiKey = ""
     
     private var headers = [String : String]()
     
@@ -130,7 +134,7 @@ import Foundation
     
     public func setHeader(key: String, value: String) {
         if key == "user-token" {
-            UserDefaultsHelper.shared.savePersistentUserToken(token: value)
+            UserDefaultsHelper.shared.saveUserToken(value)
             Backendless.shared.userService.setUserToken(value: value)
         }
         headers[key] = value
@@ -141,5 +145,13 @@ import Foundation
             UserDefaultsHelper.shared.removeUserToken()
         }
         headers.removeValue(forKey: key)
+    }
+    
+    public func setupURLSessionConfig(_ config: URLSessionConfiguration) {
+        self.urlSessionConfig = config
+    }
+    
+    public func setupURLSession(_ session: URLSession) {
+        self.urlSession = session
     }
 }

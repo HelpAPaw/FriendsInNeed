@@ -34,7 +34,7 @@
                         userInfo:(NSDictionary *)userInfo
   NS_DESIGNATED_INITIALIZER;
 
-@property (nonatomic, readonly, strong) id<FBSDKBridgeAPIProtocol> protocol;
+@property (nonatomic, readwrite, strong) id<FBSDKBridgeAPIProtocol> protocol;
 
 @end
 

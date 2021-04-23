@@ -50,6 +50,8 @@ private:
     void append_value(const Instruction::Payload&);
     void append_value(const Instruction::Payload::Link&);
     void append_value(Instruction::Payload::Type);
+    void append_value(util::Optional<Instruction::Payload::Type>);
+    void append_value(Instruction::AddColumn::CollectionType);
     void append_value(const Instruction::Path&);
     void append_value(DataType);
     void append_value(bool);
@@ -64,6 +66,7 @@ private:
     void append_value(Timestamp);
     void append_value(ObjectId);
     void append_value(Decimal128);
+    void append_value(UUID);
 
     Buffer m_buffer;
     util::metered::map<std::string, uint32_t> m_intern_strings_rev;

@@ -64,6 +64,9 @@ static NSString *const FBSDKGateKeeperAppEventsIfAutoLogSubs = @"app_events_if_a
   BOOL _observingTransactions;
 }
 
+// These are stored at the class level so that they can be reset in unit tests
+static dispatch_once_t singletonToken;
+
 + (void)startObservingTransactions
 {
   [[self singleton] startObservingTransactions];
@@ -78,10 +81,8 @@ static NSString *const FBSDKGateKeeperAppEventsIfAutoLogSubs = @"app_events_if_a
 
 + (FBSDKPaymentObserver *)singleton
 {
-  static dispatch_once_t pred;
   static FBSDKPaymentObserver *shared = nil;
-
-  dispatch_once(&pred, ^{
+  dispatch_once(&singletonToken, ^{
     shared = [[FBSDKPaymentObserver alloc] init];
   });
   return shared;
@@ -137,6 +138,21 @@ static NSString *const FBSDKGateKeeperAppEventsIfAutoLogSubs = @"app_events_if_a
   FBSDKPaymentProductRequestor *productRequest = [[FBSDKPaymentProductRequestor alloc] initWithTransaction:transaction];
   [productRequest resolveProducts];
 }
+
+#pragma mark - Testability
+
+#if DEBUG
+ #if FBSDKTEST
+
++ (void)resetSingletonToken
+{
+  if (singletonToken) {
+    singletonToken = 0;
+  }
+}
+
+ #endif
+#endif
 
 @end
 

@@ -105,6 +105,7 @@ public:
     void insert(size_t ndx, StringData value);
     StringData get(size_t ndx) const;
     StringData get_legacy(size_t ndx) const;
+    Mixed get_any(size_t ndx) const override;
     bool is_null(size_t ndx) const;
     void erase(size_t ndx);
     void move(ArrayString& dst, size_t ndx);
@@ -164,38 +165,6 @@ inline StringData ArrayString::get(const char* header, size_t ndx, Allocator& al
     }
 }
 
-template <>
-class QueryState<StringData> : public QueryStateBase {
-public:
-    StringData m_state;
-
-    template <Action action>
-    bool uses_val()
-    {
-        return false;
-    }
-
-    QueryState(Action, Array* = nullptr, size_t limit = -1)
-        : QueryStateBase(limit)
-    {
-    }
-
-    template <Action action, bool pattern>
-    inline bool match(size_t, uint64_t, StringData)
-    {
-        if (pattern)
-            return false;
-
-        if (action == act_Count) {
-            ++m_match_count;
-        }
-        else {
-            REALM_ASSERT_DEBUG(false);
-        }
-
-        return (m_limit > m_match_count);
-    }
-};
 }
 
 #endif /* REALM_ARRAY_STRING_HPP */

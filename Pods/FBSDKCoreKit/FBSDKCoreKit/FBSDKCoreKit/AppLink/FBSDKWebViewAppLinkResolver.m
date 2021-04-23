@@ -27,7 +27,7 @@
 
 #import "FBSDKAppLink.h"
 #import "FBSDKAppLinkTarget.h"
-#import "FBSDKInternalUtility.h"
+#import "FBSDKCoreKitBasicsImport.h"
 
 /**
  Describes the callback for appLinkFromURLInBackground.
@@ -94,13 +94,13 @@ static NSString *const FBSDKWebViewAppLinkResolverShouldFallbackKey = @"should_f
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-  if (self.hasLoaded) {
-    self.didFinishLoad(webView);
-    decisionHandler(WKNavigationActionPolicyCancel);
-  }
-
-  self.hasLoaded = YES;
-  decisionHandler(WKNavigationActionPolicyAllow);
+    if (self.hasLoaded) {
+        self.didFinishLoad(webView);
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        self.hasLoaded = YES;
+        decisionHandler(WKNavigationActionPolicyAllow);
+    }
 }
 
 @end
@@ -153,49 +153,49 @@ static NSString *const FBSDKWebViewAppLinkResolverShouldFallbackKey = @"should_f
 
 - (void)appLinkFromURL:(NSURL *)url handler:(FBSDKAppLinkBlock)handler
 {
-  dispatch_async(dispatch_get_main_queue(), ^{
     [self followRedirects:url handler:^(NSDictionary<NSString *,id> *result, NSError * _Nullable error) {
-
-      if (error) {
-        handler(nil, error);
-        return;
-      }
-
-      NSData *responseData = result[@"data"];
-      NSHTTPURLResponse *response = result[@"response"];
-
-      WKWebView *webView = [[WKWebView alloc] init];
-
-      FBSDKWebViewAppLinkResolverWebViewDelegate *listener = [[FBSDKWebViewAppLinkResolverWebViewDelegate alloc] init];
-      __block FBSDKWebViewAppLinkResolverWebViewDelegate *retainedListener = listener;
-      listener.didFinishLoad = ^(WKWebView *view) {
-        if (retainedListener) {
-          [self getALDataFromLoadedPage:view handler:^(NSDictionary<NSString *,id> *ogData) {
-            [view removeFromSuperview];
-            view.navigationDelegate = nil;
-            retainedListener = nil;
-            handler([self appLinkFromALData:ogData destination:url], nil);
-          }];
-        }
-      };
-      listener.didFailLoadWithError = ^(WKWebView *view, NSError *loadError) {
-        if (retainedListener) {
-          [view removeFromSuperview];
-          view.navigationDelegate = nil;
-          retainedListener = nil;
-          handler(nil, loadError);
-        }
-      };
-      webView.navigationDelegate = listener;
-      webView.hidden = YES;
-      [webView loadData:responseData
-               MIMEType:response.MIMEType
-  characterEncodingName:response.textEncodingName
-                baseURL:response.URL];
-      UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
-      [window addSubview:webView];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (error) {
+                handler(nil, error);
+                return;
+            }
+            
+            NSData *responseData = result[@"data"];
+            NSHTTPURLResponse *response = result[@"response"];
+            
+            WKWebView *webView = [[WKWebView alloc] init];
+            
+            FBSDKWebViewAppLinkResolverWebViewDelegate *listener = [[FBSDKWebViewAppLinkResolverWebViewDelegate alloc] init];
+            __block FBSDKWebViewAppLinkResolverWebViewDelegate *retainedListener = listener;
+            listener.didFinishLoad = ^(WKWebView *view) {
+                if (retainedListener) {
+                    [self getALDataFromLoadedPage:view handler:^(NSDictionary<NSString *,id> *ogData) {
+                        [view removeFromSuperview];
+                        view.navigationDelegate = nil;
+                        retainedListener = nil;
+                        handler([self appLinkFromALData:ogData destination:url], nil);
+                    }];
+                }
+            };
+            listener.didFailLoadWithError = ^(WKWebView *view, NSError *loadError) {
+                if (retainedListener) {
+                    [view removeFromSuperview];
+                    view.navigationDelegate = nil;
+                    retainedListener = nil;
+                    handler(nil, loadError);
+                }
+            };
+            webView.navigationDelegate = listener;
+            webView.hidden = YES;
+            [webView loadData:responseData
+                     MIMEType:response.MIMEType
+        characterEncodingName:response.textEncodingName
+                      baseURL:response.URL];
+            UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
+            [window addSubview:webView];
+        });
     }];
-  });
 }
 
 /*

@@ -24,26 +24,6 @@ class Client {
 public:
     enum class Error;
 
-    enum class ReconnectMode {
-        /// This is the mode that should always be used in production. In this
-        /// mode the client uses a scheme for determining a reconnect delay that
-        /// prevents it from creating too many connection requests in a short
-        /// amount of time (i.e., a server hammering protection mechanism).
-        normal,
-
-        /// For testing purposes only.
-        ///
-        /// Never reconnect automatically after the connection is closed due to
-        /// an error. Allow immediate reconnect if the connection was closed
-        /// voluntarily (e.g., due to sessions being abandoned).
-        ///
-        /// In this mode, Client::cancel_reconnect_delay() and
-        /// Session::cancel_reconnect_delay() can still be used to trigger
-        /// another reconnection attempt (with no delay) after an error has
-        /// caused the connection to be closed.
-        testing
-    };
-
     using port_type = util::network::Endpoint::port_type;
     using RoundtripTimeHandler = void(milliseconds_type roundtrip_time);
 
@@ -132,7 +112,7 @@ public:
         /// overridden by Session::Config::changeset_cooker.
         ///
         /// \sa make_client_replication(), TrivialChangesetCooker.
-        std::shared_ptr<ClientReplication::ChangesetCooker> changeset_cooker;
+        std::shared_ptr<ChangesetCooker> changeset_cooker;
 
         /// The maximum number of milliseconds to allow for a connection to
         /// become fully established. This includes the time to resolve the
@@ -529,7 +509,7 @@ public:
         /// more on this.
         ///
         /// \sa make_client_replication(), TrivialChangesetCooker.
-        std::shared_ptr<ClientReplication::ChangesetCooker> changeset_cooker;
+        std::shared_ptr<ChangesetCooker> changeset_cooker;
 
         /// The encryption key the DB will be opened with.
         util::Optional<std::array<char, 64>> encryption_key;
@@ -629,12 +609,7 @@ public:
         };
         util::Optional<ClientReset> client_reset_config;
 
-        struct ProxyConfig {
-            enum class Type { HTTP, HTTPS } type;
-            std::string address;
-            port_type port;
-        };
-        util::Optional<ProxyConfig> proxy_config;
+        util::Optional<SyncConfig::ProxyConfig> proxy_config;
 
         /// Set to true to disable the upload process for this session. This
         /// includes the sending of empty UPLOAD messages.
@@ -902,23 +877,22 @@ public:
     /// parameters specified in the Session::Config object.
     ///
     /// The two other forms of bind() are convenience functions.
-    /// void bind(std::string server_url, std::string signed_user_token) parses
-    /// the \a server_url and replaces the parameters in the Session::Config object
-    /// before the session is bound.
-    ///
-    /// \throw BadServerUrl if the specified server URL is malformed.
     void bind();
-    /// Like  bind(), but parses the \a server_url and replaces the
-    /// parameters in the Session::Config object before the session is bound.
-    ///
+    /// \brief parses parameters and replaces the parameters in the Session::Config object
+    /// before the session is bound.
     /// \param server_url For example "realm://sync.realm.io/test". See
     /// server_address, server_path, and server_port in Session::Config for
     /// information about the individual components of the URL. See
     /// ProtocolEnvelope for the list of available URL schemes and the
     /// associated default ports.
+    ///
+    /// \throw BadServerUrl if the specified server URL is malformed.
     void bind(std::string server_url, std::string signed_user_token);
-    /// Like  bind(), but replaces the corresponding parameters from the
-    /// Session::Config object before the session is bound.
+    /// void bind(std::string server_address, std::string server_path,
+    ///           std::string signed_user_token, port_type server_port = 0,
+    ///           ProtocolEnvelope protocol = ProtocolEnvelope::realm);
+    /// replaces the corresponding parameters from the Session::Config object
+    /// before the session is bound.
     void bind(std::string server_address, std::string server_path, std::string signed_user_token,
               port_type server_port = 0, ProtocolEnvelope protocol = ProtocolEnvelope::realm);
     /// @}
@@ -1143,7 +1117,7 @@ const std::error_category& client_error_category() noexcept;
 
 std::error_code make_error_code(Client::Error) noexcept;
 
-std::ostream& operator<<(std::ostream& os, Session::Config::ProxyConfig::Type);
+std::ostream& operator<<(std::ostream& os, SyncConfig::ProxyConfig::Type);
 
 } // namespace sync
 } // namespace realm

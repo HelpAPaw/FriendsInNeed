@@ -33,9 +33,9 @@
 #import "RLMThreadSafeReference_Private.hpp"
 #import "RLMUtil.hpp"
 
-#import "object.hpp"
-#import "object_schema.hpp"
-#import "shared_realm.hpp"
+#import <realm/object-store/object.hpp>
+#import <realm/object-store/object_schema.hpp>
+#import <realm/object-store/shared_realm.hpp>
 
 using namespace realm;
 
@@ -486,6 +486,24 @@ id RLMObjectFreeze(RLMObjectBase *obj) {
     }
     RLMInitializeSwiftAccessorGenerics(frozen);
     return frozen;
+}
+
+id RLMObjectThaw(RLMObjectBase *obj) {
+    if (!obj->_realm && !obj.isInvalidated) {
+        @throw RLMException(@"Unmanaged objects cannot be frozen.");
+    }
+    RLMVerifyAttached(obj);
+    if (!obj->_realm.frozen) {
+        return obj;
+    }
+    RLMRealm *liveRealm = [obj->_realm thaw];
+    RLMObjectBase *live = RLMCreateManagedAccessor(obj.class, &liveRealm->_info[obj->_info->rlmObjectSchema.className]);
+    live->_row = liveRealm->_realm->import_copy_of(obj->_row);
+    if (!live->_row.is_valid()) {
+        return nil;
+    }
+    RLMInitializeSwiftAccessorGenerics(live);
+    return live;
 }
 
 id RLMValidatedValueForProperty(id object, NSString *key, NSString *className) {

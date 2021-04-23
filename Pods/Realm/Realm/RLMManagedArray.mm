@@ -26,15 +26,16 @@
 #import "RLMProperty_Private.h"
 #import "RLMQueryUtil.hpp"
 #import "RLMRealm_Private.hpp"
+#import "RLMRealmConfiguration_Private.hpp"
 #import "RLMSchema.h"
 #import "RLMThreadSafeReference_Private.hpp"
 #import "RLMUtil.hpp"
 
-#import "list.hpp"
-#import "results.hpp"
-#import "shared_realm.hpp"
-
+#import <realm/object-store/list.hpp>
+#import <realm/object-store/results.hpp>
+#import <realm/object-store/shared_realm.hpp>
 #import <realm/table_view.hpp>
+
 #import <objc/runtime.h>
 
 @interface RLMManagedArrayHandoverMetadata : NSObject
@@ -505,9 +506,23 @@ static void RLMInsertObject(RLMManagedArray *ar, id object, NSUInteger index) {
     }
 
     RLMRealm *frozenRealm = [_realm freeze];
-    auto& parentInfo = _ownerInfo->freeze(frozenRealm);
+    auto& parentInfo = _ownerInfo->resolve(frozenRealm);
     return translateRLMResultsErrors([&] {
         return [[self.class alloc] initWithList:_backingList.freeze(frozenRealm->_realm)
+                                     parentInfo:&parentInfo
+                                       property:parentInfo.rlmObjectSchema[_key]];
+    });
+}
+
+- (instancetype)thaw {
+    if (!self.frozen) {
+        return self;
+    }
+
+    RLMRealm *liveRealm = [_realm thaw];
+    auto& parentInfo = _ownerInfo->resolve(liveRealm);
+    return translateRLMResultsErrors([&] {
+        return [[self.class alloc] initWithList:_backingList.freeze(liveRealm->_realm)
                                      parentInfo:&parentInfo
                                        property:parentInfo.rlmObjectSchema[_key]];
     });

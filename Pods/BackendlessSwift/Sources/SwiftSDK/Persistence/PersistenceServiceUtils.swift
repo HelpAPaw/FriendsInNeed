@@ -98,12 +98,12 @@ class PersistenceServiceUtils {
                     }
                     else {
                         if let updatedUser = ProcessResponse.shared.adapt(response: response, to: BackendlessUser.self) as? BackendlessUser,
-                            Backendless.shared.userService.stayLoggedIn,
-                            let current = Backendless.shared.userService.currentUser,
-                            updatedUser.objectId == current.objectId,
-                            let currentToken = current.userToken {
+                           Backendless.shared.userService.stayLoggedIn,
+                           let current = Backendless.shared.userService.currentUser,
+                           updatedUser.objectId == current.objectId,
+                           let currentToken = current.userToken {
                             updatedUser.setUserToken(value: currentToken)
-                            Backendless.shared.userService.setPersistentUser(currentUser: updatedUser)
+                            Backendless.shared.userService.setPersistentUser(currUser: updatedUser, reconnectSocket: false)
                         }
                         if let resultDictionary = (result as! JSON).dictionaryObject {
                             if let responseDictionary = PersistenceHelper.shared.convertToBLType(resultDictionary) as? [String : Any] {
@@ -132,7 +132,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
                 else {
@@ -169,7 +169,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -191,7 +191,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -209,7 +209,7 @@ class PersistenceServiceUtils {
             parameters["where"] = whereClause
         }
         if queryBuilder?.isRelationsDepthSet ?? false,
-            let relationsDepth = queryBuilder?.relationsDepth {
+           let relationsDepth = queryBuilder?.relationsDepth {
             parameters["relationsDepth"] = String(relationsDepth)
         }
         if let relationsPageSize = queryBuilder?.relationsPageSize {
@@ -271,7 +271,7 @@ class PersistenceServiceUtils {
                             else {
                                 resultArray.append(resultDictionary)
                             }
-                        }                            
+                        }
                     }
                     responseHandler(resultArray)
                 }
@@ -304,8 +304,6 @@ class PersistenceServiceUtils {
                 restMethod += "&relationsDepth=\(relationsDepth!)"
             }
         }
-            
-            // relationsPageSize = nil
         else {
             if related != nil {
                 restMethod += "?loadRelations=\(DataTypesUtils.shared.arrayToString(array: related!))"
@@ -376,7 +374,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -401,7 +399,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -421,7 +419,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -443,7 +441,7 @@ class PersistenceServiceUtils {
                     errorHandler(result as! Fault)
                 }
                 else if result is String,
-                    let intResult = Int(result as! String) {
+                        let intResult = Int(result as! String) {
                     responseHandler(intResult)
                 }
             }
@@ -495,6 +493,26 @@ class PersistenceServiceUtils {
                 }
             })
         }
+    }
+    
+    func deepSave(entity: [String : Any], responseHandler: (([String : Any]) -> Void)!, errorHandler: ((Fault) -> Void)!) {
+        let headers = ["Content-Type": "application/json"]
+        let parameters = PersistenceHelper.shared.convertDictionaryValuesFromGeometryType(entity)
+        BackendlessRequestManager(restMethod: "data/\(tableName)/deep-save", httpMethod: .put, headers: headers, parameters: parameters).makeRequest(getResponse: { response in
+            if let result = ProcessResponse.shared.adapt(response: response, to: JSON.self) {
+                if result is Fault {
+                    errorHandler(result as! Fault)
+                }
+                else if let resultDictionary = (result as! JSON).dictionaryObject {
+                    if let responseDictionary = PersistenceHelper.shared.convertToBLType(resultDictionary) as? [String : Any] {
+                        responseHandler(responseDictionary)
+                    }
+                    else {
+                        responseHandler(resultDictionary)
+                    }
+                }
+            }
+        })
     }
     
     func getTableName(entity: Any) -> String {
@@ -554,7 +572,7 @@ class PersistenceServiceUtils {
                 for i : UInt32 in 0..<outCount {
                     let property = properties[Int(i)]
                     if let propertyName = String(cString: property_getName(property), encoding: .utf8),
-                        let propertyAttr = property_getAttributes(property) {
+                       let propertyAttr = property_getAttributes(property) {
                         let propertyType = String(cString: propertyAttr).components(separatedBy: ",")[0].replacingOccurrences(of: "T", with: "")
                         entityProperties[propertyName] = propertyType
                     }
@@ -655,7 +673,7 @@ class PersistenceServiceUtils {
     
     func dictionaryToEntity(dictionary: [String: Any], className: String) -> Any? {
         if tableName == "Users" || className == "Users", tableName == className,
-            let backendlessUser = ProcessResponse.shared.adaptToBackendlessUser(responseResult: dictionary) as? BackendlessUser {
+           let backendlessUser = ProcessResponse.shared.adaptToBackendlessUser(responseResult: dictionary) as? BackendlessUser {
             if let userId = backendlessUser.objectId {
                 StoredObjects.shared.rememberObjectId(objectId: userId, forObject: backendlessUser)
             }
@@ -701,7 +719,7 @@ class PersistenceServiceUtils {
                             var result = [Any]()
                             for value in arrayValue {
                                 if let dictionaryValue = value as? [String : Any],
-                                    var _className = dictionaryValue["___class"] as? String {
+                                   var _className = dictionaryValue["___class"] as? String {
                                     if Array(classMappings.keys).contains(_className) {
                                         _className = classMappings[_className]!
                                     }
@@ -716,7 +734,7 @@ class PersistenceServiceUtils {
                             entity.setValue(result, forKey: mappedPropertyName)
                         }
                         else if let dictionaryValue = dictionary[dictionaryField] as? [String : Any],
-                            var _className = dictionaryValue["___class"] as? String {
+                                var _className = dictionaryValue["___class"] as? String {
                             if Array(classMappings.keys).contains(_className) {
                                 _className = classMappings[_className]!
                             }
@@ -737,14 +755,14 @@ class PersistenceServiceUtils {
                             entity.setValue(dictionary[dictionaryField], forKey: mappedPropertyName)
                         }
                     }
-                        
-                        // no mappings
+                    
+                    // no mappings
                     else if Array(entityFields.keys).contains(dictionaryField) {
                         if let relationDictionary = dictionary[dictionaryField] as? [String: Any] {
                             if let _className = relationDictionary["___class"] as? String {
                                 let relationClassName = getClassName(className: _className)
                                 if relationDictionary["___class"] as? String == "Users",
-                                    let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
+                                   let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
                                     entity.setValue(userObject as! BackendlessUser, forKey: dictionaryField)
                                 }
                                 else if relationDictionary["___class"] as? String == "DeviceRegistration" {
@@ -770,7 +788,7 @@ class PersistenceServiceUtils {
                             for relationDictionary in relationArrayOfDictionaries {
                                 let relationClassName = getClassName(className: relationDictionary["___class"] as! String)
                                 if relationDictionary["___class"] as? String == "Users",
-                                    let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
+                                   let userObject = ProcessResponse.shared.adaptToBackendlessUser(responseResult: relationDictionary) {
                                     relationsArray.append(userObject as! BackendlessUser)
                                 }
                                 else if relationDictionary["___class"] as? String == "DeviceRegistration" {
@@ -814,7 +832,7 @@ class PersistenceServiceUtils {
     
     func getObjectId(entity: Any) -> String? {
         if let entity = entity as? [String : Any],
-            let objectId = entity["objectId"] as? String {
+           let objectId = entity["objectId"] as? String {
             return objectId
         }
         else if let objectId = StoredObjects.shared.getObjectId(forObject: entity as! AnyHashable) {

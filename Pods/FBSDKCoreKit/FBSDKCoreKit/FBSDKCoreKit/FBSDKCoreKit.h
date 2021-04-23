@@ -18,25 +18,26 @@
 
 #import <UIKit/UIKit.h>
 
-#if TARGET_OS_TV
- #ifndef DEVICE_SHARING_DEPRECATED
-  #define DEVICE_SHARING_DEPRECATED DEPRECATED_MSG_ATTRIBUTE("Sharing from devices will no longer work as of Nov 2nd 2020")
- #endif
-#endif
-
 #ifdef BUCK
 
  #import <FBSDKCoreKit/FBSDKAccessToken.h>
  #import <FBSDKCoreKit/FBSDKAppEvents.h>
  #import <FBSDKCoreKit/FBSDKApplicationDelegate.h>
+ #import <FBSDKCoreKit/FBSDKAuthenticationToken.h>
+ #import <FBSDKCoreKit/FBSDKAuthenticationTokenClaims.h>
  #import <FBSDKCoreKit/FBSDKButton.h>
  #import <FBSDKCoreKit/FBSDKConstants.h>
  #import <FBSDKCoreKit/FBSDKCopying.h>
+ #import <FBSDKCoreKit/FBSDKDeviceButton.h>
+ #import <FBSDKCoreKit/FBSDKDeviceViewControllerBase.h>
  #import <FBSDKCoreKit/FBSDKGraphRequest.h>
+ #import <FBSDKCoreKit/FBSDKGraphRequestConnecting.h>
  #import <FBSDKCoreKit/FBSDKGraphRequestConnection.h>
+ #import <FBSDKCoreKit/FBSDKGraphRequestConnection+GraphRequestConnecting.h>
  #import <FBSDKCoreKit/FBSDKGraphRequestDataAttachment.h>
  #import <FBSDKCoreKit/FBSDKSettings.h>
  #import <FBSDKCoreKit/FBSDKTestUsersManager.h>
+ #import <FBSDKCoreKit/FBSDKUserAgeRange.h>
  #import <FBSDKCoreKit/FBSDKUtility.h>
 
  #if !TARGET_OS_TV
@@ -56,9 +57,6 @@
   #import <FBSDKCoreKit/FBSDKProfilePictureView.h>
   #import <FBSDKCoreKit/FBSDKURL.h>
   #import <FBSDKCoreKit/FBSDKWebViewAppLinkResolver.h>
- #else
-  #import <FBSDKCoreKit/FBSDKDeviceButton.h>
-  #import <FBSDKCoreKit/FBSDKDeviceViewControllerBase.h>
  #endif
 
 #else
@@ -66,14 +64,22 @@
  #import "FBSDKAccessToken.h"
  #import "FBSDKAppEvents.h"
  #import "FBSDKApplicationDelegate.h"
+ #import "FBSDKAuthenticationToken.h"
+ #import "FBSDKAuthenticationTokenClaims.h"
  #import "FBSDKButton.h"
  #import "FBSDKConstants.h"
  #import "FBSDKCopying.h"
+ #import "FBSDKDeviceButton.h"
+ #import "FBSDKDeviceViewControllerBase.h"
  #import "FBSDKGraphRequest.h"
+ #import "FBSDKGraphRequestConnecting.h"
  #import "FBSDKGraphRequestConnection.h"
+ #import "FBSDKGraphRequestConnection+GraphRequestConnecting.h"
  #import "FBSDKGraphRequestDataAttachment.h"
+ #import "FBSDKGraphRequestProtocol.h"
  #import "FBSDKSettings.h"
  #import "FBSDKTestUsersManager.h"
+ #import "FBSDKUserAgeRange.h"
  #import "FBSDKUtility.h"
 
  #if !TARGET_OS_TV
@@ -93,12 +99,9 @@
   #import "FBSDKProfilePictureView.h"
   #import "FBSDKURL.h"
   #import "FBSDKWebViewAppLinkResolver.h"
- #else
-  #import "FBSDKDeviceButton.h"
-  #import "FBSDKDeviceViewControllerBase.h"
  #endif
 
 #endif
 
-#define FBSDK_VERSION_STRING @"8.2.0"
-#define FBSDK_TARGET_PLATFORM_VERSION @"v8.0"
+#define FBSDK_VERSION_STRING @"9.2.0"
+#define FBSDK_TARGET_PLATFORM_VERSION @"v9.0"

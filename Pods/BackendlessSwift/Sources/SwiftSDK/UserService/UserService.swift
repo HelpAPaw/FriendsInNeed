@@ -32,17 +32,17 @@ import Foundation
         }
     }
     
-    private var _currentUser: BackendlessUser?
+    var currentUserForSession: BackendlessUser?
     public var currentUser: BackendlessUser? {
         get {
-            if let user = UserDefaultsHelper.shared.getCurrentUser() {
-                return user
+            if currentUserForSession != nil {
+                return currentUserForSession
             }
-            return _currentUser
+            return getCurrentUser()
         }
         set {
             if newValue != nil {
-                self.setPersistentUser(currentUser: newValue!)
+                self.setPersistentUser(currUser: newValue!, reconnectSocket: false)
             }
             else {
                 resetPersistentUser()
@@ -51,11 +51,11 @@ import Foundation
     }
     
     public func setUserToken(value: String) {
-        _currentUser?.setUserToken(value: value)
+        currentUserForSession?.setUserToken(value: value)
     }
     
     public func getUserToken() -> String? {
-        return _currentUser?.userToken
+        return currentUserForSession?.userToken
     }
     
     public func describeUserClass(responseHandler: (([UserProperty]) -> Void)!, errorHandler: ((Fault) -> Void)!) {
@@ -103,7 +103,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -122,7 +122,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -152,7 +152,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -182,7 +182,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -212,7 +212,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -240,7 +240,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -269,7 +269,7 @@ import Foundation
                     errorHandler(result as! Fault)
                 }
                 else {
-                    self.setPersistentUser(currentUser: result as! BackendlessUser)
+                    self.setPersistentUser(currUser: result as! BackendlessUser, reconnectSocket: true)
                     responseHandler(result as! BackendlessUser)
                 }
             }
@@ -277,8 +277,15 @@ import Foundation
     }
     
     public func isValidUserToken(responseHandler: ((Bool) -> Void)!, errorHandler: ((Fault) -> Void)!) {
-        if let userToken = getPersistentUserToken() {
-            BackendlessRequestManager(restMethod: "users/isvalidusertoken/\(userToken)", httpMethod: .get, headers: nil, parameters: nil).makeRequest(getResponse: { response in
+        var userToken: String?
+        if currentUserForSession?.userToken != nil {
+            userToken = currentUserForSession?.userToken
+        }
+        else {
+            userToken = UserDefaultsHelper.shared.getUserToken()
+        }
+        if userToken != nil {
+            BackendlessRequestManager(restMethod: "users/isvalidusertoken/\(userToken!)", httpMethod: .get, headers: nil, parameters: nil).makeRequest(getResponse: { response in
                 if let responseData = response.data {
                     do {
                         responseHandler(try JSONSerialization.jsonObject(with: responseData, options: .allowFragments) as! Bool)
@@ -308,7 +315,6 @@ import Foundation
             }
             parameters[key] = JSONUtils.shared.objectToJson(objectToParse: value)
         }
-        
         var userId = String()
         if let userObjectId = user.objectId {
             userId = userObjectId
@@ -329,21 +335,16 @@ import Foundation
                            updatedUser.objectId == current.objectId,
                            let currentToken = current.userToken {
                             updatedUser.setUserToken(value: currentToken)
-                            self.setPersistentUser(currentUser: updatedUser)
+                            self.setPersistentUser(currUser: updatedUser, reconnectSocket: false)
                         }
                         responseHandler(updatedUser)
                     }
                 }
             })
         }
-    }
-    
-    @available(*, deprecated, message: "Please use the currentUser property directly")
-    public func getCurrentUser() -> BackendlessUser? {
-        if let user = UserDefaultsHelper.shared.getCurrentUser() {
-            return user
+        else {
+            errorHandler(Fault(message: "Please provide objectId of the user you want to update"))
         }
-        return self._currentUser
     }
     
     public func logout(responseHandler: (() -> Void)!, errorHandler: ((Fault) -> Void)!) {
@@ -354,6 +355,9 @@ import Foundation
             }
             else {
                 self.resetPersistentUser()
+                if RTClient.shared.socketOnceCreated {
+                    RTClient.shared.reconnectSocketAfterLoginAndLogout()
+                }
                 responseHandler()
             }
         })
@@ -411,27 +415,48 @@ import Foundation
         })
     }
     
-    func setPersistentUser(currentUser: BackendlessUser) {
-        self._currentUser = currentUser
-        if let userToken = self._currentUser?.userToken {
-            UserDefaultsHelper.shared.savePersistentUserToken(token: userToken)
-        }  
-        if self.stayLoggedIn {
-            UserDefaultsHelper.shared.saveCurrentUser(currentUser: self._currentUser!)
+    func setPersistentUser(currUser: BackendlessUser, reconnectSocket: Bool) {
+        self.currentUserForSession = currUser
+        if let userToken = self.currentUserForSession?.userToken {
+            setUserToken(value: userToken)
         }
+        if self.stayLoggedIn,
+           let userToken = currentUserForSession?.userToken,
+           let userId = currentUserForSession?.objectId {
+            UserDefaultsHelper.shared.saveUserToken(userToken)
+            UserDefaultsHelper.shared.saveUserId(userId)
+        }
+        if RTClient.shared.socketOnceCreated, reconnectSocket {
+            RTClient.shared.reconnectSocketAfterLoginAndLogout()
+        }
+    }
+    
+    private func getCurrentUser() -> BackendlessUser? {
+        var user: BackendlessUser?
+        let semaphore = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async {
+            if let userId = UserDefaultsHelper.shared.getUserId() {
+                Backendless.shared.data.of(BackendlessUser.self).findById(objectId: userId, responseHandler: { curr in
+                    self.currentUserForSession = curr as? BackendlessUser
+                    user = curr as? BackendlessUser
+                    semaphore.signal()
+                }, errorHandler: { fault in
+                    user = nil
+                    semaphore.signal()
+                })
+            }
+            else {
+                semaphore.signal()
+            }
+        }
+        semaphore.wait()
+        return user
     }
     
     private func resetPersistentUser() {
-        self._currentUser = nil
+        self.currentUserForSession = nil
         UserDefaultsHelper.shared.removeUserToken()
-        UserDefaultsHelper.shared.removeCurrentUser()
-    }
-    
-    private func getPersistentUserToken() -> String? {
-        if let userToken = UserDefaultsHelper.shared.getPersistentUserToken() {
-            return userToken
-        }
-        return nil
+        UserDefaultsHelper.shared.removeUserId()
     }
     
     private func setStayLoggedIn(stayLoggedIn: Bool) {

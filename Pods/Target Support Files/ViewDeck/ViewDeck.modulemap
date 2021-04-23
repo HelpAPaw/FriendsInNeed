@@ -1,6 +1,0 @@
-framework module ViewDeck {
-  umbrella header "ViewDeck-umbrella.h"
-
-  export *
-  module * { export * }
-}

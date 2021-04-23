@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,10 +14,12 @@
                 <outlet property="btnPhoto" destination="7PG-tS-RcE" id="KQO-Dc-l9y"/>
                 <outlet property="btnSendSignal" destination="VRP-un-208" id="cjZ-fx-oTn"/>
                 <outlet property="cancelButton" destination="ttH-Qm-6yO" id="KXt-jJ-oq8"/>
+                <outlet property="filterIsActiveLabel" destination="emW-QS-bxb" id="W34-wW-CsM"/>
                 <outlet property="liSendSignal" destination="bHt-D4-pOj" id="qo2-2F-86l"/>
                 <outlet property="mapView" destination="Vzw-BA-6AS" id="yuT-dx-yfK"/>
                 <outlet property="sendSignalButtonWidthConstraint" destination="vsA-HW-GwN" id="7sU-20-tdR"/>
                 <outlet property="signalTitleField" destination="gGJ-xu-E0V" id="Dut-G5-5zI"/>
+                <outlet property="signalTypeField" destination="GjR-Pw-wl2" id="iYW-SF-sPi"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="Brj-wt-V4N"/>
             </connections>
         </placeholder>
@@ -41,25 +43,38 @@
                         <action selector="onAddSignalButton:" destination="-1" eventType="touchUpInside" id="ZEh-w4-6gG"/>
                     </connections>
                 </button>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Има активен филтър" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="emW-QS-bxb">
+                    <rect key="frame" x="20" y="20" width="280" height="40"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="bAM-sI-etD"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Vzw-BA-6AS" secondAttribute="trailing" id="1L4-vy-sW4"/>
                 <constraint firstItem="Vzw-BA-6AS" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7HH-Qn-u3B"/>
                 <constraint firstAttribute="bottom" secondItem="ttH-Qm-6yO" secondAttribute="bottom" constant="20" id="JIG-0F-Jlh"/>
+                <constraint firstAttribute="trailing" secondItem="emW-QS-bxb" secondAttribute="trailing" constant="20" symbolic="YES" id="MPs-zC-PZi"/>
+                <constraint firstItem="emW-QS-bxb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" symbolic="YES" id="NfK-hz-xik"/>
+                <constraint firstItem="emW-QS-bxb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" symbolic="YES" id="RcL-8a-YXI"/>
                 <constraint firstAttribute="bottom" secondItem="Vzw-BA-6AS" secondAttribute="bottom" id="Rlx-L2-fvx"/>
                 <constraint firstItem="Vzw-BA-6AS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="pUk-6q-AIT"/>
                 <constraint firstAttribute="trailing" secondItem="ttH-Qm-6yO" secondAttribute="trailing" constant="20" id="ykJ-5t-Mcu"/>
             </constraints>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-            <point key="canvasLocation" x="131" y="154"/>
+            <point key="canvasLocation" x="129.375" y="153.16901408450704"/>
         </view>
         <view alpha="0.90000000000000002" contentMode="scaleToFill" id="1V9-Vl-MM8">
-            <rect key="frame" x="0.0" y="0.0" width="487" height="80"/>
+            <rect key="frame" x="0.0" y="0.0" width="487" height="117"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7PG-tS-RcE" userLabel="Photo Button">
-                    <rect key="frame" x="2" y="25" width="30" height="30"/>
+                    <rect key="frame" x="2" y="43.5" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="FHC-Hi-yf9"/>
                         <constraint firstAttribute="height" constant="30" id="MWr-bY-VZ0"/>
@@ -69,8 +84,8 @@
                         <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Signal description" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
-                    <rect key="frame" x="34" y="4" width="381" height="34"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Signal description" textAlignment="natural" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
+                    <rect key="frame" x="34" y="4" width="381" height="37"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="xeL-zA-ZkW"/>
@@ -78,8 +93,8 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Gi-Gw-2Xp" userLabel="Phone fields">
-                    <rect key="frame" x="34" y="42" width="381" height="34"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Gi-Gw-2Xp" userLabel="Phone field">
+                    <rect key="frame" x="34" y="45" width="381" height="34"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="U4D-Fm-TmN"/>
@@ -87,8 +102,18 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="phonePad" smartInsertDeleteType="yes" textContentType="tel"/>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRP-un-208">
-                    <rect key="frame" x="415" y="25" width="70" height="30"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="252" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Signal type" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GjR-Pw-wl2" userLabel="Type field" customClass="FINDropdownTextField" customModule="Help_A_Paw" customModuleProvider="target">
+                    <rect key="frame" x="34" y="81" width="381" height="34"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="Eqj-dR-PrS"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="phonePad" smartInsertDeleteType="yes" textContentType="tel"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRP-un-208">
+                    <rect key="frame" x="415" y="43.5" width="70" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="VHK-FT-ieE"/>
                         <constraint firstAttribute="width" constant="70" id="vsA-HW-GwN"/>
@@ -102,28 +127,31 @@
                     </connections>
                 </button>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bHt-D4-pOj">
-                    <rect key="frame" x="440" y="30" width="20" height="20"/>
+                    <rect key="frame" x="440" y="48.5" width="20" height="20"/>
                 </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="VRP-un-208" secondAttribute="centerY" id="09p-pt-l1l"/>
+                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="11y-al-fYl"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="top" secondItem="gGJ-xu-E0V" secondAttribute="bottom" constant="4" id="3xJ-DB-UPe"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="leading" id="47Y-pg-4MJ"/>
-                <constraint firstAttribute="bottom" secondItem="3Gi-Gw-2Xp" secondAttribute="bottom" constant="4" id="5lN-Ch-WFV"/>
+                <constraint firstItem="GjR-Pw-wl2" firstAttribute="top" secondItem="3Gi-Gw-2Xp" secondAttribute="bottom" constant="2" id="4Sz-Xl-oHe"/>
+                <constraint firstItem="GjR-Pw-wl2" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="8fk-tg-KNJ"/>
+                <constraint firstAttribute="bottom" secondItem="GjR-Pw-wl2" secondAttribute="bottom" constant="2" id="AmZ-D2-FHu"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="B53-4Z-tm1"/>
-                <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
+                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
                 <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="1V9-Vl-MM8" secondAttribute="centerY" id="Lis-8h-vwj"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="7PG-tS-RcE" secondAttribute="trailing" constant="2" id="NvF-h9-llb"/>
                 <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="Oor-5C-VMS"/>
+                <constraint firstItem="GjR-Pw-wl2" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="leading" id="bsw-df-6NO"/>
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="leading" secondItem="1V9-Vl-MM8" secondAttribute="leading" constant="2" id="iZM-Fr-dIR"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="top" secondItem="1V9-Vl-MM8" secondAttribute="top" constant="4" id="pfm-tb-KO6"/>
                 <constraint firstItem="7PG-tS-RcE" firstAttribute="centerY" secondItem="1V9-Vl-MM8" secondAttribute="centerY" id="sFu-vM-xOT"/>
-                <constraint firstItem="bHt-D4-pOj" firstAttribute="centerX" secondItem="VRP-un-208" secondAttribute="centerX" id="vke-fx-Jun"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="1094.0625" y="-84.507042253521121"/>
+            <point key="canvasLocation" x="1094.0625" y="-64.964788732394368"/>
         </view>
     </objects>
     <resources>

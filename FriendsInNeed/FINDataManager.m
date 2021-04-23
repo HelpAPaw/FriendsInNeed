@@ -23,6 +23,8 @@
 #define kSettingRadiusDefault       10
 #define kSettingTimeoutKey          @"kSettingTimeoutKey"
 #define kSettingTimeoutDefault      7
+#define kSettingTypesKey            @"kSettingTypesKey"
+#define kMaxSignalTypesPadding      65535
 #define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 #define kDeviceTokenKey             @"kDeviceTokenKey"
 #define kPageSize                   100
@@ -30,6 +32,7 @@
 #define kField_ObjectId             @"objectId"
 #define kField_Author               @"author"
 #define kField_AuthorPhone          @"authorPhone"
+#define kField_SignalType           @"signalType"
 #define kField_Location             @"location"
 #define kField_Status               @"status"
 #define kField_Title                @"title"
@@ -37,6 +40,7 @@
 #define kField_Created              @"created"
 #define kField_SignalRadius         @"signalRadius"
 #define kField_SignalTimeout        @"signalTimeout"
+#define kField_SignalTypes          @"signalTypes"
 #define kField_LastLocation         @"lastLocation"
 #define kField_SignalId             @"signalID"
 #define kField_Text                 @"text"
@@ -60,6 +64,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 @property (assign, nonatomic) BOOL        isInTestMode;
 @property (assign, nonatomic) NSInteger   radius;
 @property (assign, nonatomic) NSInteger   timeout;
+@property (strong, nonatomic) NSArray<NSNumber *> *typesSetting;
 
 @end
 
@@ -115,6 +120,9 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     _nearbySignals = [NSMutableArray new];
     _isInTestMode = [self loadIsInTestMode];
     
+    NSURL *signalTypesUrl = [NSBundle.mainBundle URLForResource:@"SignalTypes" withExtension:@"plist"];
+    _signalTypes = [NSArray arrayWithContentsOfURL:signalTypesUrl];
+    
     [self loadSettings];
     
     // Setup Backendless
@@ -155,11 +163,15 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     {
         NSMutableDictionary *deviceRegistration = [NSMutableDictionary new];
         [deviceRegistration setValue:deviceRegistrationId forKey:kField_ObjectId];
-        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getRadiusSetting]] forKey:kField_SignalRadius];
-        [deviceRegistration setValue:[NSNumber numberWithInteger:[[FINDataManager sharedManager] getTimeoutSetting]] forKey:kField_SignalTimeout];
-        NSString *lastLocation = [self getWktPointWithLongitude:self.lastSavedDeviceLocation.coordinate.longitude
-                                                    andLatitude:self.lastSavedDeviceLocation.coordinate.latitude];
-        [deviceRegistration setValue:lastLocation forKey:kField_LastLocation];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:_radius] forKey:kField_SignalRadius];
+        [deviceRegistration setValue:[NSNumber numberWithInteger:_timeout] forKey:kField_SignalTimeout];
+        NSNumber *typesNumber = [NSNumber numberWithInteger:[self convertTypesBoolArrayToInt:_typesSetting]];
+        [deviceRegistration setValue:typesNumber forKey:kField_SignalTypes];
+        if (location != nil) {
+            NSString *lastLocation = [self getWktPointWithLongitude:self.lastSavedDeviceLocation.coordinate.longitude
+                                                        andLatitude:self.lastSavedDeviceLocation.coordinate.latitude];
+            [deviceRegistration setValue:lastLocation forKey:kField_LastLocation];
+        }
         
         MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
         [dataStore updateWithEntity:deviceRegistration
@@ -186,6 +198,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     FINSignal *parsedSignal = [FINSignal new];
     parsedSignal.signalId = [signalDict objectForKey:kField_ObjectId];
     parsedSignal.title = [signalDict objectForKey:kField_Title];
+    NSNumber *typeNumber = [signalDict objectForKey:kField_SignalType];
+    parsedSignal.type = typeNumber.integerValue;
     NSNumber *statusNumber = [signalDict objectForKey:kField_Status];
     parsedSignal.status = [statusNumber intValue];
     BLPoint *locationPoint = [signalDict objectForKey:kField_Location];
@@ -284,6 +298,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 if (newSignals.count > 0)
                 {
                     NSInteger badgeNumber = 0;
+                    NSInteger typesSettingInt = [self convertTypesBoolArrayToInt:self.typesSetting];
                     for (FINSignal *signal in newSignals)
                     {
                         BOOL notificationAlreadyShown = [FINDataManager setNotificationShownForSignalId:signal.signalId];
@@ -293,7 +308,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                         }
 
                         // Only show notifications about signals that haven't been solved yet
-                        if (signal.status < FINSignalStatus2)
+                        if ((signal.status < FINSignalStatus2) &&
+                            ([self shouldNotifyAboutSignalType:signal.type withSettings:typesSettingInt]))
                         {
                             badgeNumber++;
 
@@ -418,11 +434,17 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
-- (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
+- (void)submitNewSignalWithTitle:(NSString *)title
+                            type:(NSInteger)type
+                  andAuthorPhone:(NSString *)authorPhone
+                     forLocation:(CLLocationCoordinate2D)locationCoordinate
+                       withPhoto:(UIImage *)photo
+                      completion:(void (^)(FINSignal *savedSignal, FINError *error))completion
 {
     BackendlessUser *currentUser = Backendless.shared.userService.currentUser;
 
     NSDictionary *signalData = @{kField_Title:title,
+                                 kField_SignalType: [NSNumber numberWithInteger:type],
                                  kField_AuthorPhone:authorPhone,
                                  kField_Location:[self getWktPointWithLongitude:locationCoordinate.longitude andLatitude:locationCoordinate.latitude],
                                    kField_Status:@0};
@@ -608,9 +630,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (void)loginWithFacebookAccessToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion
 {
     NSDictionary *fieldsMapping = @{@"email":@"email"};
-    [Backendless.shared.userService logingWithFacebookWithAccessToken:tokenString
-                                                        fieldsMapping:fieldsMapping
-                                                      responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
+    [Backendless.shared.userService loginWithOauth2WithProviderCode:@"facebook"
+                                                              token:tokenString
+                                                      fieldsMapping:fieldsMapping
+                                                       stayLoggedIn:YES
+                                                    responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
                                                             object:nil];
         
@@ -855,7 +879,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setRelationsDepth:1];
     [queryBuilder setPageSize:kPageSize];
-    //Get all devices within 100km of the signal
+    //Get all devices within signalRadius of the signal
     NSString *signalLocationAsWKT = [self getWktPointWithLongitude:signal.coordinate.longitude andLatitude:signal.coordinate.latitude];
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"distanceOnSphere( %@, '%@') < signalRadius * 1000", kField_LastLocation, signalLocationAsWKT]];
 
@@ -876,7 +900,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             //Skip current device
             if (![Backendless.shared.messaging.currentDevice.deviceId isEqualToString:deviceId])
             {
-                [deviceIds addObject:deviceId];
+                NSNumber *signalTypesSetting = [device objectForKey:@"signalTypes"];
+                // Notify only users subscribed to this signal type
+                if ([self shouldNotifyAboutSignalType:signal.type withSettings:signalTypesSetting.integerValue]) {
+                    [deviceIds addObject:deviceId];
+                }
             }
         }
 
@@ -1067,6 +1095,10 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     
     NSInteger savedTimeout = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTimeoutKey];
     _timeout = savedTimeout != 0 ? savedTimeout : kSettingTimeoutDefault;
+    
+    NSInteger savedTypesSetting = [[NSUserDefaults standardUserDefaults] integerForKey:kSettingTypesKey];
+    savedTypesSetting = savedTypesSetting != 0 ? savedTypesSetting : kMaxSignalTypesPadding;
+    _typesSetting = [self convertTypesIntToBoolArray:savedTypesSetting];
 }
 
 - (NSInteger)getRadiusSetting
@@ -1077,6 +1109,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (NSInteger)getTimeoutSetting
 {
     return _timeout;
+}
+
+- (NSArray<NSNumber *> *)getTypesSetting
+{
+    return _typesSetting;
 }
 
 - (void)setRadiusSetting:(NSInteger)newRadius
@@ -1097,6 +1134,81 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
     }
+}
+
+- (void)setTypesSetting:(NSArray<NSNumber *>*)newTypesSetting
+{
+    if (![_typesSetting isEqualToArray:newTypesSetting]) {
+        _typesSetting = newTypesSetting;
+        
+        NSInteger typesInt = [self convertTypesBoolArrayToInt:_typesSetting];
+        [[NSUserDefaults standardUserDefaults] setInteger:typesInt forKey:kSettingTypesKey];
+    }    
+}
+
+- (NSInteger)convertTypesBoolArrayToInt:(NSArray<NSNumber *>*)boolArray
+{
+    NSInteger result = 0;
+    
+    // Put 1 on each position with a positive bool
+    for (int i = 0; i < boolArray.count; i++) {
+        result |= (boolArray[i].boolValue ? 1 : 0) << i;
+    }
+    
+    // Put 1s on all unused positions so that when new signals are introduced they are automatically subscribed to
+    result |= ((kMaxSignalTypesPadding << _signalTypes.count) & kMaxSignalTypesPadding);
+    return result;
+}
+
+- (NSArray<NSNumber *> *)convertTypesIntToBoolArray:(NSInteger)typesInt
+{
+    NSMutableArray<NSNumber *> *result = [NSMutableArray new];
+    for (int i = 0; i < _signalTypes.count; i++) {
+        BOOL typeSetting = ((typesInt >> i) & 1) == 1;
+        [result addObject:[NSNumber numberWithBool:typeSetting]];
+    }
+    
+    return result;
+}
+
+- (NSString *)getStringForSignalTypesSetting
+{
+    NSInteger count = 0;
+    for (NSNumber *typeSetting in _typesSetting) {
+        if (typeSetting.boolValue) {
+            count++;
+        }
+    }
+    
+    if (count == 0) {
+        return NSLocalizedString(@"none_signal_types", nil);
+    }
+    else if (count == _signalTypes.count) {
+        return NSLocalizedString(@"all_signal_types", nil);
+    }
+    else {
+        NSMutableString *result = [NSMutableString new];
+        
+        for (int i = 0; i < _signalTypes.count; i++) {
+            if (_typesSetting[i].boolValue) {
+                [result appendFormat:@"%@, ", _signalTypes[i]];
+            }
+        }
+        
+        // Remove last comma
+        return [result substringWithRange:NSMakeRange(0, result.length - 2)];;
+    }
+}
+
+- (BOOL)shouldNotifyAboutSignalType:(NSInteger)signalType
+                       withSettings:(NSInteger)signalTypeSettings
+{
+    return ((signalTypeSettings & (1 << signalType)) > 0);
+}
+
+- (void)saveSettings
+{
+    [self updateDeviceRegistrationWithLocation:nil];
 }
 
 @end

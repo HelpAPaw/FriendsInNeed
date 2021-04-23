@@ -31,6 +31,8 @@
 
 @interface FINDataManager : NSObject
 
+@property (strong, nonatomic) NSArray<NSString *> *signalTypes;
+
 + (instancetype)sharedManager;
 + (BOOL)setNotificationShownForSignalId:(NSString *)signalId;
 
@@ -40,7 +42,12 @@
 - (void)getCountForSignalsWithStatus:(FINSignalStatus)status withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getTotalSignalCountWithCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)submitNewSignalWithTitle:(NSString *)title andAuthorPhone:(NSString *)authorPhone forLocation:(CLLocationCoordinate2D)locationCoordinate withPhoto:(UIImage *)photo completion:(void (^)(FINSignal *savedSignal, FINError *error))completion;
+- (void)submitNewSignalWithTitle:(NSString *)title
+                            type:(NSInteger)type
+                  andAuthorPhone:(NSString *)authorPhone
+                     forLocation:(CLLocationCoordinate2D)locationCoordinate
+                       withPhoto:(UIImage *)photo
+                      completion:(void (^)(FINSignal *savedSignal, FINError *error))completion;
 - (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINError *error))completion;
 - (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion;
 - (BOOL)userIsLogged;
@@ -61,8 +68,12 @@
 
 - (NSInteger)getRadiusSetting;
 - (NSInteger)getTimeoutSetting;
+- (NSArray<NSNumber *>*)getTypesSetting;
 - (void)setRadiusSetting:(NSInteger)newRadius;
 - (void)setTimeoutSetting:(NSInteger)newTimeout;
+- (void)setTypesSetting:(NSArray<NSNumber *>*)typesArray;
+- (NSString *)getStringForSignalTypesSetting;
+- (void)saveSettings;
 
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
 

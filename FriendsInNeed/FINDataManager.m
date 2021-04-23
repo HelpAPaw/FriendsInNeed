@@ -630,9 +630,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 - (void)loginWithFacebookAccessToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion
 {
     NSDictionary *fieldsMapping = @{@"email":@"email"};
-    [Backendless.shared.userService logingWithFacebookWithAccessToken:tokenString
-                                                        fieldsMapping:fieldsMapping
-                                                      responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
+    [Backendless.shared.userService loginWithOauth2WithProviderCode:@"facebook"
+                                                              token:tokenString
+                                                      fieldsMapping:fieldsMapping
+                                                       stayLoggedIn:YES
+                                                    responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
                                                             object:nil];
         

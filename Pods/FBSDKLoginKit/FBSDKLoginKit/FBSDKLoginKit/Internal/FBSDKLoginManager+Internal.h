@@ -37,6 +37,7 @@
 @class FBSDKAccessToken;
 @class FBSDKLoginCompletionParameters;
 @class FBSDKLoginManagerLogger;
+@class FBSDKPermission;
 
 /**
  Success Block
@@ -54,22 +55,24 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
 
 @interface FBSDKLoginManager () <FBSDKURLOpening>
 @property (nonatomic, weak) UIViewController *fromViewController;
-@property (nonatomic, readonly) NSSet *requestedPermissions;
+@property (nonatomic, readonly) NSSet<FBSDKPermission *> *requestedPermissions;
 @property (nonatomic, strong) FBSDKLoginManagerLogger *logger;
+@property (nonatomic, strong) FBSDKLoginConfiguration *config;
 @property (nonatomic) FBSDKLoginManagerState state;
 @property (nonatomic) BOOL usedSFAuthSession;
 
-// for testing only
 @property (nonatomic, readonly, copy) NSString *loadExpectedChallenge;
+@property (nonatomic, readonly, copy) NSString *loadExpectedNonce;
 
 - (void)completeAuthentication:(FBSDKLoginCompletionParameters *)parameters expectChallenge:(BOOL)expectChallenge;
 
-// available to internal types to trigger login without checking read/publish mixtures.
-- (void)logInWithPermissions:(NSSet *)permissions handler:(FBSDKLoginManagerLoginResultBlock)handler;
 - (void)logIn;
 
 // made available for testing only
-- (NSDictionary *)logInParametersWithPermissions:(NSSet *)permissions serverConfiguration:(FBSDKServerConfiguration *)serverConfiguration;
+- (NSDictionary *)logInParametersWithConfiguration:(FBSDKLoginConfiguration *)configuration
+                               serverConfiguration:(FBSDKServerConfiguration *)serverConfiguration
+                                            logger:(FBSDKLoginManagerLogger *)logger
+                                        authMethod:(NSString *)authMethod;
 // made available for testing only
 - (void)validateReauthentication:(FBSDKAccessToken *)currentToken withResult:(FBSDKLoginManagerLoginResult *)loginResult;
 
@@ -77,8 +80,6 @@ typedef NS_ENUM(NSInteger, FBSDKLoginManagerState) {
 - (void)setHandler:(FBSDKLoginManagerLoginResultBlock)handler;
 // for testing only
 - (void)setRequestedPermissions:(NSSet *)requestedPermissions;
-// for testing only
-- (void)performBrowserLogInWithParameters:(NSDictionary *)loginParams handler:(FBSDKBrowserLoginSuccessBlock)handler;
 
 // available to internal modules
 - (void)handleImplicitCancelOfLogIn;

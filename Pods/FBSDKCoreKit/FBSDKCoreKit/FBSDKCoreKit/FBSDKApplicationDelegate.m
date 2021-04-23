@@ -22,24 +22,42 @@
 #import <objc/runtime.h>
 
 #import "FBSDKAppEvents+Internal.h"
+#import "FBSDKAppEventsConfigurationManager.h"
+#import "FBSDKBridgeAPI+ApplicationObserving.h"
 #import "FBSDKConstants.h"
 #import "FBSDKDynamicFrameworkLoader.h"
 #import "FBSDKError.h"
 #import "FBSDKEventDeactivationManager.h"
-#import "FBSDKFeatureManager.h"
+#import "FBSDKEventLogger.h"
+#import "FBSDKFeatureManager+FeatureChecking.h"
 #import "FBSDKGateKeeperManager.h"
+#import "FBSDKGraphRequestFactory.h"
+#import "FBSDKGraphRequestPiggybackManager+Internal.h"
 #import "FBSDKInstrumentManager.h"
 #import "FBSDKInternalUtility.h"
-#import "FBSDKLogger.h"
+#import "FBSDKLogger+Logging.h"
 #import "FBSDKServerConfiguration.h"
-#import "FBSDKServerConfigurationManager.h"
+#import "FBSDKServerConfigurationManager+ServerConfigurationProviding.h"
 #import "FBSDKSettings+Internal.h"
+#import "FBSDKSettingsLogging.h"
 #import "FBSDKTimeSpentData.h"
+#import "FBSDKTokenCache.h"
+#import "GraphAPI/FBSDKGraphRequest.h"
+#import "NSBundle+InfoDictionaryProviding.h"
+#import "NSNotificationCenter+Extensions.h"
+#import "NSUserDefaults+FBSDKDataPersisting.h"
 
 #if !TARGET_OS_TV
+ #import "FBSDKAppLinkUtility+Internal.h"
+ #import "FBSDKCodelessIndexer+Internal.h"
  #import "FBSDKContainerViewController.h"
  #import "FBSDKMeasurementEventListener.h"
  #import "FBSDKProfile+Internal.h"
+ #import "FBSDKSKAdNetworkReporter+Internal.h"
+ #import "FBSDKURLOpener.h"
+ #import "FBSDKWebDialogView.h"
+ #import "FBSDKWebViewFactory.h"
+ #import "UIApplication+URLOpener.h"
 #endif
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
@@ -54,71 +72,83 @@ NSString *const FBSDKApplicationDidBecomeActiveNotification = @"com.facebook.sdk
 
 static NSString *const FBSDKAppLinkInboundEvent = @"fb_al_inbound";
 static NSString *const FBSDKKitsBitmaskKey = @"com.facebook.sdk.kits.bitmask";
-static NSString *const FBSDKAutoInitLaunchArgument = @"_calledFromAutoInitSDK";
-static BOOL g_isSDKInitialized = NO;
+static BOOL hasInitializeBeenCalled = NO;
 static UIApplicationState _applicationState;
 
 @implementation FBSDKApplicationDelegate
 {
   NSHashTable<id<FBSDKApplicationObserving>> *_applicationObservers;
   BOOL _isAppLaunched;
+  id<FBSDKNotificationObserving> _notificationObserver;
+  Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting> _tokenWallet;
+  Class<FBSDKSettingsLogging> _settings;
 }
 
 #pragma mark - Class Methods
 
-+ (void)load
-{
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  if ([FBSDKSettings isAutoInitEnabled]) {
-    #pragma clang diagnostic pop
-    // when the app becomes active by any means,  kick off the initialization.
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(initializeWithLaunchData:)
-                                                 name:UIApplicationDidFinishLaunchingNotification
-                                               object:nil];
-  }
-}
-
-// Initialize SDK listeners
-// Don't call this function in any place else. It should only be called when the class is loaded.
-+ (void)initializeWithLaunchData:(NSNotification *)note
-{
-  [self initializeSDK:note.userInfo];
-  // Remove the observer
-  [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                  name:UIApplicationDidFinishLaunchingNotification
-                                                object:nil];
-}
-
 + (void)initializeSDK:(NSDictionary<UIApplicationLaunchOptionsKey, id> *)launchOptions
 {
-  if (g_isSDKInitialized) {
+  [self.sharedInstance initializeSDKWithLaunchOptions:launchOptions];
+}
+
++ (FBSDKApplicationDelegate *)sharedInstance
+{
+  static FBSDKApplicationDelegate *_sharedInstance;
+  static dispatch_once_t onceToken;
+  dispatch_once(&onceToken, ^{
+    _sharedInstance = [self new];
+  });
+  return _sharedInstance;
+}
+
+#pragma mark - Object Lifecycle
+
+- (instancetype)init
+{
+  return [self initWithNotificationObserver:NSNotificationCenter.defaultCenter
+                                tokenWallet:FBSDKAccessToken.class
+                                   settings:FBSDKSettings.class];
+}
+
+- (instancetype)initWithNotificationObserver:(id<FBSDKNotificationObserving>)observer
+                                 tokenWallet:(Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting>)tokenWallet
+                                    settings:(Class<FBSDKSettingsLogging>)settings
+{
+  if ((self = [super init]) != nil) {
+    _applicationObservers = [[NSHashTable alloc] init];
+    _notificationObserver = observer;
+    _tokenWallet = tokenWallet;
+    _settings = settings;
+  }
+  return self;
+}
+
+- (void)initializeSDKWithLaunchOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> *)launchOptions
+{
+  if (hasInitializeBeenCalled) {
     // Do nothing if initialized already
     return;
+  } else {
+    hasInitializeBeenCalled = YES;
   }
+  [self configureDependencies];
 
-  g_isSDKInitialized = YES;
+  Class<FBSDKSettingsLogging> const settingsLogger = self.settings;
+  [settingsLogger logWarnings];
+  [settingsLogger logIfSDKSettingsChanged];
+  [settingsLogger recordInstall];
 
-  FBSDKApplicationDelegate *delegate = [self sharedInstance];
-  [FBSDKSettings recordInstall];
-
-  NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-  [defaultCenter addObserver:delegate selector:@selector(applicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-  [defaultCenter addObserver:delegate selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-  [defaultCenter addObserver:delegate selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+  [self addObservers];
 
   [[FBSDKAppEvents singleton] registerNotifications];
 
-  NSMutableDictionary *modifiedLaunchOptions = [NSMutableDictionary dictionaryWithDictionary:launchOptions];
-  [FBSDKTypeUtility dictionary:modifiedLaunchOptions setObject:@YES forKey:FBSDKAutoInitLaunchArgument];
-  [delegate application:[UIApplication sharedApplication] didFinishLaunchingWithOptions:modifiedLaunchOptions];
+  [self application:[UIApplication sharedApplication] didFinishLaunchingWithOptions:launchOptions];
 
   // In case of sdk autoInit enabled sdk expects one appDidBecomeActive notification after app launch and has some logic to ignore it.
   // if sdk autoInit disabled app won't receive appDidBecomeActive on app launch and will ignore the first one it gets instead of handling it.
   // Send first applicationDidBecomeActive notification manually
   if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-    [delegate applicationDidBecomeActive:nil];
+    [self applicationDidBecomeActive:nil];
   }
 
   [FBSDKFeatureManager checkFeature:FBSDKFeatureInstrument completionBlock:^(BOOL enabled) {
@@ -127,18 +157,10 @@ static UIApplicationState _applicationState;
     }
   }];
 
-  [FBSDKFeatureManager checkFeature:FBSDKFeatureMonitoring completionBlock:^(BOOL enabled) {
-    if (enabled && FBSDKSettings.isAutoLogAppEventsEnabled) {
-    #ifndef DEBUG
-      [FBSDKMonitor enable];
-    #endif
-    }
-  }];
-
 #if !TARGET_OS_TV
   // Register Listener for App Link measurement events
   [FBSDKMeasurementEventListener defaultListener];
-  [delegate _logIfAutoAppLinkEnabled];
+  [self _logIfAutoAppLinkEnabled];
 #endif
   // Set the SourceApplication for time spent data. This is not going to update the value if the app has already launched.
   [FBSDKTimeSpentData setSourceApplication:launchOptions[UIApplicationLaunchOptionsSourceApplicationKey]
@@ -149,29 +171,44 @@ static UIApplicationState _applicationState;
   [FBSDKInternalUtility validateFacebookReservedURLSchemes];
 }
 
-+ (FBSDKApplicationDelegate *)sharedInstance
+- (void)addObservers
 {
-  static FBSDKApplicationDelegate *_sharedInstance;
-  static dispatch_once_t onceToken;
-  dispatch_once(&onceToken, ^{
-    _sharedInstance = [[self alloc] init];
-  });
-  return _sharedInstance;
-}
-
-#pragma mark - Object Lifecycle
-
-- (instancetype)init
-{
-  if ((self = [super init]) != nil) {
-    _applicationObservers = [[NSHashTable alloc] init];
-  }
-  return self;
+  id<FBSDKNotificationObserving> const observer = self.notificationObserver;
+  [observer addObserver:self
+               selector:@selector(applicationDidEnterBackground:)
+                   name:UIApplicationDidEnterBackgroundNotification
+                 object:nil];
+  [observer addObserver:self
+               selector:@selector(applicationDidBecomeActive:)
+                   name:UIApplicationDidBecomeActiveNotification
+                 object:nil];
+  [observer addObserver:self
+               selector:@selector(applicationWillResignActive:)
+                   name:UIApplicationWillResignActiveNotification
+                 object:nil];
+#if !TARGET_OS_TV
+  [self addObserver:FBSDKBridgeAPI.sharedInstance];
+#endif
 }
 
 - (void)dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [_notificationObserver removeObserver:self];
+}
+
+- (id<FBSDKNotificationObserving>)notificationObserver
+{
+  return _notificationObserver;
+}
+
+- (Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting>)tokenWallet
+{
+  return _tokenWallet;
+}
+
+- (Class<FBSDKSettingsLogging>)settings
+{
+  return _settings;
 }
 
 #pragma mark - UIApplicationDelegate
@@ -227,28 +264,20 @@ static UIApplicationState _applicationState;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  if ([[FBSDKTypeUtility dictionary:launchOptions objectForKey:FBSDKAutoInitLaunchArgument ofType:NSNumber.class] boolValue]) {
-    // Clean the flag out of launch options
-    NSMutableDictionary *originalLaunchOptions = [NSMutableDictionary dictionaryWithDictionary:launchOptions];
-    [originalLaunchOptions removeObjectForKey:FBSDKAutoInitLaunchArgument];
-    launchOptions = [originalLaunchOptions copy];
-  } else {
-    // Log because it was not called by autoInit
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    [FBSDKAppEvents logInternalEvent:FBSDKAppEventNameImplementsApplicationDidFinishLaunching
-                          parameters:@{}
-                  isImplicitlyLogged:YES];
-    #pragma clang diagnostic pop
-  }
-
   if (_isAppLaunched) {
     return NO;
   }
 
+  if (!hasInitializeBeenCalled) {
+    [self initializeSDKWithLaunchOptions:launchOptions];
+  }
+
   _isAppLaunched = YES;
-  FBSDKAccessToken *cachedToken = [FBSDKSettings accessTokenCache].accessToken;
-  [FBSDKAccessToken setCurrentAccessToken:cachedToken];
+
+  // Retrieve cached tokens
+  FBSDKAccessToken *cachedToken = [[self.tokenWallet tokenCache] accessToken];
+  [self.tokenWallet setCurrentAccessToken:cachedToken];
+
   // fetch app settings
   [FBSDKServerConfigurationManager loadServerConfigurationWithCompletionBlock:NULL];
 
@@ -258,6 +287,10 @@ static UIApplicationState _applicationState;
 #if !TARGET_OS_TV
   FBSDKProfile *cachedProfile = [FBSDKProfile fetchCachedProfile];
   [FBSDKProfile setCurrentProfile:cachedProfile];
+
+  FBSDKAuthenticationToken *cachedAuthToken = FBSDKAuthenticationToken.tokenCache.authenticationToken;
+  [FBSDKAuthenticationToken setCurrentAuthenticationToken:cachedAuthToken];
+  [FBSDKAuthenticationStatusUtility checkAuthenticationStatus];
 #endif
   NSArray<id<FBSDKApplicationObserving>> *observers = [_applicationObservers allObjects];
   BOOL handled = NO;
@@ -274,7 +307,7 @@ static UIApplicationState _applicationState;
 
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
-  _applicationState = UIApplicationStateBackground;
+  [self setApplicationState:UIApplicationStateBackground];
   NSArray<id<FBSDKApplicationObserving>> *observers = [_applicationObservers allObjects];
   for (id<FBSDKApplicationObserving> observer in observers) {
     if ([observer respondsToSelector:@selector(applicationDidEnterBackground:)]) {
@@ -285,7 +318,7 @@ static UIApplicationState _applicationState;
 
 - (void)applicationDidBecomeActive:(NSNotification *)notification
 {
-  _applicationState = UIApplicationStateActive;
+  [self setApplicationState:UIApplicationStateActive];
   // Auto log basic events in case autoLogAppEventsEnabled is set
   if (FBSDKSettings.isAutoLogAppEventsEnabled) {
     [FBSDKAppEvents activateApp];
@@ -304,7 +337,7 @@ static UIApplicationState _applicationState;
 
 - (void)applicationWillResignActive:(NSNotification *)notification
 {
-  _applicationState = UIApplicationStateInactive;
+  [self setApplicationState:UIApplicationStateInactive];
   NSArray<id<FBSDKApplicationObserving>> *const observers = [_applicationObservers copy];
   for (id<FBSDKApplicationObserving> observer in observers) {
     if ([observer respondsToSelector:@selector(applicationWillResignActive:)]) {
@@ -334,6 +367,12 @@ static UIApplicationState _applicationState;
 + (UIApplicationState)applicationState
 {
   return _applicationState;
+}
+
+- (void)setApplicationState:(UIApplicationState)state
+{
+  _applicationState = state;
+  [FBSDKAppEvents setApplicationState:state];
 }
 
 #pragma mark - Helper Methods
@@ -403,8 +442,6 @@ static UIApplicationState _applicationState;
     bit++;
   }
 
-  [self _logSwiftRuntimeAvailability];
-
   NSInteger existingBitmask = [[NSUserDefaults standardUserDefaults] integerForKey:FBSDKKitsBitmaskKey];
   if (existingBitmask != bitmask) {
     [[NSUserDefaults standardUserDefaults] setInteger:bitmask forKey:FBSDKKitsBitmaskKey];
@@ -430,50 +467,63 @@ static UIApplicationState _applicationState;
 #endif
 }
 
-- (void)_logSwiftRuntimeAvailability
-{
-  NSString *swiftUsageKey = @"is_using_swift";
-  NSString *eventName = @"fb_sdk_swift_runtime_check";
-  NSMutableDictionary<NSString *, NSNumber *> *params = NSMutableDictionary.new;
-
-  // Tracking if the consuming Application is using Swift
-  id delegate = [UIApplication sharedApplication].delegate;
-  NSString const *className = NSStringFromClass([delegate class]);
-  if ([className componentsSeparatedByString:@"."].count > 1) {
-    params[swiftUsageKey] = @YES;
-  }
-
-  // Additional check to see if the consuming application perhaps was
-  // originally an objc project but is now using Swift
-  if (!params[swiftUsageKey].boolValue) {
-    double delayInSeconds = 1.0;
-    dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(delay,
-      dispatch_get_main_queue(), ^{
-        UIViewController *topMostViewController = [FBSDKInternalUtility topMostViewController];
-        NSString const *vcClassName = NSStringFromClass([topMostViewController class]);
-        if ([vcClassName componentsSeparatedByString:@"."].count > 1) {
-          params[swiftUsageKey] = @YES;
-          [FBSDKAppEvents logInternalEvent:eventName
-                                parameters:params
-                        isImplicitlyLogged:NO];
-        }
-      });
-  }
-  ;
-}
-
 + (BOOL)isSDKInitialized
 {
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-  return [FBSDKSettings isAutoInitEnabled] || g_isSDKInitialized;
-  #pragma clang diagnostic pop
+  return hasInitializeBeenCalled;
+}
+
+- (void)configureDependencies
+{
+  id<FBSDKGraphRequestProviding> graphRequestProvider = [FBSDKGraphRequestFactory new];
+  id<FBSDKDataPersisting> store = NSUserDefaults.standardUserDefaults;
+  [FBSDKGraphRequest setCurrentAccessTokenStringProvider:FBSDKAccessToken.class];
+  [FBSDKGraphRequestConnection setCanMakeRequests];
+  [FBSDKAppEvents configureWithGateKeeperManager:[FBSDKGateKeeperManager class]
+                  appEventsConfigurationProvider:[FBSDKAppEventsConfigurationManager class]
+                     serverConfigurationProvider:[FBSDKServerConfigurationManager class]
+                            graphRequestProvider:graphRequestProvider
+                                  featureChecker:[FBSDKFeatureManager class]
+                                           store:store
+                                          logger:[FBSDKLogger class]];
+  [FBSDKGateKeeperManager configureWithSettings:FBSDKSettings.class
+                                requestProvider:graphRequestProvider
+                             connectionProvider:[FBSDKGraphRequestConnectionFactory new]
+                                          store:store];
+  FBSDKTokenCache *tokenCache = [FBSDKTokenCache new];
+  [FBSDKAccessToken setTokenCache:tokenCache];
+  [FBSDKAccessToken setConnectionFactory:[FBSDKGraphRequestConnectionFactory new]];
+  [FBSDKAuthenticationToken setTokenCache:tokenCache];
+  [FBSDKSettings configureWithStore:store
+     appEventsConfigurationProvider:FBSDKAppEventsConfigurationManager.class
+             infoDictionaryProvider:NSBundle.mainBundle
+                        eventLogger:[FBSDKEventLogger new]];
+  [FBSDKInternalUtility configureWithInfoDictionaryProvider:NSBundle.mainBundle];
+  [FBSDKGraphRequestPiggybackManager configureWithTokenWallet:FBSDKAccessToken.class];
+  [FBSDKAppEventsConfigurationManager configureWithStore:store];
+#if !TARGET_OS_TV
+  [FBSDKAppLinkUtility configureWithRequestProvider:[FBSDKGraphRequestFactory new]
+                             infoDictionaryProvider:NSBundle.mainBundle];
+  [FBSDKCodelessIndexer configureWithRequestProvider:[FBSDKGraphRequestFactory new]];
+  if (@available(iOS 14.0, *)) {
+    [FBSDKSKAdNetworkReporter configureWithRequestProvider:[FBSDKGraphRequestFactory new]
+                                                     store:store];
+  }
+  [FBSDKProfile configureWithStore:store
+               accessTokenProvider:FBSDKAccessToken.class];
+  [FBSDKWebDialogView configureWithWebViewProvider:[FBSDKWebViewFactory new]
+                                         urlOpener:UIApplication.sharedApplication];
+#endif
 }
 
 // MARK: - Testability
 
 #if DEBUG
+ #if FBSDKTEST
+
++ (void)resetHasInitializeBeenCalled
+{
+  hasInitializeBeenCalled = NO;
+}
 
 - (BOOL)isAppLaunched
 {
@@ -495,6 +545,7 @@ static UIApplicationState _applicationState;
   _applicationObservers = [NSHashTable new];
 }
 
+ #endif
 #endif
 
 @end

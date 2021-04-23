@@ -105,12 +105,15 @@ import Foundation
                 }                
             }
             self.userProperties = JSON(_properties!)
-            if let currentUser = Backendless.shared.userService.currentUser,
+            if let currentUser = Backendless.shared.userService.currentUserForSession,
                 self.objectId == currentUser.objectId {
                 currentUser.userProperties = self.userProperties
-                let data = try? JSONEncoder().encode(currentUser)
-                let userDefaults = UserDefaults.standard
-                userDefaults.set(data, forKey: UserDefaultsKeys.currentUser)
+                if Backendless.shared.userService.stayLoggedIn,
+                   let userToken = currentUser.userToken,
+                   let userId = currentUser.objectId {
+                    UserDefaultsHelper.shared.saveUserToken(userToken)
+                    UserDefaultsHelper.shared.saveUserId(userId)
+                }
             }
         }
     }
@@ -134,11 +137,8 @@ import Foundation
         email = try container.decodeIfPresent(String.self, forKey: .email) ?? ""
         name = try container.decodeIfPresent(String.self, forKey: .name)
         objectId = try container.decodeIfPresent(String.self, forKey: .objectId)
-        userToken = try container.decodeIfPresent(String.self, forKey: .userToken)
+        userToken = try container.decodeIfPresent(String.self, forKey: .userToken)        
         _password = try container.decodeIfPresent(String.self, forKey: ._password)
-        /*if let properties = try container.decodeIfPresent(JSON.self, forKey: .properties) {
-            self.properties = properties
-        }*/
         if let userProperties = try container.decodeIfPresent(JSON.self, forKey: .userProperties) {
             self.userProperties = userProperties
         }
@@ -156,7 +156,9 @@ import Foundation
     
     func setUserToken(value: String) {
         self.userToken = value
-        UserDefaultsHelper.shared.savePersistentUserToken(token: value)
+        if Backendless.shared.userService.stayLoggedIn {
+            UserDefaultsHelper.shared.saveUserToken(value)
+        }        
     }
     
     @available(*, deprecated, message: "Please use the userProperties property directly")

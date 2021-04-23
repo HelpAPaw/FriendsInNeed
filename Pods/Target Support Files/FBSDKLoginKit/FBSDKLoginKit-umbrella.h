@@ -15,6 +15,7 @@
 #import "FBSDKDeviceLoginManager.h"
 #import "FBSDKDeviceLoginManagerResult.h"
 #import "FBSDKLoginButton.h"
+#import "FBSDKLoginConfiguration.h"
 #import "FBSDKLoginConstants.h"
 #import "FBSDKLoginKit.h"
 #import "FBSDKLoginManager.h"

@@ -54,7 +54,6 @@ public:
     // Column info
     size_t get_column_count() const noexcept;
     size_t get_public_column_count() const noexcept;
-    DataType get_public_column_type(size_t column_ndx) const noexcept;
     ColumnType get_column_type(size_t column_ndx) const noexcept;
     StringData get_column_name(size_t column_ndx) const noexcept;
 
@@ -63,6 +62,8 @@ public:
 
     // Column Attributes
     ColumnAttrMask get_column_attr(size_t column_ndx) const noexcept;
+    void set_dictionary_key_type(size_t column_ndx, DataType key_type);
+    DataType get_dictionary_key_type(size_t column_ndx) const;
 
     // Auto Enumerated string columns
     void upgrade_string_to_enum(size_t column_ndx, ref_type keys_ref);
@@ -92,8 +93,8 @@ private:
     ArrayStringShort m_names; // 2nd slot in m_top
     Array m_attr;             // 3rd slot in m_top
     // 4th slot in m_top is vacant
-    Array m_enumkeys;     // 5th slot in m_top
-    Array m_keys;         // 6th slot in m_top
+    Array m_enumkeys; // 5th slot in m_top
+    Array m_keys;     // 6th slot in m_top
     size_t m_num_public_columns;
 
     Spec(Allocator&) noexcept; // Unattached
@@ -222,14 +223,25 @@ inline size_t Spec::get_public_column_count() const noexcept
 inline ColumnType Spec::get_column_type(size_t ndx) const noexcept
 {
     REALM_ASSERT(ndx < get_column_count());
-    ColumnType type = ColumnType(m_types.get(ndx));
-    return type;
+    return ColumnType(int(m_types.get(ndx)));
 }
 
 inline ColumnAttrMask Spec::get_column_attr(size_t ndx) const noexcept
 {
     REALM_ASSERT(ndx < get_column_count());
-    return ColumnAttrMask(m_attr.get(ndx));
+    return ColumnAttrMask(m_attr.get(ndx) & 0xFF);
+}
+
+inline void Spec::set_dictionary_key_type(size_t ndx, DataType key_type)
+{
+    ColumnAttrMask attr = get_column_attr(ndx);
+    m_attr.set(ndx, attr.m_value | (int64_t(key_type) << 8));
+}
+
+inline DataType Spec::get_dictionary_key_type(size_t ndx) const
+{
+    REALM_ASSERT(ndx < get_column_count());
+    return DataType(int(m_attr.get(ndx) >> 8));
 }
 
 inline void Spec::set_column_attr(size_t column_ndx, ColumnAttrMask attr)

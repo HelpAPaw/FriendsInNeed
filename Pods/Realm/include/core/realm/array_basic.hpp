@@ -91,6 +91,10 @@ public:
     /// you need to get multiple values, then this method will be
     /// slower.
     static T get(const char* header, size_t ndx) noexcept;
+    Mixed get_any(size_t ndx) const override
+    {
+        return Mixed(get(ndx));
+    }
 
     size_t lower_bound(T value) const noexcept;
     size_t upper_bound(T value) const noexcept;
@@ -131,9 +135,9 @@ class BasicArrayNull : public BasicArray<T> {
 public:
     using BasicArray<T>::BasicArray;
 
-    static T default_value(bool nullable)
+    static util::Optional<T> default_value(bool nullable)
     {
-        return nullable ? null::get_null_float<T>() : T(0.0);
+        return nullable ? util::Optional<T>() : util::Optional<T>(0.0);
     }
     void set(size_t ndx, util::Optional<T> value)
     {
@@ -174,6 +178,10 @@ public:
         T val = BasicArray<T>::get(ndx);
         return null::is_null_float(val) ? util::none : util::make_optional(val);
     }
+    Mixed get_any(size_t ndx) const override
+    {
+        return Mixed(get(ndx));
+    }
     size_t find_first(util::Optional<T> value, size_t begin = 0, size_t end = npos) const
     {
         if (value) {
@@ -195,82 +203,6 @@ public:
     }
     size_t find_first_null(size_t begin = 0, size_t end = npos) const;
     void find_all_null(IntegerColumn* result, size_t add_offset = 0, size_t begin = 0, size_t end = npos) const;
-};
-
-// Used only for Basic-types: currently float and double
-template <class R>
-class QueryState : public QueryStateBase {
-public:
-    R m_state;
-
-    template <Action action>
-    bool uses_val()
-    {
-        return (action == act_Max || action == act_Min || action == act_Sum);
-    }
-
-    QueryState(Action action, Array* = nullptr, size_t limit = -1)
-        : QueryStateBase(limit)
-    {
-        REALM_ASSERT((std::is_same<R, float>::value || std::is_same<R, double>::value));
-        if (action == act_Max)
-            m_state = -std::numeric_limits<R>::infinity();
-        else if (action == act_Min)
-            m_state = std::numeric_limits<R>::infinity();
-        else if (action == act_Sum)
-            m_state = 0.0;
-        else if (action == act_Count)
-            m_state = 0.0;
-        else {
-            REALM_ASSERT_DEBUG(false);
-        }
-    }
-
-    template <Action action, bool pattern, typename resulttype>
-    inline bool match(size_t index, uint64_t /*indexpattern*/, resulttype value)
-    {
-        if (pattern)
-            return false;
-
-        static_assert(action == act_Sum || action == act_Max || action == act_Min || action == act_Count,
-                      "Search action not supported");
-
-        if (action == act_Count) {
-            ++m_match_count;
-        }
-        else if (!null::is_null_float(value)) {
-            ++m_match_count;
-            if (action == act_Max) {
-                if (value > m_state) {
-                    m_state = value;
-                    if (m_key_values) {
-                        m_minmax_index = m_key_values->get(index) + m_key_offset;
-                    }
-                    else {
-                        m_minmax_index = int64_t(index);
-                    }
-                }
-            }
-            else if (action == act_Min) {
-                if (value < m_state) {
-                    m_state = value;
-                    if (m_key_values) {
-                        m_minmax_index = m_key_values->get(index) + m_key_offset;
-                    }
-                    else {
-                        m_minmax_index = int64_t(index);
-                    }
-                }
-            }
-            else if (action == act_Sum)
-                m_state += value;
-            else {
-                REALM_ASSERT_DEBUG(false);
-            }
-        }
-
-        return (m_limit > m_match_count);
-    }
 };
 
 // Class typedefs for BasicArray's: ArrayFloat and ArrayDouble

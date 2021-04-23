@@ -24,8 +24,8 @@
  #import "FBSDKProfilePictureView+Internal.h"
 
  #import "FBSDKAccessToken.h"
+ #import "FBSDKHumanSilhouetteIcon.h"
  #import "FBSDKInternalUtility.h"
- #import "FBSDKMaleSilhouetteIcon.h"
  #import "FBSDKMath.h"
  #import "FBSDKProfile+Internal.h"
  #import "FBSDKUtility.h"
@@ -221,7 +221,7 @@
       return;
     }
     self->_needsImageUpdate = YES;
-    [self _needsImageUpdate];
+    [self _updateImage];
   });
 }
 
@@ -241,11 +241,13 @@
                                            selector:@selector(_accessTokenDidChangeNotification:)
                                                name:FBSDKAccessTokenDidChangeNotification
                                              object:nil];
-
-  [self setNeedsImageUpdate];
+  [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(_profileDidChangeNotification:)
+                                               name:FBSDKProfileDidChangeNotification
+                                             object:nil];
 }
 
- #pragma mark - Helper Methods
+ #pragma mark - Notifications
 
 - (void)_accessTokenDidChangeNotification:(NSNotification *)notification
 {
@@ -253,8 +255,94 @@
     return;
   }
   _lastState = nil;
-  [self setNeedsImageUpdate];
+  [self _updateImageWithAccessToken];
 }
+
+- (void)_profileDidChangeNotification:(NSNotification *)notification
+{
+  if (![_profileID isEqualToString:@"me"]) {
+    return;
+  }
+  _lastState = nil;
+  [self _updateImageWithProfile];
+}
+
+ #pragma mark - Image Update
+
+- (void)_updateImageWithProfile
+{
+  if (!_profileID) {
+    if (!_placeholderImageIsValid) {
+      [self _setPlaceholderImage];
+    }
+    return;
+  }
+
+  // if the current image is no longer representative of the current state, clear the current value out; otherwise,
+  // leave the current value until the new resolution image is downloaded
+  FBSDKProfilePictureViewState *state = [self _state];
+  if (![_lastState isValidForState:state]) {
+    [self _setPlaceholderImage];
+  }
+
+  FBSDKProfile *profile = FBSDKProfile.currentProfile;
+  if (![state.profileID isEqualToString:@"me"] || !profile.imageURL) {
+    return;
+  }
+  _lastState = state;
+
+  [self _fetchAndSetImageWithURL:profile.imageURL state:state];
+}
+
+- (void)_updateImageWithAccessToken
+{
+  if (!_profileID) {
+    if (!_placeholderImageIsValid) {
+      [self _setPlaceholderImage];
+    }
+    return;
+  }
+
+  // if the current image is no longer representative of the current state, clear the current value out; otherwise,
+  // leave the current value until the new resolution image is downloaded
+  FBSDKProfilePictureViewState *state = [self _state];
+  if (![_lastState isValidForState:state]) {
+    [self _setPlaceholderImage];
+  }
+
+  if ([state.profileID isEqualToString:@"me"] && !FBSDKAccessToken.currentAccessTokenIsActive) {
+    return;
+  }
+  _lastState = state;
+
+  [self _fetchAndSetImageWithURL:[self _getProfileImageUrl:state] state:state];
+}
+
+- (void)_fetchAndSetImageWithURL:(NSURL *)imageURL state:(FBSDKProfilePictureViewState *)state
+{
+  __weak FBSDKProfilePictureView *weakSelf = self;
+  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:imageURL];
+  NSURLSession *session = [NSURLSession sharedSession];
+  [[session
+    dataTaskWithRequest:request
+    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+      if (!error && data.length) {
+        [weakSelf _updateImageWithData:data state:state];
+      }
+    }] resume];
+}
+
+- (void)_updateImage
+{
+  _needsImageUpdate = NO;
+  if (![_profileID isEqualToString:@"me"] || FBSDKAccessToken.currentAccessTokenIsActive) {
+    [self _updateImageWithAccessToken];
+  } else if (FBSDKProfile.currentProfile.imageURL) {
+    [self _updateImageWithProfile];
+  }
+}
+
+ #pragma mark - Helper Methods
 
 - (BOOL)_imageShouldFit
 {
@@ -306,6 +394,19 @@
   return size;
 }
 
+- (FBSDKProfilePictureViewState *)_state
+{
+  BOOL imageShouldFit = [self _imageShouldFit];
+  UIScreen *screen = self.window.screen ?: [UIScreen mainScreen];
+  CGFloat scale = screen.scale;
+  CGSize imageSize = [self _imageSize:imageShouldFit scale:scale];
+  return [[FBSDKProfilePictureViewState alloc] initWithProfileID:_profileID
+                                                            size:imageSize
+                                                           scale:scale
+                                                     pictureMode:_pictureMode
+                                                  imageShouldFit:imageShouldFit];
+}
+
 - (NSURL *)_getProfileImageUrl:(FBSDKProfilePictureViewState *)state
 {
   // If there's an existing profile, use that profile's image url handler
@@ -315,53 +416,6 @@
   return [FBSDKProfile imageURLForProfileID:state.profileID PictureMode:self.pictureMode size:state.size];
 }
 
-- (void)_needsImageUpdate
-{
-  _needsImageUpdate = NO;
-
-  if (!_profileID) {
-    if (!_placeholderImageIsValid) {
-      [self _setPlaceholderImage];
-    }
-    return;
-  }
-
-  // if the current image is no longer representative of the current state, clear the current value out; otherwise,
-  // leave the current value until the new resolution image is downloaded
-  BOOL imageShouldFit = [self _imageShouldFit];
-  UIScreen *screen = self.window.screen ?: [UIScreen mainScreen];
-  CGFloat scale = screen.scale;
-  CGSize imageSize = [self _imageSize:imageShouldFit scale:scale];
-  FBSDKProfilePictureViewState *state = [[FBSDKProfilePictureViewState alloc] initWithProfileID:_profileID
-                                                                                           size:imageSize
-                                                                                          scale:scale
-                                                                                    pictureMode:_pictureMode
-                                                                                 imageShouldFit:imageShouldFit];
-  if (![_lastState isValidForState:state]) {
-    [self _setPlaceholderImage];
-  }
-  _lastState = state;
-
-  FBSDKAccessToken *accessToken = [FBSDKAccessToken currentAccessToken];
-  if ([state.profileID isEqualToString:@"me"] && !accessToken) {
-    return;
-  }
-
-  __weak FBSDKProfilePictureView *weakSelf = self;
-
-  NSURL *imageURL = [self _getProfileImageUrl:state];
-
-  NSURLRequest *request = [[NSURLRequest alloc] initWithURL:imageURL];
-  NSURLSession *session = [NSURLSession sharedSession];
-  [[session
-    dataTaskWithRequest:request
-    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-      if (!error && data.length) {
-        [weakSelf _updateImageWithData:data state:state];
-      }
-    }] resume];
-}
-
 - (void)_setPlaceholderImage
 {
   UIColor *fillColor = [UIColor colorWithRed:157.0 / 255.0 green:177.0 / 255.0 blue:204.0 / 255.0 alpha:1.0];
@@ -369,7 +423,8 @@
   _hasProfileImage = NO;
 
   dispatch_async(dispatch_get_main_queue(), ^{
-    self->_imageView.image = [[[FBSDKMaleSilhouetteIcon alloc] initWithColor:fillColor] imageWithSize:self->_imageView.bounds.size];
+    self->_imageView.image = [[FBSDKHumanSilhouetteIcon new] imageWithSize:self->_imageView.bounds.size
+                                                                     color:fillColor];
   });
 }
 
@@ -391,6 +446,13 @@
     _placeholderImageIsValid = NO;
     [self setNeedsImageUpdate];
   }
+}
+
+ #pragma mark - Test Helpers
+
+- (FBSDKProfilePictureViewState *)lastState
+{
+  return _lastState;
 }
 
 @end

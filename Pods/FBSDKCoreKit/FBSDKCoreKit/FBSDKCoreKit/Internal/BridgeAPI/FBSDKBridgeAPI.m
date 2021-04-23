@@ -23,6 +23,8 @@
  #import "FBSDKBridgeAPI.h"
 
  #import "FBSDKCoreKit+Internal.h"
+ #import "FBSDKOperatingSystemVersionComparing.h"
+ #import "NSProcessInfo+Protocols.h"
 
 /**
  Specifies state of FBSDKAuthenticationSession (SFAuthenticationSession (iOS 11) and ASWebAuthenticationSession (iOS 12+))
@@ -40,8 +42,6 @@ typedef NS_ENUM(NSUInteger, FBSDKAuthenticationSession) {
   FBSDKAuthenticationSessionCanceledBySystem,
 };
 
-typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackURL, NSError *_Nullable error);
-
 @protocol FBSDKAuthenticationSession <NSObject>
 
 - (instancetype)initWithURL:(NSURL *)URL callbackURLScheme:(nullable NSString *)callbackURLScheme completionHandler:(FBSDKAuthenticationCompletionHandler)completionHandler;
@@ -54,16 +54,16 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
 
  #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 130000
   #import <AuthenticationServices/AuthenticationServices.h>
-@interface FBSDKBridgeAPI () <FBSDKApplicationObserving, FBSDKContainerViewControllerDelegate, ASWebAuthenticationPresentationContextProviding>
+@interface FBSDKBridgeAPI () <FBSDKContainerViewControllerDelegate, ASWebAuthenticationPresentationContextProviding>
  #else
-@interface FBSDKBridgeAPI () <FBSDKApplicationObserving, FBSDKContainerViewControllerDelegate>
+@interface FBSDKBridgeAPI () <FBSDKContainerViewControllerDelegate>
  #endif
 
 @end
 
 @implementation FBSDKBridgeAPI
 {
-  FBSDKBridgeAPIRequest *_pendingRequest;
+  NSObject<FBSDKBridgeAPIRequestProtocol> *_pendingRequest;
   FBSDKBridgeAPIResponseBlock _pendingRequestCompletionBlock;
   id<FBSDKURLOpening> _pendingURLOpen;
   id<FBSDKAuthenticationSession> _authenticationSession NS_AVAILABLE_IOS(11_0);
@@ -74,11 +74,7 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   BOOL _isDismissingSafariViewController;
   BOOL _isAppLaunched;
   FBSDKAuthenticationSession _authenticationSessionState;
-}
-
-+ (void)load
-{
-  [[FBSDKApplicationDelegate sharedInstance] addObserver:[FBSDKBridgeAPI sharedInstance]];
+  id<FBSDKOperatingSystemVersionComparing> _processInfo;
 }
 
 + (FBSDKBridgeAPI *)sharedInstance
@@ -86,9 +82,17 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   static FBSDKBridgeAPI *_sharedInstance;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    _sharedInstance = [[self alloc] init];
+    _sharedInstance = [[self alloc] initWithProcessInfo:NSProcessInfo.processInfo];
   });
   return _sharedInstance;
+}
+
+- (instancetype)initWithProcessInfo:(id<FBSDKOperatingSystemVersionComparing>)processInfo
+{
+  if ((self = [super init])) {
+    _processInfo = processInfo;
+  }
+  return self;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -112,7 +116,9 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
         errorDomain = @"com.apple.SafariServices.Authentication";
       }
       NSError *error = [FBSDKError errorWithDomain:errorDomain code:1 message:nil];
-      _authenticationSessionCompletionHandler(nil, error);
+      if (_authenticationSessionCompletionHandler) {
+        _authenticationSessionCompletionHandler(nil, error);
+      }
       isRequestingWebAuthenticationSession = [self _isRequestingWebAuthenticationSession];
     }
   }
@@ -186,8 +192,10 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
                                  initWithDomain:FBSDKErrorDomain
                                  code:FBSDKErrorBridgeAPIInterruption
                                  userInfo:@{FBSDKErrorLocalizedDescriptionKey : errorMessage}];
-          _authenticationSessionCompletionHandler(url, loginError);
-          _authenticationSessionCompletionHandler = nil;
+          if (_authenticationSessionCompletionHandler) {
+            _authenticationSessionCompletionHandler(url, loginError);
+            _authenticationSessionCompletionHandler = nil;
+          }
         }
       }
     }
@@ -257,36 +265,26 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
 {
   _expectingBackground = YES;
   _pendingURLOpen = sender;
+  __block id<FBSDKOperatingSystemVersionComparing> weakProcessInfo = _processInfo;
   dispatch_async(dispatch_get_main_queue(), ^{
     // Dispatch openURL calls to prevent hangs if we're inside the current app delegate's openURL flow already
     NSOperatingSystemVersion iOS10Version = { .majorVersion = 10, .minorVersion = 0, .patchVersion = 0 };
-    if ([FBSDKInternalUtility isOSRunTimeVersionAtLeast:iOS10Version]) {
+    if ([weakProcessInfo isOperatingSystemAtLeastVersion:iOS10Version]) {
       if (@available(iOS 10.0, *)) {
         [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:^(BOOL success) {
           handler(success, nil);
         }];
       }
-    } else {
-      BOOL opened = [[UIApplication sharedApplication] openURL:url];
-
-      if ([url.scheme hasPrefix:@"http"] && !opened) {
-        NSOperatingSystemVersion iOS8Version = { .majorVersion = 8, .minorVersion = 0, .patchVersion = 0 };
-        if (![FBSDKInternalUtility isOSRunTimeVersionAtLeast:iOS8Version]) {
-          // Safari openURL calls can wrongly return NO on iOS 7 so manually overwrite that case to YES.
-          // Otherwise we would rather trust in the actual result of openURL
-          opened = YES;
-        }
-      }
-      if (handler) {
-        handler(opened, nil);
-      }
+    } else if (handler) {
+      BOOL opened = [UIApplication.sharedApplication openURL:url];
+      handler(opened, nil);
     }
   });
 }
 
  #pragma clang diagnostic pop
 
-- (void)openBridgeAPIRequest:(FBSDKBridgeAPIRequest *)request
+- (void)openBridgeAPIRequest:(NSObject<FBSDKBridgeAPIRequestProtocol> *)request
      useSafariViewController:(BOOL)useSafariViewController
           fromViewController:(UIViewController *)fromViewController
              completionBlock:(FBSDKBridgeAPIResponseBlock)completionBlock
@@ -303,7 +301,19 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   }
   _pendingRequest = request;
   _pendingRequestCompletionBlock = [completionBlock copy];
-  void (^handler)(BOOL, NSError *) = ^(BOOL openedURL, NSError *anError) {
+  FBSDKSuccessBlock handler = [self _bridgeAPIRequestCompletionBlockWithRequest:request
+                                                                     completion:completionBlock];
+  if (useSafariViewController) {
+    [self openURLWithSafariViewController:requestURL sender:nil fromViewController:fromViewController handler:handler];
+  } else {
+    [self openURL:requestURL sender:nil handler:handler];
+  }
+}
+
+- (FBSDKSuccessBlock)_bridgeAPIRequestCompletionBlockWithRequest:(NSObject<FBSDKBridgeAPIRequestProtocol> *)request
+                                                      completion:(FBSDKBridgeAPIResponseBlock)completionBlock
+{
+  return ^(BOOL openedURL, NSError *anError) {
     if (!openedURL) {
       self->_pendingRequest = nil;
       self->_pendingRequestCompletionBlock = nil;
@@ -321,17 +331,25 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
       return;
     }
   };
-  if (useSafariViewController) {
-    [self openURLWithSafariViewController:requestURL sender:nil fromViewController:fromViewController handler:handler];
-  } else {
-    [self openURL:requestURL sender:nil handler:handler];
-  }
 }
 
 - (void)openURLWithSafariViewController:(NSURL *)url
                                  sender:(id<FBSDKURLOpening>)sender
                      fromViewController:(UIViewController *)fromViewController
                                 handler:(FBSDKSuccessBlock)handler
+{
+  [self _openURLWithSafariViewController:url
+                                  sender:sender
+                      fromViewController:fromViewController
+                                 handler:handler
+                           dylibResolver:FBSDKDynamicFrameworkLoader.shared];
+}
+
+- (void)_openURLWithSafariViewController:(NSURL *)url
+                                  sender:(id<FBSDKURLOpening>)sender
+                      fromViewController:(UIViewController *)fromViewController
+                                 handler:(FBSDKSuccessBlock)handler
+                           dylibResolver:(id<FBSDKDynamicFrameworkResolving>)dylibResolver
 {
   if (![url.scheme hasPrefix:@"http"]) {
     [self openURL:url sender:sender handler:handler];
@@ -352,7 +370,7 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   // trying to dynamically load SFSafariViewController class
   // so for the cases when it is available we can send users through Safari View Controller flow
   // in cases it is not available regular flow will be selected
-  Class SFSafariViewControllerClass = fbsdkdfl_SFSafariViewControllerClass();
+  Class SFSafariViewControllerClass = dylibResolver.safariViewControllerClass;
 
   if (SFSafariViewControllerClass) {
     UIViewController *parent = fromViewController ?: [FBSDKInternalUtility topMostViewController];
@@ -424,7 +442,7 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   }
 }
 
-- (void)setSessionCompletionHandlerFromHandler:(void (^)(BOOL, NSError *))handler
+- (void)setSessionCompletionHandlerFromHandler:(FBSDKSuccessBlock)handler
 {
   __weak FBSDKBridgeAPI *weakSelf = self;
   _authenticationSessionCompletionHandler = ^(NSURL *aURL, NSError *error) {
@@ -438,6 +456,11 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
     strongSelf->_authenticationSessionCompletionHandler = nil;
     strongSelf->_authenticationSessionState = FBSDKAuthenticationSessionNone;
   };
+}
+
+- (FBSDKAuthenticationCompletionHandler)sessionCompletionHandler
+{
+  return _authenticationSessionCompletionHandler;
 }
 
  #pragma mark -- SFSafariViewControllerDelegate
@@ -476,7 +499,7 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
 
 - (BOOL)_handleBridgeAPIResponseURL:(NSURL *)responseURL sourceApplication:(NSString *)sourceApplication
 {
-  FBSDKBridgeAPIRequest *request = _pendingRequest;
+  NSObject<FBSDKBridgeAPIRequestProtocol> *request = _pendingRequest;
   FBSDKBridgeAPIResponseBlock completionBlock = _pendingRequestCompletionBlock;
   _pendingRequest = nil;
   _pendingRequestCompletionBlock = NULL;
@@ -529,6 +552,114 @@ typedef void (^FBSDKAuthenticationCompletionHandler)(NSURL *_Nullable callbackUR
   return UIApplication.sharedApplication.keyWindow;
 }
  #pragma clang diagnostic pop
+
+ #pragma mark - Testability
+
+ #if DEBUG
+  #if FBSDKTEST
+
+- (id<FBSDKAuthenticationSession>)authenticationSession
+{
+  return _authenticationSession;
+}
+
+- (void)setAuthenticationSession:(id<FBSDKAuthenticationSession>)session
+{
+  _authenticationSession = session;
+}
+
+- (FBSDKAuthenticationSession)authenticationSessionState
+{
+  return _authenticationSessionState;
+}
+
+- (void)setAuthenticationSessionState:(FBSDKAuthenticationSession)state
+{
+  _authenticationSessionState = state;
+}
+
+- (FBSDKAuthenticationCompletionHandler)authenticationSessionCompletionHandler
+{
+  return _authenticationSessionCompletionHandler;
+}
+
+- (void)setAuthenticationSessionCompletionHandler:(FBSDKAuthenticationCompletionHandler)handler
+{
+  _authenticationSessionCompletionHandler = handler;
+}
+
+- (void)setActive:(BOOL)isActive
+{
+  _active = isActive;
+}
+
+- (BOOL)expectingBackground
+{
+  return _expectingBackground;
+}
+
+- (void)setExpectingBackground:(BOOL)isExpectingBackground
+{
+  _expectingBackground = isExpectingBackground;
+}
+
+- (id<FBSDKURLOpening>)pendingUrlOpen
+{
+  return _pendingURLOpen;
+}
+
+- (void)setPendingUrlOpen:(id<FBSDKURLOpening>)opening
+{
+  _pendingURLOpen = opening;
+}
+
+- (UIViewController *)safariViewController
+{
+  return _safariViewController;
+}
+
+- (void)setSafariViewController:(nullable UIViewController *)controller
+{
+  _safariViewController = controller;
+}
+
+- (BOOL)isDismissingSafariViewController
+{
+  return _isDismissingSafariViewController;
+}
+
+- (void)setIsDismissingSafariViewController:(BOOL)isDismissing
+{
+  _isDismissingSafariViewController = isDismissing;
+}
+
+- (NSObject<FBSDKBridgeAPIRequestProtocol> *)pendingRequest
+{
+  return _pendingRequest;
+}
+
+- (void)setPendingRequest:(NSObject<FBSDKBridgeAPIRequestProtocol> *)newValue
+{
+  _pendingRequest = newValue;
+}
+
+- (FBSDKBridgeAPIResponseBlock)pendingRequestCompletionBlock
+{
+  return _pendingRequestCompletionBlock;
+}
+
+- (void)setPendingRequestCompletionBlock:(FBSDKBridgeAPIResponseBlock)newValue
+{
+  _pendingRequestCompletionBlock = newValue;
+}
+
+- (id<FBSDKOperatingSystemVersionComparing>)processInfo
+{
+  return _processInfo;
+}
+
+  #endif
+ #endif
 
 @end
 

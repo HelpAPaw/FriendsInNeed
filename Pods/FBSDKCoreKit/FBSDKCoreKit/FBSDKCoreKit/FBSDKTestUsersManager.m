@@ -20,6 +20,10 @@
 
 #import "FBSDKCoreKit+Internal.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+
 static NSString *const kFBGraphAPITestUsersPathFormat = @"%@/accounts/test-users";
 static NSString *const kAccountsDictionaryTokenKey = @"access_token";
 static NSString *const kAccountsDictionaryPermissionsKey = @"permissions";
@@ -222,8 +226,7 @@ static NSMutableDictionary<NSString *, FBSDKTestUsersManager *> *gInstancesDicti
                                                 userID:userId
                                         expirationDate:nil
                                            refreshDate:nil
-                              dataAccessExpirationDate:nil
-                                           graphDomain:nil];
+                              dataAccessExpirationDate:nil];
 }
 
 - (NSArray *)userIdAndTokenOfExistingAccountWithPermissions:(NSSet *)permissions skip:(NSSet *)setToSkip
@@ -337,3 +340,5 @@ static NSMutableDictionary<NSString *, FBSDKTestUsersManager *> *gInstancesDicti
 }
 
 @end
+
+#pragma clang diagnostic pop

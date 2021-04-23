@@ -26,6 +26,19 @@ static int const FBSDKTokenRefreshRetrySeconds = 60 * 60; // hour
 @implementation FBSDKGraphRequestPiggybackManager
 
 static NSDate *_lastRefreshTry = nil;
+static Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting> _tokenWallet = nil;
+
++ (Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting>)tokenWallet
+{
+  return _tokenWallet;
+}
+
++ (void)configureWithTokenWallet:(Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting>)tokenWallet
+{
+  if (self == [FBSDKGraphRequestPiggybackManager class]) {
+    _tokenWallet = tokenWallet;
+  }
+}
 
 + (void)addPiggybackRequests:(FBSDKGraphRequestConnection *)connection
 {
@@ -44,9 +57,12 @@ static NSDate *_lastRefreshTry = nil;
   }
 }
 
-+ (void)addRefreshPiggyback:(FBSDKGraphRequestConnection *)connection permissionHandler:(FBSDKGraphRequestBlock)permissionHandler
++ (void)addRefreshPiggyback:(id<FBSDKGraphRequestConnecting>)connection permissionHandler:(FBSDKGraphRequestBlock)permissionHandler
 {
-  FBSDKAccessToken *expectedToken = [FBSDKAccessToken currentAccessToken];
+  FBSDKAccessToken *expectedToken = [self.tokenWallet currentAccessToken];
+  if (!expectedToken) {
+    return;
+  }
   __block NSMutableSet *permissions = nil;
   __block NSMutableSet *declinedPermissions = nil;
   __block NSMutableSet *expiredPermissions = nil;
@@ -57,7 +73,7 @@ static NSDate *_lastRefreshTry = nil;
   __block int expectingCallbacksCount = 2;
   void (^expectingCallbackComplete)(void) = ^{
     if (--expectingCallbacksCount == 0) {
-      FBSDKAccessToken *currentToken = [FBSDKAccessToken currentAccessToken];
+      FBSDKAccessToken *currentToken = [self.tokenWallet currentAccessToken];
       NSDate *expirationDate = currentToken.expirationDate;
       if (expirationDateNumber != nil) {
         expirationDate = (expirationDateNumber.doubleValue > 0
@@ -70,6 +86,9 @@ static NSDate *_lastRefreshTry = nil;
           ? [NSDate dateWithTimeIntervalSince1970:dataAccessExpirationDateNumber.doubleValue]
           : [NSDate distantFuture]);
       }
+
+      #pragma clang diagnostic push
+      #pragma clang diagnostic ignored "-Wdeprecated-declarations"
       FBSDKAccessToken *refreshedToken = [[FBSDKAccessToken alloc] initWithTokenString:tokenString ?: currentToken.tokenString
                                                                            permissions:(permissions ?: currentToken.permissions).allObjects
                                                                    declinedPermissions:(declinedPermissions ?: currentToken.declinedPermissions).allObjects
@@ -80,8 +99,10 @@ static NSDate *_lastRefreshTry = nil;
                                                                            refreshDate:[NSDate date]
                                                               dataAccessExpirationDate:dataExpirationDate
                                                                            graphDomain:graphDomain ?: currentToken.graphDomain];
+      #pragma clange diagnostic pop
+
       if (expectedToken == currentToken) {
-        [FBSDKAccessToken setCurrentAccessToken:refreshedToken];
+        [self.tokenWallet setCurrentAccessToken:refreshedToken];
       }
     }
   };
@@ -126,7 +147,7 @@ static NSDate *_lastRefreshTry = nil;
   // retrying in cases of errors and preventing duplicate refreshes.
   // obviously this is not foolproof but is simple and sufficient.
   NSDate *now = [NSDate date];
-  NSDate *tokenRefreshDate = [FBSDKAccessToken currentAccessToken].refreshDate;
+  NSDate *tokenRefreshDate = [self.tokenWallet currentAccessToken].refreshDate;
   if (tokenRefreshDate
       && [now timeIntervalSinceDate:[self _lastRefreshTry]] > [self _tokenRefreshRetryInSeconds]
       && [now timeIntervalSinceDate:tokenRefreshDate] > [self _tokenRefreshThresholdInSeconds]) {
@@ -150,10 +171,11 @@ static NSDate *_lastRefreshTry = nil;
        }];
 }
 
-+ (BOOL)_safeForPiggyback:(FBSDKGraphRequest *)request
++ (BOOL)_safeForPiggyback:(id<FBSDKGraphRequest>)request
 {
-  return [request.version isEqualToString:[FBSDKSettings graphAPIVersion]]
-  && !request.hasAttachments;
+  BOOL isVersionSafe = [request.version isEqualToString:[FBSDKSettings graphAPIVersion]];
+  BOOL hasAttachments = [(id<FBSDKGraphRequestInternal>)request hasAttachments];
+  return isVersionSafe && !hasAttachments;
 }
 
 + (int)_tokenRefreshThresholdInSeconds
@@ -178,5 +200,21 @@ static NSDate *_lastRefreshTry = nil;
 {
   _lastRefreshTry = date;
 }
+
+#if DEBUG
+ #if FBSDKTEST
+
++ (void)setTokenWallet:(Class<FBSDKAccessTokenProviding, FBSDKAccessTokenSetting>)tokenWallet
+{
+  _tokenWallet = tokenWallet;
+}
+
++ (void)reset
+{
+  _tokenWallet = nil;
+}
+
+ #endif
+#endif
 
 @end

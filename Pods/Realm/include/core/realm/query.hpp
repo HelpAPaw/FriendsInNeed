@@ -40,6 +40,7 @@
 #include <realm/timestamp.hpp>
 #include <realm/handover_defs.hpp>
 #include <realm/util/serializer.hpp>
+#include <realm/column_type_traits.hpp>
 
 namespace realm {
 
@@ -84,7 +85,9 @@ public:
     Query(ConstTableRef table, ConstTableView* tv = nullptr);
     Query(ConstTableRef table, std::unique_ptr<ConstTableView>);
     Query(ConstTableRef table, const LnkLst& list);
+    Query(ConstTableRef table, const LnkSet& set);
     Query(ConstTableRef table, LnkLstPtr&& list);
+    Query(ConstTableRef table, LnkSetPtr&& set);
     Query();
     Query(std::unique_ptr<Expression>);
     ~Query() noexcept;
@@ -122,14 +125,6 @@ public:
     Query& less_equal(ColKey column_key, int value);
     Query& between(ColKey column_key, int from, int to);
 
-    // Conditions: 2 int columns
-    Query& equal_int(ColKey column_key1, ColKey column_key2);
-    Query& not_equal_int(ColKey column_key1, ColKey column_key2);
-    Query& greater_int(ColKey column_key1, ColKey column_key2);
-    Query& less_int(ColKey column_key1, ColKey column_key2);
-    Query& greater_equal_int(ColKey column_key1, ColKey column_key2);
-    Query& less_equal_int(ColKey column_key1, ColKey column_key2);
-
     // Conditions: float
     Query& equal(ColKey column_key, float value);
     Query& not_equal(ColKey column_key, float value);
@@ -139,14 +134,6 @@ public:
     Query& less_equal(ColKey column_key, float value);
     Query& between(ColKey column_key, float from, float to);
 
-    // Conditions: 2 float columns
-    Query& equal_float(ColKey column_key1, ColKey column_key2);
-    Query& not_equal_float(ColKey column_key1, ColKey column_key2);
-    Query& greater_float(ColKey column_key1, ColKey column_key2);
-    Query& greater_equal_float(ColKey column_key1, ColKey column_key2);
-    Query& less_float(ColKey column_key1, ColKey column_key2);
-    Query& less_equal_float(ColKey column_key1, ColKey column_key2);
-
     // Conditions: double
     Query& equal(ColKey column_key, double value);
     Query& not_equal(ColKey column_key, double value);
@@ -155,14 +142,6 @@ public:
     Query& less(ColKey column_key, double value);
     Query& less_equal(ColKey column_key, double value);
     Query& between(ColKey column_key, double from, double to);
-
-    // Conditions: 2 double columns
-    Query& equal_double(ColKey column_key1, ColKey column_key2);
-    Query& not_equal_double(ColKey column_key1, ColKey column_key2);
-    Query& greater_double(ColKey column_key1, ColKey column_key2);
-    Query& greater_equal_double(ColKey column_key1, ColKey column_key2);
-    Query& less_double(ColKey column_key1, ColKey column_key2);
-    Query& less_equal_double(ColKey column_key1, ColKey column_key2);
 
     // Conditions: timestamp
     Query& equal(ColKey column_key, Timestamp value);
@@ -180,6 +159,14 @@ public:
     Query& less_equal(ColKey column_key, ObjectId value);
     Query& less(ColKey column_key, ObjectId value);
 
+    // Conditions: UUID
+    Query& equal(ColKey column_key, UUID value);
+    Query& not_equal(ColKey column_key, UUID value);
+    Query& greater(ColKey column_key, UUID value);
+    Query& greater_equal(ColKey column_key, UUID value);
+    Query& less_equal(ColKey column_key, UUID value);
+    Query& less(ColKey column_key, UUID value);
+
     // Conditions: Decimal128
     Query& equal(ColKey column_key, Decimal128 value);
     Query& not_equal(ColKey column_key, Decimal128 value);
@@ -188,6 +175,18 @@ public:
     Query& less_equal(ColKey column_key, Decimal128 value);
     Query& less(ColKey column_key, Decimal128 value);
     Query& between(ColKey column_key, Decimal128 from, Decimal128 to);
+
+    // Conditions: Mixed
+    Query& equal(ColKey column_key, Mixed value, bool case_sensitive = true);
+    Query& not_equal(ColKey column_key, Mixed value, bool case_sensitive = true);
+    Query& greater(ColKey column_key, Mixed value);
+    Query& greater_equal(ColKey column_key, Mixed value);
+    Query& less(ColKey column_key, Mixed value);
+    Query& less_equal(ColKey column_key, Mixed value);
+    Query& begins_with(ColKey column_key, Mixed value, bool case_sensitive = true);
+    Query& ends_with(ColKey column_key, Mixed value, bool case_sensitive = true);
+    Query& contains(ColKey column_key, Mixed value, bool case_sensitive = true);
+    Query& like(ColKey column_key, Mixed value, bool case_sensitive = true);
 
     // Conditions: size
     Query& size_equal(ColKey column_key, int64_t value);
@@ -223,6 +222,15 @@ public:
     Query& ends_with(ColKey column_key, BinaryData value, bool case_sensitive = true);
     Query& contains(ColKey column_key, BinaryData value, bool case_sensitive = true);
     Query& like(ColKey column_key, BinaryData b, bool case_sensitive = true);
+
+    // Conditions: untyped column vs column comparison
+    // if the column types are not comparable, an exception is thrown
+    Query& equal(ColKey column_key1, ColKey column_key2);
+    Query& less(ColKey column_key1, ColKey column_key2);
+    Query& less_equal(ColKey column_key1, ColKey column_key2);
+    Query& greater(ColKey column_key1, ColKey column_key2);
+    Query& greater_equal(ColKey column_key1, ColKey column_key2);
+    Query& not_equal(ColKey column_key1, ColKey column_key2);
 
     // Negation
     Query& Not();
@@ -296,10 +304,13 @@ public:
 
     std::string validate();
 
-    std::string get_description() const;
+    std::string get_description(const std::string& class_prefix = "") const;
     std::string get_description(util::serializer::SerialisationState& state) const;
 
-    bool eval_object(ConstObj& obj) const;
+    Query& set_ordering(std::unique_ptr<DescriptorOrdering> ordering);
+    std::shared_ptr<DescriptorOrdering> get_ordering();
+
+    bool eval_object(const Obj& obj) const;
 
 private:
     void create();
@@ -308,6 +319,7 @@ private:
     size_t find_internal(size_t start = 0, size_t end = size_t(-1)) const;
     void handle_pending_not();
     void set_table(TableRef tr);
+
 public:
     std::unique_ptr<Query> clone_for_handover(Transaction* tr, PayloadPolicy policy) const
     {
@@ -323,35 +335,18 @@ public:
 private:
     void add_expression_node(std::unique_ptr<Expression>);
 
-    template <class ColumnType>
-    Query& equal(ColKey column_key1, ColKey column_key2);
-
-    template <class ColumnType>
-    Query& less(ColKey column_key1, ColKey column_key2);
-
-    template <class ColumnType>
-    Query& less_equal(ColKey column_key1, ColKey column_key2);
-
-    template <class ColumnType>
-    Query& greater(ColKey column_key1, ColKey column_key2);
-
-    template <class ColumnType>
-    Query& greater_equal(ColKey column_key1, ColKey column_key2);
-
-    template <class ColumnType>
-    Query& not_equal(ColKey column_key1, ColKey column_key2);
-
     template <typename TConditionFunction, class T>
     Query& add_condition(ColKey column_key, T value);
 
     template <typename TConditionFunction>
     Query& add_size_condition(ColKey column_key, int64_t value);
 
-    template <typename T, bool Nullable>
-    double average(ColKey column_key, size_t* resultcount = nullptr) const;
+    template <typename T, typename R = typename AggregateResultType<T, act_Average>::result_type>
+    R average(ColKey column_key, size_t* resultcount = nullptr) const;
 
-    template <Action action, typename T, typename R>
-    R aggregate(ColKey column_key, size_t* resultcount = nullptr, ObjKey* return_ndx = nullptr) const;
+    template <typename T>
+    void aggregate(QueryStateBase& st, ColKey column_key, size_t* resultcount = nullptr,
+                   ObjKey* return_ndx = nullptr) const;
 
     size_t find_best_node(ParentNode* pn) const;
     void aggregate_internal(ParentNode* pn, QueryStateBase* st, size_t start, size_t end,
@@ -393,8 +388,10 @@ private:
 
     // At most one of these can be non-zero, and if so the non-zero one indicates the restricting view.
     LnkLstPtr m_source_link_list;                  // link lists are owned by the query.
+    LnkSetPtr m_source_link_set;                   // link sets are owned by the query.
     ConstTableView* m_source_table_view = nullptr; // table views are not refcounted, and not owned by the query.
     std::unique_ptr<ConstTableView> m_owned_source_table_view; // <--- except when indicated here
+    std::shared_ptr<DescriptorOrdering> m_ordering;
 };
 
 // Implementation:

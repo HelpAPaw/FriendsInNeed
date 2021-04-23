@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnSendSignal;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendSignalButtonWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *liSendSignal;
+@property (weak, nonatomic) IBOutlet UILabel *filterIsActiveLabel;
 
 @property (strong, nonatomic) UIBarButtonItem *addBarButton;
 @property (strong, nonatomic) UIBarButtonItem *refreshBarButton;
@@ -179,6 +180,9 @@
     UIPinchGestureRecognizer *pinchGR = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
     [pinchGR setDelegate:self];
     [self.mapView addGestureRecognizer:pinchGR];
+    
+    _filterIsActiveLabel.layer.cornerRadius = 15.0;
+    _filterIsActiveLabel.layer.masksToBounds = YES;
     
     [self setupAddSignalView];
     
@@ -944,6 +948,18 @@
 {
     _selectedSignalTypes = newTypesSelection;
     
+    NSInteger count = 0;
+    for (NSNumber *typeSetting in _selectedSignalTypes) {
+        if (typeSetting.boolValue) {
+            count++;
+        }
+    }
+    if (count == _dataManager.signalTypes.count) {
+        _filterIsActiveLabel.hidden = YES;
+    }
+    else {
+        _filterIsActiveLabel.hidden = NO;
+    }
 }
 
 #pragma mark - Privacy policy

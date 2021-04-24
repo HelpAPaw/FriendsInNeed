@@ -10,5 +10,5 @@ import Foundation
 
 @objcMembers
 public class SharedConstants: NSObject {
-    public static let kPrivacyPolicyUrl = "https://backendlessappcontent.com/***REMOVED***/***REMOVED***/files/web/privacypolicy.html"
+    public static let kPrivacyPolicyUrl = "https://backendlessappcontent.com/BDCD56B9-351A-E067-FFA4-9EA9CF2F4000/473D7C4A-3FBC-69F4-FFFF-1635F07E4300/files/web/privacypolicy.html"
 }

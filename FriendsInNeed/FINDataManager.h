@@ -10,10 +10,7 @@
 #import "FINSignal.h"
 #import "FINComment.h"
 #import "FINError.h"
-
-#define BCKNDLSS_APP_ID         @"***REMOVED***"
-#define BCKNDLSS_IOS_API_KEY    @"***REMOVED***"
-#define BCKNDLSS_REST_API_KEY   @"***REMOVED***"
+#import "Secrets.h"
 
 #define kNotificationSignalId   @"signalId"
 #define kNotificationCategoryNewSignal  @"kNotificationCategoryNewSignal"

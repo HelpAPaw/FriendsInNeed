@@ -226,6 +226,7 @@
 		F3B25042215833FF00ED1D1D /* FINSettingsSliderCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINSettingsSliderCell.xib; sourceTree = "<group>"; };
 		F3B25048215984F300ED1D1D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		F3B2504A2159850700ED1D1D /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "bg-BG"; path = "bg-BG.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		F3B773CF2634477500D39386 /* Secrets.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Secrets.h; sourceTree = "<group>"; };
 		F3BA753922232BD3003FAC5F /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		F3BA753F22232CFC003FAC5F /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3BA754122232CFD003FAC5F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -512,6 +513,7 @@
 				F38B73151C04412A00FBE20C /* FINLocationManager.m */,
 				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
 				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
+				F3B773CF2634477500D39386 /* Secrets.h */,
 			);
 			name = Data;
 			sourceTree = "<group>";

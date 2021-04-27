@@ -71,7 +71,7 @@ extension FINSettingsVC: UITableViewDataSource {
         switch indexPath.section {
         case Settings.radius.rawValue:
             let sliderCell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell) as! FINSettingsSliderCell
-            sliderCell.setup(with: "number_of_kilometers", min: 1, max: 100, currentValue: radiusValue)
+            sliderCell.setup(with: "number_of_kilometers", min: 1, max: 1000, currentValue: radiusValue)
             sliderCell.valueChangedCallback = radiusValueChanged
             cell = sliderCell
         case Settings.timeout.rawValue:

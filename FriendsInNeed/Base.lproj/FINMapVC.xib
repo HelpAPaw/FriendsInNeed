@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -35,7 +35,7 @@
                     </connections>
                 </mapView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ttH-Qm-6yO" userLabel="Cancel Button">
-                    <rect key="frame" x="275" y="480" width="25" height="24"/>
+                    <rect key="frame" x="280" y="484" width="20" height="20"/>
                     <state key="normal">
                         <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </state>
@@ -69,7 +69,7 @@
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
             <point key="canvasLocation" x="129.375" y="153.16901408450704"/>
         </view>
-        <view alpha="0.90000000000000002" contentMode="scaleToFill" id="1V9-Vl-MM8">
+        <view alpha="0.90000000000000002" contentMode="scaleToFill" id="1V9-Vl-MM8" userLabel="Add Signal View">
             <rect key="frame" x="0.0" y="0.0" width="487" height="117"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -84,14 +84,19 @@
                         <action selector="onAttachPhotoButton:" destination="-1" eventType="touchUpInside" id="e2h-kg-MXP"/>
                     </connections>
                 </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Signal description" textAlignment="natural" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Signal description" textAlignment="natural" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gGJ-xu-E0V">
                     <rect key="frame" x="34" y="4" width="381" height="37"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="xeL-zA-ZkW"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="999" constant="200" id="xeL-zA-ZkW"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="xeL-zA-ZkW"/>
+                        </mask>
+                    </variation>
                 </textField>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Your phone" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Gi-Gw-2Xp" userLabel="Phone field">
                     <rect key="frame" x="34" y="45" width="381" height="34"/>
@@ -140,7 +145,7 @@
                 <constraint firstItem="GjR-Pw-wl2" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="8fk-tg-KNJ"/>
                 <constraint firstAttribute="bottom" secondItem="GjR-Pw-wl2" secondAttribute="bottom" constant="2" id="AmZ-D2-FHu"/>
                 <constraint firstItem="3Gi-Gw-2Xp" firstAttribute="trailing" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="B53-4Z-tm1"/>
-                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
+                <constraint firstAttribute="trailing" secondItem="VRP-un-208" secondAttribute="trailing" constant="2" id="GZt-0O-9fA"/>
                 <constraint firstItem="bHt-D4-pOj" firstAttribute="centerY" secondItem="1V9-Vl-MM8" secondAttribute="centerY" id="Lis-8h-vwj"/>
                 <constraint firstItem="gGJ-xu-E0V" firstAttribute="leading" secondItem="7PG-tS-RcE" secondAttribute="trailing" constant="2" id="NvF-h9-llb"/>
                 <constraint firstItem="VRP-un-208" firstAttribute="leading" secondItem="gGJ-xu-E0V" secondAttribute="trailing" id="Oor-5C-VMS"/>

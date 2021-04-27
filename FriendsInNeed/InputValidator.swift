@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 @objc class InputValidator: NSObject {
-    static func validateInput(for fields: Array<UITextField>, message: String, parent: UIViewController, validator: (String?) -> Bool) -> Bool {
-        for textField in fields {
-            if !validator(textField.text) {
+    static func validateInput(for fields: Array<UITextInput>, message: String, parent: UIViewController, validator: (String?) -> Bool) -> Bool {
+        for textInput in fields {
+            if !validator(textInput.text(in: textInput.textRange(from: textInput.beginningOfDocument, to: textInput.endOfDocument)!)) {
                 // show error
                 let alert = UIAlertController(title: NSLocalizedString("Ooops!", comment: ""), message: message, preferredStyle: .alert)
                 let okAction = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { (action) in
@@ -28,11 +28,11 @@ import UIKit
         return true
     }
     
-    @objc static func validateGeneralInput(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+    @objc static func validateGeneralInput(for fields: Array<UITextInput>, message: String, parent: UIViewController) -> Bool {
         return validateInput(for: fields, message: message, parent: parent, validator: hasText(testStr:))
     }
     
-    @objc static func validateEmail(for fields: Array<UITextField>, message: String, parent: UIViewController) -> Bool {
+    @objc static func validateEmail(for fields: Array<UITextInput>, message: String, parent: UIViewController) -> Bool {
         return validateInput(for: fields, message: message, parent: parent, validator: isValidEmail(_:))
     }
     

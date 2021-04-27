@@ -24,12 +24,12 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (strong, nonatomic) IBOutlet UIView *addSignalView;
-@property (weak, nonatomic) IBOutlet UITextField *signalTitleField;
+@property (weak, nonatomic) IBOutlet UITextView *signalTitleTextView;
 @property (weak, nonatomic) IBOutlet UITextField *authorPhoneField;
 @property (weak, nonatomic) IBOutlet UITextField *signalTypeField;
 @property (strong, nonatomic) UIPickerView *signalTypePicker;
@@ -59,6 +59,7 @@
 @property (strong, nonatomic) CLLocation *lastRefreshCenter;
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
 @property (strong, nonatomic) NSArray<NSNumber *> *selectedSignalTypes;
+@property (strong, nonatomic) UIColor *placeholderColor;
 
 @end
 
@@ -70,6 +71,10 @@
     _cancelButton.layer.shadowColor = [UIColor redColor].CGColor;
     _cancelButton.layer.shadowOffset = CGSizeMake(0, 0);
     _cancelButton.alpha = 0.0f;
+    
+    _signalTitleTextView.layer.cornerRadius = 5.0f;
+    _signalTitleTextView.layer.borderWidth = 1.0f;
+    _signalTitleTextView.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1.0].CGColor;
     
     _addSignalView.layer.cornerRadius = 5.0f;
     _addSignalView.layer.shadowOpacity = 1.0f;
@@ -185,6 +190,8 @@
     _filterIsActiveLabel.layer.cornerRadius = 15.0;
     _filterIsActiveLabel.layer.masksToBounds = YES;
     
+    _placeholderColor = [UIColor colorWithWhite:0.8 alpha:1.0];
+    
     [self setupAddSignalView];
     
     [self setupNavigationBar];
@@ -296,6 +303,30 @@
     [_mapView setRegion:region animated:YES];
 }
 
+#pragma mark - UITextViewDelegate
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ((textView == _signalTitleTextView) &&
+        [textView.textColor isEqual:_placeholderColor] &&
+        [textView isFirstResponder]) {
+            textView.text = nil;
+            textView.textColor = [UIColor darkTextColor];
+        }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ((textView == _signalTitleTextView) &&
+        ((textView.text == nil) || [textView.text isEqualToString:@""])) {
+        [self setPlaceholderInSignalDescriptionTextView];
+    }
+}
+
+- (void)setPlaceholderInSignalDescriptionTextView
+{
+    _signalTitleTextView.textColor = _placeholderColor;
+    _signalTitleTextView.text = NSLocalizedString(@"signal_description_placeholder", nil);
+}
 
 #pragma mark
 - (void)toggleSubmitMode
@@ -310,7 +341,7 @@
         _submitSignalAnnotation.coordinate = _mapView.centerCoordinate;
         [_mapView addAnnotation:_submitSignalAnnotation];
         
-        _signalTitleField.text = @"";
+        [self setPlaceholderInSignalDescriptionTextView];
         _authorPhoneField.text = [_dataManager getUserPhone];
     }
     else
@@ -358,7 +389,7 @@
                     [self.btnPhoto setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
                     self.signalPhoto = nil;
                     
-                    [self.signalTitleField resignFirstResponder];
+                    [self.signalTitleTextView resignFirstResponder];
                     [self.authorPhoneField resignFirstResponder];
                     [self.signalTypeField resignFirstResponder];
                 }
@@ -401,17 +432,23 @@
 
 - (IBAction)onSendButton:(id)sender
 {
+    // Delete placeholder before validation
+    if ([_signalTitleTextView.textColor isEqual:_placeholderColor]) {
+        _signalTitleTextView.text = @"";
+    }
+    
     // Input validation
-    BOOL validation = [InputValidator validateGeneralInputFor:@[_signalTitleField] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
+    BOOL validation = [InputValidator validateGeneralInputFor:@[_signalTitleTextView] message:NSLocalizedString(@"Please enter a description of the signal.", nil) parent:self];
     if (!validation)
     {
+        [_signalTitleTextView becomeFirstResponder];
         return;
     }
     
     CLS_LOG(@"Submitting new signal...");
     
     [self setSendingSignalMode];
-    [_dataManager submitNewSignalWithTitle:_signalTitleField.text
+    [_dataManager submitNewSignalWithTitle:_signalTitleTextView.text
                                       type:[_signalTypePicker selectedRowInComponent:0]
                             andAuthorPhone:(NSString *)_authorPhoneField.text
                                forLocation:_submitSignalAnnotation.coordinate
@@ -455,7 +492,7 @@
         }
     }];
     
-    [_signalTitleField resignFirstResponder];
+    [_signalTitleTextView resignFirstResponder];
     [_authorPhoneField resignFirstResponder];
 }
 
@@ -651,7 +688,7 @@
 
 - (void)userDidMoveMap:(UIGestureRecognizer*)gestureRecognizer
 {
-    [_signalTitleField resignFirstResponder];
+    [_signalTitleTextView resignFirstResponder];
     [_authorPhoneField resignFirstResponder];
     
     if (_isInSubmitMode == YES)
@@ -936,7 +973,7 @@
 #pragma mark - Menu
 - (void)menuButtonTapped:(id)sender
 {
-    [_signalTitleField resignFirstResponder];
+    [_signalTitleTextView resignFirstResponder];
     [_authorPhoneField resignFirstResponder];
     
     [self.viewDeckController openSide:IIViewDeckSideLeft animated:YES];

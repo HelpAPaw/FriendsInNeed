@@ -32,6 +32,7 @@
 "registration_required" = "Изисква се регистрация";
 "only_registered_users_can_submit_signals" = "Само регистрирани потребители могат да подават сигнали";
 "filter_is_active" = "Има активен филтър";
+"signal_description_placeholder" = "Описание на сигнала\n(какво е състоянието на животното, от каква помощ има нужда и т.н.)";
 
 //FinMenuVC.m
 "Login" = "Влез";

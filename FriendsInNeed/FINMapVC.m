@@ -304,6 +304,7 @@
 }
 
 #pragma mark - UITextViewDelegate
+// UITextView doesn't have a placeholder so we have to fake it, unfortunatelly
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
     if ((textView == _signalTitleTextView) &&

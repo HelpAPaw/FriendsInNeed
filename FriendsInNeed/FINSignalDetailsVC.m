@@ -14,8 +14,10 @@
 #import "FINComment.h"
 #import "FINError.h"
 #import "FINLoginVC.h"
+#import "FINImagePickerController.h"
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 
 
 #define kTitleIndex     0
@@ -56,7 +58,7 @@ enum {
 #define kCellIdentifierAuthor   @"AuthorCell"
 #define kCellIdentifierDate     @"DateCell"
 
-@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate,imageTappableDelegate>
+@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate,FINSignalPhotoDelegate, FINImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
@@ -76,6 +78,8 @@ enum {
 @property (assign, nonatomic) BOOL keyboardIsShown;
 @property (assign, nonatomic) BOOL commentsAreLoaded;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
+@property (strong, nonatomic) FINImagePickerController *imagePickerController;
+
 
 @end
 
@@ -293,11 +297,15 @@ enum {
             [detailsCell setAuthor:_annotation.signal.authorName];
             [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
             [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.dateCreated]];
+            if ([_annotation.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
+                [detailsCell setUploadPhotoButtonIsVisible:YES];
+            }
             if (_annotation.signal.photoUrl)
             {
                 detailsCell.delegate = self;
                 [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
             }
+            
             NSString *typeString = @"-";
             if (_annotation.signal.type < [FINDataManager sharedManager].signalTypes.count)
             {
@@ -765,11 +773,37 @@ enum {
     [self presentViewController:loginVC animated:YES completion:^{}];
 }
 
-- (void)imageTapped:(UIImage *)image {
+#pragma mark - FINSignalPhotoDelegate
+
+- (void)imageTapped:(UIImage *)image
+{
     FINSignalPhotoVC *signalPhotoVC = [[FINSignalPhotoVC alloc] init];
     [signalPhotoVC injectWithImg:image];
     signalPhotoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.navigationController presentViewController:signalPhotoVC animated:YES completion:nil];
+}
+
+- (void)didTapUploadPhotoButton:(UIView *)sender
+{
+    _imagePickerController = [[FINImagePickerController alloc] initWithDelegate:self];
+    [_imagePickerController showImagePickerFrom:self withSourceView:sender];
+}
+
+#pragma mark - FINImagePickerControllerDelegate
+
+- (void)didPickImage:(UIImage *)image
+{
+    MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    loadingIndicator.label.text = NSLocalizedString(@"uploading_photo", nil);
+    [[FINDataManager sharedManager] uploadPhoto:image forSignal:_annotation.signal withCompletion:^(FINError *error) {
+        [loadingIndicator hideAnimated:YES];
+        
+        if (error == nil) {
+            [self.tableView reloadData];
+        } else {
+            [self showAlertViewControllerWithTitle:NSLocalizedString(@"Error", nil) message:error.message actions:nil];
+        }
+    }];
 }
 
 @end

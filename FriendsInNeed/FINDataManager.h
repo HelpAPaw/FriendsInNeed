@@ -39,6 +39,9 @@
 - (void)getCountForSignalsWithStatus:(FINSignalStatus)status withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getTotalSignalCountWithCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)uploadPhoto:(UIImage *)photo
+          forSignal:(FINSignal *)signal
+     withCompletion:(void (^)(FINError *error))completion;
 - (void)submitNewSignalWithTitle:(NSString *)title
                             type:(NSInteger)type
                   andAuthorPhone:(NSString *)authorPhone
@@ -50,6 +53,7 @@
 - (BOOL)userIsLogged;
 - (BOOL)getUserHasAcceptedPrivacyPolicy;
 - (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value;
+- (NSString *)getUserId;
 - (NSString *)getUserName;
 - (NSString *)getUserEmail;
 - (NSString *)getUserPhone;

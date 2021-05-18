@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -131,9 +131,20 @@
                         </attributedString>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7u-Kk-nbl">
+                        <rect key="frame" x="238" y="64" width="133" height="22"/>
+                        <color key="tintColor" red="0.97647058819999999" green="0.50980392159999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" title="Upload photo" image="icloud.and.arrow.up" catalog="system">
+                            <color key="titleColor" red="0.97647058819999999" green="0.50980392159999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="onUploadPhotoButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Wo4-LF-OSl"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="zSG-km-x6o" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="1Pj-aJ-Sxe"/>
+                    <constraint firstItem="l7u-Kk-nbl" firstAttribute="centerY" secondItem="i7Z-IZ-R4E" secondAttribute="centerY" id="3VG-lg-gpo"/>
                     <constraint firstItem="oxU-LU-43t" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="4oJ-qX-zyu"/>
                     <constraint firstItem="UQT-kp-Xll" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="6O2-yw-633"/>
                     <constraint firstItem="Xe4-u3-AGd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" symbolic="YES" id="6sK-N4-CY1"/>
@@ -142,6 +153,7 @@
                     <constraint firstItem="oxU-LU-43t" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="GYh-YG-HO3"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gCA-Lc-iFK" secondAttribute="trailing" id="H7o-Sl-4z1"/>
                     <constraint firstItem="i7Z-IZ-R4E" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="HbW-Fx-dIb"/>
+                    <constraint firstItem="l7u-Kk-nbl" firstAttribute="centerX" secondItem="i7Z-IZ-R4E" secondAttribute="centerX" id="W3G-XC-lxo"/>
                     <constraint firstItem="P3V-ZX-Ss5" firstAttribute="top" secondItem="oxU-LU-43t" secondAttribute="bottom" constant="8" id="W6u-w0-RuX"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zSG-km-x6o" secondAttribute="trailing" id="aYk-zA-eTJ"/>
                     <constraint firstItem="i7Z-IZ-R4E" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="apQ-f8-F1g"/>
@@ -160,6 +172,7 @@
             <connections>
                 <outlet property="btnCall" destination="zSG-km-x6o" id="5hA-Do-rJ8"/>
                 <outlet property="btnCallHeightConstraint" destination="3iI-nZ-iJ8" id="RIr-Ac-Ugq"/>
+                <outlet property="btnUploadPhoto" destination="l7u-Kk-nbl" id="cbT-2j-8g7"/>
                 <outlet property="imgPhotoView" destination="i7Z-IZ-R4E" id="CPs-yF-PJU"/>
                 <outlet property="lbAuthor" destination="gCA-Lc-iFK" id="obT-Kb-TLe"/>
                 <outlet property="lbDate" destination="UQT-kp-Xll" id="9DR-9e-yNt"/>
@@ -173,5 +186,6 @@
     <resources>
         <image name="ic_call.png" width="22" height="22"/>
         <image name="ic_paw.png" width="256" height="256"/>
+        <image name="icloud.and.arrow.up" catalog="system" width="128" height="106"/>
     </resources>
 </document>

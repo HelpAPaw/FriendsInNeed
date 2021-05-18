@@ -25,6 +25,7 @@
 "only_registered_users_can_change_status" = "Only registered users can change signal status";
 "only_registered_users_can_comment" = "Only registered users can write comments";
 "signal_type" = "Signal type: ";
+"uploading_photo" = "Uploading photo...";
 
 //FINSettingsVC
 "signal_types_footer" = "Signal types you want to be notified about";

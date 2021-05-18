@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbAuthor;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnCall;
+@property (weak, nonatomic) IBOutlet UIButton *btnUploadPhoto;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *btnCallHeightConstraint;
 @property (strong, nonatomic) NSDictionary *italicAttributes;
 
@@ -30,7 +31,7 @@
 }
 @synthesize delegate;
 
-- (void)setDelegate:(id <imageTappableDelegate>)aDelegate {
+- (void)setDelegate:(id <FINSignalPhotoDelegate>)aDelegate {
     if (delegate != aDelegate) {
         delegate = aDelegate;
     }
@@ -106,12 +107,25 @@
 
 - (void)setPhoto:(UIImage *)photo
 {
+    [self setUploadPhotoButtonIsVisible:NO];
+    
     _imgPhotoView.image = photo;
     UITapGestureRecognizer *singleFingerTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
     _imgPhotoView.userInteractionEnabled = true ;
     [_imgPhotoView addGestureRecognizer:singleFingerTap];
+}
+
+- (void)setUploadPhotoButtonIsVisible:(BOOL)isVisible
+{
+    _imgPhotoView.hidden = isVisible;
+    _btnUploadPhoto.hidden = !isVisible;
+}
+
+- (IBAction)onUploadPhotoButton:(id)sender
+{
+    [delegate didTapUploadPhotoButton:sender];
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer

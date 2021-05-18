@@ -68,6 +68,7 @@
 "only_registered_users_can_change_status" = "Само регистрирани потребители могат да променят статуса на сигнал";
 "only_registered_users_can_comment" = "Само регистрирани потребители могат да пишат коментари";
 "signal_type" = "Тип на сигнала: ";
+"uploading_photo" = "Качване на снимката...";
 
 //Signal
 "(empty description)" = "(празно описание)";

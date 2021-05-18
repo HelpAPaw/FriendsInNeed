@@ -13,6 +13,7 @@
 #import <ViewDeck/ViewDeck.h>
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "FINImagePickerController.h"
 #import "FINGlobalConstants.pch"
 @import FirebaseCrashlytics;
 
@@ -24,7 +25,7 @@
 #define kStandardSignalAnnotationView   @"StandardSignalAnnotationView"
 
 
-@interface FINMapVC () <MKMapViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate, UITextViewDelegate>
+@interface FINMapVC () <MKMapViewDelegate, UIGestureRecognizerDelegate, UIPickerViewDelegate, UIPickerViewDataSource, FINSignalTypesSelectionDelegate, FINImagePickerControllerDelegate, UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
@@ -60,6 +61,7 @@
 @property (assign, nonatomic) NSInteger   lastRefreshRadius;
 @property (strong, nonatomic) NSArray<NSNumber *> *selectedSignalTypes;
 @property (strong, nonatomic) UIColor *placeholderColor;
+@property (strong, nonatomic) FINImagePickerController *imagePickerController;
 
 @end
 
@@ -499,62 +501,15 @@
 
 - (IBAction)onAttachPhotoButton:(id)sender
 {
-    UIAlertController *photoModeAlert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:NSLocalizedString(@"Take Photo",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [self setPhotoSourceCamera];
-        [self showPhotoPicker];
-    }];
-    UIAlertAction *chooseExisting = [UIAlertAction actionWithTitle:NSLocalizedString(@"Choose Existing",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-        [self setPhotoSourceSavedPhotos];
-        [self showPhotoPicker];
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil) style:UIAlertActionStyleCancel handler:nil];
-    
-    [photoModeAlert addAction:takePhoto];
-    [photoModeAlert addAction:chooseExisting];
-    [photoModeAlert addAction:cancel];
-    
-    UIPopoverPresentationController *popPresenter = [photoModeAlert popoverPresentationController];
-    popPresenter.sourceView = _btnPhoto;
-    popPresenter.sourceRect = _btnPhoto.bounds;
-    
-    [self presentViewController:photoModeAlert animated:YES completion:^{}];
+    _imagePickerController = [[FINImagePickerController alloc] initWithDelegate:self];
+    [_imagePickerController showImagePickerFrom:self withSourceView:sender];
 }
 
-- (void)setPhotoSourceCamera
+#pragma mark - FINImagePickerControllerDelegate
+- (void)didPickImage:(UIImage *)image
 {
-    _photoSource = UIImagePickerControllerSourceTypeCamera;
-}
-
-- (void)setPhotoSourceSavedPhotos
-{
-    _photoSource = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-}
-
-- (void)showPhotoPicker
-{
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.sourceType = _photoSource;
-    if (_photoSource == UIImagePickerControllerSourceTypeCamera)
-    {
-        picker.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        picker.showsCameraControls = YES;
-    }
-    [self presentViewController:picker animated:YES completion:^ {}];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
-{
-    _signalPhoto = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+    _signalPhoto = image;
     [_btnPhoto setImage:_signalPhoto forState:UIControlStateNormal];
-    if (_photoSource == UIImagePickerControllerSourceTypeCamera)
-    {
-        UIImageWriteToSavedPhotosAlbum(_signalPhoto, nil, nil, nil);
-    }
-    
-    [picker dismissViewControllerAnimated:YES completion:^{}];
 }
 
 - (void)setSendingSignalMode

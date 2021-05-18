@@ -434,6 +434,26 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
+- (void)uploadPhoto:(UIImage *)photo
+          forSignal:(FINSignal *)signal
+     withCompletion:(void (^)(FINError *error))completion
+{
+    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", signal.signalId];
+    [Backendless.shared.fileService uploadFileWithFileName:fileName
+                                                  filePath:kSignalPhotosDirectory
+                                               fileContent:UIImageJPEGRepresentation(photo, 0.1)
+                                                 overwrite:YES
+                                           responseHandler:^(BackendlessFile * _Nonnull savedFile) {
+        signal.photoUrl = [NSURL URLWithString:savedFile.fileUrl];
+        [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileUrl completion:^{
+            completion(nil);
+        }];
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
 - (void)submitNewSignalWithTitle:(NSString *)title
                             type:(NSInteger)type
                   andAuthorPhone:(NSString *)authorPhone
@@ -464,19 +484,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 
             if (photo)
             {
-                NSString *fileName = [NSString stringWithFormat:@"%@.jpg", savedSignal.signalId];
-                [Backendless.shared.fileService uploadFileWithFileName:fileName
-                                                              filePath:kSignalPhotosDirectory
-                                                           fileContent:UIImageJPEGRepresentation(photo, 0.1)
-                                                             overwrite:YES
-                                                       responseHandler:^(BackendlessFile * _Nonnull savedFile) {
-                    savedSignal.photoUrl = [NSURL URLWithString:savedFile.fileUrl];
-                    [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileUrl completion:^{
-                        completion(savedSignal, nil);
-                    }];
-                } errorHandler:^(Fault * _Nonnull fault) {
-                    FINError *error = [[FINError alloc] initWithMessage:fault.message];
-                    completion(savedSignal, error);
+                [self uploadPhoto:photo forSignal:savedSignal withCompletion:^(FINError *uploadError) {
+                    completion(savedSignal, uploadError);
                 }];
             }
             else
@@ -563,6 +572,11 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             CLS_LOG(@"Could not save privacy policy acception: %@", fault.message);
         }];
     }
+}
+
+- (NSString *)getUserId
+{
+    return Backendless.shared.userService.currentUser.objectId;
 }
 
 - (NSString *)getUserName

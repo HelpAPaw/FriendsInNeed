@@ -50,6 +50,7 @@
 		F35906071E058D4200A61060 /* FINFaqVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35906051E058D4200A61060 /* FINFaqVC.m */; };
 		F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F359060A1E059CC700A61060 /* FINFaqCell.m */; };
 		F359060D1E059CC700A61060 /* FINFaqCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F359060B1E059CC700A61060 /* FINFaqCell.xib */; };
+		F362016C2653F02200907348 /* FINImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = F362016B2653F02200907348 /* FINImagePickerController.m */; };
 		F369A8C322A6BBF8005183F9 /* RLMSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = F369A8C222A6BBF8005183F9 /* RLMSignal.m */; };
 		F381ACCE1CE07E0B0050B238 /* FINError.m in Sources */ = {isa = PBXBuildFile; fileRef = F381ACCD1CE07E0B0050B238 /* FINError.m */; };
 		F38B72F01C00E04F00FBE20C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B72EF1C00E04F00FBE20C /* main.m */; };
@@ -186,6 +187,8 @@
 		F35906091E059CC700A61060 /* FINFaqCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINFaqCell.h; sourceTree = "<group>"; };
 		F359060A1E059CC700A61060 /* FINFaqCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINFaqCell.m; sourceTree = "<group>"; };
 		F359060B1E059CC700A61060 /* FINFaqCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINFaqCell.xib; sourceTree = "<group>"; };
+		F362016B2653F02200907348 /* FINImagePickerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FINImagePickerController.m; sourceTree = "<group>"; };
+		F362016D2653F09C00907348 /* FINImagePickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINImagePickerController.h; sourceTree = "<group>"; };
 		F369A8C122A6BBF8005183F9 /* RLMSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RLMSignal.h; sourceTree = "<group>"; };
 		F369A8C222A6BBF8005183F9 /* RLMSignal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RLMSignal.m; sourceTree = "<group>"; };
 		F381ACCC1CE07E0B0050B238 /* FINError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINError.h; sourceTree = "<group>"; };
@@ -363,6 +366,8 @@
 			children = (
 				F301FE021EDEBA1000880ECE /* InputValidator.swift */,
 				F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */,
+				F362016D2653F09C00907348 /* FINImagePickerController.h */,
+				F362016B2653F02200907348 /* FINImagePickerController.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -883,6 +888,7 @@
 				F38B73161C04412A00FBE20C /* FINLocationManager.m in Sources */,
 				F33F7499214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift in Sources */,
 				F38B72F01C00E04F00FBE20C /* main.m in Sources */,
+				F362016C2653F02200907348 /* FINImagePickerController.m in Sources */,
 				F359060C1E059CC700A61060 /* FINFaqCell.m in Sources */,
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,

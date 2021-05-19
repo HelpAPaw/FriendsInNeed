@@ -30,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (weak, nonatomic) IBOutlet UILabel *phoneLabel;
 @property (weak, nonatomic) IBOutlet UIButton *whyButton;
+@property (weak, nonatomic) IBOutlet UIButton *forgotPasswordButton;
 @property (weak, nonatomic) IBOutlet UITextField *phoneTextField;
 @property (weak, nonatomic) IBOutlet UIButton *registerLoginButton;
 @property (weak, nonatomic) IBOutlet UIView *facebookSeparatorView;
@@ -110,6 +111,7 @@
             self.registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Register", nil)];
             //To keep the title after state changes (e.g. user taps)
             [self.registerLoginButton setTitle:NSLocalizedString(@"Register", nil) forState:UIControlStateNormal];
+            self.forgotPasswordButton.hidden = YES;
             [self.registerLoginButton layoutIfNeeded];
         }];
         
@@ -131,6 +133,7 @@
         self.phoneLabel.hidden = YES;
         self.phoneTextField.hidden = YES;
         self.whyButton.hidden = YES;
+        self.forgotPasswordButton.hidden = NO;
         
         //For immediate change
         self.registerLoginButton.titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Login", nil)];
@@ -224,6 +227,43 @@
         
         [self login];
     }
+}
+
+- (IBAction)onForgotPasswordButton:(id)sender
+{
+    NSString *validationError = NSLocalizedString(@"enter_registration_email", nil);
+    BOOL inputValidation = [InputValidator validateEmailFor:@[_emailTextField] message:validationError parent:self];
+    if (!inputValidation)
+    {
+        return;
+    }
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                     style:UIAlertActionStyleCancel
+                                                   handler:nil];
+    UIAlertAction *yes = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+                                                     style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+        [self resetPassword];
+    }];
+    [self showAlertViewControllerWithTitle:NSLocalizedString(@"Reset password", nil)
+                                   message:NSLocalizedString(@"confirm_reset_password", nil)
+                                   actions:@[cancel, yes]];
+}
+
+- (void)resetPassword
+{
+    [self.activityIndicator startAnimating];
+    [[FINDataManager sharedManager] resetPasswordForEmail:self.emailTextField.text withCompletion:^(FINError *error) {
+        [self.activityIndicator stopAnimating];
+        if (error == nil) {
+            [self showAlertViewControllerWithTitle:NSLocalizedString(@"Success!", nil)
+                                           message:NSLocalizedString(@"password_reset_email_sent", nil)
+                                           actions:nil];
+        } else {
+            [self showError:error.message];
+        }
+    }];
 }
 
 - (void)showPrivacyPolicyWithAcceptHandler:(void (^)(UIAlertAction *action))acceptHandler andDeclineHandler:(void (^)(UIAlertAction *action))declineHandler

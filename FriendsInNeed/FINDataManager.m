@@ -671,6 +671,18 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
+- (void)resetPasswordForEmail:(NSString *)email withCompletion:(void (^)(FINError *error))completion
+{
+    [Backendless.shared.userService restorePasswordWithIdentity:email
+                                                responseHandler:^{
+        completion(nil);
+    }
+                                                   errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
 // Public method for getting signal comments
 - (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion
 {

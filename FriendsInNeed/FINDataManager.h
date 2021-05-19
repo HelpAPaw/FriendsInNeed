@@ -34,9 +34,14 @@
 + (BOOL)setNotificationShownForSignalId:(NSString *)signalId;
 
 - (void)updateDeviceRegistrationWithLocation:(CLLocation *)location;
-- (void)getSignalsForNewLocation:(CLLocation *)location withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)getSignalsForLocation:(CLLocation *)location inRadius:(NSInteger)radius overridingDampening:(BOOL)overrideDampening withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
-- (void)getCountForSignalsWithStatus:(FINSignalStatus)status withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
+- (void)getSignalsForNewLocation:(CLLocation *)location
+           withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)getSignalsForLocation:(CLLocation *)location
+                     inRadius:(NSInteger)radius
+          overridingDampening:(BOOL)overrideDampening
+        withCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)getCountForSignalsWithStatus:(FINSignalStatus)status
+               withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getTotalSignalCountWithCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
 - (void)uploadPhoto:(UIImage *)photo
@@ -48,8 +53,12 @@
                      forLocation:(CLLocationCoordinate2D)locationCoordinate
                        withPhoto:(UIImage *)photo
                       completion:(void (^)(FINSignal *savedSignal, FINError *error))completion;
-- (void)setStatus:(FINSignalStatus)status forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINError *error))completion;
-- (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion;
+- (void)setStatus:(FINSignalStatus)status
+        forSignal:(FINSignal *)signal
+withCurrentComments:(NSArray<FINComment *> *)currentComments
+       completion:(void (^)(FINError *error))completion;
+- (void)getSignalWithID:(NSString *)signalId
+             completion:(void (^)(FINSignal *signal, FINError *error))completion;
 - (BOOL)userIsLogged;
 - (BOOL)getUserHasAcceptedPrivacyPolicy;
 - (void)setUserHasAcceptedPrivacyPolicy:(BOOL)value;
@@ -57,12 +66,25 @@
 - (NSString *)getUserName;
 - (NSString *)getUserEmail;
 - (NSString *)getUserPhone;
-- (void)registerUser:(NSString *)name withEmail:(NSString *)email password:(NSString *)password phoneNumber:(NSString *)phoneNumber completion:(void (^)(FINError *error))completion;
-- (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion;
-- (void)loginWithFacebookAccessToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion;
+- (void)registerUser:(NSString *)name
+           withEmail:(NSString *)email
+            password:(NSString *)password
+         phoneNumber:(NSString *)phoneNumber
+          completion:(void (^)(FINError *error))completion;
+- (void)loginWithEmail:(NSString *)email
+           andPassword:(NSString *)password
+            completion:(void (^)(FINError *error))completion;
+- (void)loginWithFacebookAccessToken:(NSString *)tokenString
+                          completion:(void (^)(FINError *error))completion;
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;
-- (void)getCommentsForSignal:(FINSignal *)signal completion:(void (^)(NSArray *comments, FINError *error))completion;
-- (void)saveComment:(NSString *)commentText forSignal:(FINSignal *)signal withCurrentComments:(NSArray<FINComment *> *)currentComments completion:(void (^)(FINComment *comment, FINError *error))completion;
+- (void)resetPasswordForEmail:(NSString *)email
+               withCompletion:(void (^)(FINError *error))completion;
+- (void)getCommentsForSignal:(FINSignal *)signal
+                  completion:(void (^)(NSArray *comments, FINError *error))completion;
+- (void)saveComment:(NSString *)commentText
+          forSignal:(FINSignal *)signal
+withCurrentComments:(NSArray<FINComment *> *)currentComments
+         completion:(void (^)(FINComment *comment, FINError *error))completion;
 - (BOOL)getIsInTestMode;
 - (void)setIsInTestMode:(BOOL)isInTestMode;
 - (void)registerDeviceToken:(NSData *)deviceToken;

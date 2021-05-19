@@ -133,7 +133,6 @@
 		147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToolbar.swift; sourceTree = "<group>"; };
 		147F2CF81E72D2EC007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		147F2D021E72D48F007B1017 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINLoginVC.xib; sourceTree = "<group>"; };
-		147F2D061E72DC9B007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINLoginVC.strings"; sourceTree = "<group>"; };
 		147F2D0A1E72E6D2007B1017 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		147F2D0C1E72E6D9007B1017 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		148912CD1E72F94A00655DD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMapVC.xib; sourceTree = "<group>"; };
@@ -238,6 +237,7 @@
 		F3C484711C6C111D0067A169 /* FINLoginVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINLoginVC.m; sourceTree = "<group>"; };
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
+		F3C4AA5C265549F500D38419 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINLoginVC.strings"; sourceTree = "<group>"; };
 		F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINAdminVC.swift; sourceTree = "<group>"; };
 		F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINAdminVC.xib; sourceTree = "<group>"; };
 		F3D4046820680D3600A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.strings"; sourceTree = "<group>"; };
@@ -974,7 +974,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				147F2D021E72D48F007B1017 /* Base */,
-				147F2D061E72DC9B007B1017 /* bg-BG */,
+				F3C4AA5C265549F500D38419 /* bg-BG */,
 			);
 			name = FINLoginVC.xib;
 			sourceTree = "<group>";

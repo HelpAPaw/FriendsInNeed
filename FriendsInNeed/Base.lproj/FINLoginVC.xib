@@ -15,6 +15,7 @@
                 <outlet property="emailTextField" destination="Sas-B9-08t" id="DYx-Lx-riA"/>
                 <outlet property="facebookLoginButton" destination="dFX-Gd-gp1" id="9zl-pj-lKi"/>
                 <outlet property="facebookSeparatorView" destination="2pV-KB-Drb" id="g3J-Fd-wJ6"/>
+                <outlet property="forgotPasswordButton" destination="mzO-vq-dC9" id="xqn-7q-p5b"/>
                 <outlet property="hintLabel" destination="5kY-zC-Bse" id="Sat-FQ-lhO"/>
                 <outlet property="nameLabel" destination="saT-hO-LZA" id="ItK-lI-cbV"/>
                 <outlet property="nameTextField" destination="wdr-Ti-WQ7" id="0zY-J5-iMR"/>
@@ -92,7 +93,7 @@
                     <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0Y9-BS-n7e">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="293"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="333"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You need to register before you can submit signals" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5kY-zC-Bse">
                                     <rect key="frame" x="10" y="0.0" width="355" height="50"/>
@@ -151,8 +152,15 @@
                                         <outlet property="delegate" destination="-1" id="7fR-AK-luk"/>
                                     </connections>
                                 </textField>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mzO-vq-dC9">
+                                    <rect key="frame" x="42.5" y="202" width="290" height="30"/>
+                                    <state key="normal" title="Forgot password?"/>
+                                    <connections>
+                                        <action selector="onForgotPasswordButton:" destination="-1" eventType="touchUpInside" id="aQa-Qb-i0l"/>
+                                    </connections>
+                                </button>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="saT-hO-LZA">
-                                    <rect key="frame" x="42.5" y="197" width="290" height="21"/>
+                                    <rect key="frame" x="42.5" y="237" width="290" height="21"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="21" id="BIh-qH-LRh"/>
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="290" id="hxf-1G-tDB"/>
@@ -162,7 +170,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wdr-Ti-WQ7" userLabel="Name Text Field">
-                                    <rect key="frame" x="42.5" y="197" width="290" height="30"/>
+                                    <rect key="frame" x="42.5" y="237" width="290" height="30"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="5d4-JI-sLm"/>
@@ -175,7 +183,7 @@
                                     </connections>
                                 </textField>
                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ChW-NI-d1N" userLabel="Phone Label">
-                                    <rect key="frame" x="42.5" y="197" width="290" height="21"/>
+                                    <rect key="frame" x="42.5" y="237" width="290" height="21"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="21" id="Dmc-9A-G5O"/>
                                     </constraints>
@@ -184,7 +192,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="atK-Ne-sKb" userLabel="Phone Text Field">
-                                    <rect key="frame" x="42.5" y="197" width="290" height="30"/>
+                                    <rect key="frame" x="42.5" y="237" width="290" height="30"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="DeR-PW-K7L"/>
@@ -197,7 +205,7 @@
                                     </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wbC-vS-778">
-                                    <rect key="frame" x="137.5" y="202" width="100" height="30"/>
+                                    <rect key="frame" x="137.5" y="242" width="100" height="30"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="iYg-wb-q5z"/>
                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="vR9-Bz-n0K"/>
@@ -210,14 +218,14 @@
                                     </connections>
                                 </button>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2pV-KB-Drb" userLabel="Facebook separator">
-                                    <rect key="frame" x="0.0" y="242" width="375" height="1"/>
+                                    <rect key="frame" x="0.0" y="282" width="375" height="1"/>
                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="TSb-Cq-kRe"/>
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1" userLabel="Facebook button">
-                                    <rect key="frame" x="87.5" y="253" width="200" height="40"/>
+                                    <rect key="frame" x="87.5" y="293" width="200" height="40"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="200" id="Ao1-gx-IxU"/>
                                         <constraint firstAttribute="height" constant="40" id="svh-HA-TXj"/>
@@ -234,6 +242,7 @@
                                 <constraint firstItem="ChW-NI-d1N" firstAttribute="leading" secondItem="atK-Ne-sKb" secondAttribute="leading" id="VVy-MP-M5p"/>
                                 <constraint firstItem="5kY-zC-Bse" firstAttribute="leading" secondItem="0Y9-BS-n7e" secondAttribute="leading" constant="10" id="Y7R-b3-arZ"/>
                                 <constraint firstAttribute="trailing" secondItem="5kY-zC-Bse" secondAttribute="trailing" constant="10" id="jHz-oT-Aiz"/>
+                                <constraint firstItem="mzO-vq-dC9" firstAttribute="leading" secondItem="aLU-m9-fxe" secondAttribute="leading" id="tEA-MH-hjl"/>
                             </constraints>
                         </stackView>
                     </subviews>
@@ -246,10 +255,10 @@
                     </constraints>
                 </scrollView>
                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Bge-ec-XTM">
-                    <rect key="frame" x="107.5" y="251" width="20" height="20"/>
+                    <rect key="frame" x="107.5" y="291" width="20" height="20"/>
                 </activityIndicatorView>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60E-TK-uuz">
-                    <rect key="frame" x="288.5" y="236.5" width="44" height="30"/>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60E-TK-uuz">
+                    <rect key="frame" x="0.0" y="276.5" width="332.5" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="PFH-jA-GD8"/>
                     </constraints>
@@ -272,6 +281,7 @@
                 <constraint firstItem="HPy-Be-HpR" firstAttribute="trailing" secondItem="RXZ-GD-Klk" secondAttribute="trailing" id="ZQq-c7-ofl"/>
                 <constraint firstItem="60E-TK-uuz" firstAttribute="centerY" secondItem="ChW-NI-d1N" secondAttribute="centerY" id="Zs0-v1-dxV"/>
                 <constraint firstAttribute="bottom" secondItem="RXZ-GD-Klk" secondAttribute="bottom" id="bot-jo-TYq"/>
+                <constraint firstItem="60E-TK-uuz" firstAttribute="leading" secondItem="HPy-Be-HpR" secondAttribute="leading" id="dtW-gH-Kio"/>
                 <constraint firstItem="HPy-Be-HpR" firstAttribute="leading" secondItem="RXZ-GD-Klk" secondAttribute="leading" id="f5r-n7-GCC"/>
                 <constraint firstItem="ocI-Gl-ZIK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="g19-zl-24C"/>
                 <constraint firstItem="ocI-Gl-ZIK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" id="i0d-zR-fR0"/>

@@ -14,12 +14,17 @@
 "Success!" = "Успех!";
 "A confirmation link has been sent on your email. Please click it to complete your registration." = "Линк за потвърждение е изпратен на имейла Ви. Моля кликнете на него за да завършите регистрацията си.";
 "ОК" = "Добре";
+"Yes" = "Да";
 "Something went wrong! Server said:\n%@" = "Нещо се обърка! Сървърът каза:\n%@";
 "Ooops!" = "Ооопс!";
 "Why do you want my phone number?" = "Защо искате телефонния ми номер?";
 "Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted." = "Въвеждането на вашия телефонен номер  не се изисква за регистрацията. Въпреки това ние силно ви препоръчваме да го направите, за да може да сев свържем с вас ако доброволец се нуждае от информация за сигнал, който сте подали.";
 "I see" = "Разбрах";
 "Please fill all required fields" = "Моля попълнете всички задължителни полета";
+"enter_registration_email" = "Моля въведете имейлa, с който сте се регистрирали";
+"Reset password" = "Промяна на паролата";
+"confirm_reset_password" = "Ако вече сте се регистрирали, но сте забравили паролата си, можете да я промените. Желаете ли да продължите?";
+"password_reset_email_sent" = "Изпратихме Ви имейл с линк, от който можете да промените паролата си";
 
 //FinMapVC.m
 "Empty description" = "Празно описание";

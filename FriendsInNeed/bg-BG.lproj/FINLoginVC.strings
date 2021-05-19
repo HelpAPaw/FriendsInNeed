@@ -1,6 +1,6 @@
 
 /* Class = "UILabel"; text = "You need to register before you can submit signals"; ObjectID = "5kY-zC-Bse"; */
-"5kY-zC-Bse.text" = "Трябва да се регистрирате преди да може да подавата сигнали";
+"5kY-zC-Bse.text" = "Трябва да се регистрирате преди да може да подавате сигнали";
 
 /* Class = "UIButton"; normalTitle = "Why?"; ObjectID = "60E-TK-uuz"; */
 "60E-TK-uuz.normalTitle" = "Защо?";
@@ -9,7 +9,7 @@
 "ChW-NI-d1N.text" = "Тел:";
 
 /* Class = "UILabel"; text = "Email:"; ObjectID = "K16-C2-XCi"; */
-"K16-C2-XCi.text" = "Емейл:";
+"K16-C2-XCi.text" = "Имейл:";
 
 /* Class = "UISegmentedControl"; Pzg-IJ-Iml.segmentTitles[0] = "Вход"; ObjectID = "Pzg-IJ-Iml"; */
 "Pzg-IJ-Iml.segmentTitles[0]" = "Вход";
@@ -22,6 +22,9 @@
 
 /* Class = "UILabel"; text = "Password:"; ObjectID = "ma8-2h-gbd"; */
 "ma8-2h-gbd.text" = "Парола:";
+
+/* Class = "UIButton"; normalTitle = "Forgot password?"; ObjectID = "mzO-vq-dC9"; */
+"mzO-vq-dC9.normalTitle" = "Забравена парола?";
 
 /* Class = "UILabel"; text = "Name:"; ObjectID = "saT-hO-LZA"; */
 "saT-hO-LZA.text" = "Име:";

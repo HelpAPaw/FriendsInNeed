@@ -16,7 +16,7 @@
 "A4" = "No. Your location is obtained and used only locally on your device. It will not be recorded on a server or used with any other purpose beside notifying you of animals in need in your area.";
 
 //FINLoginVC.m
-"enter_registration_email" = "Please the email you used to register";
+"enter_registration_email" = "Please enter the email you used to register";
 "confirm_reset_password" = "If you have already registered but have forgotten your password you can reset it. Do you want to continue?";
 "password_reset_email_sent" = "We sent you an email with a link from which you can reset your password";
 

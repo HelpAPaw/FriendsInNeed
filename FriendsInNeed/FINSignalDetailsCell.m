@@ -29,11 +29,10 @@
     [super awakeFromNib];
     // Initialization code
 }
-@synthesize delegate;
 
-- (void)setDelegate:(id <FINSignalPhotoDelegate>)aDelegate {
-    if (delegate != aDelegate) {
-        delegate = aDelegate;
+- (void)setDelegate:(id <FINPhotoDelegate, FINSignalPhotoButtonDelegate>)aDelegate {
+    if (_delegate != aDelegate) {
+        _delegate = aDelegate;
     }
 }
 
@@ -113,7 +112,7 @@
     UITapGestureRecognizer *singleFingerTap =
     [[UITapGestureRecognizer alloc] initWithTarget:self
                                             action:@selector(handleSingleTap:)];
-    _imgPhotoView.userInteractionEnabled = true ;
+    _imgPhotoView.userInteractionEnabled = true;
     [_imgPhotoView addGestureRecognizer:singleFingerTap];
 }
 
@@ -125,12 +124,12 @@
 
 - (IBAction)onUploadPhotoButton:(id)sender
 {
-    [delegate didTapUploadPhotoButton:sender];
+    [_delegate onUploadSignalPhotoButton:sender];
 }
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
 {
-    [delegate imageTapped:_imgPhotoView.image];
+    [_delegate onImageTapped:_imgPhotoView.image];
 }
 
 - (void)setPhoneNumber:(NSString *)phoneNumber

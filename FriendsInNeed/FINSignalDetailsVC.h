@@ -8,7 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "FINAnnotation.h"
-#import "Help_A_Paw-Swift.h"
+
+@protocol FINSignalDetailsCommentCellProtocol <NSObject>
+
+- (void)setCommentText:(NSString *)text;
+- (void)setDate:(NSString *)date;
+
+@end
+
+@protocol FINPhotoDelegate
+
+- (void)onImageTapped:(UIImage *)image;
+
+@end
 
 @protocol FINSignalDetailsVCDelegate <NSObject>
 

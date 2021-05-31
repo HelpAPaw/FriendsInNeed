@@ -7,6 +7,7 @@
 //
 
 #import "FINSignalDetailsCommentCell.h"
+#import <SDWebImage/SDWebImage.h>
 
 @interface FINSignalDetailsCommentCell()
 
@@ -14,6 +15,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbDateLabel;
 @property (weak, nonatomic) IBOutlet UITextView *tvCommentText;
 @property (weak, nonatomic) IBOutlet UIView *vCellContainer;
+@property (weak, nonatomic) IBOutlet UIImageView *sdImageView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *lcImageHeight;
 
 @end
 
@@ -61,6 +64,29 @@
 - (void)setDate:(NSString *)date
 {
     _lbDateLabel.text = date;
+}
+
+- (void)setImageUrl:(NSURL *)imageUrl
+{
+    if (imageUrl != nil) {
+        _lcImageHeight.constant = kCommentPhotoHeight;
+        _sdImageView.sd_imageIndicator = SDWebImageActivityIndicator.grayIndicator;
+        [_sdImageView sd_setImageWithURL:imageUrl placeholderImage:nil];
+        
+        UITapGestureRecognizer *tapGestureRecognizer =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(onImageTapped:)];
+        _sdImageView.userInteractionEnabled = true;
+        [_sdImageView setGestureRecognizers:@[tapGestureRecognizer]];
+    }
+    else {
+        _lcImageHeight.constant = 0;
+    }
+}
+
+- (void)onImageTapped:(UITapGestureRecognizer *)recognizer
+{
+    [_delegate onImageTapped:_sdImageView.image];
 }
 
 @end

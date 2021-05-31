@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FINSignalDetailsVC.h"
 
-@protocol FINSignalPhotoDelegate
-- (void)imageTapped:(UIImage*)image;
-- (void)didTapUploadPhotoButton:(UIView *)sender;
+@protocol FINSignalPhotoButtonDelegate
+- (void)onUploadSignalPhotoButton:(UIView *)sender;
 @end
 
 @interface FINSignalDetailsCell : UITableViewCell
-@property (nonatomic, weak) id <FINSignalPhotoDelegate> delegate;
+
+@property (nonatomic, weak) id <FINPhotoDelegate, FINSignalPhotoButtonDelegate> delegate;
 
 @property (strong, nonatomic) NSString *phoneNumber;
 

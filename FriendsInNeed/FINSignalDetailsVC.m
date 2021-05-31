@@ -34,8 +34,9 @@
 #define kCellIdentifierComment          @"CommentCell"
 #define kCellIdentifierCommentStatus    @"CommentStatusCell"
 #define kCellIdentifierLoading          @"LoadingCell"
-
-
+#define kCellIdentifierTitle    @"TitleCell"
+#define kCellIdentifierAuthor   @"AuthorCell"
+#define kCellIdentifierDate     @"DateCell"
 
 enum {
     kSectionIndexDetails,
@@ -53,12 +54,12 @@ enum {
     kCellIndexStatus2,
 };
 
+enum FINPhotoDestination {
+    kPhotoDestinationSignal,
+    kPhotoDestinationComment
+};
 
-#define kCellIdentifierTitle    @"TitleCell"
-#define kCellIdentifierAuthor   @"AuthorCell"
-#define kCellIdentifierDate     @"DateCell"
-
-@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate,FINSignalPhotoDelegate, FINImagePickerControllerDelegate>
+@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate, FINPhotoDelegate, FINSignalPhotoButtonDelegate, FINImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
@@ -67,6 +68,7 @@ enum {
 @property (weak, nonatomic) IBOutlet UITextField *addCommentTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *addCommentLC;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *sendCommentButtonWidthLC;
+@property (weak, nonatomic) IBOutlet UIButton *addCommentPhotoButton;
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *sendCommentLoadingIndicator;
 
@@ -79,7 +81,8 @@ enum {
 @property (assign, nonatomic) BOOL commentsAreLoaded;
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) FINImagePickerController *imagePickerController;
-
+@property (assign, nonatomic) enum FINPhotoDestination photoDestination;
+@property (strong, nonatomic) UIImage *commentPhoto;
 
 @end
 
@@ -142,6 +145,10 @@ enum {
        
     _addCommentView.layer.shadowOffset = CGSizeMake(0, -2);
     _addCommentView.layer.shadowColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    
+    _addCommentPhotoButton.layer.cornerRadius = 5.0f;
+    _addCommentPhotoButton.clipsToBounds = YES;
+    [[_addCommentPhotoButton imageView] setContentMode: UIViewContentModeScaleAspectFill];
     
     [_sendCommentButton sizeToFit];
     _sendCommentButtonWidthLC.constant = _sendCommentButton.frame.size.width + 5;
@@ -426,6 +433,8 @@ enum {
                     commentCell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifierComment];
                     
                     [(FINSignalDetailsCommentCell *)commentCell setAuthor:comment.authorName];
+                    [(FINSignalDetailsCommentCell *)commentCell setImageUrl:comment.photoUrl];
+                    [(FINSignalDetailsCommentCell *)commentCell setDelegate:self];
                     
                     commentText = comment.text;
                 }
@@ -513,6 +522,9 @@ enum {
                 NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:18]}];
                 CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (21 * 2), 200} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
                 height = ceilf(rect.size.height) + 70;
+                if (comment.hasPhoto) {
+                    height += kCommentPhotoHeight;
+                }
             }
             else
             {
@@ -618,23 +630,35 @@ enum {
     [self setSendingCommentMode];
     [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSignal:_annotation.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
         
-        [self resetSendingCommentMode];
-        
-        if (!error)
-        {
-            [self.comments addObject:comment];
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.comments indexOfObject:comment] inSection:kSectionIndexComments];
-            [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-            
-            self.addCommentTextField.text = @"";
-        }
-        else
-        {
+        if (error != nil) {
+            [self resetSendingCommentMode];
             [self showAlertForError:error];
+        } else {
+            if (self.commentPhoto == nil) {
+                [self resetSendingCommentMode];
+                [self addNewCommentToView:comment];
+            } else {
+                [[FINDataManager sharedManager] uploadPhoto:self.commentPhoto
+                                                 forComment:comment withCompletion:^(FINError *photoError) {                    
+                    [self resetSendingCommentMode];
+                    
+                    if (photoError != nil) {
+                        [self showAlertForError:photoError];
+                    }
+                    [self addNewCommentToView:comment];
+                }];
+            }
         }
     }];
+}
+
+- (void)addNewCommentToView:(FINComment *)comment
+{
+    [self.comments addObject:comment];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.comments indexOfObject:comment] inSection:kSectionIndexComments];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void)setSendingCommentMode
@@ -647,6 +671,9 @@ enum {
 {
     _sendCommentButton.hidden = NO;
     [_sendCommentLoadingIndicator stopAnimating];
+    self.addCommentTextField.text = @"";
+    [_addCommentPhotoButton setImage:[UIImage imageNamed:@"ic_camera"] forState:UIControlStateNormal];
+    _commentPhoto = nil;
 }
 
 #pragma mark - UITextField Delegate
@@ -775,16 +802,27 @@ enum {
 
 #pragma mark - FINSignalPhotoDelegate
 
-- (void)imageTapped:(UIImage *)image
+- (void)onImageTapped:(UIImage *)image
 {
+    if (image == nil) {
+        return;
+    }
     FINSignalPhotoVC *signalPhotoVC = [[FINSignalPhotoVC alloc] init];
     [signalPhotoVC injectWithImg:image];
     signalPhotoVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     [self.navigationController presentViewController:signalPhotoVC animated:YES completion:nil];
 }
 
-- (void)didTapUploadPhotoButton:(UIView *)sender
+- (void)onUploadSignalPhotoButton:(UIView *)sender
 {
+    _photoDestination = kPhotoDestinationSignal;
+    _imagePickerController = [[FINImagePickerController alloc] initWithDelegate:self];
+    [_imagePickerController showImagePickerFrom:self withSourceView:sender];
+}
+
+- (IBAction)onAddCommentPhotoButton:(id)sender
+{
+    _photoDestination = kPhotoDestinationComment;
     _imagePickerController = [[FINImagePickerController alloc] initWithDelegate:self];
     [_imagePickerController showImagePickerFrom:self withSourceView:sender];
 }
@@ -793,17 +831,22 @@ enum {
 
 - (void)didPickImage:(UIImage *)image
 {
-    MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    loadingIndicator.label.text = NSLocalizedString(@"uploading_photo", nil);
-    [[FINDataManager sharedManager] uploadPhoto:image forSignal:_annotation.signal withCompletion:^(FINError *error) {
-        [loadingIndicator hideAnimated:YES];
-        
-        if (error == nil) {
-            [self.tableView reloadData];
-        } else {
-            [self showAlertViewControllerWithTitle:NSLocalizedString(@"Error", nil) message:error.message actions:nil];
-        }
-    }];
+    if (_photoDestination == kPhotoDestinationSignal) {
+        MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        loadingIndicator.label.text = NSLocalizedString(@"uploading_photo", nil);
+        [[FINDataManager sharedManager] uploadPhoto:image forSignal:_annotation.signal withCompletion:^(FINError *error) {
+            [loadingIndicator hideAnimated:YES];
+            
+            if (error == nil) {
+                [self.tableView reloadData];
+            } else {
+                [self showAlertViewControllerWithTitle:NSLocalizedString(@"Error", nil) message:error.message actions:nil];
+            }
+        }];
+    } else {
+        _commentPhoto = image;
+        [_addCommentPhotoButton setImage:image forState:UIControlStateNormal];
+    }
 }
 
 @end

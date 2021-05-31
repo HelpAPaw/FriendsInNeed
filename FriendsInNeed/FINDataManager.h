@@ -47,6 +47,9 @@
 - (void)uploadPhoto:(UIImage *)photo
           forSignal:(FINSignal *)signal
      withCompletion:(void (^)(FINError *error))completion;
+- (void)uploadPhoto:(UIImage *)photo
+          forComment:(FINComment *)comment
+     withCompletion:(void (^)(FINError *error))completion;
 - (void)submitNewSignalWithTitle:(NSString *)title
                             type:(NSInteger)type
                   andAuthorPhone:(NSString *)authorPhone

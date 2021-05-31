@@ -10,4 +10,9 @@
 
 @implementation FINComment
 
+- (BOOL)hasPhoto
+{
+    return _photoUrl != nil;
+}
+
 @end

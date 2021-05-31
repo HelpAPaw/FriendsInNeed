@@ -17,5 +17,7 @@
 @property (strong, nonatomic) NSDate *created;
 @property (strong, nonatomic) NSString *authorName;
 @property (strong, nonatomic) NSString *authorId;
+@property (strong, nonatomic) NSURL *photoUrl;
+@property (readonly, nonatomic) BOOL hasPhoto;
 
 @end

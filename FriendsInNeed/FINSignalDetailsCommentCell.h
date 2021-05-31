@@ -7,18 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FINSignalDetailsVC.h"
 
-@protocol FINSignalDetailsCommentCellProtocol <NSObject>
-
-- (void)setCommentText:(NSString *)text;
-- (void)setDate:(NSString *)date;
-
-@end
+#define kCommentPhotoHeight 200.0
 
 @interface FINSignalDetailsCommentCell : UITableViewCell <FINSignalDetailsCommentCellProtocol>
+
+@property (nonatomic, weak) id <FINPhotoDelegate> delegate;
 
 - (void)setCommentText:(NSString *)text;
 - (void)setAuthor:(NSString *)author;
 - (void)setDate:(NSString *)date;
+- (void)setImageUrl:(NSURL *)imageUrl;
 
 @end

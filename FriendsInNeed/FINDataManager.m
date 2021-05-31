@@ -18,6 +18,7 @@
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
+#define kCommentPhotosDirectory     @"comment_photos"
 #define kIsInTestModeKey            @"kIsInTestModeKey"
 #define kSettingRadiusKey           @"kSettingRadiusKey"
 #define kSettingRadiusDefault       10
@@ -45,6 +46,7 @@
 #define kField_SignalId             @"signalID"
 #define kField_Text                 @"text"
 #define kField_Type                 @"type"
+#define kField_Photo                @"photo"
 
 
 #define kTable_DeviceRegistration   @"DeviceRegistration"
@@ -438,19 +440,63 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
           forSignal:(FINSignal *)signal
      withCompletion:(void (^)(FINError *error))completion
 {
-    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", signal.signalId];
-    [Backendless.shared.fileService uploadFileWithFileName:fileName
-                                                  filePath:kSignalPhotosDirectory
+    [self uploadPhoto:photo
+         withFilename:[NSString stringWithFormat:@"%@.jpg", signal.signalId]
+          inDirectory:kSignalPhotosDirectory
+       withCompletion:^(NSString *urlString, FINError *error) {
+        if (error == nil) {
+            signal.photoUrl = [NSURL URLWithString:urlString];
+            completion(nil);
+        } else {
+            completion(error);
+        }
+    }];
+}
+
+- (void)uploadPhoto:(UIImage *)photo
+          forComment:(FINComment *)comment
+     withCompletion:(void (^)(FINError *error))completion
+{
+    [self uploadPhoto:photo
+         withFilename:[NSString stringWithFormat:@"%@.jpg", comment.objectId]
+          inDirectory:kCommentPhotosDirectory
+       withCompletion:^(NSString *urlString, FINError *error) {
+        if (error == nil) {
+            MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_Comments];
+            NSMutableDictionary *changes = [NSMutableDictionary new];
+            [changes setObject:urlString forKey:kField_Photo];
+            [changes setObject:comment.objectId forKey:kField_ObjectId];
+            [dataStore updateWithEntity:changes
+                        responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedComment) {
+                comment.photoUrl = [NSURL URLWithString:urlString];
+                completion(nil);
+            } errorHandler:^(Fault * _Nonnull fault) {
+                FINError *error = [[FINError alloc] initWithMessage:fault.message];
+                completion(error);
+            }];
+        }
+        else {
+            completion(error);
+        }
+    }];
+}
+
+- (void)uploadPhoto:(UIImage *)photo
+       withFilename:(NSString *)filename
+        inDirectory:(NSString *)directory
+     withCompletion:(void (^)(NSString *urlString, FINError *error))completion
+{
+    [Backendless.shared.fileService uploadFileWithFileName:filename
+                                                  filePath:directory
                                                fileContent:UIImageJPEGRepresentation(photo, 0.1)
                                                  overwrite:YES
                                            responseHandler:^(BackendlessFile * _Nonnull savedFile) {
-        signal.photoUrl = [NSURL URLWithString:savedFile.fileUrl];
         [[SDImageCache sharedImageCache] storeImage:photo forKey:savedFile.fileUrl completion:^{
-            completion(nil);
+            completion(savedFile.fileUrl, nil);
         }];
     } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
-        completion(error);
+        completion(nil, error);
     }];
 }
 
@@ -711,6 +757,10 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     if ((author != nil) && ![author isKindOfClass:NSNull.class]) {
         comment.authorId = author.objectId;
         comment.authorName = author.name;
+    }
+    NSString *urlString = [commentDict objectForKey:kField_Photo];
+    if ((urlString != nil) && ([urlString isKindOfClass:[NSString class]])) {
+        comment.photoUrl = [NSURL URLWithString:urlString];
     }
     return comment;
 }

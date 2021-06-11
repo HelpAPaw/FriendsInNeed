@@ -520,8 +520,8 @@ enum FINPhotoDestination {
             {
                 FINComment *comment = _comments[indexPath.row];
                 NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:comment.text attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:18]}];
-                CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (21 * 2), 200} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
-                height = ceilf(rect.size.height) + 70;
+                CGRect rect = [attributedText boundingRectWithSize:(CGSize){self.view.frame.size.width - (24 * 2), 2000} options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading) context:nil];
+                height = ceilf(rect.size.height) + 80;
                 if (comment.hasPhoto) {
                     height += kCommentPhotoHeight;
                 }

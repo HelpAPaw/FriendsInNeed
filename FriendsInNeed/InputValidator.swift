@@ -52,7 +52,7 @@ import UIKit
     static func hasMinMaxLength(testStr: String?) -> Bool {
         guard testStr != nil else { return false }
         
-        let lengthRegEx = "^.{10,256}$"
+        let lengthRegEx = "^.{10,512}$"
         
         let lengthTest = NSPredicate(format:"SELF MATCHES %@", lengthRegEx)
         return lengthTest.evaluate(with: testStr)

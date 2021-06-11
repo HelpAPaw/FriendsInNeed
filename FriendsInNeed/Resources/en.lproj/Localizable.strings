@@ -25,6 +25,7 @@
 "only_registered_users_can_submit_signals" = "Only registered users can submit signals";
 "filter_is_active" = "There is an active filter";
 "signal_description_placeholder" = "Signal description\n(what is the condition of the animal, what help is needed, etc.)";
+"enter_good_description" = "Please enter a signal description between 10 and 512 symbols";
 
 //FINSignalDetails.m
 "only_registered_users_can_change_status" = "Only registered users can change signal status";

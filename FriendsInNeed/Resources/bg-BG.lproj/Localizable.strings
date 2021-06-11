@@ -28,7 +28,7 @@
 
 //FinMapVC.m
 "Empty description" = "Празно описание";
-"Please enter a good description of the signal." = "Моля въведете добро описание на сигнала.";
+"enter_good_description" = "Моля въведете описание между 10 и 512 символа";
 "Your signal was submitted but the attached photo was not. The problem is:\n%@" = "Вашият сигнал беше приет, но снимката не. Проблемът е:\n%@";
 "Thank you!"= "Благодарим";
 "Take Photo" = "Направете снимка";

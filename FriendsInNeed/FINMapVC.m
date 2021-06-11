@@ -441,7 +441,7 @@
     }
     
     // Input validation
-    BOOL validation = [InputValidator validateDefaultMinMaxLengthInputFor:@[_signalTitleTextView] message:NSLocalizedString(@"Please enter a good description of the signal.", nil) parent:self];
+    BOOL validation = [InputValidator validateDefaultMinMaxLengthInputFor:@[_signalTitleTextView] message:NSLocalizedString(@"enter_good_description", nil) parent:self];
     if (!validation)
     {
         [_signalTitleTextView becomeFirstResponder];

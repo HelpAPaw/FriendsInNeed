@@ -670,17 +670,22 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
+- (void)handleUserLoggedIn:(BackendlessUser *)loggedUser
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
+                                                        object:nil];
+    
+    [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
+}
+
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
 {
     [Backendless.shared.userService loginWithIdentity:email
                                              password:password
                                       responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
-                                                            object:nil];
-        
-        [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
-        
+        [self handleUserLoggedIn:loggedUser];
         completion(nil);
+        
     } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
@@ -695,16 +700,30 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                                                       fieldsMapping:fieldsMapping
                                                        stayLoggedIn:YES
                                                     responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
-                                                            object:nil];
-        
-        [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
-        
+        [self handleUserLoggedIn:loggedUser];
         completion(nil);
+        
     } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
+}
+
+- (void)loginWithAppleToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion;
+{
+    [Backendless.shared.customService invokeWithServiceName:@"AppleAuth"
+                                                     method:@"login"
+                                                 parameters:tokenString
+                                            responseHandler:^(BackendlessUser *loggedUser) {
+         Backendless.shared.userService.currentUser = loggedUser;
+        [self handleUserLoggedIn:loggedUser];
+        completion(nil);
+        
+     }
+                                               errorHandler:^(Fault *fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+     }];
 }
 
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion

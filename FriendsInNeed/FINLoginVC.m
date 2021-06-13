@@ -13,11 +13,12 @@
 #import "Help_A_Paw-Swift.h"
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
-@interface FINLoginVC ()
+@interface FINLoginVC () <ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding>
 @property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
@@ -36,7 +37,6 @@
 @property (weak, nonatomic) IBOutlet UIView *facebookSeparatorView;
 @property (weak, nonatomic) IBOutlet UIButton *facebookLoginButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topToolbarTopConstraint;
 
 @end
 
@@ -52,18 +52,26 @@
     
     _containerScrollView.contentInset = UIEdgeInsetsMake(10.0f, 0.0f, 25.0f, 0.0f);
     
-    if (@available(iOS 11, *))
-    {
-        [_containerStackView setCustomSpacing:20.0f afterView:_registerLoginButton];
-        [_containerStackView setCustomSpacing:25.0f afterView:_facebookSeparatorView];
-    }
-    else
-    {        
-        _topToolbarTopConstraint.constant = 20.0f;
-    }
+    [_containerStackView setCustomSpacing:20.0f afterView:_registerLoginButton];
+    [_containerStackView setCustomSpacing:25.0f afterView:_facebookSeparatorView];
+    
+    [self setupSignInWithAppleButton];
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];
+}
+
+- (void)setupSignInWithAppleButton
+{
+    if (@available(iOS 13.0, *)) {
+        ASAuthorizationAppleIDButton *button = [[ASAuthorizationAppleIDButton alloc] init];
+        // Using gesture recognizer instead of the built-in mechanism because of a bug:
+        // https://stackoverflow.com/questions/63003840/sign-in-with-apple-button-not-firing-target-function
+        UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSignInWithAppleButtonTapped)];
+        [button addGestureRecognizer:tapGR];
+//        [button addTarget:self action:@selector(onSignInWithAppleButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.containerStackView addArrangedSubview:button];
+    }
 }
 
 - (void)setupScrollViewContentSize
@@ -73,7 +81,6 @@
     _containerScrollView.contentSize = scrollSize;
 }
 
-#pragma mark - Gesture Recognizers
 - (void)onContainerTap:(UITapGestureRecognizer *)sender
 {
     if (sender.state == UIGestureRecognizerStateEnded)
@@ -163,41 +170,6 @@
     [self dismissViewControllerAnimated:YES completion:^{}];
 }
 
-- (IBAction)onLoginWithFacebookButton:(id)sender
-{
-    [_activityIndicator startAnimating];
-    
-    FBSDKLoginManager *fbLoginManager = [[FBSDKLoginManager alloc] init];
-    [fbLoginManager logOut];
-    [fbLoginManager logInWithPermissions: @[@"public_profile", @"email"]
-                      fromViewController:self
-                                 handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
-         if (error)
-         {
-             [self.activityIndicator stopAnimating];
-             [self showError:error.localizedDescription];
-         }
-         else if (result.isCancelled)
-         {
-             [self.activityIndicator stopAnimating];
-         }
-         else
-         {
-             FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
-             [[FINDataManager sharedManager] loginWithFacebookAccessToken:token.tokenString
-                                                               completion:^(FINError *error) {
-                 [self.activityIndicator stopAnimating];
-                 
-                 if (error != nil) {
-                     [self showError:error.message];
-                 } else {
-                     [self askForPrivacyPolicyAcceptanceAfterLogin];
-                 }
-             }];
-         }
-     }];
-}
-
 - (IBAction)onRegisterButton:(id)sender
 {
     if (_segmentControl.selectedSegmentIndex == REGISTER_SEGMENT)
@@ -266,30 +238,7 @@
     }];
 }
 
-- (void)showPrivacyPolicyWithAcceptHandler:(void (^)(UIAlertAction *action))acceptHandler andDeclineHandler:(void (^)(UIAlertAction *action))declineHandler
-{
-    [_activityIndicator startAnimating];
-    
-    NSError *error;
-    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:[SharedConstants kPrivacyPolicyUrl]]
-                                                           encoding:NSUTF8StringEncoding
-                                                              error:&error];
-    NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]
-                                                                                         options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-                                                                                                   NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
-                                                                              documentAttributes:nil
-                                                                                           error:&error];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
-                                                                   message:nil
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert setValue:privacyPolicyAttributedString forKey:@"attributedMessage"];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDestructive handler:declineHandler]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"Accept" style:UIAlertActionStyleDefault handler:acceptHandler]];
-    
-    [self presentViewController:alert animated:YES completion:^{}];
-    
-    [_activityIndicator stopAnimating];
-}
+#pragma mark - Register and login with email and password
 
 - (void)register
 {
@@ -347,6 +296,118 @@
     }];
 }
 
+#pragma mark - Login with Facebook
+
+- (IBAction)onLoginWithFacebookButton:(id)sender
+{
+    [_activityIndicator startAnimating];
+    
+    FBSDKLoginManager *fbLoginManager = [[FBSDKLoginManager alloc] init];
+    [fbLoginManager logOut];
+    [fbLoginManager logInWithPermissions: @[@"public_profile", @"email"]
+                      fromViewController:self
+                                 handler:^(FBSDKLoginManagerLoginResult * _Nullable result, NSError * _Nullable error) {
+         if (error)
+         {
+             [self.activityIndicator stopAnimating];
+             [self showError:error.localizedDescription];
+         }
+         else if (result.isCancelled)
+         {
+             [self.activityIndicator stopAnimating];
+         }
+         else
+         {
+             FBSDKAccessToken *token = [FBSDKAccessToken currentAccessToken];
+             [[FINDataManager sharedManager] loginWithFacebookAccessToken:token.tokenString
+                                                               completion:^(FINError *error) {
+                 [self.activityIndicator stopAnimating];
+                 
+                 if (error != nil) {
+                     [self showError:error.message];
+                 } else {
+                     [self askForPrivacyPolicyAcceptanceAfterLogin];
+                 }
+             }];
+         }
+     }];
+}
+
+#pragma mark - Sign In With Apple
+
+- (void)onSignInWithAppleButtonTapped
+{
+    if (@available(iOS 13.0, *)) {
+        ASAuthorizationAppleIDProvider *provider = [[ASAuthorizationAppleIDProvider alloc] init];
+        ASAuthorizationAppleIDRequest *request = [provider createRequest];
+        request.requestedScopes = @[ASAuthorizationScopeFullName, ASAuthorizationScopeEmail];
+        
+        ASAuthorizationController *controller = [[ASAuthorizationController alloc] initWithAuthorizationRequests:@[request]];
+        controller.delegate = self;
+        controller.presentationContextProvider = self;
+        [controller performRequests];
+    }
+}
+
+- (ASPresentationAnchor)presentationAnchorForAuthorizationController:(ASAuthorizationController *)controller API_AVAILABLE(ios(13.0));
+{
+    return self.view.window;
+}
+
+- (void)authorizationController:(ASAuthorizationController *)controller didCompleteWithAuthorization:(ASAuthorization *)authorization
+API_AVAILABLE(ios(13.0))
+{
+    ASAuthorizationAppleIDCredential *appleIdCredential = authorization.credential;
+    NSData *identityToken = appleIdCredential.identityToken;
+    NSString *tokenString = [[NSString alloc] initWithData:identityToken encoding:NSUTF8StringEncoding];
+    if (tokenString != nil) {
+        [self.activityIndicator startAnimating];
+        [[FINDataManager sharedManager] loginWithAppleToken:tokenString
+                                                 completion:^(FINError *error) {
+            [self.activityIndicator stopAnimating];
+            
+            if (error != nil) {
+                [self showError:error.message];
+            } else {
+                [self askForPrivacyPolicyAcceptanceAfterLogin];
+            }
+        }];
+    }
+}
+
+- (void)authorizationController:(ASAuthorizationController *)controller didCompleteWithError:(NSError *)error
+API_AVAILABLE(ios(13.0))
+{
+    [self showError:error.localizedDescription];
+}
+
+#pragma mark - Other
+
+- (void)showPrivacyPolicyWithAcceptHandler:(void (^)(UIAlertAction *action))acceptHandler andDeclineHandler:(void (^)(UIAlertAction *action))declineHandler
+{
+    [_activityIndicator startAnimating];
+    
+    NSError *error;
+    NSString *privacyPolicyHtml = [NSString stringWithContentsOfURL:[NSURL URLWithString:[SharedConstants kPrivacyPolicyUrl]]
+                                                           encoding:NSUTF8StringEncoding
+                                                              error:&error];
+    NSAttributedString *privacyPolicyAttributedString = [[NSAttributedString alloc] initWithData:[privacyPolicyHtml dataUsingEncoding:NSUTF8StringEncoding]
+                                                                                         options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+                                                                                                   NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
+                                                                              documentAttributes:nil
+                                                                                           error:&error];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert setValue:privacyPolicyAttributedString forKey:@"attributedMessage"];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Decline" style:UIAlertActionStyleDestructive handler:declineHandler]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"Accept" style:UIAlertActionStyleDefault handler:acceptHandler]];
+    
+    [self presentViewController:alert animated:YES completion:^{}];
+    
+    [_activityIndicator stopAnimating];
+}
+
 - (void)askForPrivacyPolicyAcceptanceAfterLogin {
     // Show PP only if it hasn't been accepted
     if ([[FINDataManager sharedManager] getUserHasAcceptedPrivacyPolicy])
@@ -378,6 +439,18 @@
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {
                                                           }];
+    [alert addAction:defaultAction];
+    [self presentViewController:alert animated:YES completion:^{}];
+}
+
+- (IBAction)onWhyPhoneButton:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Why do you want my phone number?",nil)
+                                                                   message:NSLocalizedString(@"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted.",nil)
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"I see",nil)
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];
     [self presentViewController:alert animated:YES completion:^{}];
 }
@@ -419,18 +492,6 @@
     }
     
     return YES;
-}
-
-- (IBAction)onWhyPhoneButton:(id)sender
-{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Why do you want my phone number?",nil)
-                                                                   message:NSLocalizedString(@"Entering your phone number is not required for registration. However, we strongly encourage you to fill it so you can be quickly reached if a volunteer needs information about a signal that you submitted.",nil)
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"I see",nil)
-                                                            style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
-    [alert addAction:defaultAction];
-    [self presentViewController:alert animated:YES completion:^{}];
 }
 
 @end

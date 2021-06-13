@@ -26,7 +26,6 @@
                 <outlet property="segmentControl" destination="Pzg-IJ-Iml" id="vZR-Hp-3fh"/>
                 <outlet property="toolbarBackground" destination="STi-ZM-raM" id="AwE-zP-32v"/>
                 <outlet property="topToolbar" destination="ocI-Gl-ZIK" id="6Ho-k6-Nii"/>
-                <outlet property="topToolbarTopConstraint" destination="i0d-zR-fR0" id="GJA-Nn-EtC"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="whyButton" destination="60E-TK-uuz" id="KKg-gy-iCC"/>
             </connections>
@@ -291,7 +290,7 @@
                 <constraint firstAttribute="trailing" secondItem="RXZ-GD-Klk" secondAttribute="trailing" id="utL-pt-fIt"/>
                 <constraint firstItem="STi-ZM-raM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="zhb-Zb-qmm"/>
             </constraints>
-            <point key="canvasLocation" x="132" y="142"/>
+            <point key="canvasLocation" x="132" y="141.67916041979012"/>
         </view>
     </objects>
     <resources>

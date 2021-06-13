@@ -79,6 +79,8 @@ withCurrentComments:(NSArray<FINComment *> *)currentComments
             completion:(void (^)(FINError *error))completion;
 - (void)loginWithFacebookAccessToken:(NSString *)tokenString
                           completion:(void (^)(FINError *error))completion;
+- (void)loginWithAppleToken:(NSString *)tokenString
+                          completion:(void (^)(FINError *error))completion;
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;
 - (void)resetPasswordForEmail:(NSString *)email
                withCompletion:(void (^)(FINError *error))completion;

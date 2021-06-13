@@ -14,11 +14,12 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <AuthenticationServices/AuthenticationServices.h>
+@import GoogleSignIn;
 
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
-@interface FINLoginVC () <ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding>
+@interface FINLoginVC () <ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, GIDSignInDelegate>
 @property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
@@ -55,13 +56,14 @@
     [_containerStackView setCustomSpacing:20.0f afterView:_registerLoginButton];
     [_containerStackView setCustomSpacing:25.0f afterView:_facebookSeparatorView];
     
-    [self setupSignInWithAppleButton];
+    [self setupSignInWithApple];
+    [self setupSignInWithGoogle];
     
     UITapGestureRecognizer* cGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onContainerTap:)];
     [self.view addGestureRecognizer:cGR];
 }
 
-- (void)setupSignInWithAppleButton
+- (void)setupSignInWithApple
 {
     if (@available(iOS 13.0, *)) {
         ASAuthorizationAppleIDButton *button = [[ASAuthorizationAppleIDButton alloc] init];
@@ -72,6 +74,19 @@
 //        [button addTarget:self action:@selector(onSignInWithAppleButtonTapped) forControlEvents:UIControlEventTouchUpInside];
         [self.containerStackView addArrangedSubview:button];
     }
+}
+
+- (void)setupSignInWithGoogle
+{
+    [GIDSignIn sharedInstance].clientID = GOOGLE_OAUTH_CLIENT_ID;
+    [GIDSignIn sharedInstance].presentingViewController = self;
+    [GIDSignIn sharedInstance].delegate = self;
+    
+    GIDSignInButton *button = [[GIDSignInButton alloc] init];
+    UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSignInWithGoogleButtonTapped)];
+    [button addGestureRecognizer:tapGR];
+//    [button addTarget:self action:@selector(onSignInWithGoogleButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+    [self.containerStackView addArrangedSubview:button];
 }
 
 - (void)setupScrollViewContentSize
@@ -379,6 +394,32 @@ API_AVAILABLE(ios(13.0))
 API_AVAILABLE(ios(13.0))
 {
     [self showError:error.localizedDescription];
+}
+
+#pragma mark - Sign In With Google
+
+- (void)onSignInWithGoogleButtonTapped
+{
+    [[GIDSignIn sharedInstance] signIn];
+}
+
+- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error
+{
+    if (error != nil) {
+        [self showError:error.localizedDescription];
+        return;
+    }
+    
+    [self.activityIndicator startAnimating];
+    [[FINDataManager sharedManager] loginWithGoogleToken:user.authentication.accessToken completion:^(FINError *error) {
+        [self.activityIndicator stopAnimating];
+        
+        if (error != nil) {
+            [self showError:error.message];
+        } else {
+            [self askForPrivacyPolicyAcceptanceAfterLogin];
+        }
+    }];
 }
 
 #pragma mark - Other

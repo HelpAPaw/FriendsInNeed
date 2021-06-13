@@ -18,6 +18,7 @@
 #import <Realm/Realm.h>
 #import <UserNotifications/UserNotifications.h>
 @import Firebase;
+@import GoogleSignIn;
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 
@@ -93,20 +94,14 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    [FBSDKAppEvents activateApp];
+    
 }
    
 - (BOOL)application:(UIApplication *)application
                 openURL:(NSURL *)url
                 options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-        
-        BOOL result = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                                      openURL:url
-                                                            sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                                                                   annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
-        return result;
-    
-    }
+    return [[GIDSignIn sharedInstance] handleURL:url];
+}
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.

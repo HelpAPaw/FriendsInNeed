@@ -3,6 +3,7 @@ build
 *.pbxuser
 *.perspectivev3
 *.mode1v3
+Secrets.h
 .DS_Store 
 xcuserdata/
 # Cocoapods

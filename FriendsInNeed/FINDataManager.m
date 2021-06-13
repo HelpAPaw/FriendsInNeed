@@ -709,6 +709,23 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     }];
 }
 
+- (void)loginWithGoogleToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion
+{
+    NSDictionary *fieldsMapping = @{@"email":@"email"};
+    [Backendless.shared.userService loginWithOauth2WithProviderCode:@"googleplus"
+                                                              token:tokenString
+                                                      fieldsMapping:fieldsMapping
+                                                       stayLoggedIn:YES
+                                                    responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
+        [self handleUserLoggedIn:loggedUser];
+        completion(nil);
+        
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
 - (void)loginWithAppleToken:(NSString *)tokenString completion:(void (^)(FINError *error))completion;
 {
     [Backendless.shared.customService invokeWithServiceName:@"AppleAuth"

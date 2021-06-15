@@ -92,7 +92,7 @@
                     <rect key="frame" x="0.0" y="44" width="375" height="623"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="0Y9-BS-n7e">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="333"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="319"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You need to register before you can submit signals" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="5kY-zC-Bse">
                                     <rect key="frame" x="10" y="0.0" width="355" height="50"/>
@@ -224,10 +224,10 @@
                                     </constraints>
                                 </view>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFX-Gd-gp1" userLabel="Facebook button">
-                                    <rect key="frame" x="87.5" y="293" width="200" height="40"/>
+                                    <rect key="frame" x="122.5" y="293" width="130" height="26"/>
                                     <constraints>
-                                        <constraint firstAttribute="width" constant="200" id="Ao1-gx-IxU"/>
-                                        <constraint firstAttribute="height" constant="40" id="svh-HA-TXj"/>
+                                        <constraint firstAttribute="width" constant="130" id="Ao1-gx-IxU"/>
+                                        <constraint firstAttribute="height" constant="26" id="svh-HA-TXj"/>
                                     </constraints>
                                     <state key="normal" image="continue_with_facebook"/>
                                     <connections>

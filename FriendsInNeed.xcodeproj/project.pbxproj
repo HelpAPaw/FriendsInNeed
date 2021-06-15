@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -669,7 +669,7 @@
 				};
 			};
 			buildConfigurationList = F38B72E61C00E04F00FBE20C /* Build configuration list for PBXProject "FriendsInNeed" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1166,7 +1166,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1180,7 +1181,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 60;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1188,7 +1189,10 @@
 					"$(PROJECT_DIR)/FriendsInNeed/Resources",
 				);
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 4.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1206,14 +1210,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/FriendsInNeed/Resources",
 				);
 				INFOPLIST_FILE = FriendsInNeed/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 4.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1235,12 +1242,16 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 4.2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1268,12 +1279,16 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = NotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 4.2.0;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw.NotificationService;

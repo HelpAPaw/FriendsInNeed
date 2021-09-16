@@ -38,6 +38,16 @@
 				<string>com.googleusercontent.apps.960611584456-611crnbo2u66a2sqs4djci6e0d2gcmph</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>dynamicLinks</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.helpapaw.helpapaw</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -63,6 +73,10 @@
 	<false/>
 	<key>FacebookDisplayName</key>
 	<string>Help A Paw</string>
+	<key>FirebaseDynamicLinksCustomDomains</key>
+	<array>
+		<string>https://app.helpapaw.org</string>
+	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>

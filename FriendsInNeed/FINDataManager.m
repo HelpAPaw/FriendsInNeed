@@ -696,7 +696,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 {
     NSDictionary *fieldsMapping = @{@"email":@"email"};
     [Backendless.shared.userService loginWithOauth2WithProviderCode:@"facebook"
-                                                              token:tokenString
+                                                        accessToken:tokenString
                                                       fieldsMapping:fieldsMapping
                                                        stayLoggedIn:YES
                                                     responseHandler:^(BackendlessUser * _Nonnull loggedUser) {
@@ -713,7 +713,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 {
     NSDictionary *fieldsMapping = @{@"email":@"email"};
     [Backendless.shared.userService loginWithOauth2WithProviderCode:@"googleplus"
-                                                              token:tokenString
+                                                        accessToken:tokenString
                                                       fieldsMapping:fieldsMapping
                                                        stayLoggedIn:YES
                                                     responseHandler:^(BackendlessUser * _Nonnull loggedUser) {

@@ -19,7 +19,7 @@
 #define REGISTER_SEGMENT    1
 #define LOGIN_SEGMENT       0
 
-@interface FINLoginVC () <ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding, GIDSignInDelegate>
+@interface FINLoginVC () <ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding>
 @property (weak, nonatomic) IBOutlet CustomToolbar *topToolbar;
 @property (weak, nonatomic) IBOutlet UIView *toolbarBackground;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentControl;
@@ -78,10 +78,6 @@
 
 - (void)setupSignInWithGoogle
 {
-    [GIDSignIn sharedInstance].clientID = GOOGLE_OAUTH_CLIENT_ID;
-    [GIDSignIn sharedInstance].presentingViewController = self;
-    [GIDSignIn sharedInstance].delegate = self;
-    
     GIDSignInButton *button = [[GIDSignInButton alloc] init];
     UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onSignInWithGoogleButtonTapped)];
     [button addGestureRecognizer:tapGR];
@@ -400,25 +396,25 @@ API_AVAILABLE(ios(13.0))
 
 - (void)onSignInWithGoogleButtonTapped
 {
-    [[GIDSignIn sharedInstance] signIn];
-}
-
-- (void)signIn:(GIDSignIn *)signIn didSignInForUser:(GIDGoogleUser *)user withError:(NSError *)error
-{
-    if (error != nil) {
-        [self showError:error.localizedDescription];
-        return;
-    }
-    
-    [self.activityIndicator startAnimating];
-    [[FINDataManager sharedManager] loginWithGoogleToken:user.authentication.accessToken completion:^(FINError *error) {
-        [self.activityIndicator stopAnimating];
-        
+    GIDConfiguration *configuration = [[GIDConfiguration alloc] initWithClientID:GOOGLE_OAUTH_CLIENT_ID];
+    [GIDSignIn.sharedInstance signInWithConfiguration:configuration
+                             presentingViewController:self
+                                             callback:^(GIDGoogleUser * _Nullable user, NSError * _Nullable error) {
         if (error != nil) {
-            [self showError:error.message];
-        } else {
-            [self askForPrivacyPolicyAcceptanceAfterLogin];
+            [self showError:error.localizedDescription];
+            return;
         }
+        
+        [self.activityIndicator startAnimating];
+        [[FINDataManager sharedManager] loginWithGoogleToken:user.authentication.accessToken completion:^(FINError *error2) {
+            [self.activityIndicator stopAnimating];
+            
+            if (error2 != nil) {
+                [self showError:error2.message];
+            } else {
+                [self askForPrivacyPolicyAcceptanceAfterLogin];
+            }
+        }];
     }];
 }
 

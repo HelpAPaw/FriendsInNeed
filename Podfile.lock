@@ -4,40 +4,40 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - BackendlessSwift (6.4.1):
+  - BackendlessSwift (6.4.2):
     - Socket.IO-Client-Swift (~> 16.0)
-  - FBAEMKit (11.2.0):
-    - FBAEMKit/AEM (= 11.2.0)
-  - FBAEMKit/AEM (11.2.0):
-    - FBSDKCoreKit_Basics (~> 11.2.0)
-  - FBSDKCoreKit (11.2.0):
-    - FBSDKCoreKit/Core (= 11.2.0)
-  - FBSDKCoreKit/Core (11.2.0):
-    - FBAEMKit (~> 11.2.0)
-    - FBSDKCoreKit_Basics (~> 11.2.0)
-  - FBSDKCoreKit_Basics (11.2.0):
-    - FBSDKCoreKit_Basics/Basics (= 11.2.0)
-  - FBSDKCoreKit_Basics/Basics (11.2.0)
-  - FBSDKLoginKit (11.2.0):
-    - FBSDKLoginKit/Login (= 11.2.0)
-  - FBSDKLoginKit/Login (11.2.0):
-    - FBSDKCoreKit (~> 11.2.0)
-    - FBSDKCoreKit_Basics (~> 11.2.0)
-  - Firebase/Analytics (8.7.0):
+  - FBAEMKit (11.2.1):
+    - FBAEMKit/AEM (= 11.2.1)
+  - FBAEMKit/AEM (11.2.1):
+    - FBSDKCoreKit_Basics (~> 11.2.1)
+  - FBSDKCoreKit (11.2.1):
+    - FBSDKCoreKit/Core (= 11.2.1)
+  - FBSDKCoreKit/Core (11.2.1):
+    - FBAEMKit (~> 11.2.1)
+    - FBSDKCoreKit_Basics (~> 11.2.1)
+  - FBSDKCoreKit_Basics (11.2.1):
+    - FBSDKCoreKit_Basics/Basics (= 11.2.1)
+  - FBSDKCoreKit_Basics/Basics (11.2.1)
+  - FBSDKLoginKit (11.2.1):
+    - FBSDKLoginKit/Login (= 11.2.1)
+  - FBSDKLoginKit/Login (11.2.1):
+    - FBSDKCoreKit (~> 11.2.1)
+    - FBSDKCoreKit_Basics (~> 11.2.1)
+  - Firebase/Analytics (8.8.0):
     - Firebase/Core
-  - Firebase/Core (8.7.0):
+  - Firebase/Core (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 8.7.0)
-  - Firebase/CoreOnly (8.7.0):
-    - FirebaseCore (= 8.7.0)
-  - Firebase/Crashlytics (8.7.0):
+    - FirebaseAnalytics (~> 8.8.0)
+  - Firebase/CoreOnly (8.8.0):
+    - FirebaseCore (= 8.8.0)
+  - Firebase/Crashlytics (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 8.7.0)
-  - Firebase/DynamicLinks (8.7.0):
+    - FirebaseCrashlytics (~> 8.8.0)
+  - Firebase/DynamicLinks (8.8.0):
     - Firebase/CoreOnly
-    - FirebaseDynamicLinks (~> 8.7.0)
-  - FirebaseAnalytics (8.7.0):
-    - FirebaseAnalytics/AdIdSupport (= 8.7.0)
+    - FirebaseDynamicLinks (~> 8.8.0)
+  - FirebaseAnalytics (8.8.0):
+    - FirebaseAnalytics/AdIdSupport (= 8.8.0)
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -45,46 +45,53 @@ PODS:
     - GoogleUtilities/Network (~> 7.4)
     - "GoogleUtilities/NSData+zlib (~> 7.4)"
     - nanopb (~> 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (8.7.0):
+  - FirebaseAnalytics/AdIdSupport (8.8.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
-    - GoogleAppMeasurement (= 8.7.0)
+    - GoogleAppMeasurement (= 8.8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
     - GoogleUtilities/MethodSwizzler (~> 7.4)
     - GoogleUtilities/Network (~> 7.4)
     - "GoogleUtilities/NSData+zlib (~> 7.4)"
     - nanopb (~> 2.30908.0)
-  - FirebaseCore (8.7.0):
+  - FirebaseCore (8.8.0):
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.7.0):
+  - FirebaseCoreDiagnostics (8.8.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseCrashlytics (8.7.0):
+  - FirebaseCrashlytics (8.8.0):
     - FirebaseCore (~> 8.0)
     - FirebaseInstallations (~> 8.0)
     - GoogleDataTransport (~> 9.0)
     - GoogleUtilities/Environment (~> 7.4)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseDynamicLinks (8.7.0):
+  - FirebaseDynamicLinks (8.8.0):
     - FirebaseCore (~> 8.0)
-  - FirebaseInstallations (8.7.0):
+  - FirebaseInstallations (8.8.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.4)
     - GoogleUtilities/UserDefaults (~> 7.4)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleAppMeasurement (8.7.0):
-    - GoogleAppMeasurement/AdIdSupport (= 8.7.0)
+  - GoogleAppMeasurement (8.8.0):
+    - GoogleAppMeasurement/AdIdSupport (= 8.8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
     - GoogleUtilities/MethodSwizzler (~> 7.4)
     - GoogleUtilities/Network (~> 7.4)
     - "GoogleUtilities/NSData+zlib (~> 7.4)"
     - nanopb (~> 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (8.7.0):
+  - GoogleAppMeasurement/AdIdSupport (8.8.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
+    - GoogleUtilities/MethodSwizzler (~> 7.4)
+    - GoogleUtilities/Network (~> 7.4)
+    - "GoogleUtilities/NSData+zlib (~> 7.4)"
+    - nanopb (~> 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (8.8.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
     - GoogleUtilities/MethodSwizzler (~> 7.4)
     - GoogleUtilities/Network (~> 7.4)
@@ -129,12 +136,12 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (2.0.0)
-  - Realm (10.15.1):
-    - Realm/Headers (= 10.15.1)
-  - Realm/Headers (10.15.1)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
+  - Realm (10.16.0):
+    - Realm/Headers (= 10.16.0)
+  - Realm/Headers (10.16.0)
+  - SDWebImage (5.12.0):
+    - SDWebImage/Core (= 5.12.0)
+  - SDWebImage/Core (5.12.0)
   - Socket.IO-Client-Swift (16.0.1):
     - Starscream (~> 4.0)
   - Starscream (4.0.4)
@@ -186,19 +193,19 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  BackendlessSwift: 1ec74d3ea9de1ed9e5291e23e322b51b0bf9ee41
-  FBAEMKit: 7abd022abf6ea7789aa95c527bacc23f966a857c
-  FBSDKCoreKit: 28a11d82d74ff44f7af3dc035bffd611bd3d8e7d
-  FBSDKCoreKit_Basics: 69e0acab6b97b7b8cae9d452407050e78795c34d
-  FBSDKLoginKit: f32693d81d5133ddc1c3cf45aaf08bc79a630e26
-  Firebase: bc9325d5ee2041524bac78a5213d0e530c651309
-  FirebaseAnalytics: 52768800c2add1d84b751420cb4caaf8195f2c41
-  FirebaseCore: f4804c1d3f4bbbefc88904d15653038f2c99ddf7
-  FirebaseCoreDiagnostics: b63732f581a1c6a453ec7241f9ab60b3a5bd3450
-  FirebaseCrashlytics: 6fac03d1eef054833b71c929c93ab95c12989728
-  FirebaseDynamicLinks: e3fd315f43196811df8eac95803f10ff47c3b026
-  FirebaseInstallations: ede6fb72bb6337914e5888b399271259d0c4910c
-  GoogleAppMeasurement: 2be61ce546ad074dbe4dd545f222ac6033bb1d9e
+  BackendlessSwift: 6dd50250afa98c62c2b53e74c26e64b5e59dbaba
+  FBAEMKit: 5de0a7aaa854eec69bb5be20795952a63d38a5f6
+  FBSDKCoreKit: bf655f808b040ed66a72b9922911b39d703e64f4
+  FBSDKCoreKit_Basics: 73ebe3a27eb688ac5b5aa7e99f68992993042115
+  FBSDKLoginKit: 2e76831ef08d356b8f9150ea51cce865074ea304
+  Firebase: 629510f1a9ddb235f3a7c5c8ceb23ba887f0f814
+  FirebaseAnalytics: 5506ea8b867d8423485a84b4cd612d279f7b0b8a
+  FirebaseCore: 98b29e3828f0a53651c363937a7f7d92a19f1ba2
+  FirebaseCoreDiagnostics: fe77f42da6329d6d83d21fd9d621a6b704413bfc
+  FirebaseCrashlytics: 3660c045c8e45cc4276110562a0ef44cf43c8157
+  FirebaseDynamicLinks: cf76a46274569da2d4491548a39ef35f3c1a992d
+  FirebaseInstallations: 2563cb18a723ef9c6ef18318a49519b75dce613c
+  GoogleAppMeasurement: 5ba1164e3c844ba84272555e916d0a6d3d977e91
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleSignIn: fd381840dbe7c1137aa6dc30849a5c3e070c034a
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040
@@ -208,12 +215,12 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  Realm: fbcbde2620d51623cc5b18e28f5b165c39abef52
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  Realm: b6027801398f3743fc222f096faa85281b506e6c
+  SDWebImage: 4ea20cca2986adc5aacde07aa686742fd4c67a37
   Socket.IO-Client-Swift: c116d6dc9fd6be9c259bacfe143f8725bce7d79e
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
 PODFILE CHECKSUM: 8f643b95f87a98ba0a9e80df8a8e257adb85dfaa
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

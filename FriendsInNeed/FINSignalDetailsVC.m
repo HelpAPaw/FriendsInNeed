@@ -18,6 +18,7 @@
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <MBProgressHUD/MBProgressHUD.h>
+@import FirebaseDynamicLinks;
 
 
 #define kTitleIndex     0
@@ -137,7 +138,7 @@ enum FINPhotoDestination {
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierComment];
     [_tableView registerNib:[UINib nibWithNibName:@"FINSignalDetailsStatusChangeCommentCell" bundle:nil] forCellReuseIdentifier:kCellIdentifierCommentStatus];
     
-    self.navigationItem.title = NSLocalizedString(@"Signals Details",nil);
+    self.navigationItem.title = NSLocalizedString(@"Signals Details", nil);
     
     _toolbar.layer.shadowColor = [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:0.5f].CGColor;
     _toolbar.layer.shadowOpacity = 1.0f;
@@ -153,9 +154,18 @@ enum FINPhotoDestination {
     [_sendCommentButton sizeToFit];
     _sendCommentButtonWidthLC.constant = _sendCommentButton.frame.size.width + 5;
     
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_close_x_white"] style:UIBarButtonItemStylePlain target:self action:@selector(onCloseButton:)];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_close_x_white"]
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(onCloseButton:)];
     
     self.navigationItem.leftBarButtonItem = backButton;
+    
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_share_white_24pt"]
+                                                                    style:UIBarButtonItemStylePlain
+                                                                   target:self
+                                                                   action:@selector(onShareButton:)];
+    self.navigationItem.rightBarButtonItem = shareButton;
     
     _statusIsExpanded = NO;
     
@@ -317,6 +327,7 @@ enum FINPhotoDestination {
             if (_annotation.signal.type < [FINDataManager sharedManager].signalTypes.count)
             {
                 typeString = [FINDataManager sharedManager].signalTypes[_annotation.signal.type];
+                //TODO: is this working
                 typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
             }
             [detailsCell setType:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"signal_type", nil), typeString]];
@@ -615,6 +626,59 @@ enum FINPhotoDestination {
     [self.delegate refreshAnnotation:_annotation];
     [self.delegate focusAnnotation:_annotation andCenterOnMap:NO];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
+}
+
+- (IBAction)onShareButton:(id)sender
+{
+    NSString *urlString = [NSString stringWithFormat:@"http://www.helpapaw.org/app?signal=%@", self.annotation.signal.signalId];
+    NSURL *link = [[NSURL alloc] initWithString:urlString];
+    NSString *dynamicLinksDomainURIPrefix = @"https://app.helpapaw.org";
+    FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
+                                             initWithLink:link
+                                             domainURIPrefix:dynamicLinksDomainURIPrefix];
+    
+    linkBuilder.iOSParameters = [[FIRDynamicLinkIOSParameters alloc]
+                                 initWithBundleID:@"com.helpapaw.helpapaw"];
+    [linkBuilder.iOSParameters setAppStoreID:@"1234893764"];
+    [linkBuilder.iOSParameters setCustomScheme:@"com.helpapaw.helpapaw"];
+    linkBuilder.androidParameters = [[FIRDynamicLinkAndroidParameters alloc]
+                                     initWithPackageName:@"org.helpapaw.helpapaw"];
+    
+//    linkBuilder.navigationInfoParameters = [[FIRDynamicLinkNavigationInfoParameters alloc] init];
+//    [linkBuilder.navigationInfoParameters setForcedRedirectEnabled:true];
+
+//    linkBuilder.socialMetaTagParameters = [[FIRDynamicLinkSocialMetaTagParameters alloc] init];
+//    linkBuilder.socialMetaTagParameters.title = self.annotation.signal.title;
+//    linkBuilder.socialMetaTagParameters.descriptionText = [FINDataManager sharedManager].signalTypes[self.annotation.signal.type];
+//    linkBuilder.socialMetaTagParameters.imageURL = self.annotation.signal.photoUrl;
+
+    NSLog(@"The long URL is: %@", linkBuilder.url);
+    
+    NSString *shareTitle = @"Share signal";
+    NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, linkBuilder.url, nil];
+     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+     activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    activityViewController.popoverPresentationController.barButtonItem = sender;
+     [self presentViewController:activityViewController animated:YES completion:nil];
+    
+//    FIRDynamicLinkComponentsOptions *options = [[FIRDynamicLinkComponentsOptions alloc] init];
+//    options.pathLength = FIRShortDynamicLinkPathLengthShort;
+//    [FIRDynamicLinkComponents shortenURL:linkBuilder.url
+//                                 options:options
+//                              completion:^(NSURL * _Nullable shortURL, NSArray<NSString *> * _Nullable warnings, NSError * _Nullable error) {
+//        if (error || shortURL == nil) {
+//            //TODO: handle
+//            return;
+//        }
+//        NSLog(@"The short URL is: %@", shortURL);
+//
+//        NSString *shareTitle = @"Share signal";
+//        NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, shortURL, nil];
+//         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+//         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//        activityViewController.popoverPresentationController.barButtonItem = sender;
+//         [self presentViewController:activityViewController animated:YES completion:nil];
+//    }];
 }
 
 - (IBAction)onAddCommentButton:(id)sender

@@ -76,6 +76,7 @@
 	<key>FirebaseDynamicLinksCustomDomains</key>
 	<array>
 		<string>https://app.helpapaw.org</string>
+		<string>http://www.helpapaw.org/app</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>

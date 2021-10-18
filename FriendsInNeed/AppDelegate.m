@@ -44,12 +44,22 @@
                                      ofItemAtPath:folderPath error:nil];
     
     // Setup Crashlytics
+    [FIROptions defaultOptions].deepLinkURLScheme = @"com.helpapaw.helpapaw";
     [FIRApp configure];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     // Override point for customization after application launch.
     FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
+    
+    if (@available(iOS 13.0, *)) {
+        UINavigationBarAppearance *barAppearance = [[UINavigationBarAppearance alloc] init];
+        [barAppearance configureWithOpaqueBackground];
+        [barAppearance setBackgroundColor:kCustomOrange];
+        [barAppearance setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+        [[UINavigationBar appearance] setScrollEdgeAppearance:barAppearance];
+    }
+    
     [[UINavigationBar appearance] setBarTintColor:kCustomOrange];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
@@ -97,34 +107,88 @@
     
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> *_Nullable))restorationHandler {
-    BOOL handled = [[FIRDynamicLinks dynamicLinks] handleUniversalLink:userActivity.webpageURL
-                                                          completion:^(FIRDynamicLink * _Nullable dynamicLink,
-                                                                       NSError * _Nullable error) {
-                                                            // ...
-                                                          }];
-  return handled;
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(nonnull NSUserActivity *)userActivity
+ restorationHandler:
+#if defined(__IPHONE_12_0) && (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_12_0)
+(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> *_Nullable))restorationHandler {
+#else
+    (nonnull void (^)(NSArray *_Nullable))restorationHandler {
+#endif  // __IPHONE_12_0
+        NSLog(@"userActivity.webpageURL: %@", userActivity.webpageURL);
+        
+        [self handleDeepLink:userActivity.webpageURL];
+        return YES;
+//  BOOL handled = [[FIRDynamicLinks dynamicLinks] handleUniversalLink:userActivity.webpageURL
+//                                                          completion:^(FIRDynamicLink * _Nullable dynamicLink,
+//                                                                       NSError * _Nullable error) {
+//      if (dynamicLink != nil) {
+//          [self handleDeepLink:dynamicLink.url];
+//      }
+//      else {
+//          [FIRDynamicLinks performDiagnosticsWithCompletion:nil];
+//      }
+//                                                          }];
+//  return handled;
 }
    
 - (BOOL)application:(UIApplication *)application
-                openURL:(NSURL *)url
-                options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
     FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-
-      if (dynamicLink) {
+    if (dynamicLink == nil) {
+        NSArray<NSURLQueryItem *> *queryItems = [[NSURLComponents alloc] initWithString:url.absoluteString].queryItems;
+        if (queryItems.count > 0) {
+            NSString *query = queryItems.firstObject.value;
+            NSError *jsonError;
+            NSData *objectData = [query dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+                                                                 options:NSJSONReadingMutableContainers
+                                                                   error:&jsonError];
+            NSString *targetUrl = [json objectForKey:@"target_url"];
+            if (targetUrl != nil) {
+                NSArray<NSURLQueryItem *> *queryItems2 = [[NSURLComponents alloc] initWithString:targetUrl].queryItems;
+                for (NSURLQueryItem *query in queryItems2) {
+                    if ([query.name isEqualToString:@"link"]) {
+                        [self handleDeepLink:[NSURL URLWithString:query.value]];
+                        return YES;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (dynamicLink) {
         if (dynamicLink.url) {
-          // Handle the deep link. For example, show the deep-linked content,
-          // apply a promotional offer to the user's account or show customized onboarding view.
-          // ...
+            // Handle the deep link
+            [self handleDeepLink:dynamicLink.url];
         } else {
-          // Dynamic link has empty deep link. This situation will happens if
-          // Firebase Dynamic Links iOS SDK tried to retrieve pending dynamic link,
-          // but pending link is not available for this device/App combination.
-          // At this point you may display default onboarding view.
+            // Dynamic link has empty deep link. This situation will happens if
+            // Firebase Dynamic Links iOS SDK tried to retrieve pending dynamic link,
+            // but pending link is not available for this device/App combination.
+            // At this point you may display default onboarding view.
         }
         return YES;
-      }
-      return NO;
+    }
+    return NO;
+}
+    
+- (void)handleDeepLink:(NSURL *)url {
+    NSURLComponents *components = [NSURLComponents componentsWithString:url.absoluteString];
+    for (NSURLQueryItem *queryItem in components.queryItems) {
+        if ([queryItem.name isEqualToString:@"signal"]) {
+            NSString *signalId = queryItem.value;
+            [self.mapVC setFocusSignalID:signalId];
+            break;
+        }
+        //Workaround for [FIRDynamicLinks dynamicLinks] handleUniversalLink returning nil dynamic link
+        if ([queryItem.name isEqualToString:@"link"]) {
+            NSString *link = queryItem.value;
+            [self handleDeepLink:[NSURL URLWithString:link]];
+            break;
+        }
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

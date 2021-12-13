@@ -19,6 +19,7 @@ target "Help A Paw" do
     pod 'IQKeyboardManager'
     pod 'Realm'
     pod 'MBProgressHUD'
+    pod 'Branch'
     
 end
 

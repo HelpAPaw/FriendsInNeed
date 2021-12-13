@@ -10,7 +10,9 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:app.helpapaw.org</string>
+		<string>applinks:helpapaw.app.link</string>
+		<string>applinks:helpapaw-alternate.app.link</string>
+		<string>applinks:helpapaw.test.app.link</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>

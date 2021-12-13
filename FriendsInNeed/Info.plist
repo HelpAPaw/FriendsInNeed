@@ -48,6 +48,16 @@
 				<string>com.helpapaw.helpapaw</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.helpapaw.helpapaw</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>helpapaw</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -150,5 +160,19 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>branch_key</key>
+	<dict>
+		<key>live</key>
+		<string>key_live_hn7rWtK1NC88z9Mjo0dFAigjuwcZObiX</string>
+		<key>test</key>
+		<string>key_test_geZs4FS0Oq6Xu2Jpb3itugjozBjYJcnH</string>
+	</dict>
+	<key>branch_universal_link_domains</key>
+	<array>
+		<string>helpapaw.app.link</string>
+		<string>helpapaw-alternate.app.link</string>
+		<string>helpapaw.test.app.link</string>
+		<string>helpapaw-alternate.test.app.link</string>
+	</array>
 </dict>
 </plist>

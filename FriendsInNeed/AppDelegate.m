@@ -155,6 +155,12 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
                         return YES;
                     }
                 }
+                
+                NSURL *target = [NSURL URLWithString:targetUrl];
+                NSURL *newURL = [[NSURL alloc] initWithScheme:[target scheme]
+                                                         host:[target host]
+                                                         path:[target path]];
+                dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:newURL];
             }
         }
     }

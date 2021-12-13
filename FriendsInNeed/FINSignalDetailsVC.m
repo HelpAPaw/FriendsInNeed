@@ -654,31 +654,31 @@ enum FINPhotoDestination {
 
     NSLog(@"The long URL is: %@", linkBuilder.url);
     
-    NSString *shareTitle = @"Share signal";
-    NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, linkBuilder.url, nil];
-     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-     activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-    activityViewController.popoverPresentationController.barButtonItem = sender;
-     [self presentViewController:activityViewController animated:YES completion:nil];
+//    NSString *shareTitle = @"Share signal";
+//    NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, linkBuilder.url, nil];
+//     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+//     activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+//    activityViewController.popoverPresentationController.barButtonItem = sender;
+//     [self presentViewController:activityViewController animated:YES completion:nil];
     
-//    FIRDynamicLinkComponentsOptions *options = [[FIRDynamicLinkComponentsOptions alloc] init];
-//    options.pathLength = FIRShortDynamicLinkPathLengthShort;
-//    [FIRDynamicLinkComponents shortenURL:linkBuilder.url
-//                                 options:options
-//                              completion:^(NSURL * _Nullable shortURL, NSArray<NSString *> * _Nullable warnings, NSError * _Nullable error) {
-//        if (error || shortURL == nil) {
-//            //TODO: handle
-//            return;
-//        }
-//        NSLog(@"The short URL is: %@", shortURL);
-//
-//        NSString *shareTitle = @"Share signal";
-//        NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, shortURL, nil];
-//         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-//         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//        activityViewController.popoverPresentationController.barButtonItem = sender;
-//         [self presentViewController:activityViewController animated:YES completion:nil];
-//    }];
+    FIRDynamicLinkComponentsOptions *options = [[FIRDynamicLinkComponentsOptions alloc] init];
+    options.pathLength = FIRShortDynamicLinkPathLengthShort;
+    [FIRDynamicLinkComponents shortenURL:linkBuilder.url
+                                 options:options
+                              completion:^(NSURL * _Nullable shortURL, NSArray<NSString *> * _Nullable warnings, NSError * _Nullable error) {
+        if (error || shortURL == nil) {
+            //TODO: handle
+            return;
+        }
+        NSLog(@"The short URL is: %@", shortURL);
+
+        NSString *shareTitle = @"Share signal";
+        NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, shortURL, nil];
+         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        activityViewController.popoverPresentationController.barButtonItem = sender;
+         [self presentViewController:activityViewController animated:YES completion:nil];
+    }];
 }
 
 - (IBAction)onAddCommentButton:(id)sender

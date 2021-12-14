@@ -25,9 +25,6 @@ PODS:
   - Firebase/Crashlytics (8.10.0):
     - Firebase/CoreOnly
     - FirebaseCrashlytics (~> 8.10.0)
-  - Firebase/DynamicLinks (8.10.0):
-    - Firebase/CoreOnly
-    - FirebaseDynamicLinks (~> 8.10.0)
   - FirebaseAnalytics (8.10.0):
     - FirebaseAnalytics/AdIdSupport (= 8.10.0)
     - FirebaseCore (~> 8.0)
@@ -62,8 +59,6 @@ PODS:
     - GoogleUtilities/Environment (~> 7.6)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseDynamicLinks (8.10.0):
-    - FirebaseCore (~> 8.0)
   - FirebaseInstallations (8.10.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.6)
@@ -145,7 +140,6 @@ DEPENDENCIES:
   - FBSDKLoginKit
   - Firebase/Analytics
   - Firebase/Crashlytics
-  - Firebase/DynamicLinks
   - GoogleSignIn
   - IQKeyboardManager
   - MBProgressHUD
@@ -167,7 +161,6 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseCrashlytics
-    - FirebaseDynamicLinks
     - FirebaseInstallations
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -198,7 +191,6 @@ SPEC CHECKSUMS:
   FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
   FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
   FirebaseCrashlytics: 3b7f17cdf5bf1ae6ad5956696a6c26edeb39cca7
-  FirebaseDynamicLinks: bb6ac718f763ec43560f0e2bb6b655a798b277af
   FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
   GoogleAppMeasurement: a3311dbcf3ea651e5a070fe8559b57c174ada081
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
@@ -216,6 +208,6 @@ SPEC CHECKSUMS:
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   ViewDeck: 942d90dd23c9f97cc8038be352255378167edcca
 
-PODFILE CHECKSUM: 57fe60a2aef857af16a5a463bf6e206d3b737a34
+PODFILE CHECKSUM: 98e95826c63f018bef5239e58c96e998bf486a75
 
 COCOAPODS: 1.11.2

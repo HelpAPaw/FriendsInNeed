@@ -12,7 +12,6 @@ target "Help A Paw" do
     pod 'ViewDeck'
     pod 'Firebase/Crashlytics'
     pod 'Firebase/Analytics'
-    pod 'Firebase/DynamicLinks'
     pod 'GoogleSignIn'
     pod 'SDWebImage'
     pod 'FBSDKLoginKit'

@@ -61,20 +61,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>c1b8c632b33432b6048becbef89ce27d02f67b08</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-		</array>
-	</dict>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<false/>
 	<key>FacebookAppID</key>
@@ -83,11 +69,6 @@
 	<false/>
 	<key>FacebookDisplayName</key>
 	<string>Help A Paw</string>
-	<key>FirebaseDynamicLinksCustomDomains</key>
-	<array>
-		<string>https://app.helpapaw.org</string>
-		<string>http://www.helpapaw.org/app</string>
-	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>

@@ -18,7 +18,7 @@
 #import "Help_A_Paw-Swift.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <MBProgressHUD/MBProgressHUD.h>
-@import FirebaseDynamicLinks;
+@import Branch;
 
 
 #define kTitleIndex     0
@@ -630,55 +630,22 @@ enum FINPhotoDestination {
 
 - (IBAction)onShareButton:(id)sender
 {
-    NSString *urlString = [NSString stringWithFormat:@"http://www.helpapaw.org/app?signal=%@", self.annotation.signal.signalId];
-    NSURL *link = [[NSURL alloc] initWithString:urlString];
-    NSString *dynamicLinksDomainURIPrefix = @"https://app.helpapaw.org";
-    FIRDynamicLinkComponents *linkBuilder = [[FIRDynamicLinkComponents alloc]
-                                             initWithLink:link
-                                             domainURIPrefix:dynamicLinksDomainURIPrefix];
+    BranchUniversalObject *buo = [[BranchUniversalObject alloc] initWithCanonicalIdentifier:[NSString stringWithFormat:@"signal/%@", self.annotation.signal.signalId]];
+    buo.title = self.annotation.signal.title;
+    buo.contentDescription = @"Lost or found";
+    buo.imageUrl = self.annotation.signal.photoUrl.absoluteString;
+    buo.publiclyIndex = YES;
+    buo.locallyIndex = YES;
+    buo.contentMetadata.customMetadata[@"signalId"] = self.annotation.signal.signalId;
     
-    linkBuilder.iOSParameters = [[FIRDynamicLinkIOSParameters alloc]
-                                 initWithBundleID:@"com.helpapaw.helpapaw"];
-    [linkBuilder.iOSParameters setAppStoreID:@"1234893764"];
-    [linkBuilder.iOSParameters setCustomScheme:@"com.helpapaw.helpapaw"];
-    linkBuilder.androidParameters = [[FIRDynamicLinkAndroidParameters alloc]
-                                     initWithPackageName:@"org.helpapaw.helpapaw"];
+    BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
     
-//    linkBuilder.navigationInfoParameters = [[FIRDynamicLinkNavigationInfoParameters alloc] init];
-//    [linkBuilder.navigationInfoParameters setForcedRedirectEnabled:true];
-
-//    linkBuilder.socialMetaTagParameters = [[FIRDynamicLinkSocialMetaTagParameters alloc] init];
-//    linkBuilder.socialMetaTagParameters.title = self.annotation.signal.title;
-//    linkBuilder.socialMetaTagParameters.descriptionText = [FINDataManager sharedManager].signalTypes[self.annotation.signal.type];
-//    linkBuilder.socialMetaTagParameters.imageURL = self.annotation.signal.photoUrl;
-
-    NSLog(@"The long URL is: %@", linkBuilder.url);
-    
-//    NSString *shareTitle = @"Share signal";
-//    NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, linkBuilder.url, nil];
-//     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-//     activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-//    activityViewController.popoverPresentationController.barButtonItem = sender;
-//     [self presentViewController:activityViewController animated:YES completion:nil];
-    
-    FIRDynamicLinkComponentsOptions *options = [[FIRDynamicLinkComponentsOptions alloc] init];
-    options.pathLength = FIRShortDynamicLinkPathLengthShort;
-    [FIRDynamicLinkComponents shortenURL:linkBuilder.url
-                                 options:options
-                              completion:^(NSURL * _Nullable shortURL, NSArray<NSString *> * _Nullable warnings, NSError * _Nullable error) {
-        if (error || shortURL == nil) {
-            //TODO: handle
-            return;
-        }
-        NSLog(@"The short URL is: %@", shortURL);
-
-        NSString *shareTitle = @"Share signal";
-        NSArray *activityItems = [NSArray arrayWithObjects:shareTitle, shortURL, nil];
-         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-         activityViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        activityViewController.popoverPresentationController.barButtonItem = sender;
-         [self presentViewController:activityViewController animated:YES completion:nil];
-    }];
+    [buo showShareSheetWithLinkProperties:linkProperties
+                             andShareText:@"Share signal"
+                       fromViewController:self
+                                   anchor:sender
+                               completion:^(NSString * _Nullable activityType, BOOL completed) {}
+    ];
 }
 
 - (IBAction)onAddCommentButton:(id)sender

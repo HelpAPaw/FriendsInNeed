@@ -16,6 +16,4 @@
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
 - (void)updateMapToLocation:(CLLocation *)location;
 
-@property (strong, nonatomic) NSString *focusSignalID;
-
 @end

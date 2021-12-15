@@ -322,7 +322,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                             notifContent.categoryIdentifier = kNotificationCategoryNewSignal;
 
                             NSMutableDictionary *userInfo = [NSMutableDictionary new];
-                            [userInfo setObject:signal.signalId forKey:kNotificationSignalId];
+                            [userInfo setObject:signal.signalId forKey:kSignalId];
                             notifContent.userInfo = userInfo;
 
                             UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:[[NSUUID UUID] UUIDString] content:notifContent trigger:nil];

@@ -635,12 +635,12 @@ enum FINPhotoDestination {
     buo.imageUrl = self.annotation.signal.photoUrl.absoluteString;
     buo.publiclyIndex = YES;
     buo.locallyIndex = YES;
-    buo.contentMetadata.customMetadata[@"signalId"] = self.annotation.signal.signalId;
+    buo.contentMetadata.customMetadata[kSignalId] = self.annotation.signal.signalId;
     
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
     
     [buo showShareSheetWithLinkProperties:linkProperties
-                             andShareText:@"Share signal"
+                             andShareText:self.annotation.signal.title
                        fromViewController:self
                                    anchor:sender
                                completion:^(NSString * _Nullable activityType, BOOL completed) {}

@@ -12,7 +12,7 @@
 #import "FINError.h"
 #import "Secrets.h"
 
-#define kNotificationSignalId   @"signalId"
+#define kSignalId   @"signalId"
 #define kNotificationCategoryNewSignal  @"kNotificationCategoryNewSignal"
 #define kNotificationSettingRadiusChanged    @"kNotificationSettingRadiusChanged"
 #define kNotificationSettingTimeoutChanged   @"kNotificationSettingTimeoutChanged"

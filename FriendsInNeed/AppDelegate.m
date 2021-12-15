@@ -23,16 +23,13 @@
 
 @interface AppDelegate () <UNUserNotificationCenterDelegate>
 
-@property (weak, nonatomic) FINMapVC *mapVC;
-
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    BOOL r = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                    didFinishLaunchingWithOptions:launchOptions];
+    [[FBSDKApplicationDelegate sharedInstance] application:application
+                             didFinishLaunchingWithOptions:launchOptions];
     
     IQKeyboardManager.sharedManager.enable = YES;
     
@@ -47,12 +44,7 @@
     // Setup Crashlytics
     [FIRApp configure];
     
-    [self setupBranchWith:launchOptions];
-    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    // Override point for customization after application launch.
-    FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
     
     if (@available(iOS 13.0, *)) {
         UINavigationBarAppearance *barAppearance = [[UINavigationBarAppearance alloc] init];
@@ -66,6 +58,7 @@
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     [[UINavigationBar appearance] setTranslucent:NO];
+    FINMapVC *mapVC = [[FINMapVC alloc] initWithNibName:nil bundle:nil];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mapVC];
     
     FINMenuVC *menuVC = [[FINMenuVC alloc] initWithNibName:nil bundle:nil];
@@ -81,14 +74,14 @@
     
     self.window.rootViewController = viewDeckController;
     [self.window makeKeyAndVisible];
-    _mapVC = mapVC;
     
+    [self setupBranchWith:launchOptions];
     
     [self registerForNotifications];
     
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
-    return r;
+    return YES;
 }
 
 - (void)setupBranchWith:(NSDictionary * _Nullable)launchOptions {
@@ -96,12 +89,17 @@
     // if you are using the TEST key
     //[Branch setUseTestBranchKey:YES];
     
+    // enable pasteboard check for iOS 15+ only
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"15.0" options:NSNumericSearch] != NSOrderedAscending) {
+        [[Branch getInstance] checkPasteboardOnInstall];
+    }
+    
      // listener for Branch Deep Link data
     [[Branch getInstance] initSessionWithLaunchOptions:launchOptions andRegisterDeepLinkHandler:^(NSDictionary * _Nonnull params, NSError * _Nullable error) {
         // do stuff with deep link data (nav to page, display content, etc)
-        NSString *signalId = [params objectForKey:@"signalId"];
+        NSString *signalId = [params objectForKey:kSignalId];
         if (signalId != nil) {
-            [self.mapVC setFocusSignalID:signalId];
+            [self postNotificationToFocusSignalWithId:signalId];
         }
     }];
 }
@@ -124,20 +122,17 @@
     
 }
 
--  (BOOL)application:(UIApplication *)application
-continueUserActivity:(nonnull NSUserActivity *)userActivity
-  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> *_Nullable))restorationHandler {
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
     // handler for Universal Links
-     [[Branch getInstance] continueUserActivity:userActivity];
-     return YES;
+    return [[Branch getInstance] continueUserActivity:userActivity];;
 }
    
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-    
-    [[Branch getInstance] application:application openURL:url options:options];
-     return YES;
+    return [[Branch getInstance] application:application openURL:url options:options];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -171,7 +166,7 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     NSString *category = [userInfo objectForKey:@"ios-category"];
     if ([category isEqualToString:kNotificationCategoryNewSignal])
     {
-        NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
+        NSString *signalId = [userInfo objectForKey:kSignalId];
         [FINDataManager setNotificationShownForSignalId:signalId];
     }
     
@@ -183,6 +178,12 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
     completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
 }
 
+- (void)postNotificationToFocusSignalWithId:(NSString *)signalId {
+    [NSNotificationCenter.defaultCenter postNotificationName:kNotificationFocusedSignalChanged
+                                                      object:self
+                                                    userInfo:@{kSignalId : signalId}];
+}
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
 {
     UNNotificationRequest *request = response.notification.request;
@@ -192,9 +193,9 @@ continueUserActivity:(nonnull NSUserActivity *)userActivity
         if ([response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier])
         {            
             NSDictionary *userInfo = request.content.userInfo;
-            NSString *signalId = [userInfo objectForKey:kNotificationSignalId];
+            NSString *signalId = [userInfo objectForKey:kSignalId];
             [FINDataManager setNotificationShownForSignalId:signalId];
-            [_mapVC setFocusSignalID:signalId];
+            [self postNotificationToFocusSignalWithId:signalId];
         }
     }
     else

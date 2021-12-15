@@ -62,6 +62,7 @@
 @property (strong, nonatomic) NSArray<NSNumber *> *selectedSignalTypes;
 @property (strong, nonatomic) UIColor *placeholderColor;
 @property (strong, nonatomic) FINImagePickerController *imagePickerController;
+@property (strong, nonatomic) NSString *focusedSignalId;
 
 @end
 
@@ -181,6 +182,11 @@
                                                  name:kNotificationSettingTimeoutChanged
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(focusedSignalChanged:)
+                                                 name:kNotificationFocusedSignalChanged
+                                               object:nil];
+    
     UIPanGestureRecognizer *dragGR = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(userDidMoveMap:)];
     [dragGR setDelegate:self];
     [self.mapView addGestureRecognizer:dragGR];
@@ -278,9 +284,16 @@
     [self initMapVC];
 }
 
-- (void)settingsChanged:(NSNotification *) notification
+- (void)settingsChanged:(NSNotification *)notification
 {
     [self initMapVC];
+}
+
+- (void)focusedSignalChanged:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *signalId = [userInfo objectForKey:kSignalId];
+    [self setFocusedSignalId:signalId];
 }
 
 - (void)dealloc
@@ -476,7 +489,7 @@
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
                                                                           // Add new annotation to map and focus it when OK button is pressed
-                                                                          self.focusSignalID = savedSignal.signalId;
+                                                                          self.focusedSignalId = savedSignal.signalId;
                                                                           [self addAnnotationToMapFromSignal:savedSignal];
                                                                       }];
                 [alert addAction:defaultAction];
@@ -485,7 +498,7 @@
             else
             {
                 // Add new annotation to map and focus it when OK button is pressed
-                self.focusSignalID = savedSignal.signalId;
+                self.focusedSignalId = savedSignal.signalId;
                 [self addAnnotationToMapFromSignal:savedSignal];
             }
         }
@@ -557,7 +570,7 @@
     FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
     [_mapView addAnnotation:annotation];
     
-    if ([annotation.signal.signalId isEqualToString:_focusSignalID])
+    if ([annotation.signal.signalId isEqualToString:_focusedSignalId])
     {
         [self focusAnnotation:annotation andCenterOnMap:YES];
     }
@@ -585,12 +598,12 @@
     }
     self.pauseRefreshing = NO;
     
-    _focusSignalID = nil;
+    _focusedSignalId = nil;
 }
 
-- (void)setFocusSignalID:(NSString *)focusSignalID
+- (void)setFocusedSignalId:(NSString *)focusSignalID
 {
-    _focusSignalID = focusSignalID;
+    _focusedSignalId = focusSignalID;
     
     [[FINDataManager sharedManager] getSignalWithID:focusSignalID completion:^(FINSignal *signal, FINError *error) {
         if (signal)

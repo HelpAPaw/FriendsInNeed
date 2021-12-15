@@ -632,7 +632,6 @@ enum FINPhotoDestination {
 {
     BranchUniversalObject *buo = [[BranchUniversalObject alloc] initWithCanonicalIdentifier:[NSString stringWithFormat:@"signal/%@", self.annotation.signal.signalId]];
     buo.title = self.annotation.signal.title;
-    buo.contentDescription = @"Lost or found";
     buo.imageUrl = self.annotation.signal.photoUrl.absoluteString;
     buo.publiclyIndex = YES;
     buo.locallyIndex = YES;

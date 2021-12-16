@@ -291,6 +291,9 @@
 
 - (void)focusedSignalChanged:(NSNotification *)notification
 {
+    // Dismiss any presented view controllers
+    [self dismissViewControllerAnimated:YES completion:^{}];
+    
     NSDictionary *userInfo = [notification userInfo];
     NSString *signalId = [userInfo objectForKey:kSignalId];
     [self setFocusedSignalId:signalId];

@@ -639,12 +639,22 @@ enum FINPhotoDestination {
     
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
     
-    [buo showShareSheetWithLinkProperties:linkProperties
-                             andShareText:self.annotation.signal.title
-                       fromViewController:self
-                                   anchor:sender
-                               completion:^(NSString * _Nullable activityType, BOOL completed) {}
-    ];
+    [buo getShortUrlWithLinkProperties:linkProperties
+                           andCallback:^(NSString * _Nullable url, NSError * _Nullable error) {
+        if (error == nil) {
+            // Set original short url as parameter of desktop_url - this way it can be used to
+            // generate a QR which can be scanned with a smartphone
+            NSString *desktop_url = [NSString stringWithFormat:@"https://www.helpapaw.org/signal.html?link=%@", url];
+            [linkProperties addControlParam:@"$desktop_url" withValue:desktop_url];
+            
+            [buo showShareSheetWithLinkProperties:linkProperties
+                                     andShareText:self.annotation.signal.title
+                               fromViewController:self
+                                           anchor:sender
+                                       completion:^(NSString * _Nullable activityType, BOOL completed) {}
+            ];
+        }
+    }];
 }
 
 - (IBAction)onAddCommentButton:(id)sender

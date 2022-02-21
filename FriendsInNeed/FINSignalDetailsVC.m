@@ -894,7 +894,7 @@ enum FINPhotoDestination {
 - (void)onNavigateButtonTapped
 {
     //TODO: localize
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Navigation App"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select Navigation App", nil)
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     

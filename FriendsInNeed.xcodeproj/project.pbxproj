@@ -232,11 +232,11 @@
 		F3C484751C75514D0067A169 /* FINMapVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMapVC.h; sourceTree = "<group>"; };
 		F3C484761C75514D0067A169 /* FINMapVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMapVC.m; sourceTree = "<group>"; };
 		F3C4AA5C265549F500D38419 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINLoginVC.strings"; sourceTree = "<group>"; };
+		F3CCB8C227C3B7FB00D97870 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.strings"; sourceTree = "<group>"; };
 		F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINAdminVC.swift; sourceTree = "<group>"; };
 		F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FINAdminVC.xib; sourceTree = "<group>"; };
 		F3D4046820680D3600A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsVC.strings"; sourceTree = "<group>"; };
 		F3D4046C20680DAE00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMapVC.strings"; sourceTree = "<group>"; };
-		F3D4047020680DCB00A3BCE2 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINSignalDetailsCell.strings"; sourceTree = "<group>"; };
 		F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINSignalDetailsStatusChangeCommentCell.swift; sourceTree = "<group>"; };
 		F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsStatusChangeCommentCell.xib; sourceTree = "<group>"; };
 		F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINStatusHelper.swift; sourceTree = "<group>"; };
@@ -910,7 +910,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1420BA801E730854006F0B0E /* Base */,
-				F3D4047020680DCB00A3BCE2 /* bg-BG */,
+				F3CCB8C227C3B7FB00D97870 /* bg-BG */,
 			);
 			name = FINSignalDetailsCell.xib;
 			sourceTree = "<group>";

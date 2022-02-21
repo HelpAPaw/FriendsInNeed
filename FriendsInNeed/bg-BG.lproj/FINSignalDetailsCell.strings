@@ -1,6 +1,18 @@
 
+/* Class = "UILabel"; text = "Signal type: Emergency"; ObjectID = "P3V-ZX-Ss5"; */
+"P3V-ZX-Ss5.text" = "Signal type: Emergency";
+
 /* Class = "UILabel"; text = "3"; ObjectID = "Xe4-u3-AGd"; */
 "Xe4-u3-AGd.text" = "3";
 
-/* Class = "UILabel"; text = "Куче ударено от кола"; ObjectID = "oxU-LU-43t"; */
-"oxU-LU-43t.text" = "Куче ударено от кола";
+/* Class = "UIButton"; normalTitle = "Upload photo"; ObjectID = "l7u-Kk-nbl"; */
+"l7u-Kk-nbl.normalTitle" = "Качи снимка";
+
+/* Class = "UITextView"; text = "Dog hit by a car"; ObjectID = "oxU-LU-43t"; */
+"oxU-LU-43t.text" = "Dog hit by a car";
+
+/* Class = "UIButton"; normalTitle = "Navigate me"; ObjectID = "sAm-ez-LQE"; */
+"sAm-ez-LQE.normalTitle" = "Навигирай ме";
+
+/* Class = "UIButton"; normalTitle = " 1234567890"; ObjectID = "zSG-km-x6o"; */
+"zSG-km-x6o.normalTitle" = " 1234567890";

@@ -30,7 +30,7 @@
     // Initialization code
 }
 
-- (void)setDelegate:(id <FINPhotoDelegate, FINSignalPhotoButtonDelegate>)aDelegate {
+- (void)setDelegate:(id <FINPhotoDelegate, FINSignalPhotoButtonDelegate, FINNavigationDelegate>)aDelegate {
     if (_delegate != aDelegate) {
         _delegate = aDelegate;
     }
@@ -151,6 +151,11 @@
 {
     NSString *phoneNumber = [@"tel://" stringByAppendingString:[_phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""]];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNumber] options:@{} completionHandler:nil];
+}
+
+- (IBAction)onNavigateButton:(id)sender
+{
+    [_delegate onNavigateButtonTapped];
 }
 
 @end

@@ -73,6 +73,9 @@
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>googlechromes</string>
+		<string>comgooglemaps</string>
+		<string>waze</string>
 		<string>fbapi</string>
 		<string>fb-messenger-api</string>
 		<string>fbauth2</string>

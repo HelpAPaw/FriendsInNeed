@@ -15,7 +15,7 @@
 
 @interface FINSignalDetailsCell : UITableViewCell
 
-@property (nonatomic, weak) id <FINPhotoDelegate, FINSignalPhotoButtonDelegate> delegate;
+@property (nonatomic, weak) id <FINPhotoDelegate, FINSignalPhotoButtonDelegate, FINNavigationDelegate> delegate;
 
 @property (strong, nonatomic) NSString *phoneNumber;
 

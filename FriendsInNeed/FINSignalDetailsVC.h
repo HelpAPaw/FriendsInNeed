@@ -22,6 +22,12 @@
 
 @end
 
+@protocol FINNavigationDelegate
+
+- (void)onNavigateButtonTapped;
+
+@end
+
 @protocol FINSignalDetailsVCDelegate <NSObject>
 
 - (void)refreshAnnotation:(FINAnnotation *)annotation;

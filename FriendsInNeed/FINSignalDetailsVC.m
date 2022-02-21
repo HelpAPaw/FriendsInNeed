@@ -60,7 +60,7 @@ enum FINPhotoDestination {
     kPhotoDestinationComment
 };
 
-@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate, FINPhotoDelegate, FINSignalPhotoButtonDelegate, FINImagePickerControllerDelegate>
+@interface FINSignalDetailsVC () <UITableViewDataSource, UITableViewDelegate, FINPhotoDelegate, FINSignalPhotoButtonDelegate, FINImagePickerControllerDelegate, FINNavigationDelegate>
 @property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *addCommentView;
@@ -886,6 +886,67 @@ enum FINPhotoDestination {
     } else {
         _commentPhoto = image;
         [_addCommentPhotoButton setImage:image forState:UIControlStateNormal];
+    }
+}
+
+#pragma mark - FINNavigationDelegate
+
+- (void)onNavigateButtonTapped
+{
+    //TODO: localize
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select Navigation App"
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    NSString *encodedTitle = [_annotation.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *appleUrlString = [NSString stringWithFormat:@"http://maps.apple.com/?q=%@&ll=%f,%f", encodedTitle, _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"Apple Maps"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction * _Nonnull action) {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:appleUrlString]
+                                         options:@{}
+                               completionHandler:nil];
+    }];
+    [alert addAction:action];
+    
+    NSString *googleUrlString = [NSString stringWithFormat:@"comgooglemaps://?daddr=%f,%f&directionsmode=driving", _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    NSURL *googleUrl = [NSURL URLWithString:googleUrlString];
+    if ([UIApplication.sharedApplication canOpenURL:googleUrl]) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"Google Maps"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * _Nonnull action) {
+            [UIApplication.sharedApplication openURL:googleUrl
+                                             options:@{}
+                                   completionHandler:nil];
+        }];
+        [alert addAction:action];
+    }
+        
+    NSString *wazeUrlString = [NSString stringWithFormat:@"waze://?ll=%f,%f&navigate=true", _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    NSURL *wazeUrl = [NSURL URLWithString:wazeUrlString];
+    if ([UIApplication.sharedApplication canOpenURL:wazeUrl]) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:@"Waze"
+                                                         style:UIAlertActionStyleDefault
+                                                       handler:^(UIAlertAction * _Nonnull action) {
+            [UIApplication.sharedApplication openURL:wazeUrl
+                                             options:@{}
+                                   completionHandler:nil];
+        }];
+        [alert addAction:action];
+    }
+    
+    if (alert.actions.count == 1) {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:appleUrlString]
+                                         options:@{}
+                               completionHandler:nil];
+    }
+    else {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                         style:UIAlertActionStyleCancel
+                                                       handler:nil];
+        [alert addAction:cancel];
+        
+        [self presentViewController:alert animated:YES completion:nil];
     }
 }
 

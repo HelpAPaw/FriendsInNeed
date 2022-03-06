@@ -835,6 +835,22 @@
     [_mapView addAnnotation:annotation];
 }
 
+- (void)removeAnnotation:(FINAnnotation *)annotation
+{
+    MKAnnotationView *view = [self.mapView viewForAnnotation:annotation];
+
+    if (view) {
+        [UIView animateWithDuration:0.5 delay:0.0 options:0 animations:^{
+            view.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self.mapView removeAnnotation:annotation];
+            view.alpha = 1.0;   // remember to set alpha back to 1.0 because annotation view can be reused later
+        }];
+    } else {
+        [self.mapView removeAnnotation:annotation];
+    }
+}
+
 - (void)showAlertForError:(FINError *)error
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Ooops!",nil)

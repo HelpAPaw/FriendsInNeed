@@ -31,6 +31,7 @@
 @protocol FINSignalDetailsVCDelegate <NSObject>
 
 - (void)refreshAnnotation:(FINAnnotation *)annotation;
+- (void)removeAnnotation:(FINAnnotation *)annotation;
 - (void)focusAnnotation:(FINAnnotation *)annotation andCenterOnMap:(BOOL)moveToCenter;
 
 @end

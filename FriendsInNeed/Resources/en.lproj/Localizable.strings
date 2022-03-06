@@ -32,6 +32,9 @@
 "only_registered_users_can_comment" = "Only registered users can write comments";
 "signal_type" = "Signal type: ";
 "uploading_photo" = "Uploading photo...";
+"delete_alert_title" = "Delete signal?";
+"delete_alert_message" = "Do you really want to delete this signal?";
+"deleting_signal" = "Deleting signal...";
 
 //FINSettingsVC
 "signal_types_footer" = "Signal types you want to be notified about";

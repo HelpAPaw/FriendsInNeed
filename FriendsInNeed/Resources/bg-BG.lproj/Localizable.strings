@@ -75,6 +75,10 @@
 "signal_type" = "Тип на сигнала: ";
 "uploading_photo" = "Качване на снимката...";
 "Select Navigation App" = "Изберете приложение за навигация";
+"Delete" = "Изтрий";
+"delete_alert_title" = "Изтрий сигнала?";
+"delete_alert_message" = "Наистина ли искате да изтриете този сигнал?";
+"deleting_signal" = "Изтриване на сигнала...";
 
 //Signal
 "(empty description)" = "(празно описание)";

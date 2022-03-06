@@ -60,6 +60,8 @@
         forSignal:(FINSignal *)signal
 withCurrentComments:(NSArray<FINComment *> *)currentComments
        completion:(void (^)(FINError *error))completion;
+- (void)deleteSignal:(FINSignal *)signal
+      withCompletion:(void (^)(FINError *error))completion;
 - (void)getSignalWithID:(NSString *)signalId
              completion:(void (^)(FINSignal *signal, FINError *error))completion;
 - (BOOL)userIsLogged;

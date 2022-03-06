@@ -47,6 +47,7 @@
 #define kField_Text                 @"text"
 #define kField_Type                 @"type"
 #define kField_Photo                @"photo"
+#define kField_IsDeleted            @"isDeleted"
 
 
 #define kTable_DeviceRegistration   @"DeviceRegistration"
@@ -246,8 +247,10 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:-(60 * 60 * 24 * self.timeout)];
     NSString *whereClause2 = [NSString stringWithFormat:@"%@ > %lu", kField_Created, (long)([timeoutDate timeIntervalSince1970] * 1000)];
     
+    NSString *whereClause3 = [NSString stringWithFormat:@"%@ = %@", kField_IsDeleted, @"FALSE"];
+    
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
-    [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
+    [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@) AND (%@)", whereClause1, whereClause2, whereClause3]];
     
     NSLog(@"Get signals for location: %@", location);
     [self getSignalsWithQueryBuilder:queryBuilder
@@ -563,6 +566,23 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
             [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
             signal.status = status;
+            completion(nil);
+        } errorHandler:^(Fault * _Nonnull fault) {
+            FINError *error = [[FINError alloc] initWithMessage:fault.message];
+            completion(error);
+        }];
+}
+
+- (void)deleteSignal:(FINSignal *)signal withCompletion:(void (^)(FINError *error))completion
+{
+    CLS_LOG(@"Delete signal %@", signal.signalId);
+    
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:[self getSignalsTableName]];
+    NSMutableDictionary *changes = [NSMutableDictionary new];
+    [changes setObject:@YES forKey:kField_IsDeleted];
+    [changes setObject:signal.signalId forKey:kField_ObjectId];
+    [dataStore updateWithEntity:changes
+        responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
             completion(nil);
         } errorHandler:^(Fault * _Nonnull fault) {
             FINError *error = [[FINError alloc] initWithMessage:fault.message];

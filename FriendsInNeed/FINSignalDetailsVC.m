@@ -165,7 +165,14 @@ enum FINPhotoDestination {
                                                                     style:UIBarButtonItemStylePlain
                                                                    target:self
                                                                    action:@selector(onShareButton:)];
-    self.navigationItem.rightBarButtonItem = shareButton;
+    NSMutableArray *rightButtons = [NSMutableArray arrayWithObject:shareButton];
+    if ([_annotation.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
+        UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                      target:self
+                                                                                      action:@selector(onDeleteButton:)];
+        [rightButtons addObject:deleteButton];
+    }
+    self.navigationItem.rightBarButtonItems = rightButtons;
     
     _statusIsExpanded = NO;
     
@@ -628,6 +635,42 @@ enum FINPhotoDestination {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
 
+- (IBAction)onDeleteButton:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"delete_alert_title",nil)
+                                                                   message:NSLocalizedString(@"delete_alert_message",nil)
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete",nil)
+                                                            style:UIAlertActionStyleDestructive
+                                                          handler:^(UIAlertAction * action) {
+                                                              [self deleteSignal];
+                                                          }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil)
+                                                          style:UIAlertActionStyleCancel
+                                                        handler:^(UIAlertAction * action) {}];
+    [alert addAction:deleteAction];
+    [alert addAction:cancelAction];
+    [self presentViewController:alert animated:YES completion:^{}];
+}
+
+- (void)deleteSignal
+{
+    MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    loadingIndicator.label.text = NSLocalizedString(@"deleting_signal", nil);
+    [[FINDataManager sharedManager] deleteSignal:self.annotation.signal
+                                  withCompletion:^(FINError *error) {
+        [loadingIndicator hideAnimated:YES];
+        if (error != nil) {
+            [self showAlertForError:error];
+        } else {
+            [self dismissViewControllerAnimated:YES
+                                     completion:^{
+                [self.delegate removeAnnotation:self.annotation];
+            }];
+        }
+    }];
+}
+
 - (IBAction)onShareButton:(id)sender
 {
     BranchUniversalObject *buo = [[BranchUniversalObject alloc] initWithCanonicalIdentifier:[NSString stringWithFormat:@"signal/%@", self.annotation.signal.signalId]];
@@ -893,7 +936,6 @@ enum FINPhotoDestination {
 
 - (void)onNavigateButtonTapped
 {
-    //TODO: localize
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Select Navigation App", nil)
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];

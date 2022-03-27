@@ -491,18 +491,15 @@
                 UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK",nil)
                                                                         style:UIAlertActionStyleDefault
                                                                       handler:^(UIAlertAction * action) {
-                                                                          // Add new annotation to map and focus it when OK button is pressed
-                                                                          self.focusedSignalId = savedSignal.signalId;
-                                                                          [self addAnnotationToMapFromSignal:savedSignal];
-                                                                      }];
+                    // Add new annotation to map and focus it when OK button is pressed
+                    [self addToMapSavedSignal:savedSignal];
+                }];
                 [alert addAction:defaultAction];
                 [self presentViewController:alert animated:YES completion:^{}];
             }
             else
             {
-                // Add new annotation to map and focus it when OK button is pressed
-                self.focusedSignalId = savedSignal.signalId;
-                [self addAnnotationToMapFromSignal:savedSignal];
+                [self addToMapSavedSignal:savedSignal];
             }
         }
         else
@@ -513,6 +510,13 @@
     
     [_signalTitleTextView resignFirstResponder];
     [_authorPhoneField resignFirstResponder];
+}
+
+- (void)addToMapSavedSignal:(FINSignal *)savedSignal
+{
+    // Intentionally call ivar directly to avoid the setter which gets the signal explicitly (we already have it)
+    self->_focusedSignalId = savedSignal.signalId;
+    [self addAnnotationToMapFromSignal:savedSignal];
 }
 
 - (IBAction)onAttachPhotoButton:(id)sender
@@ -815,6 +819,7 @@
          }
      }];
 }
+
 - (void)setImage:(UIImage *)image forAnnotationView:(MKAnnotationView *)annotationView
 {
     UIImageView *signalImageView = [[UIImageView alloc] initWithImage:image];

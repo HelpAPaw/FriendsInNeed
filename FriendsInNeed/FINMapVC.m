@@ -553,6 +553,8 @@
 
 - (void)addAnnotationToMapFromSignal:(FINSignal *)signal
 {
+    BOOL shouldAdd = YES;
+    
     // Unfortunately to refresh annotations we need to remove and add them again
     // Remove old annotation if present
     for (FINAnnotation *ann in _mapView.annotations)
@@ -563,23 +565,36 @@
         }
         else
         {
-            // Only remove not focused annotations
-            if (   ([ann.signal.signalId isEqualToString:signal.signalId] == YES)
-                && ([_mapView.selectedAnnotations indexOfObject:ann] == NSNotFound)   )
+            // Signal is already present
+            if ([ann.signal.signalId isEqualToString:signal.signalId] == YES)
             {
-                [_mapView removeAnnotation:ann];
+                // Only remove and readd not selected annotations
+                if ([_mapView.selectedAnnotations indexOfObject:ann] == NSNotFound)
+                {
+                    [_mapView removeAnnotation:ann];
+                }
+                else
+                {
+                    // Otherwise don't remove old and don't add new annotation
+                    shouldAdd = NO;
+                }
+                
                 break;
             }
+                
         }
     }
     
     // Add new annotation
-    FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
-    [_mapView addAnnotation:annotation];
-    
-    if ([annotation.signal.signalId isEqualToString:_focusedSignalId])
+    if (shouldAdd)
     {
-        [self focusAnnotation:annotation andCenterOnMap:YES];
+        FINAnnotation *annotation = [[FINAnnotation alloc] initWithSignal:signal];
+        [_mapView addAnnotation:annotation];
+        
+        if ([annotation.signal.signalId isEqualToString:_focusedSignalId])
+        {
+            [self focusAnnotation:annotation andCenterOnMap:YES];
+        }
     }
 }
 

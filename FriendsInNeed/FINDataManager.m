@@ -177,7 +177,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
         
         MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
-        [dataStore updateWithEntity:deviceRegistration
+        [dataStore saveWithEntity:deviceRegistration
                     responseHandler:^(NSDictionary *updatedObject) {
             NSLog(@"Object has been updated: %@", updatedObject); }
                        errorHandler:^(Fault *fault) {
@@ -469,7 +469,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             NSMutableDictionary *changes = [NSMutableDictionary new];
             [changes setObject:urlString forKey:kField_Photo];
             [changes setObject:comment.objectId forKey:kField_ObjectId];
-            [dataStore updateWithEntity:changes
+            [dataStore saveWithEntity:changes
                         responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedComment) {
                 comment.photoUrl = [NSURL URLWithString:urlString];
                 completion(nil);
@@ -562,7 +562,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSMutableDictionary *changes = [NSMutableDictionary new];
     [changes setObject:[NSNumber numberWithUnsignedInteger:status] forKey:kField_Status];
     [changes setObject:signal.signalId forKey:kField_ObjectId];
-    [dataStore updateWithEntity:changes
+    [dataStore saveWithEntity:changes
         responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
             [self sendPushNotificationsForNewStatus:status onSignal:signal withCurrentComments:currentComments];
             signal.status = status;
@@ -581,7 +581,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSMutableDictionary *changes = [NSMutableDictionary new];
     [changes setObject:@YES forKey:kField_IsDeleted];
     [changes setObject:signal.signalId forKey:kField_ObjectId];
-    [dataStore updateWithEntity:changes
+    [dataStore saveWithEntity:changes
         responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
             completion(nil);
         } errorHandler:^(Fault * _Nonnull fault) {

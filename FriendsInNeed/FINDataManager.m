@@ -582,12 +582,13 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [changes setObject:@YES forKey:kField_IsDeleted];
     [changes setObject:signal.signalId forKey:kField_ObjectId];
     [dataStore saveWithEntity:changes
-        responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
-            completion(nil);
-        } errorHandler:^(Fault * _Nonnull fault) {
-            FINError *error = [[FINError alloc] initWithMessage:fault.message];
-            completion(error);
-        }];
+              responseHandler:^(NSDictionary<NSString *,id> * _Nonnull updatedSignal) {
+        [self.nearbySignals removeObject:signal];
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
 }
 
 - (void)getSignalWithID:(NSString *)signalId completion:(void (^)(FINSignal *signal, FINError *error))completion

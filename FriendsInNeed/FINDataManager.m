@@ -1266,6 +1266,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         _timeout = newTimeout;
         [[NSUserDefaults standardUserDefaults] setInteger:newTimeout forKey:kSettingTimeoutKey];
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingTimeoutChanged object:self];
+        // Delete nearby signals so signals that are outside of the new timeout don't remain in cache
+        _nearbySignals = [NSMutableArray new];
     }
 }
 

@@ -173,12 +173,12 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(settingsChanged:)
+                                             selector:@selector(radiusChanged:)
                                                  name:kNotificationSettingRadiusChanged
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(settingsChanged:)
+                                             selector:@selector(timeoutChanged:)
                                                  name:kNotificationSettingTimeoutChanged
                                                object:nil];
     
@@ -284,9 +284,17 @@
     [self initMapVC];
 }
 
-- (void)settingsChanged:(NSNotification *)notification
+- (void)radiusChanged:(NSNotification *)notification
 {
     [self initMapVC];
+    [self refreshOverridingDampening:YES];
+}
+
+- (void)timeoutChanged:(NSNotification *)notification
+{
+    [self removeAllSignalAnnotationsFromMap];
+    [self initMapVC];
+    [self refreshOverridingDampening:YES];
 }
 
 - (void)focusedSignalChanged:(NSNotification *)notification

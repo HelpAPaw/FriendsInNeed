@@ -40,3 +40,6 @@
 "signal_types_footer" = "Signal types you want to be notified about";
 "all_signal_types" = "All signal types";
 "none_signal_types" = "None";
+
+//Sharing
+"share_app_text" = "I found a great app for helping animals in need: ";

@@ -1,0 +1,10 @@
+
+/* Class = "UIButton"; normalTitle = "Share"; ObjectID = "2R5-uC-RiU"; */
+"2R5-uC-RiU.normalTitle" = "Сподели";
+
+/* Class = "UILabel"; text = "Share"; ObjectID = "Ls3-DO-DxY"; */
+"Ls3-DO-DxY.text" = "Сподели";
+
+/* Class = "UILabel"; text = "Do you like the app? Share it with friends!"; ObjectID = "ciq-cC-VaN"; */
+"ciq-cC-VaN.text" = "Харесвате ли приложението?
+Споделете го с приятели!";

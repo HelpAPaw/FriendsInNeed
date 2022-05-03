@@ -29,6 +29,7 @@ enum
     kFeedback,
     kPrivacyPolicy,
     kAbout,
+    kShare,
     kMenuItemsCount
 };
 
@@ -144,6 +145,9 @@ enum
         case kAbout:
             title = NSLocalizedString(@"About",nil);
             break;
+        case kShare:
+            title = NSLocalizedString(@"Share",nil);
+            break;
             
         default:
             break;
@@ -219,6 +223,13 @@ enum
         case kAbout:
         {
             FINAboutVC *aboutVC = [[FINAboutVC alloc] initWithNibName:nil bundle:nil];
+            aboutVC.modalPresentationStyle = UIModalPresentationFullScreen;
+            [self presentViewController:aboutVC animated:YES completion:nil];
+            break;
+        }
+        case kShare:
+        {
+            FINShareVC *aboutVC = [[FINShareVC alloc] initWithNibName:nil bundle:nil];
             aboutVC.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:aboutVC animated:YES completion:nil];
             break;

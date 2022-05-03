@@ -39,6 +39,9 @@
 		F33800251C98CAE70080FACD /* ic_menu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F33800241C98CAE70080FACD /* ic_menu@2x.png */; };
 		F33F7499214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */; };
 		F33F749B214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F33F749D214B0D6D00CCAD54 /* FINPrivacyPolicyVC.xib */; };
+		F341A762281FEBB500274B2F /* FINShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F341A760281FEBB500274B2F /* FINShareVC.swift */; };
+		F341A764281FFF8900274B2F /* FINShareVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F341A766281FFF8900274B2F /* FINShareVC.xib */; };
+		F341A76C2821710000274B2F /* ShareAppPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F341A76B2821710000274B2F /* ShareAppPresenter.swift */; };
 		F35905F91E054EE800A61060 /* FINAboutVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F35905F71E054EE800A61060 /* FINAboutVC.m */; };
 		F35905FE1E0555D200A61060 /* ic_close_x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FB1E0555D200A61060 /* ic_close_x.png */; };
 		F35905FF1E0555D200A61060 /* ic_close_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F35905FC1E0555D200A61060 /* ic_close_x@2x.png */; };
@@ -168,6 +171,10 @@
 		F33F7497214AFB0900CCAD54 /* FINPrivacyPolicyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINPrivacyPolicyVC.swift; sourceTree = "<group>"; };
 		F33F749C214B0D6D00CCAD54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINPrivacyPolicyVC.xib; sourceTree = "<group>"; };
 		F33F749F214B0D7700CCAD54 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINPrivacyPolicyVC.strings"; sourceTree = "<group>"; };
+		F341A760281FEBB500274B2F /* FINShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINShareVC.swift; sourceTree = "<group>"; };
+		F341A765281FFF8900274B2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINShareVC.xib; sourceTree = "<group>"; };
+		F341A768281FFF8C00274B2F /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINShareVC.strings"; sourceTree = "<group>"; };
+		F341A76B2821710000274B2F /* ShareAppPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareAppPresenter.swift; sourceTree = "<group>"; };
 		F35905F61E054EE800A61060 /* FINAboutVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINAboutVC.h; sourceTree = "<group>"; };
 		F35905F71E054EE800A61060 /* FINAboutVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINAboutVC.m; sourceTree = "<group>"; };
 		F35905FB1E0555D200A61060 /* ic_close_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_close_x.png; sourceTree = "<group>"; };
@@ -366,6 +373,15 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		F341A763281FEBD900274B2F /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				F341A760281FEBB500274B2F /* FINShareVC.swift */,
+				F341A766281FFF8900274B2F /* FINShareVC.xib */,
+			);
+			name = Share;
+			sourceTree = "<group>";
+		};
 		F35258B1215ECF17001A0DE1 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -516,6 +532,7 @@
 			children = (
 				147F2CD61E72BEC1007B1017 /* CustomToolbar.swift */,
 				1470C8D11FC164BD0072568E /* AlertPresenter.swift */,
+				F341A76B2821710000274B2F /* ShareAppPresenter.swift */,
 				F31BD2BE25E2900F0097FF36 /* FINDropdownTextField.swift */,
 			);
 			name = Reusable;
@@ -526,6 +543,7 @@
 			children = (
 				1449F6181FC6311D0078317E /* Menu */,
 				1449F6191FC631280078317E /* About */,
+				F341A763281FEBD900274B2F /* Share */,
 				F35906031E05823800A61060 /* FINMailComposer.h */,
 				F35906011E05821C00A61060 /* FINMailComposer.m */,
 				1449F61A1FC631390078317E /* FAQ */,
@@ -697,6 +715,7 @@
 				1420BA751E730663006F0B0E /* FINFaqVC.xib in Resources */,
 				1420BA701E73011B006F0B0E /* FINMenuVC.xib in Resources */,
 				F3B2504021582DF900ED1D1D /* FINSettingsVC.xib in Resources */,
+				F341A764281FFF8900274B2F /* FINShareVC.xib in Resources */,
 				F39C39461C9D8C1C007A2D8E /* ic_dropdown_reversed.png in Resources */,
 				F38B72FE1C00E04F00FBE20C /* Assets.xcassets in Resources */,
 				F3D06A0E20C4428A00A8939E /* FINAdminVC.xib in Resources */,
@@ -846,7 +865,9 @@
 				F35906021E05821C00A61060 /* FINMailComposer.m in Sources */,
 				F32711DF1CCCCA3D00E51AEA /* FINComment.m in Sources */,
 				F31FDD2A1DC4ABFC00076B56 /* FINMenuVC.m in Sources */,
+				F341A762281FEBB500274B2F /* FINShareVC.swift in Sources */,
 				F31BD2BF25E2900F0097FF36 /* FINDropdownTextField.swift in Sources */,
+				F341A76C2821710000274B2F /* ShareAppPresenter.swift in Sources */,
 				1470C8D21FC164BD0072568E /* AlertPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -968,6 +989,15 @@
 				F33F749F214B0D7700CCAD54 /* bg-BG */,
 			);
 			name = FINPrivacyPolicyVC.xib;
+			sourceTree = "<group>";
+		};
+		F341A766281FFF8900274B2F /* FINShareVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F341A765281FFF8900274B2F /* Base */,
+				F341A768281FFF8C00274B2F /* bg-BG */,
+			);
+			name = FINShareVC.xib;
 			sourceTree = "<group>";
 		};
 		F38B72FF1C00E04F00FBE20C /* LaunchScreen.storyboard */ = {

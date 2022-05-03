@@ -47,6 +47,7 @@
 "Feedback" = "Обратна връзка";
 "Privacy Policy" = "Политика за поверителност";
 "About" = "За приложението";
+"Share" = "Сподели";
 
 //MailComposser.m
 "Your mail client is not set up.\nYou can reach us at %@" = "Вашият имейл клиент не е конфигуриран.\nВие може да се свържете с нас на %@";
@@ -105,3 +106,9 @@
 "New signal" = "Нов сигнал";
 "New comment" = "Нов коментар";
 "New status" = "Нов статус";
+
+//Sharing
+"share_app_text" = "Открих страхотно приложение за помощ на животни в беда: ";
+"Later" = "По-късно";
+"share_app_prompt_title" = "Сподели приложението?";
+"share_app_prompt_message" = "Ако приложението ти харесва, моля сподели го с приятели!";

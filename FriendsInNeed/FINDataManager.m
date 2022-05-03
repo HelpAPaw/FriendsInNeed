@@ -29,6 +29,7 @@
 #define kDeviceRegistrationIdKey    @"kDeviceRegistrationIdKey"
 #define kDeviceTokenKey             @"kDeviceTokenKey"
 #define kPageSize                   100
+#define kAppLaunchCounterKey        @"kAppLaunchCounterKey"
 
 #define kField_ObjectId             @"objectId"
 #define kField_Author               @"author"
@@ -937,6 +938,24 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 {
     [[NSUserDefaults standardUserDefaults] setBool:isInTestMode forKey:kIsInTestModeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - App counter
++ (void)setAppLaunchCounter:(NSInteger)newValue {
+    [[NSUserDefaults standardUserDefaults] setInteger:newValue forKey:kAppLaunchCounterKey];
+}
+
++ (NSInteger)getAppLaunchCounter {
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kAppLaunchCounterKey];
+}
+
++ (void)incrementAppLaunchCounter {
+    NSInteger counter = [self getAppLaunchCounter];
+    [self setAppLaunchCounter:++counter];
+}
+
++ (void)resetAppLaunchCounter {
+    [self setAppLaunchCounter:0];
 }
 
 - (NSString *)getSignalsTableName

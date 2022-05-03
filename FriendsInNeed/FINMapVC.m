@@ -203,6 +203,8 @@
     [self setupAddSignalView];
     
     [self setupNavigationBar];
+    
+    [self showShareAppPromptIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1075,6 +1077,29 @@
     self.lastRefreshRadius = 0;
     [self removeAllSignalAnnotationsFromMap];
     [self refreshOverridingDampening:YES];
+}
+
+- (void)showShareAppPromptIfNeeded {
+    NSInteger counter = [FINDataManager getAppLaunchCounter];
+    if (counter == kAppLaunchCountForSharePrompt) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                         style:UIAlertActionStyleCancel
+                                                       handler:nil];
+        UIAlertAction *later = [UIAlertAction actionWithTitle:NSLocalizedString(@"Later", nil)
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction * _Nonnull action) {
+            [FINDataManager resetAppLaunchCounter];
+        }];
+        UIAlertAction *share = [UIAlertAction actionWithTitle:NSLocalizedString(@"Share", nil)
+                                                        style:UIAlertActionStyleDefault
+                                                      handler:^(UIAlertAction * _Nonnull action) {
+            [self showShareAppActivityFrom:self.navigationController.navigationBar];
+        }];
+        
+        [self showAlertViewControllerWithTitle:NSLocalizedString(@"share_app_prompt_title", nil)
+                                       message:NSLocalizedString(@"share_app_prompt_message", nil)
+                                       actions:@[cancel, share, later]];
+    }
 }
 
 @end

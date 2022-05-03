@@ -79,6 +79,8 @@
     
     [self registerForNotifications];
     
+    [FINDataManager incrementAppLaunchCounter];
+    
     [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
     
     return YES;

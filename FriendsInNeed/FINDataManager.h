@@ -20,6 +20,8 @@
 #define kUserPropertyPhoneNumber                @"phoneNumber"
 #define kUserPropertyAcceptedPrivacyPolicy      @"acceptedPrivacyPolicy"
 
+#define kAppLaunchCountForSharePrompt 10
+
 @protocol FINSignalsMapDelegate <NSObject>
 
 - (void)updateMapWithNearbySignals:(NSArray *)nearbySignals;
@@ -108,6 +110,10 @@ withCurrentComments:(NSArray<FINComment *> *)currentComments
 - (void)saveSettings;
 
 + (NSInteger)getNewStatusCodeFromStatusChangedComment:(NSString *)commentText;
+
++ (NSInteger)getAppLaunchCounter;
++ (void)incrementAppLaunchCounter;
++ (void)resetAppLaunchCounter;
 
 @property (weak, nonatomic) id<FINSignalsMapDelegate> mapDelegate;
 @property (strong, nonatomic) NSMutableArray    *nearbySignals;

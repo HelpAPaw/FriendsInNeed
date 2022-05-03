@@ -43,3 +43,5 @@
 
 //Sharing
 "share_app_text" = "I found a great app for helping animals in need: ";
+"share_app_prompt_title" = "Share the app?";
+"share_app_prompt_message" = "If you like the app please share it with friends!";

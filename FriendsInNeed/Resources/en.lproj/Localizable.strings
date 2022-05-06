@@ -6,14 +6,17 @@
   Copyright © 2017 Milen. All rights reserved.
 */
 
+//FAQ
 "Q1" = "How does this app work?";
-"A1" = "If you see a stray animal that needs help but for some reason cannot provide the help yourself you can submit a signal that marks the place and describes the situation. Other people that are nearby will receive a notification about it. Hopefully someone will react to the signal and help the animal.";
+"A1" = "If you come across an animal that needs help but for some reason you cannot provide that help yourself, you can submit a signal marking the location and describing the situation. Other users nearby will receive a notification about it. Hopefully someone will react to the signal and help the animal.";
 "Q2" = "Who are the people that will help those animals?";
-"A2" = "Help A Paw connects a network of volunteers that care about animals - just like you!";
+"A2" = "Help a Paw is a network of volunteers who love animals - just like you!";
 "Q3" = "How does the status of the signal change?";
-"A3" = "When a signal is submitted it starts with status 'Help needed'. When somebody decides to answer the signal he/she changes the status to 'Somebody on the way' so that other people know. If for example the person arrives at the place but needs some assistance the status can be changed back to 'Help needed'. When the animal finally receives the needed help the signal is marked as 'Solved'. Signals are color-coded in red, orange and green according to their status.";
+"A3" = "When a signal is submitted it starts with status 'Help needed'. When somebody decides to respond to the signal he/she changes the status to 'Somebody on the way'. When the animal finally receives the needed help the signal is marked as 'Solved'. In case the situation changes status can be changed back to 'Help needed'. Signals are color-coded in red, orange and green according to their status.";
 "Q4" = "Does this app track my location?";
-"A4" = "No. Your location is obtained and used only locally on your device. It will not be recorded on a server or used with any other purpose beside notifying you of animals in need in your area.";
+"A4" = "Yes. In order to alert you about signals nearby the app needs to know where you are. Approximate locations is enough. Help a Paw uses your location only for the needs of the app and does not share it with anyone. In case you don't want to give permission for location usage the app can work in passive mode - you can manually check for signals in a region that interest you. Keep in mind though that you won't receive notifications and time is often of critical importance.";
+"Q5" = "Why is the app accessing my location even when I don't use it?";
+"A5" = "In your everyday life you move and with that the last location when you opened the app may become outdated. In order for the app to alert you about signals around your new location it receives an alert from the operating system when your location changes significantly. The process is optimized so that it uses minimum energy and you don't need to worry about your battery status.";
 
 //FINLoginVC.m
 "enter_registration_email" = "Please enter the email you used to register";

@@ -46,7 +46,7 @@
     [_tableView registerNib:[UINib nibWithNibName:@"FINFaqCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:kQuestionCellIdentifier];
     
     _questionsAndAnswers = [NSMutableArray new];
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
         FINQnA *qna = [FINQnA new];
         NSString *question = [NSString stringWithFormat:@"Q%d", i+1];
         NSString *answer   = [NSString stringWithFormat:@"A%d", i+1];

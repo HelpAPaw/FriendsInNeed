@@ -12,8 +12,13 @@ class FINSettingsSliderCell: UITableViewCell {
     var unit = ""
     var min = 0
     var max = 100
-    var lastStep: Float = 0.0
-    public var valueChangedCallback: ((Int) -> Void)?
+    //Callback for changes that has the option to transform the linear scale into e.g. logarithmic one
+    lazy var valueChangedCallback: ((Float) -> Int) = {
+        func f(value: Float) -> Int {
+            return Int(value)
+        }
+        return f
+    }()
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var slider: UISlider!
 
@@ -23,37 +28,31 @@ class FINSettingsSliderCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func setup(with unit: String, min: Int, max: Int, currentValue: Int) {
+    func setup(with unit: String, min: Int, max: Int, currentValue: Int, callback: @escaping ((Float) -> Int)) {
         self.selectionStyle = .none
         
         self.unit = unit
         self.min = min
         self.max = max
+        self.valueChangedCallback = callback
         
         slider.minimumValue = Float(min)
         slider.maximumValue = Float(max)
         slider.value = Float(currentValue)
-        lastStep = slider.value
-        updateLabel()
+        updateValue()
     }
     
-    func updateLabel() {
+    func updateValue() {
+        let valueToShow = valueChangedCallback(slider.value)
+        updateLabel(valueToShow: valueToShow)
+    }
+    
+    func updateLabel(valueToShow: Int) {
         let format = NSLocalizedString(unit, comment: "")
-        label.text = String.localizedStringWithFormat(format, Int(slider.value))
+        label.text = String.localizedStringWithFormat(format, valueToShow)
     }
     
     @IBAction func sliderDidMove(_ sender: Any) {
-        // Make the slider jump in steps of 1 whole unit
-        let newStep = roundf(slider.value)
-        slider.value = newStep
-        
-        // If the value has changed - update the label and call the callback (if present)
-        if newStep != lastStep  {
-            lastStep = newStep
-            updateLabel()
-            if let valueChangedCallback = valueChangedCallback {
-                valueChangedCallback(Int(newStep))
-            }
-        }
+        updateValue()
     }
 }

@@ -21,6 +21,18 @@ class FINSettingsVC: UIViewController {
     let kReuseIdSliderCell = "SliderCell"
     let kReuseIdSignalTypesCell = "SignalTypesCell"
     
+    let kTimeoutMax = 30.0
+    let kTimeoutMin = 1.0
+    let kRadiusMax = 1000.0
+    let kRadiusMin = 1.0
+    //Coefficients for calculating linear <-> logarithmic conversion
+    lazy var kScaleCoefficientB = {
+        log(self.kRadiusMax / self.kRadiusMin) / (self.kRadiusMax - self.kRadiusMin)
+    }()
+    lazy var kScaleCoefficientA = {
+        kRadiusMax / exp(kScaleCoefficientB * kRadiusMax)
+    }()
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -71,13 +83,11 @@ extension FINSettingsVC: UITableViewDataSource {
         switch indexPath.section {
         case Settings.radius.rawValue:
             let sliderCell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell) as! FINSettingsSliderCell
-            sliderCell.setup(with: "number_of_kilometers", min: 1, max: 600, currentValue: radiusValue)
-            sliderCell.valueChangedCallback = radiusValueChanged
+            sliderCell.setup(with: "number_of_kilometers", min: Int(kRadiusMin), max: Int(kRadiusMax), currentValue: unscaleLogarithmic(scaledValue: radiusValue), callback: radiusValueChanged(to:))
             cell = sliderCell
         case Settings.timeout.rawValue:
             let sliderCell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSliderCell) as! FINSettingsSliderCell
-            sliderCell.setup(with: "number_of_days", min: 1, max: 30, currentValue: timeoutValue)
-            sliderCell.valueChangedCallback = timeoutValueChanged
+            sliderCell.setup(with: "number_of_days", min: Int(kTimeoutMin), max: Int(kTimeoutMax), currentValue: timeoutValue, callback: timeoutValueChanged(to:))
             cell = sliderCell
         case Settings.types.rawValue:
             cell = tableView.dequeueReusableCell(withIdentifier: kReuseIdSignalTypesCell)!
@@ -145,12 +155,22 @@ extension FINSettingsVC: UITableViewDelegate {
 }
 
 extension FINSettingsVC {
-    func radiusValueChanged(to newValue: Int) {
-        radiusValue = newValue
+    func scaleLogarithmic(unscaledValue: Float) -> Int {
+        Int(kScaleCoefficientA * exp(kScaleCoefficientB * Double(unscaledValue)))
     }
     
-    func timeoutValueChanged(to newValue: Int) {
-        timeoutValue = newValue
+    func unscaleLogarithmic(scaledValue: Int) -> Int {
+        Int(log(Double(scaledValue) / kScaleCoefficientA) / kScaleCoefficientB)
+    }
+    
+    func radiusValueChanged(to newValue: Float) -> Int {
+        radiusValue = scaleLogarithmic(unscaledValue: newValue)
+        return radiusValue
+    }
+    
+    func timeoutValueChanged(to newValue: Float) -> Int {
+        timeoutValue = Int(newValue)
+        return timeoutValue
     }
 }
 

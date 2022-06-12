@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "You don't have any submitted signals"; ObjectID = "D6O-CM-NT1"; */
+"D6O-CM-NT1.text" = "You don't have any submitted signals";
+
+/* Class = "UIButton"; configuration.title = "Retry"; ObjectID = "FrD-bh-SY7"; */
+"FrD-bh-SY7.configuration.title" = "Опитай отново";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "FrD-bh-SY7"; */
+"FrD-bh-SY7.normalTitle" = "Опитай отново";
+
+/* Class = "UILabel"; text = "An error occurred"; ObjectID = "KiM-ad-EXH"; */
+"KiM-ad-EXH.text" = "Възникна грешка";

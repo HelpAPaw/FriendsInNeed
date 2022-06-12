@@ -820,7 +820,8 @@
     
     CLS_LOG(@"Show details for signal %@", annotation.signal.signalId);
     
-    FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithAnnotation:annotation];
+    FINSignalDetailsVC *signalDetailsVC = [[FINSignalDetailsVC alloc] initWithSignal:annotation.signal
+                                                                       andAnnotation:annotation];
     signalDetailsVC.delegate = self;
     signalDetailsVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
     

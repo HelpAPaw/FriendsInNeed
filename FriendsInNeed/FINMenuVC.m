@@ -24,6 +24,7 @@
 enum
 {
     kLogin,
+    kMySignals,
     kSettings,
     kFAQ,
     kFeedback,
@@ -130,6 +131,9 @@ enum
             }
             break;
         }
+        case kMySignals:
+            title = NSLocalizedString(@"My Signals",nil);
+            break;
         case kSettings:
             title = NSLocalizedString(@"Settings",nil);
             break;
@@ -191,6 +195,31 @@ enum
                 loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
                 [self presentViewController:loginVC animated:YES completion:^{}];
             }
+            break;
+        }
+        case kMySignals:
+        {
+            if ([[FINDataManager sharedManager] userIsLogged]) {
+                FINMySignalsVC *mySignalsVC = [[FINMySignalsVC alloc] initWithNibName:nil bundle:nil];
+                mySignalsVC.modalPresentationStyle = UIModalPresentationFullScreen;
+                [self presentViewController:mySignalsVC animated:YES completion:nil];
+            }
+            else {
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil)
+                                                                 style:UIAlertActionStyleCancel
+                                                               handler:nil];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil)
+                                                                 style:UIAlertActionStyleDefault
+                                                            handler:^(UIAlertAction * _Nonnull action) {
+                    FINLoginVC *loginVC = [[FINLoginVC alloc] init];
+                    loginVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+                    [self presentViewController:loginVC animated:YES completion:^{}];
+                }];
+                [self showAlertViewControllerWithTitle:@""
+                                               message:NSLocalizedString(@"login_is_needed_to_view_section", nil)
+                                               actions:@[cancel, ok]];
+            }
+            
             break;
         }
         case kSettings:

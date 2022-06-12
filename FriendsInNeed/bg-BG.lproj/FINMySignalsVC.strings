@@ -1,0 +1,9 @@
+
+/* Class = "UISegmentedControl"; 5XR-6h-c2J.segmentTitles[0] = "Submitted"; ObjectID = "5XR-6h-c2J"; */
+"5XR-6h-c2J.segmentTitles[0]" = "Подадени";
+
+/* Class = "UISegmentedControl"; 5XR-6h-c2J.segmentTitles[1] = "Commented"; ObjectID = "5XR-6h-c2J"; */
+"5XR-6h-c2J.segmentTitles[1]" = "Коментирани";
+
+/* Class = "UILabel"; text = "My Signals"; ObjectID = "YKd-db-JNC"; */
+"YKd-db-JNC.text" = "Моите Сигнали";

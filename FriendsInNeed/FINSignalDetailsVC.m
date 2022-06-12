@@ -73,6 +73,7 @@ enum FINPhotoDestination {
 @property (weak, nonatomic) IBOutlet UIButton *sendCommentButton;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *sendCommentLoadingIndicator;
 
+@property (strong, nonatomic) FINSignal *signal;
 @property (strong, nonatomic) FINAnnotation *annotation;
 @property (strong, nonatomic) NSMutableArray *comments;
 @property (assign, nonatomic) BOOL statusIsExpanded;
@@ -89,12 +90,14 @@ enum FINPhotoDestination {
 
 @implementation FINSignalDetailsVC
 
-- (FINSignalDetailsVC *)initWithAnnotation:(FINAnnotation *)annotation
+- (FINSignalDetailsVC *)initWithSignal:(FINSignal *)signal
+                         andAnnotation:(FINAnnotation *)annotation
 {
     self = [self init];
     
+    _signal = signal;
     _annotation = annotation;
-    _status = _annotation.signal.status;
+    _status = signal.status;
     _comments = [NSMutableArray new];
     _commentsAreLoaded = NO;
     
@@ -107,7 +110,7 @@ enum FINPhotoDestination {
 
 - (void)getComments
 {
-    [[FINDataManager sharedManager] getCommentsForSignal:_annotation.signal completion:^(NSArray *comments, FINError *error) {
+    [[FINDataManager sharedManager] getCommentsForSignal:self.signal completion:^(NSArray *comments, FINError *error) {
         
         if (!error)
         {
@@ -166,7 +169,7 @@ enum FINPhotoDestination {
                                                                    target:self
                                                                    action:@selector(onShareButton:)];
     NSMutableArray *rightButtons = [NSMutableArray arrayWithObject:shareButton];
-    if ([_annotation.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
+    if ([self.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
         UIBarButtonItem *deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                                       target:self
                                                                                       action:@selector(onDeleteButton:)];
@@ -317,23 +320,23 @@ enum FINPhotoDestination {
             detailsCell.backgroundColor = [UIColor clearColor];
             detailsCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            [detailsCell setTitle:_annotation.signal.title];
-            [detailsCell setAuthor:_annotation.signal.authorName];
-            [detailsCell setPhoneNumber:_annotation.signal.authorPhone];
-            [detailsCell setDate:[_dateFormatter stringFromDate:_annotation.signal.dateCreated]];
-            if ([_annotation.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
+            [detailsCell setTitle:self.signal.title];
+            [detailsCell setAuthor:self.signal.authorName];
+            [detailsCell setPhoneNumber:self.signal.authorPhone];
+            [detailsCell setDate:[_dateFormatter stringFromDate:self.signal.dateCreated]];
+            if ([self.signal.authorId isEqualToString:[[FINDataManager sharedManager] getUserId]]) {
                 [detailsCell setUploadPhotoButtonIsVisible:YES];
             }
-            if (_annotation.signal.photoUrl)
+            if (self.signal.photoUrl)
             {
                 detailsCell.delegate = self;
-                [self imageGetterFrom:_annotation.signal.photoUrl forCell:detailsCell];
+                [self imageGetterFrom:self.signal.photoUrl forCell:detailsCell];
             }
             
             NSString *typeString = @"-";
-            if (_annotation.signal.type < [FINDataManager sharedManager].signalTypes.count)
+            if (self.signal.type < [FINDataManager sharedManager].signalTypes.count)
             {
-                typeString = [FINDataManager sharedManager].signalTypes[_annotation.signal.type];
+                typeString = [FINDataManager sharedManager].signalTypes[self.signal.type];
                 //TODO: is this working
                 typeString = [NSString stringWithFormat:NSLocalizedString(@"Type: %@", nil), typeString];
             }
@@ -591,7 +594,7 @@ enum FINPhotoDestination {
                 [self prepareCellFor:tableView AtIndexPath:indexPath];
                 _status = 3;
                 
-                [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:_annotation.signal withCurrentComments:self.comments completion:^(FINError *error) {
+                [[FINDataManager sharedManager] setStatus:indexPath.row forSignal:self.signal withCurrentComments:self.comments completion:^(FINError *error) {
                     if (error != nil) {
                         [self prepareCellFor:tableView AtIndexPath:indexPath];
                         self.status = currentStatus;
@@ -630,8 +633,10 @@ enum FINPhotoDestination {
 
 - (IBAction)onCloseButton:(id)sender
 {
-    [self.delegate refreshAnnotation:_annotation];
-    [self.delegate focusAnnotation:_annotation andCenterOnMap:NO];
+    if (self.annotation != nil) {
+        [self.delegate refreshAnnotation:_annotation];
+        [self.delegate focusAnnotation:_annotation andCenterOnMap:NO];
+    }
     [self.presentingViewController dismissViewControllerAnimated:YES completion:^{}];
 }
 
@@ -711,7 +716,7 @@ enum FINPhotoDestination {
     [_addCommentTextField resignFirstResponder];
 
     [self setSendingCommentMode];
-    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSignal:_annotation.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
+    [[FINDataManager sharedManager] saveComment:_addCommentTextField.text forSignal:self.signal withCurrentComments:self.comments completion:^(FINComment *comment, FINError *error) {
         
         if (error != nil) {
             [self resetSendingCommentMode];
@@ -917,7 +922,7 @@ enum FINPhotoDestination {
     if (_photoDestination == kPhotoDestinationSignal) {
         MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         loadingIndicator.label.text = NSLocalizedString(@"uploading_photo", nil);
-        [[FINDataManager sharedManager] uploadPhoto:image forSignal:_annotation.signal withCompletion:^(FINError *error) {
+        [[FINDataManager sharedManager] uploadPhoto:image forSignal:self.signal withCompletion:^(FINError *error) {
             [loadingIndicator hideAnimated:YES];
             
             if (error == nil) {
@@ -940,8 +945,8 @@ enum FINPhotoDestination {
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     
-    NSString *encodedTitle = [_annotation.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString *appleUrlString = [NSString stringWithFormat:@"http://maps.apple.com/?q=%@&ll=%f,%f", encodedTitle, _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    NSString *encodedTitle = [self.signal.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *appleUrlString = [NSString stringWithFormat:@"http://maps.apple.com/?q=%@&ll=%f,%f", encodedTitle, self.signal.coordinate.latitude, self.signal.coordinate.longitude];
     UIAlertAction *action = [UIAlertAction actionWithTitle:@"Apple Maps"
                                                      style:UIAlertActionStyleDefault
                                                    handler:^(UIAlertAction * _Nonnull action) {
@@ -951,7 +956,7 @@ enum FINPhotoDestination {
     }];
     [alert addAction:action];
     
-    NSString *googleUrlString = [NSString stringWithFormat:@"comgooglemaps://?daddr=%f,%f&directionsmode=driving", _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    NSString *googleUrlString = [NSString stringWithFormat:@"comgooglemaps://?daddr=%f,%f&directionsmode=driving", self.signal.coordinate.latitude, self.signal.coordinate.longitude];
     NSURL *googleUrl = [NSURL URLWithString:googleUrlString];
     if ([UIApplication.sharedApplication canOpenURL:googleUrl]) {
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"Google Maps"
@@ -964,7 +969,7 @@ enum FINPhotoDestination {
         [alert addAction:action];
     }
         
-    NSString *wazeUrlString = [NSString stringWithFormat:@"waze://?ll=%f,%f&navigate=true", _annotation.signal.coordinate.latitude, _annotation.signal.coordinate.longitude];
+    NSString *wazeUrlString = [NSString stringWithFormat:@"waze://?ll=%f,%f&navigate=true", self.signal.coordinate.latitude, self.signal.coordinate.longitude];
     NSURL *wazeUrl = [NSURL URLWithString:wazeUrlString];
     if ([UIApplication.sharedApplication canOpenURL:wazeUrl]) {
         UIAlertAction *action = [UIAlertAction actionWithTitle:@"Waze"

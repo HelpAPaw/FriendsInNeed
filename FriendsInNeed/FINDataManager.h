@@ -46,6 +46,8 @@
                withCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getTotalSignalCountWithCompletionHandler:(void (^)(NSInteger count, FINError *error))completion;
 - (void)getNewSignalsForLastLocationWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+- (void)getSubmittedSignalsByCurrentUserWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completion;
+- (void)getCommentedSignalsByCurrentUserWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completion;
 - (void)uploadPhoto:(UIImage *)photo
           forSignal:(FINSignal *)signal
      withCompletion:(void (^)(FINError *error))completion;

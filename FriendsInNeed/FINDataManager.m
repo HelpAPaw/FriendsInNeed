@@ -32,6 +32,7 @@
 #define kAppLaunchCounterKey        @"kAppLaunchCounterKey"
 
 #define kField_ObjectId             @"objectId"
+#define kField_OwnerId              @"ownerId"
 #define kField_Author               @"author"
 #define kField_AuthorPhone          @"authorPhone"
 #define kField_SignalType           @"signalType"
@@ -255,7 +256,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     
     NSLog(@"Get signals for location: %@", location);
     [self getSignalsWithQueryBuilder:queryBuilder
-               withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
+               withCompletionHandler:^(NSArray<NSDictionary<NSString *, id> *> *result, FINError *error) {
         if (error == nil) {
             NSLog(@"Received %lu signals", (unsigned long)result.count);
             
@@ -361,6 +362,70 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 completionHandler(UIBackgroundFetchResultFailed);
             }
         }
+    }];
+}
+
+- (void)getSubmittedSignalsByCurrentUserWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completion
+{
+    NSString *whereClause = [NSString stringWithFormat:@"%@ = '%@'", kField_OwnerId, [self getUserId]];
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setWhereClause:whereClause];
+    [self getSignalsWithQueryBuilder:queryBuilder withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
+        if (result != nil) {
+            NSMutableArray *signals = [NSMutableArray new];
+            for (NSDictionary *signalDict in result) {
+                FINSignal *signal = [self signalFromDictionary:signalDict];
+                [signals addObject:signal];
+            }
+            completion(signals, nil);
+        }
+        else {
+            completion(nil, error);
+        }
+    }];
+}
+
+- (void)getCommentedSignalsByCurrentUserWithCompletionHandler:(void (^)(NSArray<FINSignal *> *signals, FINError *error))completion
+{
+    NSString *whereClause = [NSString stringWithFormat:@"%@ = '%@'", kField_OwnerId, [self getUserId]];
+    DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+    [queryBuilder setWhereClause:whereClause];
+    
+    [self getCommentsWithQuery:queryBuilder
+                        offset:0
+                      response:^(NSArray *comments) {
+        if (comments.count == 0) {
+            completion(@[], nil);
+            return;
+        }
+        NSMutableArray *signalIds = [NSMutableArray new];
+        for (FINComment *comment in comments) {
+            [signalIds addObject:[NSString stringWithFormat:@"'%@'", comment.signalId]];
+        }
+        NSString *signalIdsString = [signalIds componentsJoinedByString:@","];
+        NSString *whereClause1 = [NSString stringWithFormat:@"%@ IN (%@)", kField_ObjectId, signalIdsString];
+        // Exclude signals submitted by this user because they appear in the "Submitted" section
+        NSString *whereClause2 = [NSString stringWithFormat:@"%@ != '%@'", kField_OwnerId, [self getUserId]];
+        DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
+        [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
+        
+        [self getSignalsWithQueryBuilder:queryBuilder
+                   withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
+            if (result != nil) {
+                NSMutableArray *signals = [NSMutableArray new];
+                for (NSDictionary *signalDict in result) {
+                    FINSignal *signal = [self signalFromDictionary:signalDict];
+                    [signals addObject:signal];
+                }
+                completion(signals, nil);
+            }
+            else {
+                completion(nil, error);
+            }
+        }];
+        
+    } error:^(FINError *error) {
+        completion(nil, error);
     }];
 }
 

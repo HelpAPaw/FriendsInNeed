@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FINMySignalsVC" customModule="Help_A_Paw" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="rE2-PG-yai" id="faW-rg-ywB"/>
+                <outlet property="segmentedView" destination="5XR-6h-c2J" id="Lzs-tc-S3c"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VZq-ba-RRZ" userLabel="System bar background">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MNa-Kt-plt" userLabel="Toolbar">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Signals" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YKd-db-JNC">
+                            <rect key="frame" x="45" y="12" width="323" height="21"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uvf-E7-MIY">
+                            <rect key="frame" x="14" y="10" width="24" height="24"/>
+                            <state key="normal" image="ic_close_x_white.png"/>
+                            <connections>
+                                <action selector="onCloseButton:" destination="-1" eventType="touchUpInside" id="LIp-Sr-bNK"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.58823529409999997" blue="0.25882352939999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="B8Z-YH-jnV"/>
+                        <constraint firstItem="uvf-E7-MIY" firstAttribute="centerY" secondItem="MNa-Kt-plt" secondAttribute="centerY" id="K9Y-dN-f4Z"/>
+                        <constraint firstItem="uvf-E7-MIY" firstAttribute="leading" secondItem="MNa-Kt-plt" secondAttribute="leadingMargin" constant="6" id="MEK-f3-bjN"/>
+                        <constraint firstAttribute="height" constant="44" id="eku-Mg-Fph"/>
+                    </constraints>
+                </view>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5XR-6h-c2J" userLabel="Segmented View">
+                    <rect key="frame" x="8" y="96" width="398" height="45"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="8AH-nY-Uza"/>
+                    </constraints>
+                    <segments>
+                        <segment title="Submitted"/>
+                        <segment title="Commented"/>
+                    </segments>
+                    <connections>
+                        <action selector="onSegmentedViewChanged:" destination="-1" eventType="valueChanged" id="e7c-Yp-Hds"/>
+                    </connections>
+                </segmentedControl>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rE2-PG-yai">
+                    <rect key="frame" x="0.0" y="148" width="414" height="748"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="5XR-6h-c2J" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" constant="-8" id="0fc-Ur-gxR"/>
+                <constraint firstItem="5XR-6h-c2J" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="8" id="1Li-f7-hYg"/>
+                <constraint firstAttribute="bottom" secondItem="rE2-PG-yai" secondAttribute="bottom" id="5wy-Bz-WWc"/>
+                <constraint firstItem="VZq-ba-RRZ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="B3h-m7-mBf"/>
+                <constraint firstItem="5XR-6h-c2J" firstAttribute="top" secondItem="VZq-ba-RRZ" secondAttribute="bottom" constant="8" symbolic="YES" id="CxV-fg-Eqs"/>
+                <constraint firstItem="MNa-Kt-plt" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="EdZ-qL-KRf"/>
+                <constraint firstItem="VZq-ba-RRZ" firstAttribute="bottom" secondItem="MNa-Kt-plt" secondAttribute="bottom" id="LVa-cW-XQx"/>
+                <constraint firstItem="rE2-PG-yai" firstAttribute="top" secondItem="5XR-6h-c2J" secondAttribute="bottom" constant="8" symbolic="YES" id="Ok8-c8-ibJ"/>
+                <constraint firstItem="VZq-ba-RRZ" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="WY3-tJ-eVS"/>
+                <constraint firstItem="rE2-PG-yai" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ZsM-JK-2uM"/>
+                <constraint firstItem="MNa-Kt-plt" firstAttribute="bottom" secondItem="VZq-ba-RRZ" secondAttribute="bottom" id="bKp-cO-peD"/>
+                <constraint firstItem="MNa-Kt-plt" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="c09-w4-MDV"/>
+                <constraint firstItem="rE2-PG-yai" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="cvl-Cx-1Xe"/>
+                <constraint firstItem="VZq-ba-RRZ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="gFj-TN-a89"/>
+                <constraint firstItem="MNa-Kt-plt" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="q1Q-yv-6K8"/>
+            </constraints>
+            <point key="canvasLocation" x="131.8840579710145" y="125.89285714285714"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_close_x_white.png" width="24" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

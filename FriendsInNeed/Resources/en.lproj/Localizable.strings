@@ -30,6 +30,9 @@
 "signal_description_placeholder" = "Signal description\n(what is the condition of the animal, what help is needed, etc.)";
 "enter_good_description" = "Please enter a signal description between 10 and 512 symbols";
 
+//FinMenuVC.m
+"login_is_needed_to_view_section" = "You have to log into your profile to view this section";
+
 //FINSignalDetails.m
 "only_registered_users_can_change_status" = "Only registered users can change signal status";
 "only_registered_users_can_comment" = "Only registered users can write comments";
@@ -48,3 +51,7 @@
 "share_app_text" = "I found a great app for helping animals in need: ";
 "share_app_prompt_title" = "Share the app?";
 "share_app_prompt_message" = "If you like the app please share it with friends!";
+
+//My Signals
+"no_submitted_signals" = "You haven't submitted any signals yet";
+"no_commented_signals" = "You haven't commented any signals yet";

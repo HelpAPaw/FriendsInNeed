@@ -371,7 +371,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
     [queryBuilder setSortBy:@[[NSString stringWithFormat:@"%@ DESC", kField_Created]]];
-    [queryBuilder setPageSize:kPageSize];
     [self getSignalsWithQueryBuilder:queryBuilder withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
         if (result != nil) {
             NSMutableArray *signals = [NSMutableArray new];
@@ -392,7 +391,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *whereClause = [NSString stringWithFormat:@"%@ = '%@'", kField_OwnerId, [self getUserId]];
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
-    [queryBuilder setPageSize:kPageSize];
     
     [self getCommentsWithQuery:queryBuilder
                         offset:0
@@ -412,7 +410,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
         [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
         [queryBuilder setSortBy:@[[NSString stringWithFormat:@"%@ DESC", kField_Created]]];
-        [queryBuilder setPageSize:kPageSize];
         
         [self getSignalsWithQueryBuilder:queryBuilder
                    withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
@@ -864,7 +861,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"signalId = \'%@\'", signal.signalId]];
     [queryBuilder setSortBy:@[kField_Created]];
     [queryBuilder addRelatedWithRelated:kField_Author];
-    [queryBuilder setPageSize:kPageSize];
     
     [self getCommentsWithQuery:queryBuilder offset:0 response:^(NSArray *comments) {
         completion(comments, nil);
@@ -896,6 +892,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 // Internal method to recursively getting all pages with comments
 - (void)getCommentsWithQuery:(DataQueryBuilder *)queryBuilder offset:(int)offset response:(void (^)(NSArray *comments))response error:(void (^)(FINError *error))failure
 {
+    [queryBuilder setPageSize:kPageSize];
     [queryBuilder setOffset:offset];
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_Comments];
     [dataStore findWithQueryBuilder:queryBuilder
@@ -1100,7 +1097,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 {
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setRelationsDepth:1];
-    [queryBuilder setPageSize:kPageSize];
     //Get all devices within signalRadius of the signal
     NSString *signalLocationAsWKT = [self getWktPointWithLongitude:signal.coordinate.longitude andLatitude:signal.coordinate.latitude];
     [queryBuilder setWhereClause:[NSString stringWithFormat:@"distanceOnSphere( %@, '%@') < signalRadius * 1000", kField_LastLocation, signalLocationAsWKT]];
@@ -1111,6 +1107,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
 // Internal method to recursively send notifications to all pages of interested devices
 - (void)sendPushNotificationsWith:(DataQueryBuilder *)queryBuilder offset:(int)offset forSignal:(FINSignal *)signal
 {
+    [queryBuilder setPageSize:kPageSize];
     [queryBuilder setOffset:offset];
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
     [dataStore findWithQueryBuilder:queryBuilder
@@ -1225,7 +1222,6 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *whereClause = [NSString stringWithFormat:@"user.objectid IN (%@)", userIds];
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
-    [queryBuilder setPageSize:kPageSize];
         
     [self sendPushNotificationsWith:queryBuilder
                              offset:0
@@ -1242,6 +1238,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                        updateType:(SignalUpdate)signalUpdate
                         newStatus:(FINSignalStatus)newStatus
                        newComment:(NSString *)newComment {
+    
+    [queryBuilder setPageSize:kPageSize];
     queryBuilder.offset = offset;
     MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_DeviceRegistration];
     [dataStore findWithQueryBuilder:queryBuilder

@@ -370,6 +370,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *whereClause = [NSString stringWithFormat:@"%@ = '%@'", kField_OwnerId, [self getUserId]];
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
+    [queryBuilder setSortBy:@[[NSString stringWithFormat:@"%@ DESC", kField_Created]]];
+    [queryBuilder setPageSize:kPageSize];
     [self getSignalsWithQueryBuilder:queryBuilder withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {
         if (result != nil) {
             NSMutableArray *signals = [NSMutableArray new];
@@ -390,6 +392,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     NSString *whereClause = [NSString stringWithFormat:@"%@ = '%@'", kField_OwnerId, [self getUserId]];
     DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
     [queryBuilder setWhereClause:whereClause];
+    [queryBuilder setPageSize:kPageSize];
     
     [self getCommentsWithQuery:queryBuilder
                         offset:0
@@ -408,6 +411,8 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         NSString *whereClause2 = [NSString stringWithFormat:@"%@ != '%@'", kField_OwnerId, [self getUserId]];
         DataQueryBuilder *queryBuilder = [DataQueryBuilder new];
         [queryBuilder setWhereClause:[NSString stringWithFormat:@"(%@) AND (%@)", whereClause1, whereClause2]];
+        [queryBuilder setSortBy:@[[NSString stringWithFormat:@"%@ DESC", kField_Created]]];
+        [queryBuilder setPageSize:kPageSize];
         
         [self getSignalsWithQueryBuilder:queryBuilder
                    withCompletionHandler:^(NSArray<NSDictionary<NSString *,id> *> *result, FINError *error) {

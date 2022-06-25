@@ -50,10 +50,13 @@
 #define kField_Type                 @"type"
 #define kField_Photo                @"photo"
 #define kField_IsDeleted            @"isDeleted"
+#define kField_Name                 @"name"
+#define kField_PhoneNumber          @"phoneNumber"
 
 
 #define kTable_DeviceRegistration   @"DeviceRegistration"
 #define kTable_Comments             @"FINComment"
+#define kTable_Users                @"Users"
 
 
 typedef NS_ENUM(NSUInteger, SignalUpdate) {
@@ -849,6 +852,50 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
     }
                                                    errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
+- (void)updateCurrentUserWithName:(NSString *)name
+                            phone:(NSString *)phone
+                      andPassword:(NSString *)password
+                   withCompletion:(void (^)(FINError *error))completion
+{
+    BackendlessUser *user = Backendless.shared.userService.currentUser;
+    NSMutableDictionary *properties = [NSMutableDictionary new];
+    [properties setValue:name forKey:kField_Name];
+    [properties setValue:phone forKey:kField_PhoneNumber];
+    if (password != nil) {
+        user._password = password;
+    }
+    [user setProperties:properties];
+    [Backendless.shared.userService updateWithUser:user responseHandler:^(BackendlessUser * _Nonnull updatedUser) {
+        if (password != nil) {
+            [self loginWithEmail:user.email andPassword:password completion:^(FINError *error) {}];
+        }
+        
+        completion(nil);
+    } errorHandler:^(Fault * _Nonnull fault) {
+        FINError *error = [[FINError alloc] initWithMessage:fault.message];
+        completion(error);
+    }];
+}
+
+- (void)deleteUserAccountwithCompletion:(void (^)(FINError *error))completion
+{
+    MapDrivenDataStore *dataStore = [Backendless.shared.data ofTable:kTable_Users];
+    [dataStore removeByIdWithObjectId:Backendless.shared.userService.currentUser.objectId
+                      responseHandler:^(NSInteger count) {
+        [self logoutWithCompletion:^(FINError *error) {
+            if (error == nil) {
+                completion(nil);
+            }
+            else {
+                completion(error);
+            }
+        }];
+    } errorHandler:^(Fault * _Nonnull fault) {
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];

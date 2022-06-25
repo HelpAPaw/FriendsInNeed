@@ -55,3 +55,8 @@
 //My Signals
 "no_submitted_signals" = "You haven't submitted any signals yet";
 "no_commented_signals" = "You haven't commented any signals yet";
+
+//My Profile
+"password_fields_mismatch_error" = "The password entered is not the same as the one in the confirmation field!";
+"delete_account_title" = "Delete profile?";
+"delete_account_message" = "Do you really want to delete your profile?";

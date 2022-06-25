@@ -123,7 +123,7 @@ enum
         {
             if ([[FINDataManager sharedManager] userIsLogged])
             {
-                title = NSLocalizedString(@"Logout",nil);
+                title = NSLocalizedString(@"My Profile",nil);
             }
             else
             {
@@ -175,17 +175,9 @@ enum
         {
             if ([[FINDataManager sharedManager] userIsLogged])
             {
-                MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                [[FINDataManager sharedManager] logoutWithCompletion:^(FINError *error) {
-                    [loadingIndicator hideAnimated:YES];
-                    if (error == nil) {
-                        [self refreshLoginStatus];
-                    } else {
-                        [self showAlertViewControllerWithTitle:NSLocalizedString(@"Error", nil)
-                                                       message:error.message
-                                                       actions:nil];
-                    }
-                }];
+                FINMyProfileVC *myProfileVC = [[FINMyProfileVC alloc] initWithNibName:nil bundle:nil];
+                myProfileVC.modalPresentationStyle = UIModalPresentationFullScreen;
+                [self presentViewController:myProfileVC animated:YES completion:nil];
             }
             else
             {

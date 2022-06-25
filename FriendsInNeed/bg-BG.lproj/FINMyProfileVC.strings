@@ -1,0 +1,33 @@
+
+/* Class = "UIButton"; configuration.title = "Delete Account"; ObjectID = "70M-1q-iC9"; */
+"70M-1q-iC9.configuration.title" = "Изтриване на профила";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "70M-1q-iC9"; */
+"70M-1q-iC9.normalTitle" = "Изтриване на профила";
+
+/* Class = "UILabel"; text = "My Profile"; ObjectID = "87Q-7e-orY"; */
+"87Q-7e-orY.text" = "Моят Профил";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "GDw-De-oxu"; */
+"GDw-De-oxu.text" = "Име";
+
+/* Class = "UILabel"; text = "New password"; ObjectID = "H6m-0l-RHA"; */
+"H6m-0l-RHA.text" = "Нова парола";
+
+/* Class = "UILabel"; text = "Email"; ObjectID = "Jim-cZ-Aoq"; */
+"Jim-cZ-Aoq.text" = "Имейл";
+
+/* Class = "UILabel"; text = "Confirm new password"; ObjectID = "MGY-CV-ULM"; */
+"MGY-CV-ULM.text" = "Потвърждение на новата парола";
+
+/* Class = "UIButton"; normalTitle = "Save"; ObjectID = "MfS-lb-P70"; */
+"MfS-lb-P70.normalTitle" = "Запиши";
+
+/* Class = "UIButton"; configuration.title = "Log Out"; ObjectID = "jTe-jS-kYg"; */
+"jTe-jS-kYg.configuration.title" = "Отписване";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "jTe-jS-kYg"; */
+"jTe-jS-kYg.normalTitle" = "Отписване";
+
+/* Class = "UILabel"; text = "Phone number"; ObjectID = "y8k-J3-OuP"; */
+"y8k-J3-OuP.text" = "Телефонен номер";

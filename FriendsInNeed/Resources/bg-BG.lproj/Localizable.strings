@@ -40,8 +40,9 @@
 "signal_description_placeholder" = "Описание на сигнала\n(какво е състоянието на животното, от каква помощ има нужда и т.н.)";
 
 //FinMenuVC.m
-"Login" = "Влез";
-"Logout" = "Излез";
+"Login" = "Вписване";
+"Logout" = "Отписване";
+"My Profile" = "Моят профил";
 "My Signals" = "Моите сигнали";
 "Settings" = "Настройки";
 "FAQ" = "Често Задавани Въпроси";
@@ -120,4 +121,10 @@
 //My Signals
 "no_submitted_signals" = "Нямате подадени сигнали все още";
 "no_commented_signals" = "Нямате коментирани сигнали все още";
+
+//My Profile
+"Error" = "Грешка";
+"password_fields_mismatch_error" = "Въведената парола не съвпада с тази в полето за потвърждение!";
+"delete_account_title" = "Изтрий профила?";
+"delete_account_message" = "Наистина ли искате да изтриете профила си?";
 

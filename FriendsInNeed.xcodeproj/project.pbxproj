@@ -85,6 +85,8 @@
 		F3BA753A22232BD3003FAC5F /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3BA753922232BD3003FAC5F /* UserNotifications.framework */; };
 		F3BA754222232CFD003FAC5F /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BA754122232CFD003FAC5F /* NotificationService.swift */; };
 		F3BA754622232CFD003FAC5F /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F3BA753F22232CFC003FAC5F /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F3BE2DB828672F9F00D10F10 /* FINMyProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BE2DB628672F9F00D10F10 /* FINMyProfileVC.swift */; };
+		F3BE2DB92867706600D10F10 /* FINMyProfileVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3BE2DBB2867706600D10F10 /* FINMyProfileVC.xib */; };
 		F3C47D5928564E2100517741 /* FINMySignalsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C47D5B28564E2100517741 /* FINMySignalsVC.xib */; };
 		F3C47D5E28564ED600517741 /* FINMySignalsChildVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3C47D6028564ED600517741 /* FINMySignalsChildVC.xib */; };
 		F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */ = {isa = PBXBuildFile; fileRef = F3C484711C6C111D0067A169 /* FINLoginVC.m */; };
@@ -244,6 +246,9 @@
 		F3BA753F22232CFC003FAC5F /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3BA754122232CFD003FAC5F /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		F3BA754322232CFD003FAC5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3BE2DB628672F9F00D10F10 /* FINMyProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FINMyProfileVC.swift; sourceTree = "<group>"; };
+		F3BE2DBA2867706600D10F10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMyProfileVC.xib; sourceTree = "<group>"; };
+		F3BE2DBD2867706900D10F10 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMyProfileVC.strings"; sourceTree = "<group>"; };
 		F3C47D5A28564E2100517741 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMySignalsVC.xib; sourceTree = "<group>"; };
 		F3C47D5D28564E2800517741 /* bg-BG */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "bg-BG"; path = "bg-BG.lproj/FINMySignalsVC.strings"; sourceTree = "<group>"; };
 		F3C47D5F28564ED600517741 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FINMySignalsChildVC.xib; sourceTree = "<group>"; };
@@ -572,6 +577,8 @@
 				F35258B1215ECF17001A0DE1 /* Settings */,
 				F3D06A0B20C4428A00A8939E /* FINAdminVC.swift */,
 				F3D06A0C20C4428A00A8939E /* FINAdminVC.xib */,
+				F3BE2DB628672F9F00D10F10 /* FINMyProfileVC.swift */,
+				F3BE2DBB2867706600D10F10 /* FINMyProfileVC.xib */,
 			);
 			name = "Side Menu";
 			sourceTree = "<group>";
@@ -742,6 +749,7 @@
 				F3D06A0E20C4428A00A8939E /* FINAdminVC.xib in Resources */,
 				1420BA7F1E730854006F0B0E /* FINSignalDetailsCell.xib in Resources */,
 				F3C47D5E28564ED600517741 /* FINMySignalsChildVC.xib in Resources */,
+				F3BE2DB92867706600D10F10 /* FINMyProfileVC.xib in Resources */,
 				147F2CFF1E72D47E007B1017 /* FINLoginVC.xib in Resources */,
 				F39C39441C9D8C1C007A2D8E /* ic_dropdown.png in Resources */,
 				F32711DB1CCB8CFF00E51AEA /* ic_camera@2x.png in Resources */,
@@ -876,6 +884,7 @@
 				F317A45D2854C08800907488 /* FINMySignalsChildVC.swift in Sources */,
 				F3B25043215833FF00ED1D1D /* FINSettingsSliderCell.swift in Sources */,
 				F3A6DC671C8488250050F9F3 /* FINDataManager.m in Sources */,
+				F3BE2DB828672F9F00D10F10 /* FINMyProfileVC.swift in Sources */,
 				F30D08682266669F0038C7FF /* SharedConstants.swift in Sources */,
 				F38B72F31C00E04F00FBE20C /* AppDelegate.m in Sources */,
 				F30568CA2827D8460063CBB4 /* FINMySignalsVC.swift in Sources */,
@@ -1042,6 +1051,15 @@
 				F3B2504A2159850700ED1D1D /* bg-BG */,
 			);
 			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
+		F3BE2DBB2867706600D10F10 /* FINMyProfileVC.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F3BE2DBA2867706600D10F10 /* Base */,
+				F3BE2DBD2867706900D10F10 /* bg-BG */,
+			);
+			name = FINMyProfileVC.xib;
 			sourceTree = "<group>";
 		};
 		F3C47D5B28564E2100517741 /* FINMySignalsVC.xib */ = {

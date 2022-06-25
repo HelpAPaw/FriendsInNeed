@@ -92,6 +92,11 @@ withCurrentComments:(NSArray<FINComment *> *)currentComments
 - (void)logoutWithCompletion:(void (^)(FINError *error))completion;
 - (void)resetPasswordForEmail:(NSString *)email
                withCompletion:(void (^)(FINError *error))completion;
+- (void)updateCurrentUserWithName:(NSString *)name
+                            phone:(NSString *)phone
+                      andPassword:(NSString *)password
+                   withCompletion:(void (^)(FINError *error))completion;
+- (void)deleteUserAccountwithCompletion:(void (^)(FINError *error))completion;
 - (void)getCommentsForSignal:(FINSignal *)signal
                   completion:(void (^)(NSArray *comments, FINError *error))completion;
 - (void)saveComment:(NSString *)commentText

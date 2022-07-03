@@ -41,6 +41,12 @@ class FINMyProfileVC: UIViewController {
            password2Field.text != nil &&
            !password1Field.text!.isEmpty &&
            !password2Field.text!.isEmpty {
+            
+            if (password1Field.text!.count < 8) {
+                showAlertViewControllerWithTitle(NSLocalizedString("Error", comment: ""), message: NSLocalizedString("password_too_short_error", comment: ""), actions: nil)
+                return
+            }
+            
             password = password1Field.text
         }
         

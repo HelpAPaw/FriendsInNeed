@@ -160,7 +160,7 @@
                                         <constraint firstAttribute="height" constant="34" id="Ejg-ym-rSP"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" textContentType="new-password"/>
+                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="new-password"/>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm new password" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MGY-CV-ULM">
                                     <rect key="frame" x="0.0" y="358" width="374" height="20.5"/>
@@ -178,7 +178,7 @@
                                         <constraint firstAttribute="height" constant="34" id="EMw-4f-mo2"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" textContentType="new-password"/>
+                                    <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="new-password"/>
                                 </textField>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GbD-n2-F56" userLabel="Bottom Spacer View">
                                     <rect key="frame" x="0.0" y="432.5" width="374" height="20"/>

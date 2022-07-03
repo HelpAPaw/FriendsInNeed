@@ -125,6 +125,7 @@
 //My Profile
 "Error" = "Грешка";
 "password_fields_mismatch_error" = "Въведената парола не съвпада с тази в полето за потвърждение!";
+"password_too_short_error" = "Паролата трябва да е дълга поне 8 символа!";
 "delete_account_title" = "Изтрий профила?";
 "delete_account_message" = "Наистина ли искате да изтриете профила си?";
 

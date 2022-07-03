@@ -58,5 +58,6 @@
 
 //My Profile
 "password_fields_mismatch_error" = "The password entered is not the same as the one in the confirmation field!";
+"password_too_short_error" = "Password must be at least 8 characters long!";
 "delete_account_title" = "Delete profile?";
 "delete_account_message" = "Do you really want to delete your profile?";

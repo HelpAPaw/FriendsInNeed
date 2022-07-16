@@ -181,9 +181,19 @@ continueUserActivity:(NSUserActivity *)userActivity
 }
 
 - (void)postNotificationToFocusSignalWithId:(NSString *)signalId {
-    [NSNotificationCenter.defaultCenter postNotificationName:kNotificationFocusedSignalChanged
-                                                      object:self
-                                                    userInfo:@{kSignalId : signalId}];
+    // Ugly hack to check if FINMapVC is already initialized
+    // If it is not - wait for it because otherwise the notification is lost and signal is not focused
+    if (FINDataManager.sharedManager.mapDelegate != nil) {
+        [NSNotificationCenter.defaultCenter postNotificationName:kNotificationFocusedSignalChanged
+                                                          object:self
+                                                        userInfo:@{kSignalId : signalId}];
+    }
+    else {
+        [self performSelector:@selector(postNotificationToFocusSignalWithId:)
+                   withObject:signalId
+                   afterDelay:0.5];
+    }
+    
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler

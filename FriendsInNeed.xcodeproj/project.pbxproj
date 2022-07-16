@@ -96,6 +96,7 @@
 		F3F225331EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */; };
 		F3F225341EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */; };
 		F3F225361EEC4D2600346AC8 /* FINStatusHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */; };
+		F3FD69CE2879AA3900FB74CC /* FINCrashReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FD69CC2879A03A00FB74CC /* FINCrashReporter.m */; };
 		F3FEAFE41DEBA19900953F7A /* FINMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */; };
 		F3FEAFE51DEBA19900953F7A /* FINMenuCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */; };
 /* End PBXBuildFile section */
@@ -266,6 +267,8 @@
 		F3F225311EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINSignalDetailsStatusChangeCommentCell.swift; sourceTree = "<group>"; };
 		F3F225321EEC02CE00346AC8 /* FINSignalDetailsStatusChangeCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINSignalDetailsStatusChangeCommentCell.xib; sourceTree = "<group>"; };
 		F3F225351EEC4D2600346AC8 /* FINStatusHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FINStatusHelper.swift; sourceTree = "<group>"; };
+		F3FD69CC2879A03A00FB74CC /* FINCrashReporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FINCrashReporter.m; sourceTree = "<group>"; };
+		F3FD69CD2879A12600FB74CC /* FINCrashReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FINCrashReporter.h; sourceTree = "<group>"; };
 		F3FEAFE11DEBA19900953F7A /* FINMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FINMenuCell.h; sourceTree = "<group>"; };
 		F3FEAFE21DEBA19900953F7A /* FINMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FINMenuCell.m; sourceTree = "<group>"; };
 		F3FEAFE31DEBA19900953F7A /* FINMenuCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FINMenuCell.xib; sourceTree = "<group>"; };
@@ -528,6 +531,8 @@
 				F3A6DC651C8488250050F9F3 /* FINDataManager.h */,
 				F3A6DC661C8488250050F9F3 /* FINDataManager.m */,
 				F3B773CF2634477500D39386 /* Secrets.h */,
+				F3FD69CD2879A12600FB74CC /* FINCrashReporter.h */,
+				F3FD69CC2879A03A00FB74CC /* FINCrashReporter.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -869,6 +874,7 @@
 				F3C484781C75514D0067A169 /* FINMapVC.m in Sources */,
 				F33800081C8E3F320080FACD /* FINSignalDetailsVC.m in Sources */,
 				F3C484731C6C111D0067A169 /* FINLoginVC.m in Sources */,
+				F3FD69CE2879AA3900FB74CC /* FINCrashReporter.m in Sources */,
 				F3D06A0D20C4428A00A8939E /* FINAdminVC.swift in Sources */,
 				F3931A9E26225201001C5BC8 /* FINSignalTypesSelectionTVC.swift in Sources */,
 				F301FE031EDEBA1000880ECE /* InputValidator.swift in Sources */,
@@ -1199,7 +1205,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 75;
+				CURRENT_PROJECT_VERSION = 76;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1211,7 +1217,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
@@ -1228,7 +1234,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Help A Paw.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 75;
+				CURRENT_PROJECT_VERSION = 76;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1239,7 +1245,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "FriendsInNeed/Help A Paw-Bridging-Header.h";
@@ -1260,7 +1266,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 75;
+				CURRENT_PROJECT_VERSION = 76;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = NotificationService/Info.plist;
@@ -1270,7 +1276,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw.NotificationService;
@@ -1297,7 +1303,7 @@
 				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 75;
+				CURRENT_PROJECT_VERSION = 76;
 				DEVELOPMENT_TEAM = NJRZ88GCVL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = NotificationService/Info.plist;
@@ -1307,7 +1313,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 5.3.0;
+				MARKETING_VERSION = 5.3.1;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.helpapaw.helpapaw.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";

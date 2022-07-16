@@ -15,7 +15,6 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "FINImagePickerController.h"
 #import "FINGlobalConstants.pch"
-@import FirebaseCrashlytics;
 
 
 #define kAddSignalViewYposition 15.0f

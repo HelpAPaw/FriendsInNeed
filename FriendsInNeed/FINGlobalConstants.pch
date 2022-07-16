@@ -9,7 +9,8 @@
 #ifndef FINGlobalConstants_pch
 #define FINGlobalConstants_pch
 
-#define CLS_LOG(__FORMAT__, ...) [[FIRCrashlytics crashlytics] logWithFormat:@"%s line %d $ " __FORMAT__, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
+#import "FINCrashReporter.h"
+#define CLS_LOG(__FORMAT__, ...) [FINCrashReporter logWithFormat:@"%s line %d $ " __FORMAT__, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
 
 #define kCustomOrange   [UIColor colorWithRed:255.0f/255.0f green:150.0f/255.0f blue:66.0f/255.0f alpha:1.0f]
 

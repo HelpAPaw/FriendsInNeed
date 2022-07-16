@@ -14,7 +14,6 @@
 #import <Backendless-Swift.h>
 #import "RLMSignal.h"
 @import UserNotifications;
-@import FirebaseCrashlytics;
 
 #define kMinimumDistanceTravelled   300
 #define kSignalPhotosDirectory      @"signal_photos"
@@ -145,6 +144,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
     } errorHandler:^(Fault * _Nonnull fault) {
         //Do nothing
+        [FINCrashReporter recordError:fault];
     }];
     
     return self;
@@ -187,6 +187,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             NSLog(@"Object has been updated: %@", updatedObject); }
                        errorHandler:^(Fault *fault) {
             NSLog(@"Server reported an error: %@", fault);
+            [FINCrashReporter recordError:fault];
         }];
     }
 }
@@ -456,6 +457,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
     }
                        errorHandler:^(Fault *fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(nil, error);
     }];
@@ -494,6 +496,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                               responseHandler:^(NSInteger count) {
         completion(count, nil);
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(0, error);
     }];
@@ -505,6 +508,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [dataStore getObjectCountWithResponseHandler:^(NSInteger count) {
         completion(count, nil);
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(0, error);
     }];
@@ -545,6 +549,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 comment.photoUrl = [NSURL URLWithString:urlString];
                 completion(nil);
             } errorHandler:^(Fault * _Nonnull fault) {
+                [FINCrashReporter recordError:fault];
                 FINError *error = [[FINError alloc] initWithMessage:fault.message];
                 completion(error);
             }];
@@ -569,6 +574,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             completion(savedFile.fileUrl, nil);
         }];
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(nil, error);
     }];
@@ -616,10 +622,12 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             //Send push notifications to all interested devices in the area
             [self sendPushNotificationsForNewSignal:savedSignal];
         } errorHandler:^(Fault * _Nonnull fault) {
+            [FINCrashReporter recordError:fault];
             FINError *error = [[FINError alloc] initWithMessage:fault.message];
             completion(nil, error);
         }];
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(nil, error);
     }];
@@ -639,6 +647,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             signal.status = status;
             completion(nil);
         } errorHandler:^(Fault * _Nonnull fault) {
+            [FINCrashReporter recordError:fault];
             FINError *error = [[FINError alloc] initWithMessage:fault.message];
             completion(error);
         }];
@@ -657,6 +666,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         [self.nearbySignals removeObject:signal];
         completion(nil);
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -672,6 +682,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(signal, nil);
         
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(nil, error);
     }];
@@ -707,7 +718,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             NSLog(@"Successfully saved privacy policy acceptance!");
         } errorHandler:^(Fault * _Nonnull fault) {
             //Do nothing, be sad
-            CLS_LOG(@"Could not save privacy policy acception: %@", fault.message);
+            [FINCrashReporter recordError:fault];
         }];
     }
 }
@@ -757,6 +768,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
     }
                                             errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -767,7 +779,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationUserLoggedIn
                                                         object:nil];
     
-    [FIRCrashlytics.crashlytics setUserID:loggedUser.objectId];
+    [FINCrashReporter setUserID:loggedUser.objectId];
 }
 
 - (void)loginWithEmail:(NSString *)email andPassword:(NSString *)password completion:(void (^)(FINError *error))completion
@@ -779,6 +791,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
         
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -796,6 +809,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
         
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -813,6 +827,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
         
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -830,6 +845,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         
      }
                                                errorHandler:^(Fault *fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
      }];
@@ -840,6 +856,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
     [Backendless.shared.userService logoutWithResponseHandler:^{
         completion(nil);
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -852,6 +869,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         completion(nil);
     }
                                                    errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -877,6 +895,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         
         completion(nil);
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -896,6 +915,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             }
         }];
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(error);
     }];
@@ -964,6 +984,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
 
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *err = [[FINError alloc] initWithMessage:fault.message];
         failure(err);
     }];
@@ -994,10 +1015,12 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
             
             completion(savedComment, nil);
         } errorHandler:^(Fault * _Nonnull fault) {
+            [FINCrashReporter recordError:fault];
             FINError *error = [[FINError alloc] initWithMessage:fault.message];
             completion(nil, error);
         }];
     } errorHandler:^(Fault * _Nonnull fault) {
+        [FINCrashReporter recordError:fault];
         FINError *error = [[FINError alloc] initWithMessage:fault.message];
         completion(nil, error);
     }];
@@ -1035,6 +1058,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         //Do nothing, be happy
     } errorHandler:^(Fault * _Nonnull fault) {
         //DO nothing, be sad
+        [FINCrashReporter recordError:fault];
     }];
     
     _isInTestMode = isInTestMode;
@@ -1122,6 +1146,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         [self updateDeviceRegistrationWithLocation:nil];
     } errorHandler:^(Fault * _Nonnull fault) {
         //Do nothing
+        [FINCrashReporter recordError:fault];
     }];
 }
 
@@ -1196,6 +1221,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 NSLog(@"Status: %@", status);
             } errorHandler:^(Fault * _Nonnull fault) {
                  NSLog(@"Server reported an error: %@", fault);
+                [FINCrashReporter recordError:fault];
             }];
         }
 
@@ -1204,6 +1230,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
     } errorHandler:^(Fault * _Nonnull fault) {
         NSLog(@"Error executing query: %@", fault.message);
+        [FINCrashReporter recordError:fault];
     }];
 }
 
@@ -1337,6 +1364,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
                 NSLog(@"Status: %@", status);
             } errorHandler:^(Fault * _Nonnull fault) {
                 NSLog(@"Server reported an error: %@", fault);
+                [FINCrashReporter recordError:fault];
             }];
         }
 
@@ -1350,6 +1378,7 @@ typedef NS_ENUM(NSUInteger, SignalUpdate) {
         }
     } errorHandler:^(Fault * _Nonnull fault) {
         NSLog(@"Error executing query: %@", fault.message);
+        [FINCrashReporter recordError:fault];
     }];
 }
 

@@ -605,7 +605,9 @@ enum FINPhotoDestination {
                                                                               handler:^(UIAlertAction * action) {}];
         
                         [self showAlertViewControllerWithTitle:NSLocalizedString(@"Ooops!",nil) message:[NSString stringWithFormat:NSLocalizedString(@"Something went wrong! Possible problem:\n%@",nil), error.message] actions: [NSArray arrayWithObjects:defaultAction, nil]];
-                        [self.delegate refreshAnnotation:self.annotation];
+                        if (self.annotation != nil) {
+                            [self.delegate refreshAnnotation:self.annotation];
+                        }
                     }
                     else {
                         self.status = indexPath.row;
@@ -662,7 +664,7 @@ enum FINPhotoDestination {
 {
     MBProgressHUD *loadingIndicator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     loadingIndicator.label.text = NSLocalizedString(@"deleting_signal", nil);
-    [[FINDataManager sharedManager] deleteSignal:self.annotation.signal
+    [[FINDataManager sharedManager] deleteSignal:self.signal
                                   withCompletion:^(FINError *error) {
         [loadingIndicator hideAnimated:YES];
         if (error != nil) {
@@ -670,7 +672,9 @@ enum FINPhotoDestination {
         } else {
             [self dismissViewControllerAnimated:YES
                                      completion:^{
-                [self.delegate removeAnnotation:self.annotation];
+                if (self.annotation != nil) {
+                    [self.delegate removeAnnotation:self.annotation];
+                }
             }];
         }
     }];
@@ -678,12 +682,12 @@ enum FINPhotoDestination {
 
 - (IBAction)onShareButton:(id)sender
 {
-    BranchUniversalObject *buo = [[BranchUniversalObject alloc] initWithCanonicalIdentifier:[NSString stringWithFormat:@"signal/%@", self.annotation.signal.signalId]];
-    buo.title = self.annotation.signal.title;
-    buo.imageUrl = self.annotation.signal.photoUrl.absoluteString;
+    BranchUniversalObject *buo = [[BranchUniversalObject alloc] initWithCanonicalIdentifier:[NSString stringWithFormat:@"signal/%@", self.signal.signalId]];
+    buo.title = self.signal.title;
+    buo.imageUrl = self.signal.photoUrl.absoluteString;
     buo.publiclyIndex = YES;
     buo.locallyIndex = YES;
-    buo.contentMetadata.customMetadata[kSignalId] = self.annotation.signal.signalId;
+    buo.contentMetadata.customMetadata[kSignalId] = self.signal.signalId;
     
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
     
@@ -696,7 +700,7 @@ enum FINPhotoDestination {
             [linkProperties addControlParam:@"$desktop_url" withValue:desktop_url];
             
             [buo showShareSheetWithLinkProperties:linkProperties
-                                     andShareText:self.annotation.signal.title
+                                     andShareText:self.signal.title
                                fromViewController:self
                                            anchor:sender
                                        completion:^(NSString * _Nullable activityType, BOOL completed) {}
